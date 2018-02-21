@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-private const val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DWUVlg.hcYZLSslJWqnO619wdVOQAaKnp8"
+private const val token = ""
 
 fun main(args: Array<String>) {
     val discordSocket = DiscordConnection(token, eventListener = Listener())
