@@ -106,14 +106,16 @@ class DiscordConnection(
                 throw DiscordCompatibilityException("Reached unreachable Resume code")
             }
             OpCode.RECONNECT -> {
-                TODO("Handle reconnecting")
+                restart()
             }
             OpCode.REQUEST_GUILD_MEMBERS -> {
                 // Only here for completeness, will never receive
                 throw DiscordCompatibilityException("Reached unreachable Request Guild Member code")
             }
             OpCode.INVALID_SESSION -> {
-                TODO("Handle invalid session")
+                sessionNumber = null
+                sequenceNumber = null
+                restart()
             }
             OpCode.HELLO -> {
                 val hello = jsonMapper.treeToValue<Hello>(gatewayMessage.dataPayload!!)
