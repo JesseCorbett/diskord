@@ -1,11 +1,13 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.internal
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.api.events.*
-import com.jessecorbett.diskord.api.gateway.Channel
+import com.jessecorbett.diskord.EventListener
+import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.api.Channel
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.models.*
+import com.jessecorbett.diskord.jsonMapper
 
 fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonNode) {
     eventListener.onEvent(event)

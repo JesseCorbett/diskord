@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.gateway
+package com.jessecorbett.diskord.api
 
 data class GatewayBotUrl(
         val url: String,

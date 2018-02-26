@@ -13,7 +13,7 @@ data class Message(
         @JsonProperty("tts") val isTTS: Boolean,
         @JsonProperty("mention_everyone") val mentionsEveryone: Boolean,
         @JsonProperty("mentions") val usersMentioned: Array<User> = emptyArray(),
-        @JsonProperty("mention_roles") val rolesMentioned: Array<Role> = emptyArray(),
+        @JsonProperty("mention_roles") val rolesIdsMentioned: Array<String> = emptyArray(),
         @JsonProperty("attachments") val attachments: Array<Attachment> = emptyArray(),
         @JsonProperty("embeds") val embeds: Array<Embed> = emptyArray(),
         @JsonProperty("reactions") val reactions: Array<Reaction> = emptyArray(),

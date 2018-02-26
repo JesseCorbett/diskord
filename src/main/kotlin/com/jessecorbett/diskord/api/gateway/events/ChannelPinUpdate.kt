@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.events
+package com.jessecorbett.diskord.api.gateway.events
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.ZonedDateTime

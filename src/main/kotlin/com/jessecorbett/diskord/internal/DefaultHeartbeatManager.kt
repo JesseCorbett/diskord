@@ -1,5 +1,6 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.internal
 
+import com.jessecorbett.diskord.HeartbeatManager
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import kotlinx.coroutines.experimental.*
 

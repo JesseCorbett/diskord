@@ -2,27 +2,41 @@ package com.jessecorbett.diskord
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.api.events.DiscordEvent
-import com.jessecorbett.diskord.api.events.Hello
-import com.jessecorbett.diskord.api.gateway.GatewayBotUrl
+import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
+import com.jessecorbett.diskord.api.gateway.events.Hello
+import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
 import com.jessecorbett.diskord.api.gateway.commands.Identify
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.internal.DefaultHeartbeatManager
+import com.jessecorbett.diskord.internal.DefaultLifecycleManager
+import com.jessecorbett.diskord.internal.DiscordWebSocketListener
+import com.jessecorbett.diskord.internal.dispatchEvent
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
 private const val discordApi = "https://discordapp.com/api"
 
-class DiscordConnection(private val token: String, private val eventListener: EventListener, private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager()) {
-    private val socket: WebSocket
+class DiscordConnection(
+        private val token: String,
+        private val eventListener: EventListener,
+        private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
+        private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
+) {
+    private var socket: WebSocket
 
     private var sequenceNumber: Int? = null
     private var sessionNumber: String? = null
 
     init {
+        lifecycleManager.start(::restart)
+        socket = startConnection()
+    }
+
+    private fun startConnection(): WebSocket {
         val httpClient = OkHttpClient.Builder().build()
 
         val webSockedEndpointRequest = Request.Builder()
@@ -43,12 +57,17 @@ class DiscordConnection(private val token: String, private val eventListener: Ev
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
-        socket = httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage))
+        return httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
     }
 
-    fun close() {
+    private fun close() {
         heartbeatManager.close()
         socket.close(0, "Requested close")
+    }
+
+    private fun restart() {
+        close()
+        socket = startConnection()
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
