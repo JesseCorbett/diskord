@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord
 
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.api.RestClient
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
 import com.jessecorbett.diskord.api.gateway.commands.Identify
@@ -17,19 +16,17 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
-private const val discordApi = "https://discordapp.com/api"
-
-class DiscordConnection(
+class WebSocketConnection(
         private val token: String,
         private val eventListener: EventListener,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private var socket: WebSocket
-    val rest = RestClient(discordApi, token)
+    private val gatewayUrl = RestClient(token).getBotGateway().url
 
     private var sequenceNumber: Int? = null
-    private var sessionNumber: String? = null
+    private var sessionId: String? = null
 
     init {
         lifecycleManager.start(::restart)
@@ -37,25 +34,25 @@ class DiscordConnection(
     }
 
     private fun startConnection(): WebSocket {
-        val gateway = RestClient(discordApi, token).getBotGateway()
-
         val request = Request.Builder()
-                .url(gateway.url + "?encoding=json&v=6")
+                .url(gatewayUrl + "?encoding=json&v=6")
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
         return OkHttpClient.Builder().build().newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
     }
 
-    private fun close() {
+    fun close() {
         heartbeatManager.close()
         socket.close(0, "Requested close")
     }
 
     private fun restart() {
-        println("Restarting")
-        close()
-        socket = startConnection()
+        if (sessionId != null && sequenceNumber != null) {
+            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
+        } else {
+            initialize()
+        }
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
@@ -101,7 +98,7 @@ class DiscordConnection(
                 throw DiscordCompatibilityException("Reached unreachable Request Guild Member code")
             }
             OpCode.INVALID_SESSION -> {
-                sessionNumber = null
+                sessionId = null
                 sequenceNumber = null
                 restart()
             }
@@ -126,7 +123,7 @@ class DiscordConnection(
 
     private fun initialize() {
         if (sequenceNumber != null && sequenceNumber != null) {
-            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionNumber!!, sequenceNumber!!))
+            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
             sendGatewayMessage(OpCode.IDENTIFY, Identify(token))
         }

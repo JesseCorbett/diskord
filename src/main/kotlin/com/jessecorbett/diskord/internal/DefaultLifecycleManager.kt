@@ -15,13 +15,13 @@ class DefaultLifecycleManager : DiscordLifecycleManager {
     override fun closing(code: Int, reason: String) {
         println(code)
         println(reason)
-        TODO("not implemented")
+        restart()
     }
 
     override fun closed(code: Int, reason: String) {
         println(code)
         println(reason)
-        TODO("not implemented")
+        restart()
     }
 
     override fun failed(failure: Throwable, response: Response?) {

@@ -1,17 +1,20 @@
-package com.jessecorbett.diskord.api
+package com.jessecorbett.diskord
 
 import com.fasterxml.jackson.databind.type.CollectionType
+import com.jessecorbett.diskord.api.GatewayBotUrl
+import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
-import com.jessecorbett.diskord.jsonMapper
 import okhttp3.*
 import kotlin.reflect.KClass
+
+private const val discordApi = "https://discordapp.com/api"
 
 private val httpClient = OkHttpClient.Builder().build()
 private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
 
-class RestClient(private val discordApi: String, private val token: String) {
+class RestClient(private val token: String) {
     private fun <T : Any> OkHttpClient.get(url: String, responseClass: KClass<T>): T {
         val request = Request.Builder()
                 .url(discordApi + url)
