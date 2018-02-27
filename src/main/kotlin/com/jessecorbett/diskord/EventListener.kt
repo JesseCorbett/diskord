@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.gateway.events.*
-import com.jessecorbett.diskord.api.Channel
+import com.jessecorbett.diskord.api.models.Channel
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.models.*
 

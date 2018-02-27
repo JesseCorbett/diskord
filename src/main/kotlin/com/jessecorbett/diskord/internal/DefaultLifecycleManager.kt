@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.internal
 import com.jessecorbett.diskord.DiscordLifecycleManager
 import okhttp3.Response
 import java.io.EOFException
+import java.net.SocketException
 
 class DefaultLifecycleManager : DiscordLifecycleManager {
     private lateinit var restart: () -> Unit
@@ -27,6 +28,10 @@ class DefaultLifecycleManager : DiscordLifecycleManager {
         when (failure) {
             is EOFException -> {
                 println("Reached an EOF, restarting")
+                restart()
+            }
+            is SocketException -> {
+                println("Had a Socket error, restarting")
                 restart()
             }
             else -> {

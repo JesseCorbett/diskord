@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.EventListener
 import com.jessecorbett.diskord.api.gateway.events.*
-import com.jessecorbett.diskord.api.Channel
+import com.jessecorbett.diskord.api.models.Channel
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.jsonMapper

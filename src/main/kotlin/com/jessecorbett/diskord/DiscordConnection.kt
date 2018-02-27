@@ -1,14 +1,13 @@
 package com.jessecorbett.diskord
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
-import com.jessecorbett.diskord.api.gateway.events.Hello
-import com.jessecorbett.diskord.api.GatewayBotUrl
+import com.jessecorbett.diskord.api.RestClient
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
 import com.jessecorbett.diskord.api.gateway.commands.Identify
 import com.jessecorbett.diskord.api.gateway.commands.Resume
+import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
+import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.DefaultHeartbeatManager
 import com.jessecorbett.diskord.internal.DefaultLifecycleManager
@@ -27,6 +26,7 @@ class DiscordConnection(
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private var socket: WebSocket
+    val rest = RestClient(discordApi, token)
 
     private var sequenceNumber: Int? = null
     private var sessionNumber: String? = null
@@ -37,27 +37,14 @@ class DiscordConnection(
     }
 
     private fun startConnection(): WebSocket {
-        val httpClient = OkHttpClient.Builder().build()
-
-        val webSockedEndpointRequest = Request.Builder()
-                .url(discordApi + "/gateway/bot")
-                .header("Authorization", "Bot $token")
-                .get().build()
-
-        val gateway = httpClient.newCall(webSockedEndpointRequest).execute().let {
-            it.let {
-                it.body().let {
-                    jsonMapper.readValue<GatewayBotUrl>(it!!.string())
-                }
-            }
-        }
+        val gateway = RestClient(discordApi, token).getBotGateway()
 
         val request = Request.Builder()
                 .url(gateway.url + "?encoding=json&v=6")
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
-        return httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
+        return OkHttpClient.Builder().build().newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
     }
 
     private fun close() {
@@ -66,6 +53,7 @@ class DiscordConnection(
     }
 
     private fun restart() {
+        println("Restarting")
         close()
         socket = startConnection()
     }
