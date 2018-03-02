@@ -46,7 +46,7 @@ class WebSocketConnection(
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
-        return OkHttpClient.Builder().build().newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
+        return OkHttpClient.Builder().cache(null).build().newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
     }
 
     fun close() {

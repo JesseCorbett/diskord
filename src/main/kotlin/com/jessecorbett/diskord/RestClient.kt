@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
 
 private const val discordApi = "https://discordapp.com/api"
 
-private val httpClient = OkHttpClient.Builder().build()
+private val httpClient = OkHttpClient.Builder().cache(null).build()
 private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
 
 private val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
