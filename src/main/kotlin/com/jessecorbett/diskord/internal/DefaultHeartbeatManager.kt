@@ -21,8 +21,9 @@ class DefaultHeartbeatManager : HeartbeatManager {
         }
         heartbeatJob = launch(threadPool) {
             while (true) {
-                delay(heartbeatPeriod)
+                println("Sending heartbeat")
                 sendHeartbeat()
+                delay(heartbeatPeriod)
             }
         }
     }
