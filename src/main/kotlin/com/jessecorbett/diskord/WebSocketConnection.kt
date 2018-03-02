@@ -113,8 +113,8 @@ class WebSocketConnection(
             OpCode.HELLO -> {
                 println(gatewayMessage)
                 val hello = jsonMapper.treeToValue<Hello>(gatewayMessage.dataPayload!!)
-                heartbeatManager.start(hello.heartbeatInterval, ::sendHeartbeat, ::sendHeartbeatAcknowledgement)
                 initialize()
+                heartbeatManager.start(hello.heartbeatInterval, ::sendHeartbeat, ::sendHeartbeatAcknowledgement)
             }
             OpCode.HEARTBEAT_ACK -> {
                 println(gatewayMessage)
