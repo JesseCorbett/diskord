@@ -31,7 +31,6 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:2.9.4"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1"
-//    implementation "com.codahale:xsalsa20poly1305:0.8.1"
 }
 
 compileKotlin {

@@ -12,6 +12,13 @@ class DefaultHeartbeatManager : HeartbeatManager {
 
     override fun start(heartbeatPeriod: Int, sendHeartbeat: () -> Unit, sendAcknowledgement: () -> Unit) {
         this.sendAcknowledgement = sendAcknowledgement
+        runBlocking {
+            try {
+                heartbeatJob?.join()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         heartbeatJob = launch(threadPool) {
             while (true) {
                 sendHeartbeat()

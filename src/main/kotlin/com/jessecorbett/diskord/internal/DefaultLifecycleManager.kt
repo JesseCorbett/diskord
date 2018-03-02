@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.DiscordLifecycleManager
 import okhttp3.Response
 import java.io.EOFException
 import java.net.SocketException
+import java.net.SocketTimeoutException
 
 class DefaultLifecycleManager : DiscordLifecycleManager {
     private lateinit var restart: () -> Unit
@@ -32,6 +33,10 @@ class DefaultLifecycleManager : DiscordLifecycleManager {
             }
             is SocketException -> {
                 println("Had a Socket error, restarting")
+                restart()
+            }
+            is SocketTimeoutException -> {
+                println("Socket timed out, restarting")
                 restart()
             }
             else -> {

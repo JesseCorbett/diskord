@@ -1,5 +1,9 @@
 package com.jessecorbett.diskord
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
@@ -16,14 +20,17 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
+private val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
+
 class WebSocketConnection(
         private val token: String,
         private val eventListener: EventListener,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
-    private var socket: WebSocket
     private val gatewayUrl = RestClient(token).getBotGateway().url
+    private var socket: WebSocket
 
     private var sequenceNumber: Int? = null
     private var sessionId: String? = null
@@ -48,11 +55,9 @@ class WebSocketConnection(
     }
 
     private fun restart() {
-        if (sessionId != null && sequenceNumber != null) {
-            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
-        } else {
-            initialize()
-        }
+        println("restarting")
+        socket = startConnection()
+        println("restarted")
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
@@ -68,6 +73,7 @@ class WebSocketConnection(
                 receiveEvent(gatewayMessage)
             }
             OpCode.HEARTBEAT -> {
+                println(gatewayMessage)
                 heartbeatManager.acceptHeartbeat(gatewayMessage)
             }
             OpCode.IDENTIFY -> {
@@ -91,6 +97,7 @@ class WebSocketConnection(
                 throw DiscordCompatibilityException("Reached unreachable Resume code")
             }
             OpCode.RECONNECT -> {
+                println(gatewayMessage)
                 restart()
             }
             OpCode.REQUEST_GUILD_MEMBERS -> {
@@ -98,16 +105,19 @@ class WebSocketConnection(
                 throw DiscordCompatibilityException("Reached unreachable Request Guild Member code")
             }
             OpCode.INVALID_SESSION -> {
+                println(gatewayMessage)
                 sessionId = null
                 sequenceNumber = null
                 restart()
             }
             OpCode.HELLO -> {
+                println(gatewayMessage)
                 val hello = jsonMapper.treeToValue<Hello>(gatewayMessage.dataPayload!!)
                 heartbeatManager.start(hello.heartbeatInterval, ::sendHeartbeat, ::sendHeartbeatAcknowledgement)
                 initialize()
             }
             OpCode.HEARTBEAT_ACK -> {
+                println(gatewayMessage)
                 heartbeatManager.acceptAcknowledgement(gatewayMessage)
             }
         }
@@ -122,7 +132,7 @@ class WebSocketConnection(
     }
 
     private fun initialize() {
-        if (sequenceNumber != null && sequenceNumber != null) {
+        if (sessionId != null && sequenceNumber != null) {
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
             sendGatewayMessage(OpCode.IDENTIFY, Identify(token))
