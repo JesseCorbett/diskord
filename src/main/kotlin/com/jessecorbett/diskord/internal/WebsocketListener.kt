@@ -1,15 +1,21 @@
 package com.jessecorbett.diskord.internal
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.jessecorbett.diskord.DiscordLifecycleManager
 import com.jessecorbett.diskord.WebSocketCloseCode
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
-import com.jessecorbett.diskord.jsonMapper
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+
+private val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
 class DiscordWebSocketListener(private val acceptMessage: (GatewayMessage) -> Unit, private val lifecycleManager: DiscordLifecycleManager) : WebSocketListener() {
 
