@@ -50,6 +50,7 @@ class WebSocketConnection(
     }
 
     fun close() {
+        println("Closing")
         heartbeatManager.close()
         socket.close(0, "Requested close")
     }
