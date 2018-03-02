@@ -133,17 +133,13 @@ class WebSocketConnection(
 
     private fun initialize() {
         if (sessionId != null && sequenceNumber != null) {
-            println("Sending RESUME")
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
-            println("Sending IDENTIFY")
             sendGatewayMessage(OpCode.IDENTIFY, Identify(token))
         }
     }
 
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
-        val string = jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, event))
-        println(string)
-        socket.send(string)
+        socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, event)))
     }
 }
