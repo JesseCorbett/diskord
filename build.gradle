@@ -16,6 +16,15 @@ apply plugin: 'kotlin'
 
 mainClassName = "com.jessecorbett.diskord.DiskordKt"
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 repositories {
     mavenCentral()
     jcenter()
