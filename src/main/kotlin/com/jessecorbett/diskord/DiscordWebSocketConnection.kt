@@ -16,13 +16,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
-class WebSocketConnection(
+class DiscordWebSocketConnection(
         private val token: String,
         private val eventListener: EventListener,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
-    private val gatewayUrl = RestClient(token).getBotGateway().url
+    private val gatewayUrl = DiscordRestClient(token).getBotGateway().url
     private var socket: WebSocket
 
     private var sequenceNumber: Int? = null
@@ -134,6 +134,7 @@ class WebSocketConnection(
     }
 
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
+        println("Sending OpCode: $opCode")
         socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, event)))
     }
 }

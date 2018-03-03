@@ -11,10 +11,7 @@ buildscript {
 
 group 'com.jessecorbett'
 
-apply plugin: 'application'
 apply plugin: 'kotlin'
-
-mainClassName = "com.jessecorbett.diskord.DiskordKt"
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -27,14 +24,12 @@ artifacts {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.2"
-    implementation "com.google.code.findbugs:jsr305:3.0.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.3"
     implementation "com.squareup.okhttp3:okhttp:3.9.1"
     implementation "com.fasterxml.jackson.core:jackson-core:2.9.4"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4"
