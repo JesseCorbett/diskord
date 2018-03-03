@@ -8,20 +8,19 @@ import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
-import com.jessecorbett.diskord.internal.DefaultHeartbeatManager
-import com.jessecorbett.diskord.internal.DefaultLifecycleManager
-import com.jessecorbett.diskord.internal.DiscordWebSocketListener
-import com.jessecorbett.diskord.internal.dispatchEvent
+import com.jessecorbett.diskord.internal.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
+import org.slf4j.LoggerFactory
 
-class DiscordWebSocketConnection(
+class DiscordWebSocket(
         private val token: String,
         private val eventListener: EventListener,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
+    private val logger = LoggerFactory.getLogger(this.javaClass)
     private val gatewayUrl = DiscordRestClient(token).getBotGateway().url
     private var socket: WebSocket
 
@@ -35,7 +34,7 @@ class DiscordWebSocketConnection(
 
     private fun startConnection(): WebSocket {
         val request = Request.Builder()
-                .url(gatewayUrl + "?encoding=json&v=6")
+                .url("$gatewayUrl?encoding=json&v=6")
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
@@ -43,15 +42,16 @@ class DiscordWebSocketConnection(
     }
 
     fun close() {
-        println("Closing")
+        logger.info("Closing")
         heartbeatManager.close()
         socket.close(0, "Requested close")
+        logger.info("Closed")
     }
 
     private fun restart() {
-        println("restarting")
+        logger.info("Restarting")
         socket = startConnection()
-        println("restarted")
+        logger.info("Restarted")
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
@@ -61,13 +61,13 @@ class DiscordWebSocketConnection(
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
+        logger.debug("Received OpCode ${gatewayMessage.opCode}")
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
                 receiveEvent(gatewayMessage)
             }
             OpCode.HEARTBEAT -> {
-                println(gatewayMessage)
                 heartbeatManager.acceptHeartbeat(gatewayMessage)
             }
             OpCode.IDENTIFY -> {
@@ -91,7 +91,6 @@ class DiscordWebSocketConnection(
                 throw DiscordCompatibilityException("Reached unreachable Resume code")
             }
             OpCode.RECONNECT -> {
-                println(gatewayMessage)
                 restart()
             }
             OpCode.REQUEST_GUILD_MEMBERS -> {
@@ -99,19 +98,16 @@ class DiscordWebSocketConnection(
                 throw DiscordCompatibilityException("Reached unreachable Request Guild Member code")
             }
             OpCode.INVALID_SESSION -> {
-                println(gatewayMessage)
                 sessionId = null
                 sequenceNumber = null
                 restart()
             }
             OpCode.HELLO -> {
-                println(gatewayMessage)
                 val hello = jsonMapper.treeToValue<Hello>(gatewayMessage.dataPayload!!)
                 initialize()
                 heartbeatManager.start(hello.heartbeatInterval, ::sendHeartbeat, ::sendHeartbeatAcknowledgement)
             }
             OpCode.HEARTBEAT_ACK -> {
-                println(gatewayMessage)
                 heartbeatManager.acceptAcknowledgement(gatewayMessage)
             }
         }
@@ -134,7 +130,7 @@ class DiscordWebSocketConnection(
     }
 
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
-        println("Sending OpCode: $opCode")
+        logger.debug("Sending OpCode: $opCode")
         socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, event)))
     }
 }

@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.api.gateway
 
 import com.fasterxml.jackson.annotation.JsonValue
 

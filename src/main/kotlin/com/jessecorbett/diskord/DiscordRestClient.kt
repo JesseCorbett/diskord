@@ -6,6 +6,8 @@ import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
+import com.jessecorbett.diskord.internal.httpClient
+import com.jessecorbett.diskord.internal.jsonMapper
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -26,7 +28,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
 
         return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
@@ -41,7 +43,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
 
         return jsonMapper.readValue(response.body()!!.string(), collectionType)
@@ -56,7 +58,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
 
         return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
@@ -71,7 +73,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
     }
 
@@ -84,7 +86,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
 
         return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
@@ -99,7 +101,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
     }
 
@@ -112,7 +114,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
 
         return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
@@ -127,7 +129,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
     }
 
@@ -140,7 +142,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            println(response)
+            TODO("Throw exceptions for unsuccessful calls")
         }
     }
 
