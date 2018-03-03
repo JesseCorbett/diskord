@@ -91,33 +91,7 @@ abstract class EventListener {
     }
 
     fun onMessageCreate(message: Message) {
-        if (message.author == null) {
-            println()
-            println("HERE!!!!!!!!!!!!!!!!!")
-            println(message)
-            println()
-        }
 
-        if (message.content == null) {
-            println()
-            println("HERE!!!!!!!!!!!!!!!!!")
-            println(message)
-            println()
-        }
-
-        if (message.sentAt == null) {
-            println()
-            println("HERE!!!!!!!!!!!!!!!!!")
-            println(message)
-            println()
-        }
-
-        if (message.type == null) {
-            println()
-            println("HERE!!!!!!!!!!!!!!!!!")
-            println(message)
-            println()
-        }
     }
 
     fun onMessageUpdate(message: Message) {
