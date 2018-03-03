@@ -6,139 +6,139 @@ import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.models.*
 
 abstract class EventListener {
-    fun onEvent(event: DiscordEvent) {
+    open fun onEvent(event: DiscordEvent) {
 
     }
 
-    fun onReady(ready: Ready) {
+    open fun onReady(ready: Ready) {
 
     }
 
-    fun onResumed(resume: Resume) {
+    open fun onResumed(resume: Resume) {
 
     }
 
-    fun onChannelCreate(channel: Channel) {
+    open fun onChannelCreate(channel: Channel) {
 
     }
 
-    fun onChannelUpdate(channel: Channel) {
+    open fun onChannelUpdate(channel: Channel) {
 
     }
 
-    fun onChannelDelete(channel: Channel) {
+    open fun onChannelDelete(channel: Channel) {
 
     }
 
-    fun onChannelPinsUpdate(channelPinUpdate: ChannelPinUpdate) {
+    open fun onChannelPinsUpdate(channelPinUpdate: ChannelPinUpdate) {
 
     }
 
-    fun onGuildCreate(guild: CreatedGuild) {
+    open fun onGuildCreate(guild: CreatedGuild) {
 
     }
 
-    fun onGuildUpdate(guild: Guild) {
+    open fun onGuildUpdate(guild: Guild) {
 
     }
 
-    fun onGuildDelete(guild: Guild) {
+    open fun onGuildDelete(guild: Guild) {
 
     }
 
-    fun onGuildBanAdd(ban: GuildBan) {
+    open fun onGuildBanAdd(ban: GuildBan) {
 
     }
 
-    fun onGuildBanRemove(ban: GuildBan) {
+    open fun onGuildBanRemove(ban: GuildBan) {
 
     }
 
-    fun onGuildEmojiUpdate(emojiUpdate: GuildEmojiUpdate) {
+    open fun onGuildEmojiUpdate(emojiUpdate: GuildEmojiUpdate) {
 
     }
 
-    fun onGuildIntegrationsUpdate(integrationUpdate: GuildIntegrationUpdate) {
+    open fun onGuildIntegrationsUpdate(integrationUpdate: GuildIntegrationUpdate) {
 
     }
 
-    fun onGuildMemberAdd(guildMember: GuildMemberAdd) {
+    open fun onGuildMemberAdd(guildMember: GuildMemberAdd) {
 
     }
 
-    fun onGuildMemberUpdate(guildMemberUpdate: GuildMemberUpdate) {
+    open fun onGuildMemberUpdate(guildMemberUpdate: GuildMemberUpdate) {
 
     }
 
-    fun onGuildMemberRemove(guildMemeberRemove: GuildMemeberRemove) {
+    open fun onGuildMemberRemove(guildMemeberRemove: GuildMemeberRemove) {
 
     }
 
-    fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {
+    open fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {
 
     }
 
-    fun onGuildRoleCreate(guildRoleCreate: GuildRoleCreate) {
+    open fun onGuildRoleCreate(guildRoleCreate: GuildRoleCreate) {
 
     }
 
-    fun onGuildRoleUpdate(guildRoleUpdate: GuildRoleUpdate) {
+    open fun onGuildRoleUpdate(guildRoleUpdate: GuildRoleUpdate) {
 
     }
 
-    fun onGuildRoleDelete(guildRoleDelete: GuildRoleDelete) {
+    open fun onGuildRoleDelete(guildRoleDelete: GuildRoleDelete) {
 
     }
 
-    fun onMessageCreate(message: Message) {
+    open fun onMessageCreate(message: Message) {
 
     }
 
-    fun onMessageUpdate(message: Message) {
+    open fun onMessageUpdate(message: Message) {
 
     }
 
-    fun onMessageDelete(message: MessageDelete) {
+    open fun onMessageDelete(message: MessageDelete) {
 
     }
 
-    fun onMessageBulkDelete(message: BulkMessageDelete) {
+    open fun onMessageBulkDelete(message: BulkMessageDelete) {
 
     }
 
-    fun onMessageReactionAdd(reactionAdd: MessageReaction) {
+    open fun onMessageReactionAdd(reactionAdd: MessageReaction) {
 
     }
 
-    fun onMessageReactionRemove(reactionRemove: MessageReaction) {
+    open fun onMessageReactionRemove(reactionRemove: MessageReaction) {
 
     }
 
-    fun onMessageReactionRemoveAll(messageReactionRemoveAll: MessageReactionRemoveAll) {
+    open fun onMessageReactionRemoveAll(messageReactionRemoveAll: MessageReactionRemoveAll) {
 
     }
 
-    fun onPresenceUpdate(presenceUpdate: PresenceUpdate) {
+    open fun onPresenceUpdate(presenceUpdate: PresenceUpdate) {
 
     }
 
-    fun onTypingStart(typingStart: TypingStart) {
+    open fun onTypingStart(typingStart: TypingStart) {
 
     }
 
-    fun onUserUpdate(user: User) {
+    open fun onUserUpdate(user: User) {
 
     }
 
-    fun onVoiceStateUpdate(voiceState: VoiceState) {
+    open fun onVoiceStateUpdate(voiceState: VoiceState) {
 
     }
 
-    fun onVoiceServerUpdate(voiceServerUpdate: VoiceServerUpdate) {
+    open fun onVoiceServerUpdate(voiceServerUpdate: VoiceServerUpdate) {
 
     }
 
-    fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) {
+    open fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) {
 
     }
 }
