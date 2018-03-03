@@ -1,9 +1,5 @@
 package com.jessecorbett.diskord
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
@@ -19,9 +15,6 @@ import com.jessecorbett.diskord.internal.dispatchEvent
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
-
-private val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
 class WebSocketConnection(
         private val token: String,

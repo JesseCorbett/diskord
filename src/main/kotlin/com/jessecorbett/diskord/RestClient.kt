@@ -1,25 +1,20 @@
 package com.jessecorbett.diskord
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.CollectionType
 import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import kotlin.reflect.KClass
 
 private const val discordApi = "https://discordapp.com/api"
 
-private val httpClient = OkHttpClient.Builder().cache(null).build()
 private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
-
-private val jsonMapper = ObjectMapper().findAndRegisterModules().setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
 class RestClient(private val token: String) {
     private fun <T : Any> OkHttpClient.get(url: String, responseClass: KClass<T>): T {
