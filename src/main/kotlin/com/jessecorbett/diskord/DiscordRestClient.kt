@@ -19,11 +19,13 @@ private const val discordApi = "https://discordapp.com/api"
 private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
 
 class DiscordRestClient(private val token: String) {
+
+    private fun commonRequest(url: String): Request.Builder {
+        return Request.Builder().url(discordApi + url).header("Authorization", "Bot $token")
+    }
+
     private fun <T : Any> OkHttpClient.get(url: String, responseClass: KClass<T>): T {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .get().build()
+        val request = commonRequest(url).get().build()
 
         val response = this.newCall(request).execute()
 
@@ -31,14 +33,15 @@ class DiscordRestClient(private val token: String) {
             TODO("Throw exceptions for unsuccessful calls")
         }
 
-        return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
+        val body = response.body()
+        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
+        body?.close()
+
+        return responseObject
     }
 
     private fun <T : Any> OkHttpClient.get(url: String, collectionType: CollectionType): T {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .get().build()
+        val request = commonRequest(url).get().build()
 
         val response = this.newCall(request).execute()
 
@@ -46,14 +49,15 @@ class DiscordRestClient(private val token: String) {
             TODO("Throw exceptions for unsuccessful calls")
         }
 
-        return jsonMapper.readValue(response.body()!!.string(), collectionType)
+        val body = response.body()
+        val responseObject = jsonMapper.readValue<T>(body?.string(), collectionType)
+        body?.close()
+
+        return responseObject
     }
 
     private fun <T : Any> OkHttpClient.post(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
@@ -61,27 +65,27 @@ class DiscordRestClient(private val token: String) {
             TODO("Throw exceptions for unsuccessful calls")
         }
 
-        return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
+        val body = response.body()
+        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
+        body?.close()
+
+        return responseObject
     }
 
     private fun OkHttpClient.post(url: String, requestBody: Any? = null) {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
             TODO("Throw exceptions for unsuccessful calls")
         }
+
+        response.body()?.close()
     }
 
     private fun <T : Any> OkHttpClient.put(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
@@ -89,27 +93,27 @@ class DiscordRestClient(private val token: String) {
             TODO("Throw exceptions for unsuccessful calls")
         }
 
-        return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
+        val body = response.body()
+        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
+        body?.close()
+
+        return responseObject
     }
 
     private fun OkHttpClient.put(url: String, requestBody: Any? = null) {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
             TODO("Throw exceptions for unsuccessful calls")
         }
+
+        response.body()?.close()
     }
 
     private fun <T : Any> OkHttpClient.patch(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
@@ -117,36 +121,38 @@ class DiscordRestClient(private val token: String) {
             TODO("Throw exceptions for unsuccessful calls")
         }
 
-        return jsonMapper.readValue(response.body()!!.string(), responseClass.java)
+        val body = response.body()
+        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
+        body?.close()
+
+        return responseObject
     }
 
     private fun OkHttpClient.patch(url: String, requestBody: Any? = null) {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+        val request = commonRequest(url).patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
 
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
             TODO("Throw exceptions for unsuccessful calls")
         }
+
+        response.body()?.close()
     }
 
     private fun OkHttpClient.delete(url: String) {
-        val request = Request.Builder()
-                .url(discordApi + url)
-                .header("Authorization", "Bot $token")
-                .delete().build()
+        val request = commonRequest(url).delete().build()
 
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
             TODO("Throw exceptions for unsuccessful calls")
         }
+
+        response.body()?.close()
     }
 
-    private fun <T : Any> typeListOf(listedClass: KClass<T>): CollectionType {
+    private fun <T : Any> listOfType(listedClass: KClass<T>): CollectionType {
         return jsonMapper.typeFactory.constructCollectionType(List::class.java, listedClass.java)
     }
 
@@ -173,7 +179,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getMessages(channelId: String): List<Message> {
-        return httpClient.get("/channels/$channelId/messages", typeListOf(Message::class))
+        return httpClient.get("/channels/$channelId/messages", listOfType(Message::class))
     }
 
     fun getChannelMessage(channelId: String, messageId: String): Message {
@@ -193,7 +199,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getReactions(channelId: String, messageId: String, emoji: String): List<Reaction> {
-        return httpClient.get("/channels/$channelId/messages/$messageId/reaction/$emoji", typeListOf(Reaction::class))
+        return httpClient.get("/channels/$channelId/messages/$messageId/reaction/$emoji", listOfType(Reaction::class))
     }
 
     fun deleteAllReactions(channelId: String, messageId: String) {
@@ -217,7 +223,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getChannelInvites(channelId: String): List<Invite> {
-        return httpClient.get("/channels/$channelId/invites", typeListOf(Invite::class))
+        return httpClient.get("/channels/$channelId/invites", listOfType(Invite::class))
     }
 
     fun createChannelInvite(channelId: String, createInvite: CreateInvite): Invite {
@@ -233,7 +239,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getPinnedMessages(channelId: String): List<Message> {
-        return httpClient.get("/channels/$channelId/pins", typeListOf(Message::class))
+        return httpClient.get("/channels/$channelId/pins", listOfType(Message::class))
     }
 
     fun pinMessage(channelId: String, messageId: String) {
@@ -253,7 +259,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildEmoji(guildId: String): List<Emoji> {
-        return httpClient.get("/guilds/$guildId/emojis", typeListOf(Emoji::class))
+        return httpClient.get("/guilds/$guildId/emojis", listOfType(Emoji::class))
     }
 
     fun getEmoji(guildId: String, emojiId: String): Emoji {
@@ -289,7 +295,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildChannels(guildId: String): List<Channel> {
-        return httpClient.get("/guilds/$guildId/channels", typeListOf(Channel::class))
+        return httpClient.get("/guilds/$guildId/channels", listOfType(Channel::class))
     }
 
     fun createGuildChannel(guildId: String, channel: CreateChannel): Channel {
@@ -305,7 +311,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildMembers(guildId: String, limit: Int = 1, afterMember: String = "0"): List<GuildMember> {
-        return httpClient.get("/guilds/$guildId/members?limit=$limit&after=$afterMember", typeListOf(GuildMember::class))
+        return httpClient.get("/guilds/$guildId/members?limit=$limit&after=$afterMember", listOfType(GuildMember::class))
     }
 
     fun addGuildMember(guildId: String, userId: String, addGuildMember: AddGuildMember) {
@@ -333,7 +339,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildBans(guildId: String): List<Ban> {
-        return httpClient.get("/guilds/$guildId/bans", typeListOf(Ban::class))
+        return httpClient.get("/guilds/$guildId/bans", listOfType(Ban::class))
     }
 
     fun createGuildBan(guildId: String, userId: String, deleteMessageDays: Int, reason: String = "") {
@@ -345,7 +351,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildRoles(guildId: String): List<Role> {
-        return httpClient.get("/guilds/$guildId/roles", typeListOf(Role::class))
+        return httpClient.get("/guilds/$guildId/roles", listOfType(Role::class))
     }
 
     fun createGuildRole(guildId: String, guildRole: CreateGuildRole): Role {
@@ -373,15 +379,15 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getGuildVoiceRegions(guildId: String): List<VoiceRegion> {
-        return httpClient.get("/guilds/$guildId/regions", typeListOf(VoiceRegion::class))
+        return httpClient.get("/guilds/$guildId/regions", listOfType(VoiceRegion::class))
     }
 
     fun getGuildInvites(guildId: String): List<Invite> {
-        return httpClient.get("/guilds/$guildId/invites", typeListOf(Invite::class))
+        return httpClient.get("/guilds/$guildId/invites", listOfType(Invite::class))
     }
 
     fun getGuildIntegrations(guildId: String): List<GuildIntegration> {
-        return httpClient.get("/guilds/$guildId/integrations", typeListOf(GuildIntegration::class))
+        return httpClient.get("/guilds/$guildId/integrations", listOfType(GuildIntegration::class))
     }
 
     fun createGuildIntegration(guildId: String, guildIntegration: CreateGuildIntegration) {
@@ -436,7 +442,7 @@ class DiscordRestClient(private val token: String) {
         if (after != null) {
             url += "&after=$after"
         }
-        return httpClient.get(url, typeListOf(Guild::class))
+        return httpClient.get(url, listOfType(Guild::class))
     }
 
     fun leaveGuild(guildId: String) {
@@ -444,7 +450,7 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getUserDMs(): List<Channel> {
-        return httpClient.get("/users/@me/channels", typeListOf(Channel::class))
+        return httpClient.get("/users/@me/channels", listOfType(Channel::class))
     }
 
     fun createDM(createDM: CreateDM): Channel {
@@ -456,11 +462,11 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getUserConnections(): List<UserConnection> {
-        return httpClient.get("/users/@me/connections", typeListOf(UserConnection::class))
+        return httpClient.get("/users/@me/connections", listOfType(UserConnection::class))
     }
 
     fun getVoiceRegions(): List<VoiceRegion> {
-        return httpClient.get("/voice/regions", typeListOf(VoiceRegion::class))
+        return httpClient.get("/voice/regions", listOfType(VoiceRegion::class))
     }
 
     fun createWebhook(channelId: String, webhook: CreateWebhook): Webhook {
@@ -468,11 +474,11 @@ class DiscordRestClient(private val token: String) {
     }
 
     fun getChannelWebhooks(channelId: String): List<Webhook> {
-        return httpClient.get("/channels/$channelId/webhooks", typeListOf(Webhook::class))
+        return httpClient.get("/channels/$channelId/webhooks", listOfType(Webhook::class))
     }
 
     fun getGuildWebhooks(guildId: String): List<Webhook> {
-        return httpClient.get("/guilds/$guildId/webhooks", typeListOf(Webhook::class))
+        return httpClient.get("/guilds/$guildId/webhooks", listOfType(Webhook::class))
     }
 
     fun getWebhook(webhookId: String): Webhook {
