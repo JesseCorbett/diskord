@@ -9,7 +9,6 @@ import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
-import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
@@ -38,7 +37,7 @@ class DiscordWebSocket(
                 .addHeader("Authorization", "Bot $token")
                 .build()
 
-        return OkHttpClient.Builder().cache(null).build().newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
+        return httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, lifecycleManager))
     }
 
     fun close() {
