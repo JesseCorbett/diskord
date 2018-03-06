@@ -16,15 +16,14 @@ import org.slf4j.LoggerFactory
 class DiscordWebSocket(
         private val token: String,
         private val eventListener: EventListener,
+        var sessionId: String? = null,
+        var sequenceNumber: Int? = null,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private val gatewayUrl = DiscordRestClient(token).getBotGateway().url
     private var socket: WebSocket
-
-    private var sequenceNumber: Int? = null
-    private var sessionId: String? = null
 
     init {
         lifecycleManager.start(::restart)
