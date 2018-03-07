@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
@@ -7,6 +8,7 @@ import com.jessecorbett.diskord.api.gateway.commands.Identify
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
+import com.jessecorbett.diskord.api.gateway.events.Ready
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
 import okhttp3.Request
@@ -53,9 +55,17 @@ class DiscordWebSocket(
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
+        gatewayMessage.dataPayload ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events
-        gatewayMessage.dataPayload ?: throw DiscordCompatibilityException("Encountered DiscordEvent $discordEvent without event data")
+        if (discordEvent == DiscordEvent.READY) {
+            setSessionId(gatewayMessage.dataPayload)
+        }
         dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
+    }
+
+    private fun setSessionId(data: JsonNode) {
+        val readyData = jsonMapper.treeToValue<Ready>(data)
+        sessionId = readyData.sessionId
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
