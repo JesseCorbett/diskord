@@ -10,7 +10,7 @@ data class GatewayMessage(
         @JsonProperty("op") val opCode: OpCode,
         @JsonProperty("d") @JsonInclude(JsonInclude.Include.ALWAYS) val dataPayload: JsonNode?,
         @JsonProperty("s") val sequenceNumber: Int?,
-        @JsonProperty("t") val event: DiscordEvent?
+        @JsonProperty("t") val event: String = ""
 )
 
 enum class OpCode(@JsonValue val code: Int) {

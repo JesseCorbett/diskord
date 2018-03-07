@@ -53,9 +53,9 @@ class DiscordWebSocket(
     }
 
     private fun receiveEvent(gatewayMessage: GatewayMessage) {
-        gatewayMessage.event ?: throw DiscordCompatibilityException("Encountered OpCode ${gatewayMessage.opCode} without an event name")
-        gatewayMessage.dataPayload ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
-        dispatchEvent(eventListener, gatewayMessage.event, gatewayMessage.dataPayload)
+        val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events
+        gatewayMessage.dataPayload ?: throw DiscordCompatibilityException("Encountered DiscordEvent $discordEvent without event data")
+        dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
@@ -129,6 +129,7 @@ class DiscordWebSocket(
 
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
-        socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, event)))
+        val eventName = event?.name ?: ""
+        socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, eventName)))
     }
 }

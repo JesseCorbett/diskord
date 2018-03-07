@@ -122,12 +122,6 @@ fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonN
             val presenceUpdate = jsonMapper.treeToValue<PresenceUpdate>(data)
             eventListener.onPresenceUpdate(presenceUpdate)
         }
-        DiscordEvent.PRESENCES_REPLACE -> {
-            println("===============================================================")
-            println("Undocumented event:")
-            println(data)
-            println("===============================================================")
-        }
         DiscordEvent.TYPING_START -> {
             val typingStart = jsonMapper.treeToValue<TypingStart>(data)
             eventListener.onTypingStart(typingStart)
