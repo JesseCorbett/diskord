@@ -20,6 +20,8 @@ class DiscordWebSocket(
         private val eventListener: EventListener,
         var sessionId: String? = null,
         var sequenceNumber: Int? = null,
+        val shardId: Int = 0,
+        val shardCount: Int = 0,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
@@ -133,7 +135,12 @@ class DiscordWebSocket(
         if (sessionId != null && sequenceNumber != null) {
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
-            sendGatewayMessage(OpCode.IDENTIFY, Identify(token))
+            val identify = if (shardCount > 0) {
+                Identify(token, arrayOf(shardId, shardCount))
+            } else {
+                Identify(token)
+            }
+            sendGatewayMessage(OpCode.IDENTIFY, identify)
         }
     }
 
