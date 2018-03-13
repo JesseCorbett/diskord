@@ -1,3 +1,3 @@
 package com.jessecorbett.diskord.exception
 
-class DiscordCompatibilityException(message: String) : RuntimeException(message)
+class DiscordCompatibilityException(override val message: String) : DiscordException()

@@ -6,22 +6,36 @@ import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
+import com.jessecorbett.diskord.exception.*
 import com.jessecorbett.diskord.internal.httpClient
 import com.jessecorbett.diskord.internal.jsonMapper
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.*
+import java.time.Instant
 import kotlin.reflect.KClass
 
 private const val discordApi = "https://discordapp.com/api"
-
 private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
 
 class DiscordRestClient(private val token: String) {
-
     private fun commonRequest(url: String): Request.Builder {
         return Request.Builder().url(discordApi + url).header("Authorization", "Bot $token")
+    }
+
+    private fun handleFailure(code: Int, headers: Headers) {
+        when (code) {
+            400 -> throw DiscordBadRequestException()
+            401 -> throw DiscordUnauthorizedException()
+            403 -> throw DiscordBadPermissionsException()
+            404 -> throw DiscordNotFoundException()
+            429 -> {
+                val resetTime = Instant.ofEpochSecond(headers.get("x-ratelimit-reset")!!.toLong())
+                throw DiscordRateLimitException(resetTime)
+            }
+            502 -> throw DiscordGatewayException()
+        }
+        if (code in 500..599) {
+            throw DiscordInternalServerException()
+        }
     }
 
     private fun <T : Any> OkHttpClient.get(url: String, responseClass: KClass<T>): T {
@@ -30,7 +44,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         val body = response.body()
@@ -46,7 +60,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         val body = response.body()
@@ -62,7 +76,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         val body = response.body()
@@ -78,7 +92,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         response.body()?.close()
@@ -90,7 +104,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         val body = response.body()
@@ -106,7 +120,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         response.body()?.close()
@@ -118,7 +132,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         val body = response.body()
@@ -134,7 +148,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         response.body()?.close()
@@ -146,7 +160,7 @@ class DiscordRestClient(private val token: String) {
         val response = this.newCall(request).execute()
 
         if (!response.isSuccessful) {
-            TODO("Throw exceptions for unsuccessful calls")
+            handleFailure(response.code(), response.headers())
         }
 
         response.body()?.close()
@@ -163,8 +177,6 @@ class DiscordRestClient(private val token: String) {
     fun getBotGateway(): GatewayBotUrl {
         return httpClient.get("/gateway/bot", GatewayBotUrl::class)
     }
-
-
 
     fun getChannel(channelId: String): Channel {
         return httpClient.get("/channels/$channelId", Channel::class)
@@ -434,7 +446,7 @@ class DiscordRestClient(private val token: String) {
         return httpClient.patch("/users/@me", User::class, user)
     }
 
-    fun getUserGuilds(limit: Int = 100, before: String?, after: String?): List<Guild> {
+    fun getUserGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<Guild> {
         var url = "/users/@me/guilds?limit=$limit"
         if (before != null) {
             url += "&before=$before"

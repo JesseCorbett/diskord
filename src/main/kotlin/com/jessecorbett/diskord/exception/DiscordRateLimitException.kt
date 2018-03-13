@@ -1,3 +1,5 @@
 package com.jessecorbett.diskord.exception
 
-class DiscordRateLimitException(message: String) : RuntimeException(message)
+import java.time.Instant
+
+class DiscordRateLimitException(val resetsAt: Instant) : DiscordException()
