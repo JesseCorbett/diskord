@@ -1,6 +1,8 @@
 package com.jessecorbett.diskord
 
-import com.fasterxml.jackson.databind.type.CollectionType
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
@@ -14,12 +16,15 @@ import java.time.Instant
 import kotlin.reflect.KClass
 
 private const val discordApi = "https://discordapp.com/api"
-private val jsonMediaType = MediaType.parse("application/json; charset=utf-8")
+
+private fun jsonBody(value: Any?): RequestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonMapper.writeValueAsString(value))
+
+private fun <T: Any> Response.bodyAs(bodyClass: KClass<T>): T = jsonMapper.readValue(this.body()!!.string(), bodyClass.java)
+
+private fun <T: Any> Response.bodyAsListOf(bodyClass: KClass<T>): List<T>
+        = jsonMapper.readValue(this.body()!!.string(), jsonMapper.typeFactory.constructCollectionType(List::class.java, bodyClass.java))
 
 class DiscordRestClient(private val token: String) {
-    private fun commonRequest(url: String): Request.Builder {
-        return Request.Builder().url(discordApi + url).header("Authorization", "Bot $token")
-    }
 
     private fun handleFailure(code: Int, headers: Headers) {
         when (code) {
@@ -38,413 +43,229 @@ class DiscordRestClient(private val token: String) {
         }
     }
 
-    private fun <T : Any> OkHttpClient.get(url: String, responseClass: KClass<T>): T {
-        val request = commonRequest(url).get().build()
+    private fun commonRequest(url: String): Request.Builder = Request.Builder().url(discordApi + url).header("Authorization", "Bot $token")
 
-        val response = this.newCall(request).execute()
-
+    private fun makeRequest(request: Request): Response {
+        val response = httpClient.newCall(request).execute()
         if (!response.isSuccessful) {
             handleFailure(response.code(), response.headers())
         }
-
-        val body = response.body()
-        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
-        body?.close()
-
-        return responseObject
+        return response
     }
 
-    private fun <T : Any> OkHttpClient.get(url: String, collectionType: CollectionType): T {
-        val request = commonRequest(url).get().build()
+    private fun getRequest(url: String) = makeRequest(commonRequest(url).get().build())
 
-        val response = this.newCall(request).execute()
+    private fun postRequest(url: String, body: Any) = makeRequest(commonRequest(url).post(jsonBody(body)).build())
 
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
+    private fun postRequest(url: String) = makeRequest(commonRequest(url).post(jsonBody(null)).build())
 
-        val body = response.body()
-        val responseObject = jsonMapper.readValue<T>(body?.string(), collectionType)
-        body?.close()
+    private fun putRequest(url: String, body: Any) = makeRequest(commonRequest(url).put(jsonBody(body)).build())
 
-        return responseObject
+    private fun putRequest(url: String) = makeRequest(commonRequest(url).put(jsonBody(null)).build())
+
+    private fun patchRequest(url: String, body: Any) = makeRequest(commonRequest(url).patch(jsonBody(body)).build())
+
+    private fun deleteRequest(url: String) {
+        makeRequest(commonRequest(url).delete().build())
     }
 
-    private fun <T : Any> OkHttpClient.post(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = commonRequest(url).post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+    fun getGateway() = getRequest("/gateway").bodyAs(GatewayUrl::class)
 
-        val response = this.newCall(request).execute()
+    fun getBotGateway() = getRequest("/gateway/bot").bodyAs(GatewayBotUrl::class)
 
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
+    fun getChannel(channelId: String) = getRequest("/channels/$channelId").bodyAs(Channel::class)
 
-        val body = response.body()
-        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
-        body?.close()
+    fun updateChannel(channel: Channel) = putRequest("/channels/${channel.id}", channel).bodyAs(Channel::class)
 
-        return responseObject
-    }
+    fun deleteChannel(channelId: String): Unit = deleteRequest("/channels/$channelId")
 
-    private fun OkHttpClient.post(url: String, requestBody: Any? = null) {
-        val request = commonRequest(url).post(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
+    fun getMessages(channelId: String) = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
 
-        val response = this.newCall(request).execute()
+    fun getChannelMessage(channelId: String, messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
 
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        response.body()?.close()
-    }
-
-    private fun <T : Any> OkHttpClient.put(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = commonRequest(url).put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
-
-        val response = this.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        val body = response.body()
-        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
-        body?.close()
-
-        return responseObject
-    }
-
-    private fun OkHttpClient.put(url: String, requestBody: Any? = null) {
-        val request = commonRequest(url).put(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
-
-        val response = this.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        response.body()?.close()
-    }
-
-    private fun <T : Any> OkHttpClient.patch(url: String, responseClass: KClass<T>, requestBody: Any? = null): T {
-        val request = commonRequest(url).patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
-
-        val response = this.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        val body = response.body()
-        val responseObject = jsonMapper.readValue(body?.string(), responseClass.java)
-        body?.close()
-
-        return responseObject
-    }
-
-    private fun OkHttpClient.patch(url: String, requestBody: Any? = null) {
-        val request = commonRequest(url).patch(RequestBody.create(jsonMediaType, jsonMapper.writeValueAsString(requestBody))).build()
-
-        val response = this.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        response.body()?.close()
-    }
-
-    private fun OkHttpClient.delete(url: String) {
-        val request = commonRequest(url).delete().build()
-
-        val response = this.newCall(request).execute()
-
-        if (!response.isSuccessful) {
-            handleFailure(response.code(), response.headers())
-        }
-
-        response.body()?.close()
-    }
-
-    private fun <T : Any> listOfType(listedClass: KClass<T>): CollectionType {
-        return jsonMapper.typeFactory.constructCollectionType(List::class.java, listedClass.java)
-    }
-
-    fun getGateway(): GatewayUrl {
-        return httpClient.get("/gateway", GatewayUrl::class)
-    }
-
-    fun getBotGateway(): GatewayBotUrl {
-        return httpClient.get("/gateway/bot", GatewayBotUrl::class)
-    }
-
-    fun getChannel(channelId: String): Channel {
-        return httpClient.get("/channels/$channelId", Channel::class)
-    }
-
-    fun updateChannel(channel: Channel): Channel {
-        return httpClient.put("/channels/${channel.id}", Channel::class, channel)
-    }
-
-    fun deleteChannel(channelId: String) {
-        httpClient.delete("/channels/$channelId")
-    }
-
-    fun getMessages(channelId: String): List<Message> {
-        return httpClient.get("/channels/$channelId/messages", listOfType(Message::class))
-    }
-
-    fun getChannelMessage(channelId: String, messageId: String): Message {
-        return httpClient.get("/channels/$channelId/messages/$messageId", Message::class)
-    }
-
-    fun createMessage(channelId: String, message: CreateMessage): Message {
-        return httpClient.post("/channels/$channelId/messages", Message::class, message)
-    }
+    fun createMessage(channelId: String, message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs(Message::class)
 
     fun createReaction(channelId: String, messageId: String, emoji: String) {
-        httpClient.put("/channels/$channelId/messages/$messageId/reactions/$emoji/@me")
+        putRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/@me")
     }
 
     fun deleteReaction(channelId: String, messageId: String, emoji: String, userId: String = "@me") {
-        httpClient.delete("/channels/$channelId/messages/$messageId/reactions/$emoji/$userId")
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/$userId")
     }
 
-    fun getReactions(channelId: String, messageId: String, emoji: String): List<Reaction> {
-        return httpClient.get("/channels/$channelId/messages/$messageId/reaction/$emoji", listOfType(Reaction::class))
-    }
+    fun getReactions(channelId: String, messageId: String, emoji: String): List<Reaction> = getRequest("/channels/$channelId/messages/$messageId/reaction/$emoji").bodyAsListOf(Reaction::class)
 
     fun deleteAllReactions(channelId: String, messageId: String) {
-        httpClient.delete("/channels/$channelId/messages/$messageId/reactions")
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions")
     }
 
-    fun editMessage(channelId: String, messageId: String, messageEdit: MessageEdit): Message {
-        return httpClient.put("/channels/$channelId/messages/$messageId", Message::class, messageEdit)
-    }
+    fun editMessage(channelId: String, messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit).bodyAs(Message::class)
 
     fun deleteMessage(channelId: String, messageId: String) {
-        httpClient.delete("/channels/$channelId/messages/$messageId")
+        deleteRequest("/channels/$channelId/messages/$messageId")
     }
 
     fun bulkDeleteMessages(channelId: String, bulkMessageDelete: BulkMessageDelete) {
-        httpClient.post("/channels/$channelId/messages/bulk-delete", bulkMessageDelete)
+        postRequest("/channels/$channelId/messages/bulk-delete", bulkMessageDelete)
     }
 
     fun editChannelPermissions(channelId: String, overwrite: Overwrite) {
-        httpClient.put("/channels/$channelId/permissions/${overwrite.id}", overwrite)
+        putRequest("/channels/$channelId/permissions/${overwrite.id}", overwrite)
     }
 
-    fun getChannelInvites(channelId: String): List<Invite> {
-        return httpClient.get("/channels/$channelId/invites", listOfType(Invite::class))
-    }
+    fun getChannelInvites(channelId: String) = getRequest("/channels/$channelId/invites").bodyAsListOf(Invite::class)
 
-    fun createChannelInvite(channelId: String, createInvite: CreateInvite): Invite {
-        return httpClient.post("/channels/$channelId/invites", Invite::class, createInvite)
-    }
+    fun createChannelInvite(channelId: String, createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs(Invite::class)
 
     fun deleteChannelPermissions(channelId: String, overwriteId: String) {
-        httpClient.delete("/channels/$channelId/permissions/$overwriteId")
+        deleteRequest("/channels/$channelId/permissions/$overwriteId")
     }
 
     fun triggerTypingIndicator(channelId: String) {
-        httpClient.post("/channels/$channelId/typing")
+        postRequest("/channels/$channelId/typing")
     }
 
-    fun getPinnedMessages(channelId: String): List<Message> {
-        return httpClient.get("/channels/$channelId/pins", listOfType(Message::class))
-    }
+    fun getPinnedMessages(channelId: String) = getRequest("/channels/$channelId/pins").bodyAsListOf(Message::class)
 
     fun pinMessage(channelId: String, messageId: String) {
-        httpClient.put("/channels/$channelId/pins/$messageId")
+        putRequest("/channels/$channelId/pins/$messageId")
     }
 
     fun unpinMessage(channelId: String, messageId: String) {
-        httpClient.delete("/channels/$channelId/pins/$messageId")
+        putRequest("/channels/$channelId/pins/$messageId")
     }
 
     fun addGroupDMRecipient(channelId: String, userId: String, groupDMAddRecipient: GroupDMAddRecipient) {
-        httpClient.put("/channels/$channelId/recipients/$userId", groupDMAddRecipient)
+        putRequest("/channels/$channelId/recipients/$userId", groupDMAddRecipient)
     }
 
     fun removeGroupDMRecipient(channelId: String, userId: String) {
-        httpClient.delete("/channels/$channelId/recipients/$userId")
+        deleteRequest("/channels/$channelId/recipients/$userId")
     }
 
-    fun getGuildEmoji(guildId: String): List<Emoji> {
-        return httpClient.get("/guilds/$guildId/emojis", listOfType(Emoji::class))
-    }
+    fun getGuildEmoji(guildId: String) = getRequest("/guilds/$guildId/emojis").bodyAsListOf(Emoji::class)
 
-    fun getEmoji(guildId: String, emojiId: String): Emoji {
-        return httpClient.get("/guild/$guildId/emojis/$emojiId", Emoji::class)
-    }
+    fun getEmoji(guildId: String, emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs(Emoji::class)
 
-    fun createEmoji(guildId: String, createEmoji: CreateEmoji): Emoji {
-        return httpClient.post("/guild/$guildId/emojis", Emoji::class, createEmoji)
-    }
+    fun createEmoji(guildId: String, createEmoji: CreateEmoji) = postRequest("/guild/$guildId/emojis", createEmoji).bodyAs(Emoji::class)
 
-    fun updateEmoji(guildId: String, emojiId: String, emoji: PatchEmoji): Emoji {
-        return httpClient.patch("/guild/$guildId/emojis/$emojiId", Emoji::class, emoji)
-    }
+    fun updateEmoji(guildId: String, emojiId: String, emoji: PatchEmoji) = patchRequest("/guild/$guildId/emojis/$emojiId", emoji).bodyAs(Emoji::class)
 
     fun deleteEmoji(guildId: String, emojiId: String) {
-        httpClient.delete("/guild/$guildId/emojis/$emojiId")
+        deleteRequest("/guild/$guildId/emojis/$emojiId")
     }
 
-    fun createGuild(guild: CreateGuild): Guild {
-        return httpClient.post("/guilds", Guild::class, guild)
-    }
+    fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild).bodyAs(Guild::class)
 
-    fun getGuild(guildId: String): Guild {
-        return httpClient.get("/guilds/$guildId", Guild::class)
-    }
+    fun getGuild(guildId: String) = getRequest("/guilds/$guildId").bodyAs(Guild::class)
 
-    fun updateGuild(guildId: String, guild: PatchGuild): Guild {
-        return httpClient.patch("/guilds/$guildId", Guild::class, guild)
-    }
+    fun updateGuild(guildId: String, guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs(Guild::class)
 
     fun deleteGuild(guildId: String) {
-        httpClient.delete("/guilds/$guildId")
+        deleteRequest("/guilds/$guildId")
     }
 
-    fun getGuildChannels(guildId: String): List<Channel> {
-        return httpClient.get("/guilds/$guildId/channels", listOfType(Channel::class))
-    }
+    fun getGuildChannels(guildId: String) = getRequest("/guilds/$guildId/channels").bodyAsListOf(Channel::class)
 
-    fun createGuildChannel(guildId: String, channel: CreateChannel): Channel {
-        return httpClient.post("/guilds/$guildId/channels", Channel::class, channel)
-    }
+    fun createGuildChannel(guildId: String, channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs(Channel::class)
 
     fun modifyGuildChannelPositions(guildId: String, positions: List<GuildPosition>) {
-        httpClient.patch("/guilds/$guildId/channels", positions)
+        patchRequest("/guilds/$guildId/channels", positions)
     }
 
-    fun getGuildMember(guildId: String, userId: String): GuildMember {
-        return httpClient.get("/guilds/$guildId/members/$userId", GuildMember::class)
-    }
+    fun getGuildMember(guildId: String, userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs(GuildMember::class)
 
-    fun getGuildMembers(guildId: String, limit: Int = 1, afterMember: String = "0"): List<GuildMember> {
-        return httpClient.get("/guilds/$guildId/members?limit=$limit&after=$afterMember", listOfType(GuildMember::class))
-    }
+    fun getGuildMembers(guildId: String, limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsListOf(GuildMember::class)
 
     fun addGuildMember(guildId: String, userId: String, addGuildMember: AddGuildMember) {
-        httpClient.put("/guilds/$guildId/members/$userId", addGuildMember)
+        putRequest("/guilds/$guildId/members/$userId", addGuildMember)
     }
 
     fun updateGuildMember(guildId: String, userId: String, guildMember: PatchGuildMember) {
-        httpClient.patch("/guilds/$guildId/members/$userId", guildMember)
+        patchRequest("/guilds/$guildId/members/$userId", guildMember)
     }
 
     fun changeGuildMemberNickname(guildId: String, guildMember: PatchGuildMemberNickname) {
-        httpClient.patch("/guilds/$guildId/members/@me/nick", guildId)
+        patchRequest("/guilds/$guildId/members/@me/nick", guildMember)
     }
 
     fun addGuildMemberRole(guildId: String, userId: String, roleId: String) {
-        httpClient.put("/guilds/$guildId/members/$userId/roles/$roleId")
+        putRequest("/guilds/$guildId/members/$userId/roles/$roleId")
     }
 
     fun removeGuildMemberRole(guildId: String, userId: String, roleId: String) {
-        httpClient.delete("/guilds/$guildId/members/$userId/roles/$roleId")
+        deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId")
     }
 
     fun removeGuildMember(guildId: String, userId: String) {
-        httpClient.delete("/guilds/$guildId/members/$userId")
+        deleteRequest("/guilds/$guildId/members/$userId")
     }
 
-    fun getGuildBans(guildId: String): List<Ban> {
-        return httpClient.get("/guilds/$guildId/bans", listOfType(Ban::class))
-    }
+    fun getGuildBans(guildId: String) = getRequest("/guilds/$guildId/bans").bodyAsListOf(Ban::class)
 
-    fun createGuildBan(guildId: String, userId: String, deleteMessageDays: Int, reason: String = "") {
-        httpClient.put("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason")
+    fun createGuildBan(guildId: String, userId: String, deleteMessageDays: Int, reason: String) {
+        putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason")
     }
 
     fun removeGuildBan(guildId: String, userId: String) {
-        httpClient.delete("/guilds/$guildId/bans/$userId")
+        deleteRequest("/guilds/$guildId/bans/$userId")
     }
 
-    fun getGuildRoles(guildId: String): List<Role> {
-        return httpClient.get("/guilds/$guildId/roles", listOfType(Role::class))
-    }
+    fun getGuildRoles(guildId: String) = getRequest("/guilds/$guildId/roles").bodyAsListOf(Role::class)
 
-    fun createGuildRole(guildId: String, guildRole: CreateGuildRole): Role {
-        return httpClient.post("/guilds/$guildId/roles", Role::class, guildRole)
-    }
+    fun createGuildRole(guildId: String, guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs(Role::class)
 
     fun modifyGuildRolePositions(guildId: String, positions: List<GuildPosition>) {
-        httpClient.patch("/guilds/$guildId/roles", positions)
+        patchRequest("/guilds/$guildId/roles", positions)
     }
 
-    fun updateGuildRole(guildId: String, roleId: String, role: PatchRole): Role {
-        return httpClient.patch("/guilds/$guildId/roles/$roleId", Role::class, role)
-    }
+    fun updateGuildRole(guildId: String, roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs(Role::class)
 
     fun deleteGuildRole(guildId: String, roleId: String) {
-        httpClient.delete("/guilds/$guildId/roles/$roleId")
+        deleteRequest("/guilds/$guildId/roles/$roleId")
     }
 
-    fun getPrunePotential(guildId: String, days: Int = 1): Pruned {
-        return httpClient.get("/guilds/$guildId/prune?days=$days", Pruned::class)
-    }
+    fun getPrunePotential(guildId: String, days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
 
-    fun pruneGuild(guildId: String, days: Int = 1): Pruned {
-        return httpClient.post("/guilds/$guildId/prune?days=$days", Pruned::class)
-    }
+    fun pruneGuild(guildId: String, days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
 
-    fun getGuildVoiceRegions(guildId: String): List<VoiceRegion> {
-        return httpClient.get("/guilds/$guildId/regions", listOfType(VoiceRegion::class))
-    }
+    fun getGuildVoiceRegions(guildId: String) = getRequest("/guilds/$guildId/regions").bodyAsListOf(VoiceRegion::class)
 
-    fun getGuildInvites(guildId: String): List<Invite> {
-        return httpClient.get("/guilds/$guildId/invites", listOfType(Invite::class))
-    }
+    fun getGuildInvites(guildId: String) = getRequest("/guilds/$guildId/invites").bodyAsListOf(Invite::class)
 
-    fun getGuildIntegrations(guildId: String): List<GuildIntegration> {
-        return httpClient.get("/guilds/$guildId/integrations", listOfType(GuildIntegration::class))
-    }
+    fun getGuildIntegrations(guildId: String) = getRequest("/guilds/$guildId/integrations").bodyAsListOf(GuildIntegration::class)
 
     fun createGuildIntegration(guildId: String, guildIntegration: CreateGuildIntegration) {
-        return httpClient.post("/guilds/$guildId/integrations", guildIntegration)
+        postRequest("/guilds/$guildId/integrations", guildIntegration)
     }
 
     fun updateGuildIntegration(guildId: String, guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
-        return httpClient.patch("/guilds/$guildId/integrations/$guildIntegrationId", guildIntegration)
+        patchRequest("/guilds/$guildId/integrations/$guildIntegrationId", guildIntegration)
     }
 
     fun deleteGuildIntegration(guildId: String, guildIntegrationId: String) {
-        httpClient.delete("/guilds/$guildId/integrations/$guildIntegrationId")
+        deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId")
     }
 
     fun syncGuildIntegration(guildId: String, guildIntegrationId: String) {
-        httpClient.post("/guilds/$guildId/integrations/$guildIntegrationId/sync")
+        postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync")
     }
 
-    fun getGuildEmbed(guildId: String): GuildEmbed {
-        return httpClient.get("/guilds/$guildId/embed", GuildEmbed::class)
-    }
+    fun getGuildEmbed(guildId: String) = getRequest("/guilds/$guildId/embed").bodyAs(GuildEmbed::class)
 
-    fun updateGuildEmbed(guildId: String, guildEmbed: GuildEmbed): GuildEmbed {
-        return httpClient.patch("/guilds/$guildId/embed", GuildEmbed::class, guildEmbed)
-    }
+    fun updateGuildEmbed(guildId: String, guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs(GuildEmbed::class)
 
-    fun getGuildVanityUrl(guildId: String): Invite {
-        return httpClient.get("/guilds/$guildId/vanity-url", Invite::class)
-    }
+    fun getGuildVanityUrl(guildId: String) = getRequest("/guilds/$guildId/vanity-url").bodyAs(Invite::class)
 
-    fun getInvite(inviteCode: String): Invite {
-        return httpClient.get("/invites/$inviteCode", Invite::class)
-    }
+    fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").bodyAs(Invite::class)
 
     fun deleteInvite(inviteCode: String) {
-        httpClient.delete("/invites/$inviteCode")
+        deleteRequest("/invites/$inviteCode")
     }
 
-    fun getUser(userId: String = "@me"): User {
-        return httpClient.get("/users/$userId", User::class)
-    }
+    fun getUser(userId: String = "@me") = getRequest("/users/$userId").bodyAs(User::class)
 
-    fun modifyUser(user: ModifyUser): User {
-        return httpClient.patch("/users/@me", User::class, user)
-    }
+    fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user).bodyAs(User::class)
 
     fun getUserGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<Guild> {
         var url = "/users/@me/guilds?limit=$limit"
@@ -454,70 +275,48 @@ class DiscordRestClient(private val token: String) {
         if (after != null) {
             url += "&after=$after"
         }
-        return httpClient.get(url, listOfType(Guild::class))
+        return getRequest(url).bodyAsListOf(Guild::class)
     }
 
     fun leaveGuild(guildId: String) {
-        httpClient.delete("/users/@me/guilds/$guildId")
+        deleteRequest("/users/@me/guilds/$guildId")
     }
 
-    fun getUserDMs(): List<Channel> {
-        return httpClient.get("/users/@me/channels", listOfType(Channel::class))
-    }
+    fun getUserDMs() = getRequest("/users/@me/channels").bodyAsListOf(Channel::class)
 
-    fun createDM(createDM: CreateDM): Channel {
-        return httpClient.post("/users/@me/channels", Channel::class, createDM)
-    }
+    fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM).bodyAs(Channel::class)
 
-    fun createGroupDM(groupDM: CreateGroupDM): Channel {
-        return httpClient.post("/users/@me/channels", Channel::class, groupDM)
-    }
+    fun createGroupDM(groupDM: CreateGroupDM) = postRequest("/users/@me/channels", groupDM).bodyAs(Channel::class)
 
-    fun getUserConnections(): List<UserConnection> {
-        return httpClient.get("/users/@me/connections", listOfType(UserConnection::class))
-    }
+    fun getUserConnections() = getRequest("/users/@me/connections").bodyAsListOf(UserConnection::class)
 
-    fun getVoiceRegions(): List<VoiceRegion> {
-        return httpClient.get("/voice/regions", listOfType(VoiceRegion::class))
-    }
+    fun getVoiceRegions() = getRequest("/voice/regions").bodyAsListOf(VoiceRegion::class)
 
-    fun createWebhook(channelId: String, webhook: CreateWebhook): Webhook {
-        return httpClient.post("/channels/$channelId/webhooks", Webhook::class, webhook)
-    }
+    fun createWebhook(channelId: String, webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).bodyAs(Webhook::class)
 
-    fun getChannelWebhooks(channelId: String): List<Webhook> {
-        return httpClient.get("/channels/$channelId/webhooks", listOfType(Webhook::class))
-    }
+    fun getChannelWebhooks(channelId: String) = getRequest("/channels/$channelId/webhooks").bodyAsListOf(Webhook::class)
 
-    fun getGuildWebhooks(guildId: String): List<Webhook> {
-        return httpClient.get("/guilds/$guildId/webhooks", listOfType(Webhook::class))
-    }
+    fun getGuildWebhooks(guildId: String) = getRequest("/guilds/$guildId/webhooks").bodyAsListOf(Webhook::class)
 
-    fun getWebhook(webhookId: String): Webhook {
-        return httpClient.get("/webhooks/$webhookId", Webhook::class)
-    }
+    fun getWebhook(webhookId: String) = getRequest("/webhooks/$webhookId").bodyAs(Webhook::class)
 
-    fun getWebhookWithToken(webhookId: String, webhookToken: String): Webhook {
-        return httpClient.get("/webhooks/$webhookId/$webhookToken", Webhook::class)
-    }
+    fun getWebhookWithToken(webhookId: String, webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs(Webhook::class)
 
-    fun updateWebhook(webhookId: String, webhook: PatchWebhook): Webhook {
-        return httpClient.patch("/webhooks/$webhookId", Webhook::class, webhook)
-    }
+    fun updateWebhook(webhookId: String, webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs(Webhook::class)
 
     fun updateWebhookWithToken(webhookId: String, webhookToken: String, webhook: PatchWebhook): Webhook {
-        return httpClient.patch("/webhooks/$webhookId/$webhookToken", Webhook::class, webhook)
+        return patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs(Webhook::class)
     }
 
     fun deleteWebhook(webhookId: String) {
-        return httpClient.delete("/webhooks/$webhookId")
+        deleteRequest("/webhooks/$webhookId")
     }
 
     fun deleteWebhookWithToken(webhookId: String, webhookToken: String) {
-        return httpClient.delete("/webhooks/$webhookId/$webhookToken")
+        deleteRequest("/webhooks/$webhookId/$webhookToken")
     }
 
     fun executeWebhook(webhookId: String, webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) {
-        return httpClient.post("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission)
+        postRequest("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission)
     }
 }
