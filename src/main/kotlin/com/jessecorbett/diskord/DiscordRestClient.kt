@@ -66,7 +66,7 @@ class DiscordRestClient(private val token: String) {
         makeRequest(commonRequest(url).delete().build())
     }
 
-    fun getGateway() = getRequest("/gateway").bodyAs(GatewayUrl::class)
+    fun getApiGateway() = getRequest("/gateway").bodyAs(GatewayUrl::class)
 
     fun getBotGateway() = getRequest("/gateway/bot").bodyAs(GatewayBotUrl::class)
 
@@ -76,23 +76,23 @@ class DiscordRestClient(private val token: String) {
 
     fun deleteChannel(channelId: String): Unit = deleteRequest("/channels/$channelId")
 
-    fun getMessages(channelId: String) = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
+    fun getChannelMessages(channelId: String) = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
 
     fun getChannelMessage(channelId: String, messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
 
     fun createMessage(channelId: String, message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs(Message::class)
 
-    fun createReaction(channelId: String, messageId: String, emoji: String) {
+    fun addMessageReaction(channelId: String, messageId: String, emoji: String) {
         putRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/@me")
     }
 
-    fun deleteReaction(channelId: String, messageId: String, emoji: String, userId: String = "@me") {
+    fun removeMessageReaction(channelId: String, messageId: String, emoji: String, userId: String = "@me") {
         deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/$userId")
     }
 
-    fun getReactions(channelId: String, messageId: String, emoji: String): List<Reaction> = getRequest("/channels/$channelId/messages/$messageId/reaction/$emoji").bodyAsListOf(Reaction::class)
+    fun getMessageReactions(channelId: String, messageId: String, emoji: String): List<Reaction> = getRequest("/channels/$channelId/messages/$messageId/reaction/$emoji").bodyAsListOf(Reaction::class)
 
-    fun deleteAllReactions(channelId: String, messageId: String) {
+    fun deleteAllMessageReactions(channelId: String, messageId: String) {
         deleteRequest("/channels/$channelId/messages/$messageId/reactions")
     }
 
@@ -102,7 +102,7 @@ class DiscordRestClient(private val token: String) {
         deleteRequest("/channels/$channelId/messages/$messageId")
     }
 
-    fun bulkDeleteMessages(channelId: String, bulkMessageDelete: BulkMessageDelete) {
+    fun bulkDeleteChannelMessages(channelId: String, bulkMessageDelete: BulkMessageDelete) {
         postRequest("/channels/$channelId/messages/bulk-delete", bulkMessageDelete)
     }
 
