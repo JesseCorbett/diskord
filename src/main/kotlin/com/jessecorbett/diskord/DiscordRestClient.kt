@@ -1,8 +1,5 @@
 package com.jessecorbett.diskord
 
-import com.fasterxml.jackson.core.JsonFactory
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
