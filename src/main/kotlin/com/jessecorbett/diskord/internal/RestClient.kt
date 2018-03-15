@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.internal
 
-import com.jessecorbett.diskord.api.rest.response.RateLimitExceeded
+import com.jessecorbett.diskord.api.RateLimitExceeded
 import com.jessecorbett.diskord.exception.*
 import okhttp3.MediaType
 import okhttp3.Request

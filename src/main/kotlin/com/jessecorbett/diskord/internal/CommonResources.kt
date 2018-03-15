@@ -17,7 +17,7 @@ internal val httpClient = OkHttpClient.Builder()
 internal val jsonMapper = ObjectMapper().findAndRegisterModules()
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!! // This always returns an object
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
 internal fun <T: Any> Response.bodyAs(bodyClass: KClass<T>) = jsonMapper.readValue(this.body()!!.string(), bodyClass.java)!!
 

@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.rest.response
+package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
