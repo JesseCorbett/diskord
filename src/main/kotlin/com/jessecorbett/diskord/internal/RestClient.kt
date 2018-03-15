@@ -1,28 +1,19 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.api.rest.response.RateLimitExceeded
 import com.jessecorbett.diskord.exception.*
-import com.jessecorbett.diskord.internal.RateLimitInfo
-import com.jessecorbett.diskord.internal.httpClient
-import com.jessecorbett.diskord.internal.jsonMapper
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import java.time.Instant
-import kotlin.reflect.KClass
 
 private const val discordApi = "https://discordapp.com/api"
 
+private fun jsonBody(value: Any?): RequestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonMapper.writeValueAsString(value))
+
 abstract class RestClient(val token: String) {
     private val rateInfo = RateLimitInfo(1, 1, Instant.MAX)
-
-    private fun jsonBody(value: Any?): RequestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonMapper.writeValueAsString(value))
-
-    protected fun <T: Any> Response.bodyAs(bodyClass: KClass<T>) = jsonMapper.readValue(this.body()!!.string(), bodyClass.java)!!
-
-    protected fun <T: Any> Response.bodyAsListOf(bodyClass: KClass<T>): List<T>
-            = jsonMapper.readValue(this.body()!!.string(), jsonMapper.typeFactory.constructCollectionType(List::class.java, bodyClass.java))
 
     private fun handleFailure(response: Response) {
         when (response.code()) {

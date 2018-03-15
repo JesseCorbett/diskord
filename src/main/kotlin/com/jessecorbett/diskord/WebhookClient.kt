@@ -3,27 +3,29 @@ package com.jessecorbett.diskord
 import com.jessecorbett.diskord.api.models.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
+import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.internal.bodyAs
 
 class WebhookClient(token: String, val webhookId: String) : RestClient(token) {
     fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs(Webhook::class)
 
-    fun getWebhookWithToken(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs(Webhook::class)
+    fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs(Webhook::class)
 
-    fun updateWebhook(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs(Webhook::class)
+    fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs(Webhook::class)
 
-    fun updateWebhookWithToken(webhookToken: String, webhook: PatchWebhook): Webhook {
+    fun update(webhookToken: String, webhook: PatchWebhook): Webhook {
         return patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs(Webhook::class)
     }
 
-    fun deleteWebhook() {
+    fun delete() {
         deleteRequest("/webhooks/$webhookId")
     }
 
-    fun deleteWebhookWithToken(webhookToken: String) {
+    fun delete(webhookToken: String) {
         deleteRequest("/webhooks/$webhookId/$webhookToken")
     }
 
-    fun executeWebhook(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) {
+    fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) {
         postRequest("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission)
     }
 }

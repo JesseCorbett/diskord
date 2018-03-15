@@ -4,6 +4,9 @@ import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
 import com.jessecorbett.diskord.internal.RateLimitInfo
+import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.internal.bodyAs
+import com.jessecorbett.diskord.internal.bodyAsListOf
 import java.time.Instant
 
 class ChannelClient(token: String, val channelId: String) : RestClient(token) {
@@ -11,15 +14,15 @@ class ChannelClient(token: String, val channelId: String) : RestClient(token) {
 
     fun getChannel() = getRequest("/channels/$channelId").bodyAs(Channel::class)
 
-    fun updateChannel(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs(Channel::class)
+    fun update(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs(Channel::class)
 
-    fun deleteChannel() {
+    fun delete() {
         deleteRequest("/channels/$channelId")
     }
 
-    fun getChannelMessages() = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
+    fun getMessage() = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
 
-    fun getChannelMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
+    fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
 
     fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs(Message::class)
 
@@ -43,19 +46,19 @@ class ChannelClient(token: String, val channelId: String) : RestClient(token) {
         deleteRequest("/channels/$channelId/messages/$messageId", messageDeleteRateInfo)
     }
 
-    fun bulkDeleteChannelMessages(channelId: String, bulkMessageDelete: BulkMessageDelete) {
+    fun bulkDeleteMessages(channelId: String, bulkMessageDelete: BulkMessageDelete) {
         postRequest("/channels/$channelId/messages/bulk-delete", bulkMessageDelete)
     }
 
-    fun editChannelPermissions(overwrite: Overwrite) {
+    fun editPermissions(overwrite: Overwrite) {
         putRequest("/channels/$channelId/permissions/${overwrite.id}", overwrite)
     }
 
-    fun getChannelInvites() = getRequest("/channels/$channelId/invites").bodyAsListOf(Invite::class)
+    fun getInvites() = getRequest("/channels/$channelId/invites").bodyAsListOf(Invite::class)
 
-    fun createChannelInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs(Invite::class)
+    fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs(Invite::class)
 
-    fun deleteChannelPermissions(overwriteId: String) {
+    fun deletePermissions(overwriteId: String) {
         deleteRequest("/channels/$channelId/permissions/$overwriteId")
     }
 
@@ -81,7 +84,7 @@ class ChannelClient(token: String, val channelId: String) : RestClient(token) {
         deleteRequest("/channels/$channelId/recipients/$userId")
     }
 
-    fun getChannelWebhooks() = getRequest("/channels/$channelId/webhooks").bodyAsListOf(Webhook::class)
+    fun getWebhooks() = getRequest("/channels/$channelId/webhooks").bodyAsListOf(Webhook::class)
 
     fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).bodyAs(Webhook::class)
 

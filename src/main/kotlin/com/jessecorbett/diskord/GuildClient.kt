@@ -2,9 +2,12 @@ package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.internal.bodyAs
+import com.jessecorbett.diskord.internal.bodyAsListOf
 
 class GuildClient(token: String, val guildId: String) : RestClient(token) {
-    fun getGuildEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsListOf(Emoji::class)
+    fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsListOf(Emoji::class)
 
     fun getEmoji(emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs(Emoji::class)
 
@@ -18,107 +21,107 @@ class GuildClient(token: String, val guildId: String) : RestClient(token) {
 
     fun getGuild() = getRequest("/guilds/$guildId").bodyAs(Guild::class)
 
-    fun updateGuild(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs(Guild::class)
+    fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs(Guild::class)
 
-    fun deleteGuild() {
+    fun delete() {
         deleteRequest("/guilds/$guildId")
     }
 
-    fun getGuildChannels() = getRequest("/guilds/$guildId/channels").bodyAsListOf(Channel::class)
+    fun getChannels() = getRequest("/guilds/$guildId/channels").bodyAsListOf(Channel::class)
 
-    fun createGuildChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs(Channel::class)
+    fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs(Channel::class)
 
-    fun modifyGuildChannelPositions(positions: List<GuildPosition>) {
+    fun modifyChannelPositions(positions: List<GuildPosition>) {
         patchRequest("/guilds/$guildId/channels", positions)
     }
 
-    fun getGuildMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs(GuildMember::class)
+    fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs(GuildMember::class)
 
-    fun getGuildMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsListOf(GuildMember::class)
+    fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsListOf(GuildMember::class)
 
-    fun addGuildMember(userId: String, addGuildMember: AddGuildMember) {
+    fun addMember(userId: String, addGuildMember: AddGuildMember) {
         putRequest("/guilds/$guildId/members/$userId", addGuildMember)
     }
 
-    fun updateGuildMember(userId: String, guildMember: PatchGuildMember) {
+    fun updateMember(userId: String, guildMember: PatchGuildMember) {
         patchRequest("/guilds/$guildId/members/$userId", guildMember)
     }
 
-    fun changeGuildMemberNickname(guildMember: PatchGuildMemberNickname) {
+    fun changeMemberNickname(guildMember: PatchGuildMemberNickname) {
         patchRequest("/guilds/$guildId/members/@me/nick", guildMember)
     }
 
-    fun addGuildMemberRole(userId: String, roleId: String) {
+    fun addMemberRole(userId: String, roleId: String) {
         putRequest("/guilds/$guildId/members/$userId/roles/$roleId")
     }
 
-    fun removeGuildMemberRole(userId: String, roleId: String) {
+    fun removeMemberRole(userId: String, roleId: String) {
         deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId")
     }
 
-    fun removeGuildMember(userId: String) {
+    fun removeMember(userId: String) {
         deleteRequest("/guilds/$guildId/members/$userId")
     }
 
-    fun getGuildBans() = getRequest("/guilds/$guildId/bans").bodyAsListOf(Ban::class)
+    fun getBans() = getRequest("/guilds/$guildId/bans").bodyAsListOf(Ban::class)
 
-    fun createGuildBan(userId: String, deleteMessageDays: Int, reason: String) {
+    fun createBan(userId: String, deleteMessageDays: Int, reason: String) {
         putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason")
     }
 
-    fun removeGuildBan(userId: String) {
+    fun removeBan(userId: String) {
         deleteRequest("/guilds/$guildId/bans/$userId")
     }
 
-    fun getGuildRoles() = getRequest("/guilds/$guildId/roles").bodyAsListOf(Role::class)
+    fun getRoles() = getRequest("/guilds/$guildId/roles").bodyAsListOf(Role::class)
 
-    fun createGuildRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs(Role::class)
+    fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs(Role::class)
 
-    fun modifyGuildRolePositions(positions: List<GuildPosition>) {
+    fun modifyRolePositions(positions: List<GuildPosition>) {
         patchRequest("/guilds/$guildId/roles", positions)
     }
 
-    fun updateGuildRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs(Role::class)
+    fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs(Role::class)
 
-    fun deleteGuildRole(roleId: String) {
+    fun deleteRole(roleId: String) {
         deleteRequest("/guilds/$guildId/roles/$roleId")
     }
 
     fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
 
-    fun pruneGuild(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
+    fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
 
-    fun getGuildVoiceRegions() = getRequest("/guilds/$guildId/regions").bodyAsListOf(VoiceRegion::class)
+    fun getVoiceRegions() = getRequest("/guilds/$guildId/regions").bodyAsListOf(VoiceRegion::class)
 
-    fun getGuildInvites() = getRequest("/guilds/$guildId/invites").bodyAsListOf(Invite::class)
+    fun getInvites() = getRequest("/guilds/$guildId/invites").bodyAsListOf(Invite::class)
 
-    fun getGuildIntegrations() = getRequest("/guilds/$guildId/integrations").bodyAsListOf(GuildIntegration::class)
+    fun getIntegrations() = getRequest("/guilds/$guildId/integrations").bodyAsListOf(GuildIntegration::class)
 
-    fun createGuildIntegration(guildIntegration: CreateGuildIntegration) {
+    fun createIntegration(guildIntegration: CreateGuildIntegration) {
         postRequest("/guilds/$guildId/integrations", guildIntegration)
     }
 
-    fun updateGuildIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
+    fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
         patchRequest("/guilds/$guildId/integrations/$guildIntegrationId", guildIntegration)
     }
 
-    fun deleteGuildIntegration(guildIntegrationId: String) {
+    fun deleteIntegration(guildIntegrationId: String) {
         deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId")
     }
 
-    fun syncGuildIntegration(guildIntegrationId: String) {
+    fun syncIntegration(guildIntegrationId: String) {
         postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync")
     }
 
-    fun getGuildEmbed() = getRequest("/guilds/$guildId/embed").bodyAs(GuildEmbed::class)
+    fun getEmbed() = getRequest("/guilds/$guildId/embed").bodyAs(GuildEmbed::class)
 
-    fun updateGuildEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs(GuildEmbed::class)
+    fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs(GuildEmbed::class)
 
-    fun getGuildVanityUrl() = getRequest("/guilds/$guildId/vanity-url").bodyAs(Invite::class)
+    fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url").bodyAs(Invite::class)
 
-    fun getGuildWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsListOf(Webhook::class)
+    fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsListOf(Webhook::class)
 
-    fun leaveGuild() {
+    fun leave() {
         deleteRequest("/users/@me/guilds/$guildId")
     }
 }

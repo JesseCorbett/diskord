@@ -4,6 +4,9 @@ import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.internal.bodyAs
+import com.jessecorbett.diskord.internal.bodyAsListOf
 
 class DiscordClient(token: String) : RestClient(token) {
     fun getApiGateway() = getRequest("/gateway").bodyAs(GatewayUrl::class)
@@ -33,7 +36,7 @@ class DiscordClient(token: String) : RestClient(token) {
         return getRequest(url).bodyAsListOf(Guild::class)
     }
 
-    fun getUserDMs() = getRequest("/users/@me/channels").bodyAsListOf(Channel::class)
+    fun getDMs() = getRequest("/users/@me/channels").bodyAsListOf(Channel::class)
 
     fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM).bodyAs(Channel::class)
 
