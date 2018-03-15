@@ -5,15 +5,15 @@ import com.jessecorbett.diskord.api.models.Attachment
 import com.jessecorbett.diskord.api.models.Embed
 import com.jessecorbett.diskord.api.models.MessageActivity
 import com.jessecorbett.diskord.api.models.MessageApplication
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class Message(
         @JsonProperty("id") val id: String,
         @JsonProperty("channel_id") val channelId: String,
         @JsonProperty("author") val author: User?,
         @JsonProperty("content") val content: String,
-        @JsonProperty("timestamp") val sentAt: ZonedDateTime,
-        @JsonProperty("edited_timestamp") val editedAt: ZonedDateTime?,
+        @JsonProperty("timestamp") val sentAt: Instant,
+        @JsonProperty("edited_timestamp") val editedAt: Instant?,
         @JsonProperty("tts") val isTTS: Boolean,
         @JsonProperty("mention_everyone") val mentionsEveryone: Boolean,
         @JsonProperty("mentions") val usersMentioned: Array<User> = emptyArray(),

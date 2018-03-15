@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.api.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.jessecorbett.diskord.api.User
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class GuildIntegration(
         @JsonProperty("id") val id: String,
@@ -15,7 +15,7 @@ data class GuildIntegration(
         @JsonProperty("expire_grace_period") val expirationGracePeriod: Int,
         @JsonProperty("user") val user: User,
         @JsonProperty("account") val account: IntegrationAccount,
-        @JsonProperty("synced_at") val syncedAt: ZonedDateTime
+        @JsonProperty("synced_at") val syncedAt: Instant
 )
 
 data class IntegrationAccount(

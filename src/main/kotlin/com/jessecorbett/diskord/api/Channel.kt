@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.jessecorbett.diskord.api.models.Overwrite
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class Channel(
         @JsonProperty("id") val id: String,
@@ -22,7 +22,7 @@ data class Channel(
         @JsonProperty("owner_id") var dmOwnerId: String?,
         @JsonProperty("application_id") var applicationId: String?,
         @JsonProperty("parent_id") var parentId: String?,
-        @JsonProperty("last_pin_timestamp") var lastPinTime: ZonedDateTime?
+        @JsonProperty("last_pin_timestamp") var lastPinTime: Instant?
 )
 
 enum class ChannelType(@JsonValue val code: Int) {

@@ -1,14 +1,14 @@
 package com.jessecorbett.diskord.api.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class Embed(
         @JsonProperty("title") val title: String?,
         @JsonProperty("type") val type: String,
         @JsonProperty("description") val description: String?,
         @JsonProperty("url") val url: String?,
-        @JsonProperty("timestamp") val timestamp: ZonedDateTime?,
+        @JsonProperty("timestamp") val timestamp: Instant?,
         @JsonProperty("color") val color: Int,
         @JsonProperty("footer") val footer: EmbedFooter?,
         @JsonProperty("image") val image: EmbedImage?,

@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class Invite(
         @JsonProperty("code") val code: String,
@@ -16,6 +16,6 @@ data class InviteMetadata(
         @JsonProperty("max_uses") val maxUses: Int,
         @JsonProperty("max_age") val expiresAfterSeconds: Int,
         @JsonProperty("temporary") val grantsTemporaryMembership: Boolean,
-        @JsonProperty("created_at") val createdAt: ZonedDateTime,
+        @JsonProperty("created_at") val createdAt: Instant,
         @JsonProperty("revoked") val isRevoked: Boolean
 )

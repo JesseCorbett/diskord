@@ -3,11 +3,14 @@ package com.jessecorbett.diskord.api.gateway.events
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.jessecorbett.diskord.api.Emoji
 import com.jessecorbett.diskord.api.Role
-import com.jessecorbett.diskord.api.models.*
+import com.jessecorbett.diskord.api.models.BarePresenceUpdate
+import com.jessecorbett.diskord.api.models.ExplicitContentFilterLevel
+import com.jessecorbett.diskord.api.models.GuildMember
+import com.jessecorbett.diskord.api.models.VoiceState
 import com.jessecorbett.diskord.api.models.values.MFALevel
 import com.jessecorbett.diskord.api.models.values.NotificationsLevel
 import com.jessecorbett.diskord.api.models.values.VerificationLevel
-import java.time.ZonedDateTime
+import java.time.Instant
 
 data class CreatedGuild(
         @JsonProperty("id") val id: String,
@@ -32,7 +35,7 @@ data class CreatedGuild(
         @JsonProperty("widget_enabled") val widgetEnabled: Boolean?,
         @JsonProperty("widget_channel_id") val widgetChannelId: String?,
         @JsonProperty("system_channel_id") val systemMessageChannelId: String?,
-        @JsonProperty("joined_at") val userJoinedAt: ZonedDateTime?,
+        @JsonProperty("joined_at") val userJoinedAt: Instant?,
         @JsonProperty("large") val isLargeGuild: Boolean?,
         @JsonProperty("unavailable") val isUnavailable: Boolean?,
         @JsonProperty("member_count") val memberCount: Int?,
