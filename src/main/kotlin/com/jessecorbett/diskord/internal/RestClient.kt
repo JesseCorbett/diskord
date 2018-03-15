@@ -15,6 +15,12 @@ private fun jsonBody(value: Any?): RequestBody = RequestBody.create(MediaType.pa
 abstract class RestClient(val token: String) {
     private val rateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
+    fun getRateLimit() = rateInfo.limit
+
+    fun getRateRemaining() = rateInfo.remaining
+
+    fun getRateResetTime() = rateInfo.resetTime
+
     private fun handleFailure(response: Response) {
         when (response.code()) {
             400 -> throw DiscordBadRequestException()

@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.GatewayBotUrl
 import com.jessecorbett.diskord.api.GatewayUrl
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.api.rest.response.PartialGuild
 import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsListOf
@@ -25,7 +26,7 @@ class DiscordClient(token: String) : RestClient(token) {
 
     fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user).bodyAs(User::class)
 
-    fun getUserGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<Guild> {
+    fun getGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<PartialGuild> {
         var url = "/users/@me/guilds?limit=$limit"
         if (before != null) {
             url += "&before=$before"
@@ -33,7 +34,7 @@ class DiscordClient(token: String) : RestClient(token) {
         if (after != null) {
             url += "&after=$after"
         }
-        return getRequest(url).bodyAsListOf(Guild::class)
+        return getRequest(url).bodyAsListOf(PartialGuild::class)
     }
 
     fun getDMs() = getRequest("/users/@me/channels").bodyAsListOf(Channel::class)
