@@ -19,7 +19,7 @@ class DiscordClient(token: String) : RestClient(token) {
     fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").bodyAs(Invite::class)
 
     fun deleteInvite(inviteCode: String) {
-        deleteRequest("/invites/$inviteCode")
+        deleteRequest("/invites/$inviteCode").close()
     }
 
     fun getUser(userId: String = "@me") = getRequest("/users/$userId").bodyAs(User::class)
@@ -37,6 +37,7 @@ class DiscordClient(token: String) : RestClient(token) {
         return getRequest(url).bodyAsListOf(PartialGuild::class)
     }
 
+    @Deprecated("Currently Discord does not return anything from the endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using #createDM")
     fun getDMs() = getRequest("/users/@me/channels").bodyAsListOf(Channel::class)
 
     fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM).bodyAs(Channel::class)
