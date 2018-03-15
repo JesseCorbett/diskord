@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.models.Webhook
+import com.jessecorbett.diskord.api.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.internal.RestClient

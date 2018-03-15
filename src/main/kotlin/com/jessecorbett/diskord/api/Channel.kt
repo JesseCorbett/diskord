@@ -1,7 +1,8 @@
-package com.jessecorbett.diskord.api.models
+package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
+import com.jessecorbett.diskord.api.models.Overwrite
 import java.time.ZonedDateTime
 
 data class Channel(
@@ -16,9 +17,9 @@ data class Channel(
         @JsonProperty("last_message_id") var lastMessageId: String?,
         @JsonProperty("bitrate") var voiceBitrate: Int?,
         @JsonProperty("user_limit") var voiceUserLimit: Int?,
-        @JsonProperty("recipients") var recipients: Array<User>?,
-        @JsonProperty("icon") var icon: String?,
-        @JsonProperty("owner_id") var ownerId: String?,
+        @JsonProperty("recipients") var dmRecipients: Array<User>?,
+        @JsonProperty("icon") var iconHash: String?,
+        @JsonProperty("owner_id") var dmOwnerId: String?,
         @JsonProperty("application_id") var applicationId: String?,
         @JsonProperty("parent_id") var parentId: String?,
         @JsonProperty("last_pin_timestamp") var lastPinTime: ZonedDateTime?

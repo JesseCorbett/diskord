@@ -2,6 +2,8 @@ package com.jessecorbett.diskord.api.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
+import com.jessecorbett.diskord.api.User
+import com.jessecorbett.diskord.api.Webhook
 
 
 data class AuditLog(

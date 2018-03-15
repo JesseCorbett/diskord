@@ -1,6 +1,7 @@
-package com.jessecorbett.diskord.api.models
+package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.api.models.ExplicitContentFilterLevel
 import com.jessecorbett.diskord.api.models.values.MFALevel
 import com.jessecorbett.diskord.api.models.values.NotificationsLevel
 import com.jessecorbett.diskord.api.models.values.VerificationLevel
@@ -8,8 +9,9 @@ import com.jessecorbett.diskord.api.models.values.VerificationLevel
 data class Guild(
         @JsonProperty("id") val id: String,
         @JsonProperty("name") val name: String,
-        @JsonProperty("icon") val icon: String?,
-        @JsonProperty("owner") val userIsOwner: Boolean,
+        @JsonProperty("icon") val iconHash: String?,
+        @JsonProperty("splash") val splashHash: String?,
+        @JsonProperty("owner") val userIsOwner: Boolean?,
         @JsonProperty("owner_id") val ownerId: String,
         @JsonProperty("permissions") val permissions: Int?,
         @JsonProperty("region") val region: String,
@@ -27,6 +29,5 @@ data class Guild(
         @JsonProperty("application_id") val owningApplicationId: String?,
         @JsonProperty("widget_enabled") val widgetEnabled: Boolean?,
         @JsonProperty("widget_channel_id") val widgetChannelId: String?,
-        @JsonProperty("system_channel_id") val systemMessageChannelId: String?,
-        @JsonProperty("unavailable") val unavailable: Boolean?
+        @JsonProperty("system_channel_id") val systemMessageChannelId: String?
 )

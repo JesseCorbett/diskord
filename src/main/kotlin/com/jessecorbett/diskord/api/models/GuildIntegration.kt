@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.api.User
 import java.time.ZonedDateTime
 
 data class GuildIntegration(

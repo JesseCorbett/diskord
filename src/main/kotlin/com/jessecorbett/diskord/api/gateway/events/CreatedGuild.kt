@@ -1,6 +1,8 @@
 package com.jessecorbett.diskord.api.gateway.events
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.api.Emoji
+import com.jessecorbett.diskord.api.Role
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.models.values.MFALevel
 import com.jessecorbett.diskord.api.models.values.NotificationsLevel

@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api
+package com.jessecorbett.diskord.exception
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

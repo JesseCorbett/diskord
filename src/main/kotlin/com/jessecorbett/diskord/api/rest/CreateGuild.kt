@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.models.Channel
+import com.jessecorbett.diskord.api.Channel
 import com.jessecorbett.diskord.api.models.ExplicitContentFilterLevel
-import com.jessecorbett.diskord.api.models.Role
+import com.jessecorbett.diskord.api.Role
 import com.jessecorbett.diskord.api.models.values.NotificationsLevel
 import com.jessecorbett.diskord.api.models.values.VerificationLevel
 

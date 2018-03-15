@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord
 
+import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete

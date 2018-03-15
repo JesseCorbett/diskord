@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.models.ChannelType
+import com.jessecorbett.diskord.api.ChannelType
 import com.jessecorbett.diskord.api.models.Overwrite
 
 data class CreateChannel(

@@ -3,6 +3,10 @@ package com.jessecorbett.diskord.internal
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.EventListener
+import com.jessecorbett.diskord.api.Channel
+import com.jessecorbett.diskord.api.Guild
+import com.jessecorbett.diskord.api.Message
+import com.jessecorbett.diskord.api.User
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.models.*

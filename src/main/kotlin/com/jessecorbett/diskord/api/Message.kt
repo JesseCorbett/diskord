@@ -1,14 +1,18 @@
-package com.jessecorbett.diskord.api.models
+package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.api.models.Attachment
+import com.jessecorbett.diskord.api.models.Embed
+import com.jessecorbett.diskord.api.models.MessageActivity
+import com.jessecorbett.diskord.api.models.MessageApplication
 import java.time.ZonedDateTime
 
 data class Message(
         @JsonProperty("id") val id: String,
         @JsonProperty("channel_id") val channelId: String,
         @JsonProperty("author") val author: User?,
-        @JsonProperty("content") val content: String?,
-        @JsonProperty("timestamp") val sentAt: ZonedDateTime?,
+        @JsonProperty("content") val content: String,
+        @JsonProperty("timestamp") val sentAt: ZonedDateTime,
         @JsonProperty("edited_timestamp") val editedAt: ZonedDateTime?,
         @JsonProperty("tts") val isTTS: Boolean,
         @JsonProperty("mention_everyone") val mentionsEveryone: Boolean,
@@ -20,7 +24,7 @@ data class Message(
         @JsonProperty("nonce") val validationNonce: String?,
         @JsonProperty("pinned") val isPinned: Boolean,
         @JsonProperty("webhook_id") val webHookId: String?,
-        @JsonProperty("type") val type: MessageType?,
+        @JsonProperty("type") val type: MessageType,
         @JsonProperty("activity") val activity: MessageActivity?,
         @JsonProperty("application") val application: MessageApplication?
 )
