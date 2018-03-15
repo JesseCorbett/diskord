@@ -88,4 +88,6 @@ class GuildClient(token: String, val guildId: String) : RestClient(token) {
     fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsListOf(Webhook::class)
 
     fun leave() = deleteRequest("/users/@me/guilds/$guildId").close()
+
+    fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs").bodyAs(AuditLog::class)
 }

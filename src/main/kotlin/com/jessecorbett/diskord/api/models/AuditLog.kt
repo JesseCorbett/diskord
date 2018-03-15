@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.api.models
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 
+
 data class AuditLog(
         @JsonProperty("webhooks") val webhooks: List<Webhook>,
         @JsonProperty("users") val users: List<User>,
@@ -12,17 +13,17 @@ data class AuditLog(
 data class AuditLogEntry(
         @JsonProperty("id") val id: String,
         @JsonProperty("target_id") val targetId: String?,
-        @JsonProperty("changes") val changes: List<AuditLogChange>,
+        @JsonProperty("changes") val changes: List<AuditLogChange> = emptyList(),
         @JsonProperty("user_id") val userId: String,
-        @JsonProperty("action_type") val actionType: AuditLogActionType,
+        @JsonProperty("action_type") val actionType: Int,
         @JsonProperty("options") val optionalData: OptionalEntryData?,
-        @JsonProperty("reason") val reason: String
+        @JsonProperty("reason") val reason: String?
 )
 
 // TODO: Make super dynamic and all
 data class AuditLogChange(
-        @JsonProperty("new_value") val newValue: String?,
-        @JsonProperty("old_value") val oldValue: String?,
+        @JsonProperty("new_value") val newValue: Any?,
+        @JsonProperty("old_value") val oldValue: Any?,
         @JsonProperty("key") val key: String
 )
 
@@ -41,7 +42,7 @@ enum class OverwrittenEntityType(@JsonValue val code: String) {
     ROLE("role")
 }
 
-enum class AuditLogActionType(@JsonValue val code: Int) {
+enum class AuditLogActionType(val code: Int) {
     GUILD_UPDATE(1),
     CHANNEL_CREATE(10),
     CHANNEL_UPDATE(11),

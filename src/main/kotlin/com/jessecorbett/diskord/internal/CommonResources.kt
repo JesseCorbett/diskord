@@ -18,7 +18,8 @@ internal val httpClient = OkHttpClient.Builder()
 internal val jsonMapper = ObjectMapper().findAndRegisterModules()
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)!!
 
 internal fun <T: Any> Response.bodyAs(bodyClass: KClass<T>): T {
     val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
@@ -31,3 +32,6 @@ internal fun <T: Any> Response.bodyAsListOf(bodyClass: KClass<T>): List<T> {
     this.body()?.close()
     return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, bodyClass.java))
 }
+
+internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
+internal const val defaultUserAgentVersion = "0.0.0"

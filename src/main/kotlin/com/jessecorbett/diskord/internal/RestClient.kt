@@ -14,6 +14,8 @@ private fun jsonBody(value: Any?): RequestBody = RequestBody.create(MediaType.pa
 
 abstract class RestClient(val token: String) {
     private val rateInfo = RateLimitInfo(1, 1, Instant.MAX)
+    var botUrl: String = defaultUserAgentUrl
+    var botVersion: String = defaultUserAgentVersion
 
     fun getRateLimit() = rateInfo.limit
 
@@ -38,7 +40,7 @@ abstract class RestClient(val token: String) {
         }
     }
 
-    private fun commonRequest(url: String): Request.Builder = Request.Builder().url(discordApi + url).header("Authorization", "Bot $token")
+    private fun commonRequest(url: String): Request.Builder = Request.Builder().url(discordApi + url).header("Authorization", "Bot $token").header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
 
     private fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
         val response = httpClient.newCall(request).execute()
