@@ -5,4 +5,4 @@ import java.time.Instant
 /**
  * Thrown when a client calls an endpoint too many times
  */
-class DiscordRateLimitException(val resetsAt: Instant) : DiscordException()
+class DiscordRateLimitException(override val message: String, val retryAt: Instant, val isGlobalRateLimit: Boolean) : DiscordException()
