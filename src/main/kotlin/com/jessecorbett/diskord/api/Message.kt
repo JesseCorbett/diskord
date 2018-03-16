@@ -2,9 +2,6 @@ package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.jessecorbett.diskord.api.models.Attachment
-import com.jessecorbett.diskord.api.models.Embed
-import com.jessecorbett.diskord.api.models.MessageActivity
-import com.jessecorbett.diskord.api.models.MessageApplication
 import java.time.Instant
 
 data class Message(
@@ -39,3 +36,23 @@ enum class MessageType(val code: Int) {
     CHANNEL_PINNED_MESSAGE(6),
     GUILD_MEMBER_JOIN(7)
 }
+
+data class MessageActivity(
+        @JsonProperty("type") val type: MessageActivityType,
+        @JsonProperty("party_id") val partyId: String
+)
+
+enum class MessageActivityType(val code: Int) {
+    JOIN(0),
+    SPECTATE(1),
+    LISTEN(2),
+    JOIN_REQUEST(3)
+}
+
+data class MessageApplication(
+        @JsonProperty("id") val id: String,
+        @JsonProperty("cover_image") val coverImage: String,
+        @JsonProperty("description") val description: String,
+        @JsonProperty("icon") val icon: String,
+        @JsonProperty("name") val name: String
+)

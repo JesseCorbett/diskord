@@ -1,10 +1,7 @@
 package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.models.ExplicitContentFilterLevel
-import com.jessecorbett.diskord.api.models.values.MFALevel
-import com.jessecorbett.diskord.api.models.values.NotificationsLevel
-import com.jessecorbett.diskord.api.models.values.VerificationLevel
+import com.fasterxml.jackson.annotation.JsonValue
 
 data class Guild(
         @JsonProperty("id") val id: String,
@@ -31,3 +28,27 @@ data class Guild(
         @JsonProperty("widget_channel_id") val widgetChannelId: String?,
         @JsonProperty("system_channel_id") val systemMessageChannelId: String?
 )
+
+enum class VerificationLevel(@JsonValue val level: Int) {
+    NONE(0),
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3),
+    VERY_HIGH(4)
+}
+
+enum class NotificationsLevel(@JsonValue val level: Int) {
+    ALL_MESSAGES(0),
+    ONLY_MENTIONS(1)
+}
+
+enum class ExplicitContentFilterLevel(@JsonValue val level: Int) {
+    DISABLED(0),
+    MEMBERS_WITHOUT_ROLES(1),
+    ALL_MEMBERS(2)
+}
+
+enum class MFALevel(@JsonValue val level: Int) {
+    NONE(0),
+    ELEVATED(1)
+}

@@ -2,7 +2,6 @@ package com.jessecorbett.diskord.api
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
-import com.jessecorbett.diskord.api.models.Overwrite
 import java.time.Instant
 
 data class Channel(
@@ -31,4 +30,16 @@ enum class ChannelType(@JsonValue val code: Int) {
     GUILD_VOICE(2),
     GROUP_DM(3),
     GUILD_CATEGORY(4)
+}
+
+data class Overwrite(
+        @JsonProperty("id") val id: String,
+        @JsonProperty("type") val type: OverwriteType,
+        @JsonProperty("allow") val allowed: Int,// TODO: Parse int bit set
+        @JsonProperty("deny") val denied: Int
+)
+
+enum class OverwriteType(@JsonValue val value: String) {
+    ROLE("role"),
+    MEMBER("member")
 }

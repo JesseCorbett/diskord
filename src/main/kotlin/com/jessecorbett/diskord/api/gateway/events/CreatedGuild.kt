@@ -1,15 +1,10 @@
 package com.jessecorbett.diskord.api.gateway.events
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.Emoji
-import com.jessecorbett.diskord.api.Role
+import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.models.BarePresenceUpdate
-import com.jessecorbett.diskord.api.models.ExplicitContentFilterLevel
 import com.jessecorbett.diskord.api.models.GuildMember
 import com.jessecorbett.diskord.api.models.VoiceState
-import com.jessecorbett.diskord.api.models.values.MFALevel
-import com.jessecorbett.diskord.api.models.values.NotificationsLevel
-import com.jessecorbett.diskord.api.models.values.VerificationLevel
 import java.time.Instant
 
 data class CreatedGuild(
