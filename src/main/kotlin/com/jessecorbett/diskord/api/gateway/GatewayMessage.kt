@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.JsonNode
-import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 
 data class GatewayMessage(
         @JsonProperty("op") val opCode: OpCode,
         @JsonProperty("d") @JsonInclude(JsonInclude.Include.ALWAYS) val dataPayload: JsonNode?,
         @JsonProperty("s") val sequenceNumber: Int?,
-        @JsonProperty("t") val event: String = ""
+        @JsonProperty("t") val event: String? = null
 )
 
 enum class OpCode(@JsonValue val code: Int) {
