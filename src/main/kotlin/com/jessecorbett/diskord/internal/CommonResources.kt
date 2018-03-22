@@ -18,8 +18,7 @@ internal val httpClient = OkHttpClient.Builder()
 internal val jsonMapper = ObjectMapper().findAndRegisterModules()
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true)!!
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
 internal fun <T: Any> Response.bodyAs(bodyClass: KClass<T>): T {
     val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")

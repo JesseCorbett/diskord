@@ -32,6 +32,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.3"
     implementation "com.squareup.okhttp3:okhttp:3.9.1"
     implementation "com.fasterxml.jackson.core:jackson-core:2.9.4"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.9.4"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1"
     implementation "org.slf4j:slf4j-api:1.7.25"
