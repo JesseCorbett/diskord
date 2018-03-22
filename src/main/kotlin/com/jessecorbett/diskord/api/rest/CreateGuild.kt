@@ -9,7 +9,7 @@ import com.jessecorbett.diskord.api.VerificationLevel
 
 data class CreateGuild(
         @JsonProperty("name") val name: String,
-        @JsonProperty("region") val voidRegionId: String,
+        @JsonProperty("region") val voiceRegionId: String,
         @JsonProperty("icon") val base64IconData: String,
         @JsonProperty("verification_level") val verificationLevel: VerificationLevel,
         @JsonProperty("default_message_notifications") val defaultNotificationsLevel: NotificationsLevel,

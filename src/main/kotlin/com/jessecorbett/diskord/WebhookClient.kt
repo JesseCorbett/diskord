@@ -13,7 +13,7 @@ class WebhookClient(token: String, val webhookId: String) : RestClient(token) {
 
     fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs(Webhook::class)
 
-    fun update(webhookToken: String, webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs(Webhook::class)
+    fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs(Webhook::class)
 
     fun delete() = deleteRequest("/webhooks/$webhookId").close()
 

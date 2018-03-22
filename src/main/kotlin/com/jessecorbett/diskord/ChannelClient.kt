@@ -19,7 +19,7 @@ class ChannelClient(token: String, val channelId: String) : RestClient(token) {
 
     fun delete() = deleteRequest("/channels/$channelId").close()
 
-    fun getMessage() = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
+    fun getMessages() = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
 
     fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
 
