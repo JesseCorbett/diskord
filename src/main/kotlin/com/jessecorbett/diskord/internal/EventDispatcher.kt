@@ -9,8 +9,9 @@ import com.jessecorbett.diskord.api.Message
 import com.jessecorbett.diskord.api.User
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.*
-import com.jessecorbett.diskord.api.models.*
-import com.jessecorbett.diskord.api.rest.CreateMessage
+import com.jessecorbett.diskord.api.models.BulkMessageDelete
+import com.jessecorbett.diskord.api.models.MessageDelete
+import com.jessecorbett.diskord.api.models.VoiceState
 
 fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonNode) {
     eventListener.onEvent(event)
