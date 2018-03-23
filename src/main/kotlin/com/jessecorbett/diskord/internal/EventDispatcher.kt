@@ -21,7 +21,7 @@ fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonN
             eventListener.onReady(readyData)
         }
         DiscordEvent.RESUMED -> {
-            val resumedData = jsonMapper.treeToValue<Resume>(data)
+            val resumedData = jsonMapper.treeToValue<Resumed>(data)
             eventListener.onResumed(resumedData)
         }
         DiscordEvent.CHANNEL_CREATE -> {

@@ -1,12 +1,13 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.Channel
 import com.jessecorbett.diskord.api.Guild
 import com.jessecorbett.diskord.api.Message
 import com.jessecorbett.diskord.api.User
-import com.jessecorbett.diskord.api.gateway.commands.Resume
-import com.jessecorbett.diskord.api.models.*
+import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.api.models.BulkMessageDelete
+import com.jessecorbett.diskord.api.models.MessageDelete
+import com.jessecorbett.diskord.api.models.VoiceState
 
 abstract class EventListener {
     open fun onEvent(event: DiscordEvent) {
@@ -17,7 +18,7 @@ abstract class EventListener {
 
     }
 
-    open fun onResumed(resume: Resume) {
+    open fun onResumed(resumed: Resumed) {
 
     }
 
