@@ -16,8 +16,8 @@ import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
 
 class DiscordWebSocket(
-        private val token: String,
-        private val eventListener: EventListener,
+        val token: String,
+        val eventListener: EventListener,
         var sessionId: String? = null,
         var sequenceNumber: Int? = null,
         val shardId: Int = 0,
