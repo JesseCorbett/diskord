@@ -8,7 +8,7 @@ data class Message(
         @JsonProperty("id") val id: String,
         @JsonProperty("channel_id") val channelId: String,
         @JsonProperty("author") val author: User?,
-        @JsonProperty("content") val content: String?,
+        @JsonProperty("content") val content: String = "",
         @JsonProperty("timestamp") val sentAt: Instant,
         @JsonProperty("edited_timestamp") val editedAt: Instant?,
         @JsonProperty("tts") val isTTS: Boolean,
