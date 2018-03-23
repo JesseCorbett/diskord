@@ -10,6 +10,7 @@ import com.jessecorbett.diskord.api.User
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.models.*
+import com.jessecorbett.diskord.api.rest.CreateMessage
 
 fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonNode) {
     eventListener.onEvent(event)
@@ -99,7 +100,7 @@ fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonN
             eventListener.onMessageCreate(message)
         }
         DiscordEvent.MESSAGE_UPDATE -> {
-            val message = jsonMapper.treeToValue<Message>(data)
+            val message = jsonMapper.treeToValue<MessageUpdate>(data)
             eventListener.onMessageUpdate(message)
         }
         DiscordEvent.MESSAGE_DELETE -> {

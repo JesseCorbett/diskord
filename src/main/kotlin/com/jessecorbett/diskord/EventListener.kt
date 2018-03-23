@@ -97,7 +97,7 @@ abstract class EventListener {
 
     }
 
-    open fun onMessageUpdate(message: Message) {
+    open fun onMessageUpdate(message: MessageUpdate) {
 
     }
 
