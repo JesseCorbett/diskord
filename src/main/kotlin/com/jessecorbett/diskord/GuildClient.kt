@@ -3,11 +3,12 @@ package com.jessecorbett.diskord
 import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.internal.DiscordToken
 import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsListOf
 
-class GuildClient(token: String, val guildId: String) : RestClient(token) {
+class GuildClient(token: DiscordToken, val guildId: String) : RestClient(token) {
     fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsListOf(Emoji::class)
 
     fun getEmoji(emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs(Emoji::class)

@@ -4,11 +4,12 @@ import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
+import com.jessecorbett.diskord.internal.DiscordToken
 import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsListOf
 
-class DiscordClient(token: String) : RestClient(token) {
+class DiscordClient(token: DiscordToken) : RestClient(token) {
     fun getApiGateway() = getRequest("/gateway").bodyAs(GatewayUrl::class)
 
     fun getBotGateway() = getRequest("/gateway/bot").bodyAs(GatewayBotUrl::class)

@@ -26,7 +26,7 @@ class DiscordWebSocket(
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-    private val gatewayUrl = DiscordClient(token).getBotGateway().url
+    private val gatewayUrl = DiscordClient(DiscordToken(token, TokenType.BOT)).getBotGateway().url
     private var socket: WebSocket
 
     init {

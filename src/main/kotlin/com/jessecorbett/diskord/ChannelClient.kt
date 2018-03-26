@@ -4,13 +4,10 @@ import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
-import com.jessecorbett.diskord.internal.RateLimitInfo
-import com.jessecorbett.diskord.internal.RestClient
-import com.jessecorbett.diskord.internal.bodyAs
-import com.jessecorbett.diskord.internal.bodyAsListOf
+import com.jessecorbett.diskord.internal.*
 import java.time.Instant
 
-class ChannelClient(token: String, val channelId: String) : RestClient(token) {
+class ChannelClient(token: DiscordToken, val channelId: String) : RestClient(token) {
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
     fun getChannel() = getRequest("/channels/$channelId").bodyAs(Channel::class)
