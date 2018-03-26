@@ -40,7 +40,7 @@ abstract class RestClient(val token: DiscordToken) {
         }
     }
 
-    private fun commonRequest(url: String): Request.Builder = Request.Builder().url(discordApi + url).header("Authorization", "$${token.tokenType.type} ${token.token}").header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
+    private fun commonRequest(url: String): Request.Builder = Request.Builder().url(discordApi + url).header("Authorization", "${token.tokenType.type} ${token.token}").header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
 
     private fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
         val response = httpClient.newCall(request).execute()
