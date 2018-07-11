@@ -1,36 +1,34 @@
 package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.*
-import com.jessecorbett.diskord.api.models.*
 import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.api.rest.BulkMessageDelete
 import com.jessecorbett.diskord.internal.*
 import java.time.Instant
 
 class ChannelClient(token: DiscordToken, val channelId: String) : RestClient(token) {
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
-    fun getChannel() = getRequest("/channels/$channelId").bodyAs(Channel::class)
+    fun getChannel() = getRequest("/channels/$channelId").bodyAs<Channel>()
 
-    fun update(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs(Channel::class)
+    fun update(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs<Channel>()
 
     fun delete() = deleteRequest("/channels/$channelId").close()
 
-    fun getMessages() = getRequest("/channels/$channelId/messages").bodyAsListOf(Message::class)
+    fun getMessages() = getRequest("/channels/$channelId/messages").bodyAsList<Message>()
 
-    fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs(Message::class)
+    fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs<Message>()
 
-    fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs(Message::class)
+    fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs<Message>()
 
     fun addMessageReaction(messageId: String, emoji: String) = putRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/@me").close()
 
     fun removeMessageReaction(messageId: String, emoji: String, userId: String = "@me") = deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emoji/$userId").close()
 
-    fun getMessageReactions(messageId: String, emoji: String): List<Reaction> = getRequest("/channels/$channelId/messages/$messageId/reaction/$emoji").bodyAsListOf(Reaction::class)
+    fun getMessageReactions(messageId: String, emoji: String) = getRequest("/channels/$channelId/messages/$messageId/reaction/$emoji").bodyAsList<Reaction>()
 
     fun deleteAllMessageReactions(messageId: String) = deleteRequest("/channels/$channelId/messages/$messageId/reactions").close()
 
-    fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit).bodyAs(Message::class)
+    fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit).bodyAs<Message>()
 
     fun deleteMessage(messageId: String) = deleteRequest("/channels/$channelId/messages/$messageId", messageDeleteRateInfo).close()
 
@@ -38,15 +36,15 @@ class ChannelClient(token: DiscordToken, val channelId: String) : RestClient(tok
 
     fun editPermissions(overwrite: Overwrite) = putRequest("/channels/$channelId/permissions/${overwrite.id}", overwrite).close()
 
-    fun getInvites() = getRequest("/channels/$channelId/invites").bodyAsListOf(Invite::class)
+    fun getInvites() = getRequest("/channels/$channelId/invites").bodyAsList<Invite>()
 
-    fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs(Invite::class)
+    fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs<Invite>()
 
     fun deletePermissions(overwriteId: String) = deleteRequest("/channels/$channelId/permissions/$overwriteId").close()
 
     fun triggerTypingIndicator() = postRequest("/channels/$channelId/typing").close()
 
-    fun getPinnedMessages() = getRequest("/channels/$channelId/pins").bodyAsListOf(Message::class)
+    fun getPinnedMessages() = getRequest("/channels/$channelId/pins").bodyAsList<Message>()
 
     fun pinMessage(messageId: String) = putRequest("/channels/$channelId/pins/$messageId").close()
 
@@ -56,8 +54,8 @@ class ChannelClient(token: DiscordToken, val channelId: String) : RestClient(tok
 
     fun removeGroupDMRecipient(userId: String) = deleteRequest("/channels/$channelId/recipients/$userId").close()
 
-    fun getWebhooks() = getRequest("/channels/$channelId/webhooks").bodyAsListOf(Webhook::class)
+    fun getWebhooks() = getRequest("/channels/$channelId/webhooks").bodyAsList<Webhook>()
 
-    fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).bodyAs(Webhook::class)
+    fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).bodyAs<Webhook>()
 
 }

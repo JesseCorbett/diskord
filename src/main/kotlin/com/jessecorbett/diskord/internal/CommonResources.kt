@@ -9,7 +9,6 @@ import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.util.concurrent.TimeUnit
-import kotlin.reflect.KClass
 
 internal val httpClient = OkHttpClient.Builder()
         .cache(null)
@@ -20,16 +19,16 @@ internal val jsonMapper = ObjectMapper().findAndRegisterModules()
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
-internal fun <T: Any> Response.bodyAs(bodyClass: KClass<T>): T {
+internal inline fun <reified T> Response.bodyAs(): T {
     val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
     this.body()?.close()
-    return jsonMapper.readValue(bodyString, bodyClass.java)!!
+    return jsonMapper.readValue(bodyString, T::class.java)!!
 }
 
-internal fun <T: Any> Response.bodyAsListOf(bodyClass: KClass<T>): List<T> {
+internal inline fun <reified T> Response.bodyAsList(): List<T> {
     val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
     this.body()?.close()
-    return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, bodyClass.java))
+    return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, T::class.java))
 }
 
 internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"

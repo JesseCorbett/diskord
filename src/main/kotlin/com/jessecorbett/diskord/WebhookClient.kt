@@ -8,13 +8,13 @@ import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 
 class WebhookClient(token: DiscordToken, val webhookId: String) : RestClient(token) {
-    fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs(Webhook::class)
+    fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
 
-    fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs(Webhook::class)
+    fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs<Webhook>()
 
-    fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs(Webhook::class)
+    fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs<Webhook>()
 
-    fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs(Webhook::class)
+    fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs<Webhook>()
 
     fun delete() = deleteRequest("/webhooks/$webhookId").close()
 

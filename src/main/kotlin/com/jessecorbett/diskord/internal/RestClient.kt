@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.internal
 
-import com.jessecorbett.diskord.exception.RateLimitExceeded
 import com.jessecorbett.diskord.exception.*
 import okhttp3.MediaType
 import okhttp3.Request
@@ -30,7 +29,7 @@ abstract class RestClient(val token: DiscordToken) {
             403 -> throw DiscordBadPermissionsException()
             404 -> throw DiscordNotFoundException()
             429 -> {
-                val rateLimitInfo = response.bodyAs(RateLimitExceeded::class)
+                val rateLimitInfo = response.bodyAs<RateLimitExceeded>()
                 throw DiscordRateLimitException(rateLimitInfo.message, Instant.now().plusMillis(rateLimitInfo.retryAfter), rateLimitInfo.isGlobal)
             }
             502 -> throw DiscordGatewayException()

@@ -6,34 +6,34 @@ import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.internal.DiscordToken
 import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
-import com.jessecorbett.diskord.internal.bodyAsListOf
+import com.jessecorbett.diskord.internal.bodyAsList
 
 class GuildClient(token: DiscordToken, val guildId: String) : RestClient(token) {
-    fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsListOf(Emoji::class)
+    fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsList<Emoji>()
 
-    fun getEmoji(emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs(Emoji::class)
+    fun getEmoji(emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs<Emoji>()
 
-    fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guild/$guildId/emojis", createEmoji).bodyAs(Emoji::class)
+    fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guild/$guildId/emojis", createEmoji).bodyAs<Emoji>()
 
-    fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guild/$guildId/emojis/$emojiId", emoji).bodyAs(Emoji::class)
+    fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guild/$guildId/emojis/$emojiId", emoji).bodyAs<Emoji>()
 
     fun deleteEmoji(emojiId: String) = deleteRequest("/guild/$guildId/emojis/$emojiId").close()
 
-    fun getGuild() = getRequest("/guilds/$guildId").bodyAs(Guild::class)
+    fun getGuild() = getRequest("/guilds/$guildId").bodyAs<Guild>()
 
-    fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs(Guild::class)
+    fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs<Guild>()
 
     fun delete() = deleteRequest("/guilds/$guildId").close()
 
-    fun getChannels() = getRequest("/guilds/$guildId/channels").bodyAsListOf(Channel::class)
+    fun getChannels() = getRequest("/guilds/$guildId/channels").bodyAsList<Channel>()
 
-    fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs(Channel::class)
+    fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs<Channel>()
 
     fun modifyChannelPositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/channels", positions).close()
 
-    fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs(GuildMember::class)
+    fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs<GuildMember>()
 
-    fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsListOf(GuildMember::class)
+    fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsList<GuildMember>()
 
     fun addMember(userId: String, addGuildMember: AddGuildMember) = putRequest("/guilds/$guildId/members/$userId", addGuildMember).close()
 
@@ -47,31 +47,31 @@ class GuildClient(token: DiscordToken, val guildId: String) : RestClient(token) 
 
     fun removeMember(userId: String) = deleteRequest("/guilds/$guildId/members/$userId").close()
 
-    fun getBans() = getRequest("/guilds/$guildId/bans").bodyAsListOf(Ban::class)
+    fun getBans() = getRequest("/guilds/$guildId/bans").bodyAsList<Ban>()
 
     fun createBan(userId: String, deleteMessageDays: Int, reason: String) = putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason").close()
 
     fun removeBan(userId: String) = deleteRequest("/guilds/$guildId/bans/$userId").close()
 
-    fun getRoles() = getRequest("/guilds/$guildId/roles").bodyAsListOf(Role::class)
+    fun getRoles() = getRequest("/guilds/$guildId/roles").bodyAsList<Role>()
 
-    fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs(Role::class)
+    fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs<Role>()
 
     fun modifyRolePositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/roles", positions).close()
 
-    fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs(Role::class)
+    fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs<Role>()
 
     fun deleteRole(roleId: String) = deleteRequest("/guilds/$guildId/roles/$roleId").close()
 
-    fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
+    fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").bodyAs<Pruned>()
 
-    fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs(Pruned::class)
+    fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs<Pruned>()
 
-    fun getVoiceRegions() = getRequest("/guilds/$guildId/regions").bodyAsListOf(VoiceRegion::class)
+    fun getVoiceRegions() = getRequest("/guilds/$guildId/regions").bodyAsList<VoiceRegion>()
 
-    fun getInvites() = getRequest("/guilds/$guildId/invites").bodyAsListOf(Invite::class)
+    fun getInvites() = getRequest("/guilds/$guildId/invites").bodyAsList<Invite>()
 
-    fun getIntegrations() = getRequest("/guilds/$guildId/integrations").bodyAsListOf(GuildIntegration::class)
+    fun getIntegrations() = getRequest("/guilds/$guildId/integrations").bodyAsList<GuildIntegration>()
 
     fun createIntegration(guildIntegration: CreateGuildIntegration) = postRequest("/guilds/$guildId/integrations", guildIntegration).close()
 
@@ -81,15 +81,15 @@ class GuildClient(token: DiscordToken, val guildId: String) : RestClient(token) 
 
     fun syncIntegration(guildIntegrationId: String) = postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync").close()
 
-    fun getEmbed() = getRequest("/guilds/$guildId/embed").bodyAs(GuildEmbed::class)
+    fun getEmbed() = getRequest("/guilds/$guildId/embed").bodyAs<GuildEmbed>()
 
-    fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs(GuildEmbed::class)
+    fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs<GuildEmbed>()
 
-    fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url").bodyAs(Invite::class)
+    fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url").bodyAs<Invite>()
 
-    fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsListOf(Webhook::class)
+    fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsList<Webhook>()
 
     fun leave() = deleteRequest("/users/@me/guilds/$guildId").close()
 
-    fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs").bodyAs(AuditLog::class)
+    fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs").bodyAs<AuditLog>()
 }
