@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.exception.*
+import kotlinx.coroutines.experimental.delay
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
@@ -44,6 +45,10 @@ abstract class RestClient(val token: DiscordToken) {
             .header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
 
     private suspend fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
+        if (rateLimit.remaining == 0) {
+            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli())
+        }
+
         return suspendCoroutine { cont ->
             httpClient.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, exception: IOException) {
@@ -51,7 +56,7 @@ abstract class RestClient(val token: DiscordToken) {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    rateLimit.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
+                    rateInfo.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
                     rateLimit.remaining = response.header("X-RateLimit-Remaining")?.toInt() ?: rateLimit.remaining
                     rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong() ?: rateLimit.resetTime.epochSecond)
 
