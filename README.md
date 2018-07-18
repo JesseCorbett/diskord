@@ -37,6 +37,11 @@ dependencies {
 </dependency>
 ```
 
+## How do I use this?
+
+Proper documentation needs to be written, but the concept for now is very simple.
+Instantiate each client as you like to access the methods Discord offers for that particular resource.
+To build a live bot, simply create a DiscordWebSocket with an EventListener, overriding the event methods you want to know about.
 
 ### Things to do
 - Add more testing

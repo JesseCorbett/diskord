@@ -12,12 +12,12 @@ import com.jessecorbett.diskord.api.gateway.events.Ready
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.Request
 import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
 
 class DiscordWebSocket(
-        val gatewayUrl: String,
         val token: String,
         val eventListener: EventListener,
         var sessionId: String? = null,
@@ -29,6 +29,7 @@ class DiscordWebSocket(
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private var socket: WebSocket
+    private val gatewayUrl = runBlocking { DiscordClient(DiscordToken(token, TokenType.BOT)).getBotGateway().url }
 
     init {
         lifecycleManager.start(::restart)
