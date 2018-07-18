@@ -12,7 +12,8 @@ import java.util.concurrent.TimeUnit
 
 internal val httpClient = OkHttpClient.Builder()
         .cache(null)
-        .connectionPool(ConnectionPool(1, 3, TimeUnit.SECONDS)).build()
+        .connectionPool(ConnectionPool(1, 3, TimeUnit.SECONDS))
+        .build()
 
 internal val jsonMapper = ObjectMapper().findAndRegisterModules()
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)

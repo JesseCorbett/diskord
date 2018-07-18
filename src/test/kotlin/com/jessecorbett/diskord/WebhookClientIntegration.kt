@@ -8,6 +8,7 @@ import com.jessecorbett.diskord.exception.DiscordException
 import com.jessecorbett.diskord.exception.DiscordNotFoundException
 import com.jessecorbett.diskord.internal.DiscordToken
 import com.jessecorbett.diskord.internal.TokenType
+import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -21,91 +22,109 @@ class WebhookClientIntegration {
     private lateinit var webhookClient: WebhookClient
 
     @Before fun setup() {
-        webhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
-        webhookClient = WebhookClient(DiscordToken(token, TokenType.BOT), webhook.id)
+        runBlocking {
+            webhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
+            webhookClient = WebhookClient(DiscordToken(token, TokenType.BOT), webhook.id)
+        }
     }
 
     @After fun clean() {
-        webhookClient.delete()
+        runBlocking {
+            webhookClient.delete()
+        }
     }
 
     @Test fun getWebhookTest() {
-        webhookClient.getWebhook()
+        runBlocking {
+            webhookClient.getWebhook()
+        }
     }
 
     @Test fun getWebhookWithToken() {
-        webhookClient.getWebhook(webhook.token)
+        runBlocking {
+            webhookClient.getWebhook(webhook.token)
+        }
     }
 
     @Test fun updateWebhookTest() {
         val originalName = webhook.defaultName
 
-        webhookClient.update(PatchWebhook(randomString()))
-        val newName = webhookClient.getWebhook().defaultName
-        Assert.assertNotEquals(originalName, newName)
+        runBlocking {
+            webhookClient.update(PatchWebhook(randomString()))
+            val newName = webhookClient.getWebhook().defaultName
+            Assert.assertNotEquals(originalName, newName)
 
-        webhookClient.update(PatchWebhook(originalName))
-        val revertedName = webhookClient.getWebhook().defaultName
-        Assert.assertEquals(originalName, revertedName)
+            webhookClient.update(PatchWebhook(originalName))
+            val revertedName = webhookClient.getWebhook().defaultName
+            Assert.assertEquals(originalName, revertedName)
+        }
     }
 
     @Test fun updateWebhookWithTokenTest() {
         val originalName = webhook.defaultName
 
-        webhookClient.update(PatchWebhook(randomString()), webhook.token)
-        val newName = webhookClient.getWebhook().defaultName
-        Assert.assertNotEquals(originalName, newName)
+        runBlocking {
+            webhookClient.update(PatchWebhook(randomString()), webhook.token)
+            val newName = webhookClient.getWebhook().defaultName
+            Assert.assertNotEquals(originalName, newName)
 
-        webhookClient.update(PatchWebhook(originalName), webhook.token)
-        val revertedName = webhookClient.getWebhook().defaultName
-        Assert.assertEquals(originalName, revertedName)
+            webhookClient.update(PatchWebhook(originalName), webhook.token)
+            val revertedName = webhookClient.getWebhook().defaultName
+            Assert.assertEquals(originalName, revertedName)
+        }
     }
 
     @Test fun deleteWebhookTest() {
-        val webhookId = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString())).id
-        val client = WebhookClient(DiscordToken(token, TokenType.BOT), webhookId)
+        runBlocking {
+            val webhookId = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString())).id
+            val client = WebhookClient(DiscordToken(token, TokenType.BOT), webhookId)
 
-        client.getWebhook()
-        client.delete()
-
-        var deleted = false
-        try {
             client.getWebhook()
-        } catch (e: DiscordException) {
-            Assert.assertTrue(e is DiscordNotFoundException)
-            deleted = true
-        }
+            client.delete()
 
-        Assert.assertTrue(deleted)
+            var deleted = false
+            try {
+                client.getWebhook()
+            } catch (e: DiscordException) {
+                Assert.assertTrue(e is DiscordNotFoundException)
+                deleted = true
+            }
+
+            Assert.assertTrue(deleted)
+        }
     }
 
     @Test fun deleteWebhookWithTokenTest() {
-        val ourWebhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
-        val client = WebhookClient(DiscordToken(token, TokenType.BOT), ourWebhook.id)
+        runBlocking {
+            val ourWebhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
+            val client = WebhookClient(DiscordToken(token, TokenType.BOT), ourWebhook.id)
 
-        client.getWebhook()
-        client.delete(ourWebhook.token)
-
-        var deleted = false
-        try {
             client.getWebhook()
-        } catch (e: DiscordException) {
-            Assert.assertTrue(e is DiscordNotFoundException)
-            deleted = true
-        }
+            client.delete(ourWebhook.token)
 
-        Assert.assertTrue(deleted)
+            var deleted = false
+            try {
+                client.getWebhook()
+            } catch (e: DiscordException) {
+                Assert.assertTrue(e is DiscordNotFoundException)
+                deleted = true
+            }
+
+            Assert.assertTrue(deleted)
+        }
     }
 
     @Test fun executeWebhookTest() {
-        val content = randomString()
-        val name = randomString()
-        webhookClient.execute(webhook.token, WebhookSubmission(content, name))
+        runBlocking {
+            val content = randomString()
+            val name = randomString()
+            webhookClient.execute(webhook.token, WebhookSubmission(content, name))
 
-        val channelClient = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel)
-        val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
+            val channelClient = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel)
+            val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
 
-        Assert.assertEquals(content, message.content)
-        Assert.assertEquals(name, message.author!!.username)
+            Assert.assertEquals(content, message.content)
+            Assert.assertEquals(name, message.author!!.username)
+        }
     }
 }

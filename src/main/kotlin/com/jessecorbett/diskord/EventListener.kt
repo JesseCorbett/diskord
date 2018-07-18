@@ -8,141 +8,143 @@ import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.models.BulkMessageDelete
 import com.jessecorbett.diskord.api.models.MessageDelete
 import com.jessecorbett.diskord.api.models.VoiceState
+import kotlinx.coroutines.experimental.Unconfined
+import kotlin.coroutines.experimental.CoroutineContext
 
-abstract class EventListener {
-    open fun onEvent(event: DiscordEvent) {
-
-    }
-
-    open fun onReady(ready: Ready) {
+abstract class EventListener(val context: CoroutineContext = Unconfined) {
+    open suspend fun onEvent(event: DiscordEvent) {
 
     }
 
-    open fun onResumed(resumed: Resumed) {
+    open suspend fun onReady(ready: Ready) {
 
     }
 
-    open fun onChannelCreate(channel: Channel) {
+    open suspend fun onResumed(resumed: Resumed) {
 
     }
 
-    open fun onChannelUpdate(channel: Channel) {
+    open suspend fun onChannelCreate(channel: Channel) {
 
     }
 
-    open fun onChannelDelete(channel: Channel) {
+    open suspend fun onChannelUpdate(channel: Channel) {
 
     }
 
-    open fun onChannelPinsUpdate(channelPinUpdate: ChannelPinUpdate) {
+    open suspend fun onChannelDelete(channel: Channel) {
 
     }
 
-    open fun onGuildCreate(guild: CreatedGuild) {
+    open suspend fun onChannelPinsUpdate(channelPinUpdate: ChannelPinUpdate) {
 
     }
 
-    open fun onGuildUpdate(guild: Guild) {
+    open suspend fun onGuildCreate(guild: CreatedGuild) {
 
     }
 
-    open fun onGuildDelete(guild: Guild) {
+    open suspend fun onGuildUpdate(guild: Guild) {
 
     }
 
-    open fun onGuildBanAdd(ban: GuildBan) {
+    open suspend fun onGuildDelete(guild: Guild) {
 
     }
 
-    open fun onGuildBanRemove(ban: GuildBan) {
+    open suspend fun onGuildBanAdd(ban: GuildBan) {
 
     }
 
-    open fun onGuildEmojiUpdate(emojiUpdate: GuildEmojiUpdate) {
+    open suspend fun onGuildBanRemove(ban: GuildBan) {
 
     }
 
-    open fun onGuildIntegrationsUpdate(integrationUpdate: GuildIntegrationUpdate) {
+    open suspend fun onGuildEmojiUpdate(emojiUpdate: GuildEmojiUpdate) {
 
     }
 
-    open fun onGuildMemberAdd(guildMember: GuildMemberAdd) {
+    open suspend fun onGuildIntegrationsUpdate(integrationUpdate: GuildIntegrationUpdate) {
 
     }
 
-    open fun onGuildMemberUpdate(guildMemberUpdate: GuildMemberUpdate) {
+    open suspend fun onGuildMemberAdd(guildMember: GuildMemberAdd) {
 
     }
 
-    open fun onGuildMemberRemove(guildMemeberRemove: GuildMemeberRemove) {
+    open suspend fun onGuildMemberUpdate(guildMemberUpdate: GuildMemberUpdate) {
 
     }
 
-    open fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {
+    open suspend fun onGuildMemberRemove(guildMemberRemove: GuildMemeberRemove) {
 
     }
 
-    open fun onGuildRoleCreate(guildRoleCreate: GuildRoleCreate) {
+    open suspend fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {
 
     }
 
-    open fun onGuildRoleUpdate(guildRoleUpdate: GuildRoleUpdate) {
+    open suspend fun onGuildRoleCreate(guildRoleCreate: GuildRoleCreate) {
 
     }
 
-    open fun onGuildRoleDelete(guildRoleDelete: GuildRoleDelete) {
+    open suspend fun onGuildRoleUpdate(guildRoleUpdate: GuildRoleUpdate) {
 
     }
 
-    open fun onMessageCreate(message: Message) {
+    open suspend fun onGuildRoleDelete(guildRoleDelete: GuildRoleDelete) {
 
     }
 
-    open fun onMessageUpdate(message: MessageUpdate) {
+    open suspend fun onMessageCreate(message: Message) {
 
     }
 
-    open fun onMessageDelete(message: MessageDelete) {
+    open suspend fun onMessageUpdate(message: MessageUpdate) {
 
     }
 
-    open fun onMessageBulkDelete(message: BulkMessageDelete) {
+    open suspend fun onMessageDelete(message: MessageDelete) {
 
     }
 
-    open fun onMessageReactionAdd(reactionAdd: MessageReaction) {
+    open suspend fun onMessageBulkDelete(message: BulkMessageDelete) {
 
     }
 
-    open fun onMessageReactionRemove(reactionRemove: MessageReaction) {
+    open suspend fun onMessageReactionAdd(reactionAdd: MessageReaction) {
 
     }
 
-    open fun onMessageReactionRemoveAll(messageReactionRemoveAll: MessageReactionRemoveAll) {
+    open suspend fun onMessageReactionRemove(reactionRemove: MessageReaction) {
 
     }
 
-    open fun onPresenceUpdate(presenceUpdate: PresenceUpdate) {
+    open suspend fun onMessageReactionRemoveAll(messageReactionRemoveAll: MessageReactionRemoveAll) {
 
     }
 
-    open fun onTypingStart(typingStart: TypingStart) {
+    open suspend fun onPresenceUpdate(presenceUpdate: PresenceUpdate) {
 
     }
 
-    open fun onUserUpdate(user: User) {
+    open suspend fun onTypingStart(typingStart: TypingStart) {
 
     }
 
-    open fun onVoiceStateUpdate(voiceState: VoiceState) {
+    open suspend fun onUserUpdate(user: User) {
 
     }
 
-    open fun onVoiceServerUpdate(voiceServerUpdate: VoiceServerUpdate) {
+    open suspend fun onVoiceStateUpdate(voiceState: VoiceState) {
 
     }
 
-    open fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) {
+    open suspend fun onVoiceServerUpdate(voiceServerUpdate: VoiceServerUpdate) {
+
+    }
+
+    open suspend fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) {
 
     }
 }

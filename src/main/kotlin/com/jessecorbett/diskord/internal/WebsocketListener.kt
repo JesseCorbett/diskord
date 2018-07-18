@@ -22,26 +22,23 @@ class DiscordWebSocketListener(
         logger.error("Encountered an unexpected error, code: ${response.body()}")
     }
 
-    override fun onMessage(webSocket: WebSocket, text: String) {
-        val gatewayMessage = jsonMapper.readValue<GatewayMessage>(text)
-        acceptMessage(gatewayMessage)
-    }
+    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(jsonMapper.readValue(text))
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-        TODO("This should never be called yet, we'll come back to it when it's time to implement ETF")
+        TODO("This should never be called, we'll need it though if we choose to implement ETF")
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         val closeCode = WebSocketCloseCode.values().find { it.code == code } ?: throw DiscordCompatibilityException("Unexpected close code")
-        lifecycleManager.closing(code, reason)
+        lifecycleManager.closing(closeCode, reason)
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         val closeCode = WebSocketCloseCode.values().find { it.code == code } ?: throw DiscordCompatibilityException("Unexpected close code")
-        lifecycleManager.closed(code, reason)
+        lifecycleManager.closed(closeCode, reason)
     }
 
-    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        lifecycleManager.failed(t, response)
+    override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
+        lifecycleManager.failed(throwable, response)
     }
 }

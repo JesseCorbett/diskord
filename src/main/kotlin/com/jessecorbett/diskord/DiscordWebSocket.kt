@@ -11,11 +11,13 @@ import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
+import kotlinx.coroutines.experimental.launch
 import okhttp3.Request
 import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
 
 class DiscordWebSocket(
+        val gatewayUrl: String,
         val token: String,
         val eventListener: EventListener,
         var sessionId: String? = null,
@@ -26,7 +28,6 @@ class DiscordWebSocket(
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-    private val gatewayUrl = DiscordClient(DiscordToken(token, TokenType.BOT)).getBotGateway().url
     private var socket: WebSocket
 
     init {
@@ -62,7 +63,9 @@ class DiscordWebSocket(
         if (discordEvent == DiscordEvent.READY) {
             setSessionId(gatewayMessage.dataPayload)
         }
-        dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
+        launch(eventListener.context) {
+            dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
+        }
     }
 
     private fun setSessionId(data: JsonNode) {

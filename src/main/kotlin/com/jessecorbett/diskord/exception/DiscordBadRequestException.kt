@@ -1,3 +1,3 @@
 package com.jessecorbett.diskord.exception
 
-class DiscordBadRequestException : DiscordException()
+class DiscordBadRequestException(override val message: String?) : DiscordException()

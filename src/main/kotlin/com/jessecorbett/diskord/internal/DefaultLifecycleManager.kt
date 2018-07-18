@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.DiscordLifecycleManager
+import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
 import okhttp3.Response
 import org.slf4j.LoggerFactory
 
@@ -14,12 +15,12 @@ class DefaultLifecycleManager : DiscordLifecycleManager {
         this.restart = restart
     }
 
-    override fun closing(code: Int, reason: String) {
+    override fun closing(code: WebSocketCloseCode, reason: String) {
         logger.info("Closing with code '$code' and reason '$reason'")
         restart()
     }
 
-    override fun closed(code: Int, reason: String) {
+    override fun closed(code: WebSocketCloseCode, reason: String) {
         logger.info("Closed with code '$code' and reason '$reason'")
         restart()
     }

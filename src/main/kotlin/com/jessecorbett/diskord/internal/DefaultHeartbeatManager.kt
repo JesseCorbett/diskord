@@ -17,7 +17,7 @@ class DefaultHeartbeatManager : HeartbeatManager {
     override fun start(heartbeatPeriod: Int, sendHeartbeat: () -> Unit, sendAcknowledgement: () -> Unit) {
         this.sendAcknowledgement = sendAcknowledgement
         heartbeatJob = launch(threadPool) {
-            while (true) {
+            while (this.isActive) {
                 sendHeartbeat()
                 delay(heartbeatPeriod)
             }
@@ -26,9 +26,7 @@ class DefaultHeartbeatManager : HeartbeatManager {
 
     override fun close() {
         logger.info("Closing")
-        runBlocking {
-            heartbeatJob?.join()
-        }
+        runBlocking { heartbeatJob?.join() }
     }
 
     override fun acceptHeartbeat(message: GatewayMessage) {
@@ -37,6 +35,6 @@ class DefaultHeartbeatManager : HeartbeatManager {
     }
 
     override fun acceptAcknowledgement(message: GatewayMessage) {
-        // For now this default class is not tracking heartbeat acks
+        // This default class is not tracking heartbeat acks
     }
 }

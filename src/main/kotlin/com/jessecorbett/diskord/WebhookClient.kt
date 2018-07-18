@@ -8,18 +8,18 @@ import com.jessecorbett.diskord.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 
 class WebhookClient(token: DiscordToken, val webhookId: String) : RestClient(token) {
-    fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
+    suspend fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
 
-    fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs<Webhook>()
+    suspend fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs<Webhook>()
 
-    fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs<Webhook>()
+    suspend fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs<Webhook>()
 
-    fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs<Webhook>()
+    suspend fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs<Webhook>()
 
-    fun delete() = deleteRequest("/webhooks/$webhookId").close()
+    suspend fun delete() = deleteRequest("/webhooks/$webhookId").close()
 
-    fun delete(webhookToken: String) = deleteRequest("/webhooks/$webhookId/$webhookToken").close()
+    suspend fun delete(webhookToken: String) = deleteRequest("/webhooks/$webhookId/$webhookToken").close()
 
-    fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) =
+    suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) =
             postRequest("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission).close()
 }
