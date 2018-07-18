@@ -1,11 +1,12 @@
 # Diskord
 A mostly implemented Kotlin client for Discord
 
-This project should still be considered as in-progress, as it likely still has bugs and the testing could be better.
 
-Feel free to submit a PR or an Issue and I'll address the issue ASAP.
+Built on the principle of a lean client built on coroutines that gets the intricacies of rate limits and async out of your way.
+
+
+Feel free to submit a PR or an Issue and I'll address it ASAP.
 
 ### Things to do
 - Add testing
 - Add OAuth2 client
-- Rework clients to be async, probably using coroutines to stick to language convention
