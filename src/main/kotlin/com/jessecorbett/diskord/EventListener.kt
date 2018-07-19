@@ -8,10 +8,10 @@ import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.models.BulkMessageDelete
 import com.jessecorbett.diskord.api.models.MessageDelete
 import com.jessecorbett.diskord.api.models.VoiceState
-import kotlinx.coroutines.experimental.Unconfined
+import kotlinx.coroutines.experimental.newFixedThreadPoolContext
 import kotlin.coroutines.experimental.CoroutineContext
 
-abstract class EventListener(val context: CoroutineContext = Unconfined) {
+abstract class EventListener(val context: CoroutineContext = newFixedThreadPoolContext(1, "diskord")) {
     open suspend fun onEvent(event: DiscordEvent) {
 
     }

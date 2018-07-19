@@ -45,8 +45,9 @@ abstract class RestClient(val token: DiscordToken) {
             .header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
 
     private suspend fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
-        if (rateLimit.remaining == 0) {
-            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli())
+        if (rateLimit.remaining < 1) {
+            // Has a built in buffer of 100ms to allow for a slight margin of difference between Discord and the Bot's clocks
+            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli() + 100)
         }
 
         return suspendCoroutine { cont ->
