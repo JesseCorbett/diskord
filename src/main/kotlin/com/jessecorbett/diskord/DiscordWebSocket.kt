@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.OpCode
+import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
 import com.jessecorbett.diskord.api.gateway.commands.Identify
 import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
@@ -48,7 +49,7 @@ class DiscordWebSocket(
     fun close() {
         logger.info("Closing")
         heartbeatManager.close()
-        socket.close(0, "Requested close")
+        socket.close(WebSocketCloseCode.INTENTIONAL_CLOSURE.code, "Requested close")
         logger.info("Closed")
     }
 

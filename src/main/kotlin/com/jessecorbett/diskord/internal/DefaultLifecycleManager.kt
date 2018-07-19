@@ -17,12 +17,14 @@ class DefaultLifecycleManager : DiscordLifecycleManager {
 
     override fun closing(code: WebSocketCloseCode, reason: String) {
         logger.info("Closing with code '$code' and reason '$reason'")
-        restart()
+        if (code != WebSocketCloseCode.INTENTIONAL_CLOSURE)
+            restart()
     }
 
     override fun closed(code: WebSocketCloseCode, reason: String) {
         logger.info("Closed with code '$code' and reason '$reason'")
-        restart()
+        if (code != WebSocketCloseCode.INTENTIONAL_CLOSURE)
+            restart()
     }
 
     override fun failed(failure: Throwable, response: Response?) {

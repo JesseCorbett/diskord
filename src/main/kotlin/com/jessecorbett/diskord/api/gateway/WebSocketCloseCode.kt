@@ -26,6 +26,11 @@ enum class WebSocketCloseCode(@JsonValue val code: Int) {
     TLS_FAILED_RESERVED(1015),
 
     /**
+     * Diskord custom close codes
+     */
+    INTENTIONAL_CLOSURE(3000),
+
+    /**
      * Discord Socket Codes
      * https://discordapp.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes
      */
