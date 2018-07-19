@@ -60,7 +60,7 @@ class BotListener : EventListener() {
 }
 
 fun main(args: Array<String>) {
-    DiscordWebSocket(botToken, BotListener)
+    DiscordWebSocket(botToken, BotListener())
 }
 ```
 
