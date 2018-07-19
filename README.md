@@ -17,7 +17,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.0.2'
+    implementation 'com.jessecorbett:Diskord:0.0.13'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.13</version>
 </dependency>
 ```
 
@@ -44,6 +44,7 @@ Instantiate each client as you like to access the methods Discord offers for tha
 To build a live bot, simply create a DiscordWebSocket with an EventListener, overriding the event methods you want to know about.
 
 ### Things to do
+- Convenience methods
 - Add more testing
 - Add OAuth2 client
 - Possibly a DSL for simple reactive bots
