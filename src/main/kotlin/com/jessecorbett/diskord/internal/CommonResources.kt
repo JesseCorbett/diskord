@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.jessecorbett.diskord.exception.DiscordCompatibilityException
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
@@ -15,7 +16,7 @@ internal val httpClient = OkHttpClient.Builder()
         .connectionPool(ConnectionPool(1, 3, TimeUnit.SECONDS))
         .build()
 
-internal val jsonMapper = ObjectMapper().findAndRegisterModules()
+internal val jsonMapper = ObjectMapper().findAndRegisterModules().registerModule(JavaTimeModule())
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
@@ -33,4 +34,4 @@ internal inline fun <reified T> Response.bodyAsList(): List<T> {
 }
 
 internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
-internal const val defaultUserAgentVersion = "0.0.12"
+internal const val defaultUserAgentVersion = "0.0.13"
