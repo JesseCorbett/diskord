@@ -46,33 +46,36 @@ abstract class RestClient(val token: DiscordToken) {
 
     private suspend fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
         if (rateLimit.remaining < 1) {
-            // Has a built in buffer of 500ms to allow for a slight margin of difference between Discord and the Bot's clocks
-            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli() + 500)
+            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli())
         }
 
-        return suspendCoroutine { cont ->
-            httpClient.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, exception: IOException) {
-                    cont.resumeWithException(exception)
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    rateInfo.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
-                    rateLimit.remaining = response.header("X-RateLimit-Remaining")?.toInt() ?: rateLimit.remaining
-                    rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong() ?: rateLimit.resetTime.epochSecond)
-
-                    if (!response.isSuccessful) {
-                        try {
-                            captureFailure(response)
-                        } catch (discordException: DiscordException) {
-                            cont.resumeWithException(discordException)
-                            return
-                        }
+        try {
+            return suspendCoroutine { cont ->
+                httpClient.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, exception: IOException) {
+                        cont.resumeWithException(exception)
                     }
 
-                    cont.resume(response)
-                }
-            })
+                    override fun onResponse(call: Call, response: Response) {
+                        rateInfo.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
+                        rateLimit.remaining = response.header("X-RateLimit-Remaining")?.toInt() ?: rateLimit.remaining
+                        rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong() ?: rateLimit.resetTime.epochSecond)
+
+                        if (!response.isSuccessful) {
+                            try {
+                                captureFailure(response)
+                            } catch (discordException: DiscordException) {
+                                cont.resumeWithException(discordException)
+                                return
+                            }
+                        }
+
+                        cont.resume(response)
+                    }
+                })
+            }
+        } catch (rateLimitException: DiscordRateLimitException) {
+            return makeRequest(request, rateLimit)
         }
     }
 
