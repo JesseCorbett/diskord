@@ -11,13 +11,13 @@ import com.jessecorbett.diskord.internal.bodyAsList
 class GuildClient(token: DiscordToken, val guildId: String) : RestClient(token) {
     suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsList<Emoji>()
 
-    suspend fun getEmoji(emojiId: String) = getRequest("/guild/$guildId/emojis/$emojiId").bodyAs<Emoji>()
+    suspend fun getEmoji(emojiId: String) = getRequest("/guilds/$guildId/emojis/$emojiId").bodyAs<Emoji>()
 
-    suspend fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guild/$guildId/emojis", createEmoji).bodyAs<Emoji>()
+    suspend fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guilds/$guildId/emojis", createEmoji).bodyAs<Emoji>()
 
-    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guild/$guildId/emojis/$emojiId", emoji).bodyAs<Emoji>()
+    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guilds/$guildId/emojis/$emojiId", emoji).bodyAs<Emoji>()
 
-    suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guild/$guildId/emojis/$emojiId").close()
+    suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId").close()
 
     suspend fun getGuild() = getRequest("/guilds/$guildId").bodyAs<Guild>()
 
