@@ -26,7 +26,10 @@ class DefaultHeartbeatManager : HeartbeatManager {
 
     override fun close() {
         logger.info("Closing")
-        runBlocking { heartbeatJob?.join() }
+        launch(threadPool) {
+            heartbeatJob?.cancelAndJoin()
+            logger.info("Closed")
+        }
     }
 
     override fun acceptHeartbeat(message: GatewayMessage) {
