@@ -9,5 +9,5 @@ data class Emoji(
         @JsonProperty("user") val creator: User?,
         @JsonProperty("require_colons") val requiresWrappingColons: Boolean?,
         @JsonProperty("managed") val isManaged: Boolean?,
-        @JsonProperty("animated") val isAnimated: Boolean?
+        @JsonProperty("animated") val isAnimated: Boolean = false
 )
