@@ -46,8 +46,8 @@ abstract class RestClient(val token: DiscordToken) {
 
     private suspend fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {
         if (rateLimit.remaining < 1) {
-            // Has a built in buffer of 100ms to allow for a slight margin of difference between Discord and the Bot's clocks
-            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli() + 100)
+            // Has a built in buffer of 500ms to allow for a slight margin of difference between Discord and the Bot's clocks
+            delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli() + 500)
         }
 
         return suspendCoroutine { cont ->
