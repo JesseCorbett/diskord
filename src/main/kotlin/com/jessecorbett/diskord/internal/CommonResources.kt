@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.jessecorbett.diskord.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.Response

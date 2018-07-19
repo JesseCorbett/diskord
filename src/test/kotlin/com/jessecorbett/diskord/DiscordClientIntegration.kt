@@ -7,8 +7,8 @@ import com.jessecorbett.diskord.api.rest.CreateDM
 import com.jessecorbett.diskord.api.rest.CreateGroupDM
 import com.jessecorbett.diskord.api.rest.CreateGuild
 import com.jessecorbett.diskord.api.rest.ModifyUser
-import com.jessecorbett.diskord.exception.DiscordBadPermissionsException
-import com.jessecorbett.diskord.exception.DiscordException
+import com.jessecorbett.diskord.api.exception.DiscordBadPermissionsException
+import com.jessecorbett.diskord.api.exception.DiscordException
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Ignore

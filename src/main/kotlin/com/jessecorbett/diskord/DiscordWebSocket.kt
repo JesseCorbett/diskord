@@ -10,7 +10,7 @@ import com.jessecorbett.diskord.api.gateway.commands.Resume
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
-import com.jessecorbett.diskord.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
@@ -142,7 +142,7 @@ class DiscordWebSocket(
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
             val identify = if (shardCount > 0) {
-                Identify(token, arrayOf(shardId, shardCount))
+                Identify(token, listOf(shardId, shardCount))
             } else {
                 Identify(token)
             }

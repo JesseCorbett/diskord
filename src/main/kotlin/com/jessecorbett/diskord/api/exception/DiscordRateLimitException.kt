@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.exception
+package com.jessecorbett.diskord.api.exception
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant

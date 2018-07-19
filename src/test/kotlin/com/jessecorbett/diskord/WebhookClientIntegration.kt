@@ -4,8 +4,8 @@ import com.jessecorbett.diskord.api.Webhook
 import com.jessecorbett.diskord.api.rest.CreateWebhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
-import com.jessecorbett.diskord.exception.DiscordException
-import com.jessecorbett.diskord.exception.DiscordNotFoundException
+import com.jessecorbett.diskord.api.exception.DiscordException
+import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
 import org.junit.Assert

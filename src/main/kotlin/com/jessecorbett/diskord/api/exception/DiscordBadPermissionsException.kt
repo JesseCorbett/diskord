@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.exception
+package com.jessecorbett.diskord.api.exception
 
 /**
  * Thrown when the user does not have permissions for the attempted call

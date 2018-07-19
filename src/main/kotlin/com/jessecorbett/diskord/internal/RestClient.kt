@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.internal
 
-import com.jessecorbett.diskord.exception.*
+import com.jessecorbett.diskord.api.exception.*
 import kotlinx.coroutines.experimental.delay
 import okhttp3.*
 import java.io.IOException

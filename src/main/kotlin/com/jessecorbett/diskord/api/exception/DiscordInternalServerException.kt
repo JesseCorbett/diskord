@@ -1,3 +1,3 @@
-package com.jessecorbett.diskord.exception
+package com.jessecorbett.diskord.api.exception
 
 class DiscordInternalServerException : DiscordException()
