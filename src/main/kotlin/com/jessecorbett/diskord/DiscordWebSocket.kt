@@ -49,7 +49,7 @@ class DiscordWebSocket(
     fun close() {
         logger.info("Closing")
         heartbeatManager.close()
-        socket.close(WebSocketCloseCode.INTENTIONAL_CLOSURE.code, "Requested close")
+        socket.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
         logger.info("Closed")
     }
 
