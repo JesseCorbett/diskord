@@ -46,8 +46,27 @@ Proper documentation needs to be written, but the concept for now is very simple
 Instantiate each client as you like to access the methods Discord offers for that particular resource.
 To build a live bot, simply create a DiscordWebSocket with an EventListener, overriding the event methods you want to know about.
 
+### Ping Pong Example
+```kotlin
+const val botToken = "A-Totally-Real-Discord-Bot-Token"
+
+class BotListener : EventListener() {
+    override suspend fun onMessageCreate(message: Message) {
+        if (message.content == "ping") {
+            val channelClient = ChannelClient(DiscordToken(token, TokenType.BOT), message.channelId)
+            channelClient.sendMessage("pong")
+        }
+    }
+}
+
+fun main(args: Array<String>) {
+    DiscordWebSocket(botToken, BotListener)
+}
+```
+
 ### Things to do
 - Convenience methods
 - Add more testing
+- Proper documentation
 - Add OAuth2 client
 - Possibly a DSL for simple reactive bots
