@@ -15,7 +15,7 @@ data class Embed(
         @JsonProperty("video") val video: EmbedVideo? = null,
         @JsonProperty("provider") val provider: EmbedProvider? = null,
         @JsonProperty("author") val author: EmbedAuthor? = null,
-        @JsonProperty("fields") val fields: Array<EmbedField> = emptyArray(),
+        @JsonProperty("fields") val fields: List<EmbedField> = emptyList(),
         @JsonProperty("type") val type: String = "rich"
 )
 

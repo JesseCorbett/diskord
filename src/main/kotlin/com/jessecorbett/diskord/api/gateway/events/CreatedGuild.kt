@@ -22,9 +22,9 @@ data class CreatedGuild(
         @JsonProperty("verification_level") val verificationLevel: VerificationLevel,
         @JsonProperty("default_message_notifications") val defaultMessageNotificationLevel: NotificationsLevel,
         @JsonProperty("explicit_content_filter") val explicitContentFilterLevel: ExplicitContentFilterLevel,
-        @JsonProperty("roles") val roles: Array<Role>,
-        @JsonProperty("emojis") val emojis: Array<Emoji>,
-        @JsonProperty("features") val features: Array<String>,
+        @JsonProperty("roles") val roles: List<Role>,
+        @JsonProperty("emojis") val emojis: List<Emoji>,
+        @JsonProperty("features") val features: List<String>,
         @JsonProperty("mfa_level") val mfaLevel: MFALevel,
         @JsonProperty("application_id") val owningApplicationId: String?,
         @JsonProperty("widget_enabled") val widgetEnabled: Boolean?,
@@ -34,7 +34,7 @@ data class CreatedGuild(
         @JsonProperty("large") val isLargeGuild: Boolean?,
         @JsonProperty("unavailable") val isUnavailable: Boolean?,
         @JsonProperty("member_count") val memberCount: Int?,
-        @JsonProperty("voice_states") val voiceStates: Array<VoiceState>?,
-        @JsonProperty("members") val members: Array<GuildMember>,
-        @JsonProperty("presences") val userPresences: Array<BarePresenceUpdate>
+        @JsonProperty("voice_states") val voiceStates: List<VoiceState>?,
+        @JsonProperty("members") val members: List<GuildMember>,
+        @JsonProperty("presences") val userPresences: List<BarePresenceUpdate>
 )

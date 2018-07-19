@@ -8,10 +8,10 @@ data class Ready(
         @JsonProperty("v") val gatewayProtocolVersion: Int,
         @JsonProperty("user") val user: User,
         @JsonProperty("user_settings") val userSettings: Any,
-        @JsonProperty("private_channels") val directMessageChannels: Array<Channel>,
-        @JsonProperty("guilds") val guilds: Array<UnavailableGuild>,
+        @JsonProperty("private_channels") val directMessageChannels: List<Channel>,
+        @JsonProperty("guilds") val guilds: List<UnavailableGuild>,
         @JsonProperty("session_id") val sessionId: String,
-        @JsonProperty("relationships") val relationships: Array<Any>,
-        @JsonProperty("presences") val presences: Array<Any>,
-        @JsonProperty("_trace") val debug: Array<String>
+        @JsonProperty("relationships") val relationships: List<Any>,
+        @JsonProperty("presences") val presences: List<Any>,
+        @JsonProperty("_trace") val debug: List<String>
 )

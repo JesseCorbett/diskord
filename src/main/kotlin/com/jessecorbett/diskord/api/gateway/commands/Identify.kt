@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Identify(
         @JsonProperty("token") val token: String,
-        @JsonProperty("shard") @JsonInclude(JsonInclude.Include.NON_NULL) val shard: Array<Int>? = null,
+        @JsonProperty("shard") @JsonInclude(JsonInclude.Include.NON_NULL) val shard: List<Int>? = null,
         @JsonProperty("compress") val canCompress: Boolean = false,
         @JsonProperty("large_threshold") val memberCountThreshold: Int = 50,
         @JsonProperty("presence") val presence: UpdateStatus? = null,

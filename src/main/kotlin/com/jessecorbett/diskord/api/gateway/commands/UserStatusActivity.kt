@@ -23,7 +23,7 @@ data class Timestamps(
 
 data class ActivityParty(
         @JsonProperty("id") val id: String?,
-        @JsonProperty("size") val size: IntArray? = null
+        @JsonProperty("size") val size: List<Int>? = null
 )
 
 data class Assets(

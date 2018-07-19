@@ -5,5 +5,5 @@ import com.jessecorbett.diskord.api.Emoji
 
 data class GuildEmojiUpdate(
         @JsonProperty("guild_id") val guildId: String,
-        @JsonProperty("emojis") val emojis: Array<Emoji>
+        @JsonProperty("emojis") val emojis: List<Emoji>
 )
