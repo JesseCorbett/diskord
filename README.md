@@ -20,7 +20,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.0.13'
+    implementation 'com.jessecorbett:Diskord:0.0.14'
 }
 ```
 
@@ -36,7 +36,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
 </dependency>
 ```
 
@@ -53,7 +53,7 @@ const val botToken = "A-Totally-Real-Discord-Bot-Token"
 class BotListener : EventListener() {
     override suspend fun onMessageCreate(message: Message) {
         if (message.content == "ping") {
-            val channelClient = ChannelClient(DiscordToken(token, TokenType.BOT), message.channelId)
+            val channelClient = ChannelClient(token, message.channelId)
             channelClient.sendMessage("pong")
         }
     }

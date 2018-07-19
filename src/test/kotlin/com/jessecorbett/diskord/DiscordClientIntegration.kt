@@ -9,8 +9,6 @@ import com.jessecorbett.diskord.api.rest.CreateGuild
 import com.jessecorbett.diskord.api.rest.ModifyUser
 import com.jessecorbett.diskord.exception.DiscordBadPermissionsException
 import com.jessecorbett.diskord.exception.DiscordException
-import com.jessecorbett.diskord.internal.DiscordToken
-import com.jessecorbett.diskord.internal.TokenType
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Ignore
@@ -19,7 +17,7 @@ import org.junit.Test
 class DiscordClientIntegration {
     private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DYuHdA.wVgVrSJ0DqO0RfUHwm9xeZStPNY"
     private val tokensUser = "346444615831781376"
-    private val discordClient = DiscordClient(DiscordToken(token, TokenType.BOT))
+    private val discordClient = DiscordClient(token)
     private val userForDM = "321775636798504962"
 
     @Test fun getApiGatewayTest() {
@@ -40,7 +38,7 @@ class DiscordClientIntegration {
 
         val guild = runBlocking { discordClient.createGuild(createGuild) }
 
-        val guildClient = GuildClient(DiscordToken(token, TokenType.BOT), guild.id)
+        val guildClient = GuildClient(token, guild.id)
         runBlocking {
             guildClient.getGuild()
             guildClient.delete()

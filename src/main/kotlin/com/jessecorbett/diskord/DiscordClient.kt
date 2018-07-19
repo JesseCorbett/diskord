@@ -1,12 +1,19 @@
 package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.*
-import com.jessecorbett.diskord.api.models.*
-import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.api.models.UserConnection
+import com.jessecorbett.diskord.api.models.VoiceRegion
+import com.jessecorbett.diskord.api.rest.CreateDM
+import com.jessecorbett.diskord.api.rest.CreateGroupDM
+import com.jessecorbett.diskord.api.rest.CreateGuild
+import com.jessecorbett.diskord.api.rest.ModifyUser
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
-import com.jessecorbett.diskord.internal.*
+import com.jessecorbett.diskord.internal.DiscordUserType
+import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.internal.bodyAs
+import com.jessecorbett.diskord.internal.bodyAsList
 
-class DiscordClient(token: DiscordToken) : RestClient(token) {
+class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     suspend fun getApiGateway() = getRequest("/gateway").bodyAs<GatewayUrl>()
 
     suspend fun getBotGateway() = getRequest("/gateway/bot").bodyAs<GatewayBotUrl>()

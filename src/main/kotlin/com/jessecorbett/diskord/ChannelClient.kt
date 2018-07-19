@@ -5,7 +5,7 @@ import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.internal.*
 import java.time.Instant
 
-class ChannelClient(token: DiscordToken, val channelId: String) : RestClient(token) {
+class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
     suspend fun getChannel() = getRequest("/channels/$channelId").bodyAs<Channel>()

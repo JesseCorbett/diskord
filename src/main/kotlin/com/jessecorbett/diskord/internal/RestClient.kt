@@ -11,7 +11,7 @@ private const val discordApi = "https://discordapp.com/api"
 
 private fun jsonBody(value: Any?) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), jsonMapper.writeValueAsString(value))
 
-abstract class RestClient(val token: DiscordToken) {
+abstract class RestClient(val token: String, val userType: DiscordUserType) {
     private val rateInfo = RateLimitInfo(1, 1, Instant.MAX)
     var botUrl: String = defaultUserAgentUrl
     var botVersion: String = defaultUserAgentVersion
@@ -41,7 +41,7 @@ abstract class RestClient(val token: DiscordToken) {
 
     private fun commonRequest(url: String) = Request.Builder()
             .url(discordApi + url)
-            .header("Authorization", "${token.tokenType.type} ${token.token}")
+            .header("Authorization", "$userType $token")
             .header("User-Agent", "DiscordBot: ($botUrl, $botVersion)")
 
     private suspend fun makeRequest(request: Request, rateLimit: RateLimitInfo): Response {

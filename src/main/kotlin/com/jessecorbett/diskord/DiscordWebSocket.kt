@@ -25,12 +25,13 @@ class DiscordWebSocket(
         var sequenceNumber: Int? = null,
         val shardId: Int = 0,
         val shardCount: Int = 0,
+        val userType: DiscordUserType = DiscordUserType.BOT,
         private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager(),
         private val lifecycleManager: DiscordLifecycleManager = DefaultLifecycleManager()
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private var socket: WebSocket
-    private val gatewayUrl = runBlocking { DiscordClient(DiscordToken(token, TokenType.BOT)).getBotGateway().url }
+    private val gatewayUrl = runBlocking { DiscordClient(token, userType).getBotGateway().url }
 
     init {
         lifecycleManager.start(::restart)

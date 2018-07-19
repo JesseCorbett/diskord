@@ -6,8 +6,6 @@ import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.exception.DiscordException
 import com.jessecorbett.diskord.exception.DiscordNotFoundException
-import com.jessecorbett.diskord.internal.DiscordToken
-import com.jessecorbett.diskord.internal.TokenType
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
 import org.junit.Assert
@@ -23,8 +21,8 @@ class WebhookClientIntegration {
 
     @Before fun setup() {
         runBlocking {
-            webhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
-            webhookClient = WebhookClient(DiscordToken(token, TokenType.BOT), webhook.id)
+            webhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
+            webhookClient = WebhookClient(token, webhook.id)
         }
     }
 
@@ -76,8 +74,8 @@ class WebhookClientIntegration {
 
     @Test fun deleteWebhookTest() {
         runBlocking {
-            val webhookId = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString())).id
-            val client = WebhookClient(DiscordToken(token, TokenType.BOT), webhookId)
+            val webhookId = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString())).id
+            val client = WebhookClient(token, webhookId)
 
             client.getWebhook()
             client.delete()
@@ -96,8 +94,8 @@ class WebhookClientIntegration {
 
     @Test fun deleteWebhookWithTokenTest() {
         runBlocking {
-            val ourWebhook = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel).createWebhook(CreateWebhook(randomString()))
-            val client = WebhookClient(DiscordToken(token, TokenType.BOT), ourWebhook.id)
+            val ourWebhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
+            val client = WebhookClient(token, ourWebhook.id)
 
             client.getWebhook()
             client.delete(ourWebhook.token)
@@ -120,7 +118,7 @@ class WebhookClientIntegration {
             val name = randomString()
             webhookClient.execute(webhook.token, WebhookSubmission(content, name))
 
-            val channelClient = ChannelClient(DiscordToken(token, TokenType.BOT), webhookChannel)
+            val channelClient = ChannelClient(token, webhookChannel)
             val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
 
             Assert.assertEquals(content, message.content)
