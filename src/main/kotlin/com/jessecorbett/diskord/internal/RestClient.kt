@@ -33,9 +33,7 @@ abstract class RestClient(val token: String, val userType: DiscordUserType) {
                 throw DiscordRateLimitException(rateLimitInfo.message, Instant.now().plusMillis(rateLimitInfo.retryAfter), rateLimitInfo.isGlobal)
             }
             502 -> throw DiscordGatewayException()
-        }
-        if (response.code() in 500..599) {
-            throw DiscordInternalServerException()
+            in 500..599 -> throw DiscordInternalServerException()
         }
     }
 
