@@ -63,7 +63,17 @@ fun main(args: Array<String>) {
 }
 ```
 
-### Things to do
+## FAQ
+* Does this support voice chat?
+    * No, voice chat is not supported. If you need it I recommend checking out [JDA](https://github.com/DV8FromTheWorld/JDA) or [Discord4J](https://github.com/Discord4J/Discord4J)
+* Is this library production ready?
+    * Absolutely not, it is far from battle tested, lacks documentation, and the tests written are minimal at best
+* Can I still use Diskord if I really want to?
+    * Yes. It hasn't been thouroughly tested, but bugs aside it should comply with the full Bot API and WebSocket interface
+* Can I contact you to ask a question/contribute to the project/tell you this is all shit?
+    * Go for it
+
+## Things to do
 - Convenience methods
 - Add more testing
 - Proper documentation
