@@ -2,7 +2,7 @@
 
 A Kotlin client for Discord bots
 
-Built as a lean client using coroutines that gets the intricacies of rate limits, async, and data models out of your way.
+Built as a lean, opinionated client using coroutines that gets the intricacies of rate limits, async, and data models out of your way.
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
