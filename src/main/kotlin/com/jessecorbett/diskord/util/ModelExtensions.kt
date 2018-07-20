@@ -18,6 +18,9 @@ val Message.isFromWebhook: Boolean
 val Message.authorId: String
     get() = this.author.id
 
+val Message.words: List<String>
+    get() = this.content.split(" ")
+
 
 /**
  * User extensions
