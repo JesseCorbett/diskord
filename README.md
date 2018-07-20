@@ -14,7 +14,6 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```
 allprojects {
     repositories {
-   	...
    	maven { url 'https://jitpack.io' }
     }
 }
