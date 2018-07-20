@@ -6,7 +6,7 @@ Built as a lean client using coroutines that gets the intricacies of rate limits
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
-Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/JesseLCorbett)
+Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by the [Discord server](https://discord.gg/UPTWsZ5)
 
 ## How do I import this?
 
