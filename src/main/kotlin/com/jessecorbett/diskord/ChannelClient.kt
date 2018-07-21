@@ -20,8 +20,6 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
 
     suspend fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs<Message>()
 
-    suspend fun sendMessage(message: String) = postRequest("/channels/$channelId/messages", CreateMessage(message)).bodyAs<Message>()
-
     suspend fun addMessageReaction(messageId: String, unicodeEmoji: String) = putRequest("/channels/$channelId/messages/$messageId/reactions/$unicodeEmoji/@me").close()
 
     suspend fun addMessageReaction(messageId: String, emoji: Emoji) = putRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/@me").close()

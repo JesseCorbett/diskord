@@ -20,7 +20,7 @@ data class Message(
         @JsonProperty("reactions") val reactions: List<Reaction> = emptyList(),
         @JsonProperty("nonce") val validationNonce: String?,
         @JsonProperty("pinned") val isPinned: Boolean,
-        @JsonProperty("webhook_id") val webHookId: String?,
+        @JsonProperty("webhook_id") val webhookId: String?,
         @JsonProperty("type") val type: MessageType,
         @JsonProperty("activity") val activity: MessageActivity?,
         @JsonProperty("application") val application: MessageApplication?
