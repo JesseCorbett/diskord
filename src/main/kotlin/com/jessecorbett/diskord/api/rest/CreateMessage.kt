@@ -67,11 +67,9 @@ data class EmbedField(
 
 fun embed(block: Embed.() -> Unit) = Embed().apply(block)
 
-fun Embed.image(url: String, block: EmbedImage.() -> Unit) {
-    image = EmbedImage(url).apply(block)
-}
+fun image(url: String, block: EmbedImage.() -> Unit) = EmbedImage(url).apply(block)
 
-fun Embed.video(url: String, block: EmbedVideo.() -> Unit) {
+fun Embed.addVideo(url: String, block: EmbedVideo.() -> Unit) {
     video = EmbedVideo(url).apply(block)
 }
 
