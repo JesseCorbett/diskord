@@ -19,7 +19,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
 
     suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId").close()
 
-    suspend fun getGuild() = getRequest("/guilds/$guildId").bodyAs<Guild>()
+    suspend fun get() = getRequest("/guilds/$guildId").bodyAs<Guild>()
 
     suspend fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs<Guild>()
 

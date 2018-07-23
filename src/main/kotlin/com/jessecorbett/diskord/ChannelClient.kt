@@ -8,7 +8,7 @@ import java.time.Instant
 class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
-    suspend fun getChannel() = getRequest("/channels/$channelId").bodyAs<Channel>()
+    suspend fun get() = getRequest("/channels/$channelId").bodyAs<Channel>()
 
     suspend fun update(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs<Channel>()
 

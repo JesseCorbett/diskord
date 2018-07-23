@@ -22,9 +22,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
 
     suspend fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").bodyAs<Invite>()
 
-    suspend fun deleteInvite(inviteCode: String) {
-        deleteRequest("/invites/$inviteCode").close()
-    }
+    suspend fun deleteInvite(inviteCode: String) = deleteRequest("/invites/$inviteCode").close()
 
     suspend fun getUser(userId: String = "@me") = getRequest("/users/$userId").bodyAs<User>()
 

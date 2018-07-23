@@ -1,8 +1,11 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.ChannelClient
+import com.jessecorbett.diskord.GuildClient
 import com.jessecorbett.diskord.api.*
 import com.jessecorbett.diskord.api.rest.CreateMessage
+import com.jessecorbett.diskord.api.rest.PatchGuildMember
+import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname
 
 
 /**
@@ -63,3 +66,7 @@ val Emoji.tag: String
  * Client extensions
  */
 suspend fun ChannelClient.sendMessage(message: String) = this.createMessage(CreateMessage(message))
+
+suspend fun GuildClient.changeNickname(nickname: String) = this.changeMemberNickname(PatchGuildMemberNickname(nickname))
+
+suspend fun GuildClient.changeNickname(userId: String, nickname: String) = this.updateMember(userId, PatchGuildMember(nickname))
