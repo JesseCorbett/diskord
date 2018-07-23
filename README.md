@@ -51,7 +51,7 @@ const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 val clientStore = ClientStore(BOT_TOKEN)
 
-class BotListener : EventListener() {
+object BotListener : EventListener() {
     override suspend fun onMessageCreate(message: Message) {
         if (message.content == "ping") {
             clientStore.channels[message.channelId].sendMessage("pong")
