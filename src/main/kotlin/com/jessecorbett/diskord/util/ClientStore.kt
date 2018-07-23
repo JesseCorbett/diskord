@@ -13,11 +13,11 @@ class ClientStore(userToken: String) {
     val webhooks = WebhookClients(userToken)
 }
 
-class ChannelClients(userToken: String): RestClients<ChannelClient>(userToken, {ChannelClient(userToken, it)})
+class ChannelClients(userToken: String): RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
 
-class GuildClients(userToken: String): RestClients<GuildClient>(userToken, {GuildClient(userToken, it)})
+class GuildClients(userToken: String): RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
 
-class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, {WebhookClient(userToken, it)})
+class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 abstract class RestClients<T: RestClient>(private val userToken: String, private val gen: (String) -> T) {
     private val clients: MutableMap<String, T> = HashMap()
