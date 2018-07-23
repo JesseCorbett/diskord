@@ -47,19 +47,20 @@ To build a live bot, simply create a DiscordWebSocket with an EventListener, ove
 
 ### Ping Pong Example
 ```kotlin
-const val botToken = "A-Totally-Real-Discord-Bot-Token"
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+val clientStore = ClientStore(BOT_TOKEN)
 
 class BotListener : EventListener() {
     override suspend fun onMessageCreate(message: Message) {
         if (message.content == "ping") {
-            val channelClient = ChannelClient(token, message.channelId)
-            channelClient.sendMessage("pong")
+            clientStore.channels[message.channelId].sendMessage("pong")
         }
     }
 }
 
 fun main(args: Array<String>) {
-    DiscordWebSocket(botToken, BotListener())
+    DiscordWebSocket(BOT_TOKEN, BotListener())
 }
 ```
 
