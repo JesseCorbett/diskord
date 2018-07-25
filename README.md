@@ -64,6 +64,21 @@ fun main(args: Array<String>) {
 }
 ```
 
+### Experimental DSL Ping Pong Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+fun main(args: Array<String>) {
+    bot(BOT_TOKEN) {
+        commands('!') {
+            command("ping") { params, authorId, channel, clients ->
+                channel.sendMessage("pong")
+            }
+        }
+    }
+}
+```
+
 ## FAQ
 * Does this support voice chat?
     * No, voice chat is not supported. If you need it I recommend checking out [JDA](https://github.com/DV8FromTheWorld/JDA) or [Discord4J](https://github.com/Discord4J/Discord4J)

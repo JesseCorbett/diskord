@@ -6,7 +6,6 @@ import com.jessecorbett.diskord.EventListener
 import com.jessecorbett.diskord.api.Message
 import com.jessecorbett.diskord.util.ClientStore
 import com.jessecorbett.diskord.util.authorId
-import com.jessecorbett.diskord.util.sendMessage
 
 class Bot constructor(val token: String) : EventListener() {
     private val clientStore = ClientStore(token)
