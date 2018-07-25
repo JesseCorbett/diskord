@@ -70,7 +70,7 @@ const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main(args: Array<String>) {
     bot(BOT_TOKEN) {
-        commands('!') {
+        commands {
             command("ping") { params, authorId, channel, clients ->
                 channel.sendMessage("pong")
             }

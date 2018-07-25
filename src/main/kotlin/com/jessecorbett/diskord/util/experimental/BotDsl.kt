@@ -30,7 +30,7 @@ class Bot constructor(val token: String) : EventListener() {
 
 typealias Command = suspend (List<String>, String, ChannelClient, ClientStore) -> Unit
 
-data class CommandSet(val prefix: Char, val commands: MutableMap<String, Command> = HashMap())
+data class CommandSet(val prefix: Char = '!', val commands: MutableMap<String, Command> = HashMap())
 
 fun bot(token: String, block: Bot.() -> Unit) = Bot(token).apply(block)
 
