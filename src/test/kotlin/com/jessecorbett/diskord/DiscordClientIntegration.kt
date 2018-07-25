@@ -40,12 +40,12 @@ class DiscordClientIntegration {
 
         val guildClient = GuildClient(token, guild.id)
         runBlocking {
-            guildClient.getGuild()
+            guildClient.get()
             guildClient.delete()
         }
         var guildDeleted = false
         try {
-            runBlocking { guildClient.getGuild() }
+            runBlocking { guildClient.get() }
         } catch (e: DiscordException) {
             Assert.assertTrue(e is DiscordBadPermissionsException)
             guildDeleted = true

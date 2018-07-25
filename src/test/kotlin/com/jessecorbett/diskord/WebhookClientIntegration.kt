@@ -119,10 +119,10 @@ class WebhookClientIntegration {
             webhookClient.execute(webhook.token, WebhookSubmission(content, name))
 
             val channelClient = ChannelClient(token, webhookChannel)
-            val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
+            val message = channelClient.getMessage(channelClient.get().lastMessageId!!)
 
             Assert.assertEquals(content, message.content)
-            Assert.assertEquals(name, message.author!!.username)
+            Assert.assertEquals(name, message.author.username)
         }
     }
 }
