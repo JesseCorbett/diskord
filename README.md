@@ -19,7 +19,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.0.19'
+    implementation 'com.jessecorbett:Diskord:0.0.20'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.20</version>
 </dependency>
 ```
 
