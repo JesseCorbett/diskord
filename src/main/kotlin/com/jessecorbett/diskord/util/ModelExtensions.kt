@@ -12,19 +12,19 @@ import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname
  * Message extensions
  */
 val Message.isFromUser: Boolean
-    get() = !this.author.isBot
+    get() = !author.isBot
 
 val Message.isFromBot: Boolean
-    get() = this.author.isBot && this.webhookId == null
+    get() = author.isBot && this.webhookId == null
 
 val Message.isFromWebhook: Boolean
-    get() = this.webhookId != null
+    get() = webhookId != null
 
 val Message.authorId: String
-    get() = this.author.id
+    get() = author.id
 
 val Message.words: List<String>
-    get() = this.content.split(" ")
+    get() = content.split(" ")
 
 
 /**
@@ -33,7 +33,10 @@ val Message.words: List<String>
 fun String.toUserMention() = "<@$this>"
 
 val User.mention: String
-    get() = this.id.toUserMention()
+    get() = id.toUserMention()
+
+val User.hasCustomAvatar: Boolean
+    get() = avatarHash != null
 
 
 /**
@@ -42,7 +45,7 @@ val User.mention: String
 fun String.toRoleMention() = "<@&$this>"
 
 val Role.mention: String
-    get() = this.id.toRoleMention()
+    get() = id.toRoleMention()
 
 
 /**
@@ -56,7 +59,7 @@ val Channel.mention: String
  * Emoji extensions
  */
 val Emoji.isUnicode: Boolean
-    get() = this.id == null
+    get() = id == null
 
 val Emoji.tag: String
     get() = if (isUnicode) name else "<${if (isAnimated) "a" else ""}:$name:$id>"
@@ -65,8 +68,8 @@ val Emoji.tag: String
 /**
  * Client extensions
  */
-suspend fun ChannelClient.sendMessage(message: String) = this.createMessage(CreateMessage(message))
+suspend fun ChannelClient.sendMessage(message: String) = createMessage(CreateMessage(message))
 
-suspend fun GuildClient.changeNickname(nickname: String) = this.changeMemberNickname(PatchGuildMemberNickname(nickname))
+suspend fun GuildClient.changeNickname(nickname: String) = changeMemberNickname(PatchGuildMemberNickname(nickname))
 
-suspend fun GuildClient.changeNickname(userId: String, nickname: String) = this.updateMember(userId, PatchGuildMember(nickname))
+suspend fun GuildClient.changeNickname(userId: String, nickname: String) = updateMember(userId, PatchGuildMember(nickname))
