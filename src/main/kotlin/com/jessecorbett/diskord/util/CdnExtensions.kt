@@ -3,46 +3,59 @@ package com.jessecorbett.diskord.util
 import com.jessecorbett.diskord.api.Emoji
 import com.jessecorbett.diskord.api.Guild
 import com.jessecorbett.diskord.api.User
+import com.jessecorbett.diskord.api.exception.DiscordBadRequestException
 
-const val discordCdn = "https://cdn.discordapp.com/"
+const val discordCdn = "https://cdn.discordapp.com"
 
-val User.pngAvatarUrl: String?
-    get() = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png" else null
+private fun sizeFormat(size: Int?): String {
+    if (size == null) {
+        return ""
+    }
+    if (size > 0 && (size and (size - 1)) == 0) {
+        return "?size=$size"
+    } else {
+        throw DiscordBadRequestException("Image size must be a power of two")
+    }
+}
 
-val User.jpgAvatarUrl: String?
-    get() = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg" else null
+fun User.pngAvatar(size: Int? = null): String?
+    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png${sizeFormat(size)}" else null
 
-val User.webpAvatarUrl: String?
-    get() = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp" else null
+fun User.jpgAvatar(size: Int? = null): String?
+    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg${sizeFormat(size)}" else null
 
-val User.gifAvatarUrl: String?
-    get() = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.gif" else null
+fun User.webpAvatar(size: Int? = null): String?
+    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp${sizeFormat(size)}" else null
 
-val User.pngDefaultAvatarUrl: String
-    get() = "$discordCdn/embed/avatars/${discriminator % 5}.png"
+fun User.gifAvatar(size: Int? = null): String?
+    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.gif${sizeFormat(size)}" else null
 
-
-val Emoji.pngUrl: String?
-    get() = if (!isUnicode) "$discordCdn/emojis/$id.png" else null
-
-val Emoji.gifUrl: String?
-    get() = if (!isUnicode) "$discordCdn/emojis/$id.gif" else null
+fun User.pngDefaultAvatar(size: Int? = null): String
+    = "$discordCdn/embed/avatars/${discriminator % 5}.png${sizeFormat(size)}"
 
 
-val Guild.pngIconUrl: String?
-    get() = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png" else null
+fun Emoji.png(size: Int? = null): String?
+    = if (!isUnicode) "$discordCdn/emojis/$id.png${sizeFormat(size)}" else null
 
-val Guild.jpgIconUrl: String?
-    get() = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg" else null
+fun Emoji.gif(size: Int? = null): String?
+    = if (!isUnicode) "$discordCdn/emojis/$id.gif${sizeFormat(size)}" else null
 
-val Guild.webpIconUrl: String?
-    get() = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp" else null
 
-val Guild.pngSplashUrl: String?
-    get() = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png" else null
+fun Guild.pngIcon(size: Int? = null): String?
+    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
 
-val Guild.jpgSplashUrl: String?
-    get() = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg" else null
+fun Guild.jpgIcon(size: Int? = null): String?
+    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
 
-val Guild.webpSplashUrl: String?
-    get() = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp" else null
+fun Guild.webpIcon(size: Int? = null): String?
+    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
+
+fun Guild.pngSplash(size: Int? = null): String?
+    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png${sizeFormat(size)}" else null
+
+fun Guild.jpgSplash(size: Int? = null): String?
+    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg${sizeFormat(size)}" else null
+
+fun Guild.webpSplash(size: Int? = null): String?
+    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
+
