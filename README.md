@@ -19,7 +19,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.0.23'
+    implementation 'com.jessecorbett:Diskord:0.1.0'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.0.23</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -90,8 +90,5 @@ fun main(args: Array<String>) {
     * Go for it
 
 ## Things to do
-- Convenience methods
 - Add more testing
 - Proper documentation
-- Add OAuth2 client
-- Possibly a DSL for simple reactive bots

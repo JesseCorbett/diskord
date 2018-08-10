@@ -34,4 +34,4 @@ internal inline fun <reified T> Response.bodyAsList(): List<T> {
 }
 
 internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
-internal const val defaultUserAgentVersion = "0.0.23"
+internal const val defaultUserAgentVersion = "0.1.0"
