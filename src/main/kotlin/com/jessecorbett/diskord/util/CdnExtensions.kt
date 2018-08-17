@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.Emoji
 import com.jessecorbett.diskord.api.Guild
 import com.jessecorbett.diskord.api.User
 import com.jessecorbett.diskord.api.exception.DiscordBadRequestException
+import com.jessecorbett.diskord.api.rest.response.PartialGuild
 
 const val discordCdn = "https://cdn.discordapp.com"
 
@@ -59,3 +60,11 @@ fun Guild.jpgSplash(size: Int? = null): String?
 fun Guild.webpSplash(size: Int? = null): String?
     = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
 
+fun PartialGuild.pngIcon(size: Int? = null): String?
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
+
+fun PartialGuild.jpgIcon(size: Int? = null): String?
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
+
+fun PartialGuild.webpIcon(size: Int? = null): String?
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
