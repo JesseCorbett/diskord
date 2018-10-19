@@ -36,5 +36,6 @@ data class Assets(
 enum class ActivityType(@JsonValue val code: Int) {
     GAME(0),
     STREAMING(1),
-    LISTENING(2)
+    LISTENING(2),
+    UNKNOWN(3)
 }
