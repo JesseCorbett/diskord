@@ -12,8 +12,9 @@ import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.Request
 import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
@@ -66,7 +67,7 @@ class DiscordWebSocket(
         if (discordEvent == DiscordEvent.READY) {
             setSessionId(gatewayMessage.dataPayload)
         }
-        launch(eventListener.context) {
+        GlobalScope.launch(eventListener.context) {
             dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
         }
     }

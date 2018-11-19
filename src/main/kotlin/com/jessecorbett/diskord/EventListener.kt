@@ -8,10 +8,11 @@ import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.models.BulkMessageDelete
 import com.jessecorbett.diskord.api.models.MessageDelete
 import com.jessecorbett.diskord.api.models.VoiceState
-import kotlinx.coroutines.experimental.newFixedThreadPoolContext
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.asCoroutineDispatcher
+import java.util.concurrent.Executors
+import kotlin.coroutines.CoroutineContext
 
-abstract class EventListener(val context: CoroutineContext = newFixedThreadPoolContext(1, "diskord")) {
+abstract class EventListener(val context: CoroutineContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
     open suspend fun onEvent(event: DiscordEvent) {
 
     }

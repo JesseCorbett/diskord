@@ -8,7 +8,9 @@ import com.jessecorbett.diskord.internal.jsonMapper
 import okhttp3.*
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 
 private const val AUTH_CODE = "authorization_code"

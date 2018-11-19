@@ -1,11 +1,13 @@
 package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.api.exception.*
-import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.delay
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 private const val discordApi = "https://discordapp.com/api"
 

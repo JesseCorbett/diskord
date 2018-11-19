@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.HeartbeatManager
 import com.jessecorbett.diskord.api.gateway.GatewayMessage
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 
 class DefaultHeartbeatManager : HeartbeatManager {
@@ -12,9 +12,9 @@ class DefaultHeartbeatManager : HeartbeatManager {
         throw RuntimeException("Tried to restart DefaultHeartbeatManager before calling start method")
     }
 
-    override fun start(heartbeatPeriod: Int, sendHeartbeat: () -> Unit, sendAcknowledgement: () -> Unit) {
+    override fun start(heartbeatPeriod: Long, sendHeartbeat: () -> Unit, sendAcknowledgement: () -> Unit) {
         this.sendAcknowledgement = sendAcknowledgement
-        heartbeatJob = launch(CommonPool) {
+        heartbeatJob = GlobalScope.launch(Dispatchers.Default) {
             while (this.isActive) {
                 sendHeartbeat()
                 delay(heartbeatPeriod)
@@ -24,7 +24,7 @@ class DefaultHeartbeatManager : HeartbeatManager {
 
     override fun close() {
         logger.info("Closing")
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             heartbeatJob?.cancelAndJoin()
             logger.info("Closed")
         }

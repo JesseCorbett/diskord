@@ -1,19 +1,19 @@
 package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.Webhook
+import com.jessecorbett.diskord.api.exception.DiscordException
+import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
 import com.jessecorbett.diskord.api.rest.CreateWebhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
-import com.jessecorbett.diskord.api.exception.DiscordException
-import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class WebhookClientIntegration {
-    private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DYuHdA.wVgVrSJ0DqO0RfUHwm9xeZStPNY"
+    private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
     private val webhookChannel = "424046633253339136"
 
     private lateinit var webhook: Webhook
