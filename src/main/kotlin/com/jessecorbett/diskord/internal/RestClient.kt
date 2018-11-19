@@ -30,9 +30,8 @@ abstract class RestClient(val token: String, val userType: DiscordUserType) {
             401 -> throw DiscordUnauthorizedException()
             403 -> throw DiscordBadPermissionsException()
             404 -> throw DiscordNotFoundException()
-            429 -> {
-                val rateLimitInfo = response.bodyAs<RateLimitExceeded>()
-                throw DiscordRateLimitException(rateLimitInfo.message, Instant.now().plusMillis(rateLimitInfo.retryAfter), rateLimitInfo.isGlobal)
+            429 -> response.bodyAs<RateLimitExceeded>().let {
+                throw DiscordRateLimitException(it.message, Instant.now().plusMillis(it.retryAfter), it.isGlobal)
             }
             502 -> throw DiscordGatewayException()
             in 500..599 -> throw DiscordInternalServerException()
@@ -59,7 +58,8 @@ abstract class RestClient(val token: String, val userType: DiscordUserType) {
                     override fun onResponse(call: Call, response: Response) {
                         rateInfo.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
                         rateLimit.remaining = response.header("X-RateLimit-Remaining")?.toInt() ?: rateLimit.remaining
-                        rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong() ?: rateLimit.resetTime.epochSecond)
+                        rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong()
+                                ?: rateLimit.resetTime.epochSecond)
 
                         if (!response.isSuccessful) {
                             try {
