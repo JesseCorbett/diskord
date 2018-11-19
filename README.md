@@ -19,7 +19,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.1.0'
+    implementation 'com.jessecorbett:Diskord:0.2.0'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
@@ -85,7 +85,7 @@ fun main(args: Array<String>) {
 * Is this library production ready?
     * Absolutely not, it is far from battle tested, lacks documentation, and the tests written are minimal at best
 * Can I still use Diskord if I really want to?
-    * Yes. It hasn't been thouroughly tested, but bugs aside it should comply with the full Bot API and WebSocket interface
+    * Yes. It hasn't been thoroughly tested, but bugs aside it should comply with the full Bot API and WebSocket interface
 * Can I contact you to ask a question/contribute to the project/tell you this is all shit?
     * Go for it
 
