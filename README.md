@@ -19,7 +19,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:0.2.1'
+    implementation 'com.jessecorbett:Diskord:0.3.0'
 }
 ```
 
@@ -35,7 +35,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>Diskord</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -92,3 +92,4 @@ fun main(args: Array<String>) {
 ## Things to do
 - Add more testing
 - Proper documentation
+- Build out DSL
