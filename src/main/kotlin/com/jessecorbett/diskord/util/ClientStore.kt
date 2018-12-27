@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.ChannelClient
-import com.jessecorbett.diskord.DiscordClient
-import com.jessecorbett.diskord.GuildClient
-import com.jessecorbett.diskord.WebhookClient
-import com.jessecorbett.diskord.internal.RestClient
+import com.jessecorbett.diskord.api.client.ChannelClient
+import com.jessecorbett.diskord.api.client.DiscordClient
+import com.jessecorbett.diskord.api.client.GuildClient
+import com.jessecorbett.diskord.api.client.WebhookClient
+import com.jessecorbett.diskord.api.client.internal.RestClient
 
 class ClientStore(userToken: String) {
     val discord = DiscordClient(userToken)

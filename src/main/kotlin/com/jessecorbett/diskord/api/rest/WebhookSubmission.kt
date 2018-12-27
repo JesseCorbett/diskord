@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.Embed
+import com.jessecorbett.diskord.api.model.Embed
 
 data class WebhookSubmission(
         @JsonProperty("content") val content: String? = null,

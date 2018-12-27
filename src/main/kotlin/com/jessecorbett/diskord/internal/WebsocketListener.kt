@@ -2,8 +2,8 @@ package com.jessecorbett.diskord.internal
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.jessecorbett.diskord.DiscordLifecycleManager
-import com.jessecorbett.diskord.api.gateway.GatewayMessage
-import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
+import com.jessecorbett.diskord.api.websocket.GatewayMessage
+import com.jessecorbett.diskord.api.websocket.WebSocketCloseCode
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import okhttp3.Response
 import okhttp3.WebSocket

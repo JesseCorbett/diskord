@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 internal val httpClient = OkHttpClient.Builder()
         .cache(null)
-        .connectionPool(ConnectionPool(1, 3, TimeUnit.SECONDS))
+        .connectionPool(ConnectionPool(1, 5, TimeUnit.SECONDS))
         .build()
 
 internal val jsonMapper = ObjectMapper().findAndRegisterModules().registerModule(JavaTimeModule())
@@ -34,4 +34,4 @@ internal inline fun <reified T> Response.bodyAsList(): List<T> {
 }
 
 internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
-internal const val defaultUserAgentVersion = "0.2.0"
+internal const val defaultUserAgentVersion = "0.2.1"

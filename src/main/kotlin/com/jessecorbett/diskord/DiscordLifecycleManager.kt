@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
+import com.jessecorbett.diskord.api.websocket.WebSocketCloseCode
 import okhttp3.Response
 
 interface DiscordLifecycleManager {

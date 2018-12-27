@@ -1,6 +1,8 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.Webhook
+import com.jessecorbett.diskord.api.model.Webhook
+import com.jessecorbett.diskord.api.client.ChannelClient
+import com.jessecorbett.diskord.api.client.WebhookClient
 import com.jessecorbett.diskord.api.exception.DiscordException
 import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
 import com.jessecorbett.diskord.api.rest.CreateWebhook

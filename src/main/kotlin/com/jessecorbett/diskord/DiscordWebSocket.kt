@@ -2,14 +2,16 @@ package com.jessecorbett.diskord
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.api.gateway.GatewayMessage
-import com.jessecorbett.diskord.api.gateway.OpCode
-import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
-import com.jessecorbett.diskord.api.gateway.commands.Identify
-import com.jessecorbett.diskord.api.gateway.commands.Resume
-import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
-import com.jessecorbett.diskord.api.gateway.events.Hello
-import com.jessecorbett.diskord.api.gateway.events.Ready
+import com.jessecorbett.diskord.api.DiscordUserType
+import com.jessecorbett.diskord.api.client.DiscordClient
+import com.jessecorbett.diskord.api.websocket.GatewayMessage
+import com.jessecorbett.diskord.api.websocket.OpCode
+import com.jessecorbett.diskord.api.websocket.WebSocketCloseCode
+import com.jessecorbett.diskord.api.websocket.commands.Identify
+import com.jessecorbett.diskord.api.websocket.commands.Resume
+import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
+import com.jessecorbett.diskord.api.websocket.events.Hello
+import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.internal.*
 import kotlinx.coroutines.GlobalScope

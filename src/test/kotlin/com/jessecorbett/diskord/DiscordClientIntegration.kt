@@ -1,8 +1,10 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.ExplicitContentFilterLevel
-import com.jessecorbett.diskord.api.NotificationsLevel
-import com.jessecorbett.diskord.api.VerificationLevel
+import com.jessecorbett.diskord.api.model.ExplicitContentFilterLevel
+import com.jessecorbett.diskord.api.model.NotificationsLevel
+import com.jessecorbett.diskord.api.model.VerificationLevel
+import com.jessecorbett.diskord.api.client.DiscordClient
+import com.jessecorbett.diskord.api.client.GuildClient
 import com.jessecorbett.diskord.api.rest.CreateDM
 import com.jessecorbett.diskord.api.rest.CreateGroupDM
 import com.jessecorbett.diskord.api.rest.CreateGuild

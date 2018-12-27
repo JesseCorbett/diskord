@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.util.experimental
 
-import com.jessecorbett.diskord.ChannelClient
+import com.jessecorbett.diskord.api.client.ChannelClient
 import com.jessecorbett.diskord.DiscordWebSocket
 import com.jessecorbett.diskord.EventListener
-import com.jessecorbett.diskord.api.Message
+import com.jessecorbett.diskord.api.model.Message
 import com.jessecorbett.diskord.util.ClientStore
 import com.jessecorbett.diskord.util.authorId
 

@@ -1,13 +1,13 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.Channel
-import com.jessecorbett.diskord.api.Guild
-import com.jessecorbett.diskord.api.Message
-import com.jessecorbett.diskord.api.User
-import com.jessecorbett.diskord.api.gateway.events.*
-import com.jessecorbett.diskord.api.models.BulkMessageDelete
-import com.jessecorbett.diskord.api.models.MessageDelete
-import com.jessecorbett.diskord.api.models.VoiceState
+import com.jessecorbett.diskord.api.model.Channel
+import com.jessecorbett.diskord.api.model.Guild
+import com.jessecorbett.diskord.api.model.Message
+import com.jessecorbett.diskord.api.model.User
+import com.jessecorbett.diskord.api.websocket.events.*
+import com.jessecorbett.diskord.api.model.BulkMessageDelete
+import com.jessecorbett.diskord.api.model.MessageDelete
+import com.jessecorbett.diskord.api.model.VoiceState
 import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext

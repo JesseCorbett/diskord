@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.ChannelClient
-import com.jessecorbett.diskord.GuildClient
-import com.jessecorbett.diskord.api.*
+import com.jessecorbett.diskord.api.client.ChannelClient
+import com.jessecorbett.diskord.api.client.GuildClient
+import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.CreateMessage
 import com.jessecorbett.diskord.api.rest.PatchGuildMember
 import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname

@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.ExplicitContentFilterLevel
-import com.jessecorbett.diskord.api.NotificationsLevel
-import com.jessecorbett.diskord.api.VerificationLevel
+import com.jessecorbett.diskord.api.model.ExplicitContentFilterLevel
+import com.jessecorbett.diskord.api.model.NotificationsLevel
+import com.jessecorbett.diskord.api.model.VerificationLevel
 
 data class PatchGuild(
         @JsonProperty("name") val name: String? = null,

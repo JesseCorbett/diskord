@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.internal
 
 import com.jessecorbett.diskord.DiscordLifecycleManager
-import com.jessecorbett.diskord.api.gateway.WebSocketCloseCode
+import com.jessecorbett.diskord.api.websocket.WebSocketCloseCode
 import okhttp3.Response
 import org.slf4j.LoggerFactory
 

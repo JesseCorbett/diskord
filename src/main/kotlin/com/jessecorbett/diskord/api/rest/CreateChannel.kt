@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.api.ChannelType
-import com.jessecorbett.diskord.api.Overwrite
+import com.jessecorbett.diskord.api.model.ChannelType
+import com.jessecorbett.diskord.api.model.Overwrite
 
 data class CreateChannel(
         @JsonProperty("name") val name: String,
