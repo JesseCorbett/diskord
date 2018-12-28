@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
+import kotlinx.coroutines.asCoroutineDispatcher
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 internal val httpClient = OkHttpClient.Builder()
@@ -32,6 +34,8 @@ internal inline fun <reified T> Response.bodyAsList(): List<T> {
     this.body()?.close()
     return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, T::class.java))
 }
+
+internal val defaultHeartbeatContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
 internal const val defaultUserAgentVersion = "0.3.0"

@@ -12,27 +12,27 @@ import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.internal.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
+import kotlin.coroutines.CoroutineContext
 
 class DiscordWebSocket(
-        val token: String,
-        val eventListener: EventListener,
+        private val token: String,
+        private val eventListener: EventListener,
         var sessionId: String? = null,
         var sequenceNumber: Int? = null,
-        val shardId: Int = 0,
-        val shardCount: Int = 0,
-        val userType: DiscordUserType = DiscordUserType.BOT,
-        val websocketLifecycleListener: WebsocketLifecycleListener? = null,
-        private val heartbeatManager: HeartbeatManager = DefaultHeartbeatManager()
+        private val shardId: Int = 0,
+        private val shardCount: Int = 0,
+        private val userType: DiscordUserType = DiscordUserType.BOT,
+        private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
+        private val heartbeatContext: CoroutineContext = defaultHeartbeatContext
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private var socket = startConnection()
+    private var heartbeatJob: Job? = null
 
     private fun startConnection(): WebSocket {
         val gatewayUrl = runBlocking { DiscordClient(token, userType).getBotGateway().url }
@@ -70,16 +70,19 @@ class DiscordWebSocket(
     }
 
     fun close() {
-        logger.info("Closing")
-        heartbeatManager.close()
+        logger.debug("Closing")
+        // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
+        runBlocking { heartbeatJob?.cancelAndJoin() }
+        heartbeatJob = null
         socket.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
-        logger.info("Closed")
+        logger.info("Closed connection")
     }
 
     private fun restart() {
-        logger.info("Restarting")
+        logger.debug("Restarting")
+        close()
         socket = startConnection()
-        logger.info("Restarted")
+        logger.info("Restarted connection")
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
@@ -90,21 +93,23 @@ class DiscordWebSocket(
                 receiveGatewayMessage(gatewayMessage)
             }
             OpCode.HEARTBEAT -> {
-                heartbeatManager.acceptHeartbeat(gatewayMessage)
+                sendGatewayMessage(OpCode.HEARTBEAT_ACK)
             }
             OpCode.RECONNECT -> {
+                logger.info("Server requested a reconnect")
                 restart()
             }
             OpCode.INVALID_SESSION -> {
+                logger.warn("The session was invalid, falling back to new session behavior")
                 sessionId = null
                 sequenceNumber = null
                 restart()
             }
             OpCode.HELLO -> {
-                 initialize(jsonMapper.treeToValue(gatewayMessage.dataPayload!!))
+                 initializeSession(jsonMapper.treeToValue(gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
-                heartbeatManager.acceptAcknowledgement(gatewayMessage)
+                // TODO: We should handle errors to do with a lack of heartbeat ack. Low priority though
             }
             else -> {
                 throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")
@@ -112,7 +117,7 @@ class DiscordWebSocket(
         }
     }
 
-    private fun initialize(hello: Hello) {
+    private fun initializeSession(hello: Hello) {
         if (sessionId != null && sequenceNumber != null) {
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
         } else {
@@ -124,7 +129,14 @@ class DiscordWebSocket(
             sendGatewayMessage(OpCode.IDENTIFY, identify)
         }
 
-        heartbeatManager.start(hello.heartbeatInterval, { sendGatewayMessage(OpCode.HEARTBEAT, sequenceNumber) }, { sendGatewayMessage(OpCode.HEARTBEAT_ACK) })
+        heartbeatJob?.cancel()
+
+        heartbeatJob = GlobalScope.launch(heartbeatContext) {
+            while (this.isActive) {
+                sendGatewayMessage(OpCode.HEARTBEAT, sequenceNumber)
+                delay(hello.heartbeatInterval)
+            }
+        }
     }
 
     private fun receiveGatewayMessage(gatewayMessage: GatewayMessage) {
