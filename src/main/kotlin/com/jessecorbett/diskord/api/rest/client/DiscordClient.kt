@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.client
+package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.rest.CreateDM
 import com.jessecorbett.diskord.api.rest.CreateGroupDM
@@ -6,10 +6,10 @@ import com.jessecorbett.diskord.api.rest.CreateGuild
 import com.jessecorbett.diskord.api.rest.ModifyUser
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
 import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.client.internal.RestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.model.*
-import com.jessecorbett.diskord.api.websocket.GatewayBotUrl
-import com.jessecorbett.diskord.api.websocket.GatewayUrl
+import com.jessecorbett.diskord.api.websocket.model.GatewayBotUrl
+import com.jessecorbett.diskord.api.websocket.model.GatewayUrl
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsList
 

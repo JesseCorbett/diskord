@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.model.Channel
 import com.jessecorbett.diskord.api.model.Guild

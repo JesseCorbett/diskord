@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.client
+package com.jessecorbett.diskord.api.rest.client
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.jessecorbett.diskord.api.rest.BearerToken

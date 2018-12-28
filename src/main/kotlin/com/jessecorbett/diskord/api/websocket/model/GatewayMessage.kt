@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.websocket
+package com.jessecorbett.diskord.api.websocket.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty

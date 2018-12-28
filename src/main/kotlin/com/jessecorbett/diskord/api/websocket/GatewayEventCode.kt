@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.fasterxml.jackson.annotation.JsonValue
 
-enum class GatewayEvent(@JsonValue val code: Int) {
+enum class GatewayEventCode(@JsonValue val code: Int) {
     DISPATCH(0),
     HEARTBEAT(1),
     IDENTIFY(2),

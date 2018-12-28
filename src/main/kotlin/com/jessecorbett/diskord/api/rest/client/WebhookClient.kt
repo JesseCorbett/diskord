@@ -1,10 +1,10 @@
-package com.jessecorbett.diskord.api.client
+package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.client.internal.RestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 
 class WebhookClient(token: String, val webhookId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {

@@ -1,6 +1,6 @@
-package com.jessecorbett.diskord
+package com.jessecorbett.diskord.api.websocket
 
-import com.jessecorbett.diskord.api.websocket.GatewayMessage
+import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 
 interface HeartbeatManager {
     fun start(heartbeatPeriod: Long, sendHeartbeat: () -> Unit, sendAcknowledgement: () -> Unit)

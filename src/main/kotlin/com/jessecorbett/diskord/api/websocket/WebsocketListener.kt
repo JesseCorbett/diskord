@@ -1,19 +1,18 @@
-package com.jessecorbett.diskord.internal
+package com.jessecorbett.diskord.api.websocket
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.jessecorbett.diskord.DiscordLifecycleManager
-import com.jessecorbett.diskord.api.websocket.GatewayMessage
-import com.jessecorbett.diskord.api.websocket.WebSocketCloseCode
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
+import com.jessecorbett.diskord.internal.jsonMapper
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import org.slf4j.LoggerFactory
 
-class DiscordWebSocketListener(
+internal class DiscordWebSocketListener(
         private val acceptMessage: (GatewayMessage) -> Unit,
-        private val lifecycleManager: DiscordLifecycleManager
+        private val lifecycleManager: WebsocketLifecycleManager
 ) : WebSocketListener() {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -41,4 +40,14 @@ class DiscordWebSocketListener(
     override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
         lifecycleManager.failed(throwable, response)
     }
+}
+
+internal interface WebsocketLifecycleManager {
+    fun start()
+
+    fun closing(code: WebSocketCloseCode, reason: String)
+
+    fun closed(code: WebSocketCloseCode, reason: String)
+
+    fun failed(failure: Throwable, response: Response?)
 }

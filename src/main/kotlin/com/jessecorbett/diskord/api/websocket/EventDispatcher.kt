@@ -1,8 +1,7 @@
-package com.jessecorbett.diskord.internal
+package com.jessecorbett.diskord.api.websocket
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import com.jessecorbett.diskord.EventListener
 import com.jessecorbett.diskord.api.model.Channel
 import com.jessecorbett.diskord.api.model.Guild
 import com.jessecorbett.diskord.api.model.Message
@@ -11,6 +10,7 @@ import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.api.model.BulkMessageDelete
 import com.jessecorbett.diskord.api.model.MessageDelete
 import com.jessecorbett.diskord.api.model.VoiceState
+import com.jessecorbett.diskord.internal.jsonMapper
 
 suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonNode) {
     eventListener.onEvent(event)

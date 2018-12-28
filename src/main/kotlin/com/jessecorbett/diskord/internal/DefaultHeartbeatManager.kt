@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.internal
 
-import com.jessecorbett.diskord.HeartbeatManager
-import com.jessecorbett.diskord.api.websocket.GatewayMessage
+import com.jessecorbett.diskord.api.websocket.HeartbeatManager
+import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 

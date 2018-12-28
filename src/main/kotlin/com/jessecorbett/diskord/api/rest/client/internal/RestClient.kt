@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.client.internal
+package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*

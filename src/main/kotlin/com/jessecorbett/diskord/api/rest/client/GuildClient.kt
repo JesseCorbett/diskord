@@ -1,9 +1,9 @@
-package com.jessecorbett.diskord.api.client
+package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.client.internal.RestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsList
 
