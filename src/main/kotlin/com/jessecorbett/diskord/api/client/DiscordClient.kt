@@ -14,9 +14,9 @@ import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsList
 
 class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
-    suspend fun getApiGateway() = getRequest("/websocket").bodyAs<GatewayUrl>()
+    suspend fun getApiGateway() = getRequest("/gateway").bodyAs<GatewayUrl>()
 
-    suspend fun getBotGateway() = getRequest("/websocket/bot").bodyAs<GatewayBotUrl>()
+    suspend fun getBotGateway() = getRequest("/gateway/bot").bodyAs<GatewayBotUrl>()
 
     suspend fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild).bodyAs<Guild>()
 
