@@ -5,6 +5,7 @@ import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.api.rest.client.WebhookClient
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
+import java.util.concurrent.ConcurrentHashMap
 
 class ClientStore(userToken: String) {
     val discord = DiscordClient(userToken)
@@ -20,8 +21,6 @@ class GuildClients(userToken: String): RestClients<GuildClient>(userToken, { Gui
 class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 abstract class RestClients<T: RestClient>(private val userToken: String, private val gen: (String) -> T) {
-    private val clients: MutableMap<String, T> = HashMap()
-    operator fun get(resourceId: String) = clients.getOrPut(resourceId) {
-        return gen(resourceId)
-    }
+    private val clients: MutableMap<String, T> = ConcurrentHashMap()
+    operator fun get(resourceId: String) = clients.getOrPut(resourceId) { gen(resourceId) }
 }

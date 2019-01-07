@@ -12,53 +12,55 @@ private fun sizeFormat(size: Int?): String {
     if (size == null) {
         return ""
     }
-    if (size > 0 && (size and (size - 1)) == 0) {
-        return "?size=$size"
-    } else {
+
+    // Size must be a positive power of two
+    if (size <= 0 || (size and (size - 1)) != 0) {
         throw DiscordBadRequestException("Image size must be a power of two")
     }
+
+    return "?size=$size"
 }
 
 fun User.pngAvatar(size: Int? = null): String?
-    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png${sizeFormat(size)}" else null
+        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png${sizeFormat(size)}" else null
 
 fun User.jpgAvatar(size: Int? = null): String?
-    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg${sizeFormat(size)}" else null
+        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg${sizeFormat(size)}" else null
 
 fun User.webpAvatar(size: Int? = null): String?
-    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp${sizeFormat(size)}" else null
+        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp${sizeFormat(size)}" else null
 
 fun User.gifAvatar(size: Int? = null): String?
-    = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.gif${sizeFormat(size)}" else null
+        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.gif${sizeFormat(size)}" else null
 
 fun User.pngDefaultAvatar(size: Int? = null): String
-    = "$discordCdn/embed/avatars/${discriminator % 5}.png${sizeFormat(size)}"
+        = "$discordCdn/embed/avatars/${discriminator % 5}.png${sizeFormat(size)}"
 
 
 fun Emoji.png(size: Int? = null): String?
-    = if (!isUnicode) "$discordCdn/emojis/$id.png${sizeFormat(size)}" else null
+        = if (!isUnicode) "$discordCdn/emojis/$id.png${sizeFormat(size)}" else null
 
 fun Emoji.gif(size: Int? = null): String?
-    = if (!isUnicode) "$discordCdn/emojis/$id.gif${sizeFormat(size)}" else null
+        = if (!isUnicode) "$discordCdn/emojis/$id.gif${sizeFormat(size)}" else null
 
 
 fun Guild.pngIcon(size: Int? = null): String?
-    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
 
 fun Guild.jpgIcon(size: Int? = null): String?
-    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
 
 fun Guild.webpIcon(size: Int? = null): String?
-    = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
+        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
 
 fun Guild.pngSplash(size: Int? = null): String?
-    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png${sizeFormat(size)}" else null
+        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png${sizeFormat(size)}" else null
 
 fun Guild.jpgSplash(size: Int? = null): String?
-    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg${sizeFormat(size)}" else null
+        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg${sizeFormat(size)}" else null
 
 fun Guild.webpSplash(size: Int? = null): String?
-    = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
+        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
 
 fun PartialGuild.pngIcon(size: Int? = null): String?
         = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
