@@ -3,7 +3,6 @@ package com.jessecorbett.diskord.dsl
 import com.jessecorbett.diskord.api.model.Message
 import com.jessecorbett.diskord.util.words
 
-
 @DiskordDsl
 fun Bot.commands(prefix: Char = '.', commands: MutableList<Command> = ArrayList(), block: CommandSet.() -> Unit) {
     CommandSet(commands).apply(block)
