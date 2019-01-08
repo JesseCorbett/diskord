@@ -28,7 +28,8 @@ class DiscordWebSocket(
         private val shardCount: Int = 0,
         private val userType: DiscordUserType = DiscordUserType.BOT,
         private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
-        private val heartbeatContext: CoroutineContext = defaultHeartbeatContext
+        private val eventListenerContext: CoroutineContext = Dispatchers.Default,
+        private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private var socket = startConnection()
@@ -69,16 +70,19 @@ class DiscordWebSocket(
         }))
     }
 
-    fun close() {
+    fun close(forceClose: Boolean = false) {
         logger.debug("Closing")
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         runBlocking { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
         socket.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
+        if (forceClose) {
+            httpClient.dispatcher().executorService().shutdown()
+        }
         logger.info("Closed connection")
     }
 
-    private fun restart() {
+    fun restart() {
         logger.debug("Restarting")
         close()
         socket = startConnection()
@@ -148,7 +152,7 @@ class DiscordWebSocket(
             sessionId = jsonMapper.treeToValue<Ready>(gatewayMessage.dataPayload).sessionId
         }
 
-        GlobalScope.launch(eventListener.context) {
+        GlobalScope.launch(eventListenerContext) {
             dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
         }
     }

@@ -1,68 +1,41 @@
 package com.jessecorbett.diskord.dsl
 
-import com.jessecorbett.diskord.api.exception.DiscordException
 import com.jessecorbett.diskord.api.model.Message
+import com.jessecorbett.diskord.api.model.MessageDelete
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.EventListener
+import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
 import com.jessecorbett.diskord.util.ClientStore
 import com.jessecorbett.diskord.util.sendMessage
-import com.jessecorbett.diskord.util.words
 
 @DslMarker
 annotation class DiskordDsl
 
-@DiskordDsl
-class Bot constructor(val token: String) : EventListener() {
-    private val clientStore = ClientStore(token)
+class Bot(token: String) : EventListener() {
     private val websocket = DiscordWebSocket(token, this)
-    val commands = ArrayList<CommandSet>()
-    val responses = ArrayList<String>()
+    val clientStore = ClientStore(token)
 
-    override suspend fun onMessageCreate(message: Message) {
-        commands.filter { message.content.startsWith(it.prefix) }
-                .flatMap { it.commands }
-                .filter { it.command == message.words[0].drop(1) }
-                .forEach { it.block(message, clientStore) }
-    }
+    fun shutdown(forceClose: Boolean = false) = websocket.close(forceClose)
 
-    fun commands(prefix: Char = '.', block: CommandSet.() -> Unit) {
-        val commandSet = CommandSet(clientStore, prefix)
-        commandSet.apply(block)
-        commands += commandSet
-    }
-}
-
-fun bot(token: String, block: Bot.() -> Unit) = Bot(token).apply(block)
-
-
-class CommandSet(private val clientStore: ClientStore, val prefix: Char, val commands: MutableList<Command> = ArrayList()) {
-    fun command(command: String, action: suspend (Message, ClientStore) -> Unit) {
-        commands + Command(clientStore, command, action)
-    }
-}
-
-class CommandBuilder(private val clientStore: ClientStore, val command: String, val block: suspend (Message, ClientStore) -> Unit) {
     suspend fun Message.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
-
     suspend fun Message.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
 
-    fun build() {
+    @DiskordDsl
+    fun messageCreated(block: suspend (Message) -> Unit) { messageCreateHooks += block }
+    private val messageCreateHooks: MutableList<suspend (Message) -> Unit> = ArrayList()
+    override suspend fun onMessageCreate(message: Message) { messageCreateHooks.forEach { it(message) } }
 
-    }
-}
+    @DiskordDsl
+    fun messageUpdated(block: suspend (MessageUpdate) -> Unit) { messageUpdateHooks += block }
+    private val messageUpdateHooks: MutableList<suspend (MessageUpdate) -> Unit> = ArrayList()
+    override suspend fun onMessageUpdate(message: MessageUpdate) { messageUpdateHooks.forEach { it(message) } }
 
-data class Command(val command, val block: suspend (Message, ClientStore) -> Unit)
-
-fun test() {
-
-
-    bot("fake-token") {
-        commands {
-            command("ping") { message, clients ->
-                message.reply("pong")
-            }
-        }
-    }
-
+    @DiskordDsl
+    fun messageDeleted(block: suspend (MessageDelete) -> Unit) { messageDeleteHooks += block }
+    private val messageDeleteHooks: MutableList<suspend (MessageDelete) -> Unit> = ArrayList()
+    override suspend fun onMessageDelete(message: MessageDelete) { messageDeleteHooks.forEach { it(message) } }
 
 }
+
+@DiskordDsl
+fun bot(token: String, block: Bot.() -> Unit) = Bot(token).apply(block)

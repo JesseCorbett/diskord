@@ -8,11 +8,12 @@ import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.api.model.BulkMessageDelete
 import com.jessecorbett.diskord.api.model.MessageDelete
 import com.jessecorbett.diskord.api.model.VoiceState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 
-abstract class EventListener(val context: CoroutineContext = Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+abstract class EventListener {
     open suspend fun onEvent(event: DiscordEvent) {
 
     }
