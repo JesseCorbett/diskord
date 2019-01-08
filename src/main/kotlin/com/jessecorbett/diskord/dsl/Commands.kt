@@ -10,7 +10,7 @@ fun Bot.commands(prefix: Char = '.', commands: MutableList<Command> = ArrayList(
     messageCreated { message ->
         if (!message.content.startsWith(prefix)) return@messageCreated
         commands.filter { it.command == message.words[0].drop(1) }.forEach {
-            it.action(message)
+            it.action(it, message)
         }
     }
 }
@@ -19,9 +19,9 @@ fun Bot.commands(prefix: Char = '.', commands: MutableList<Command> = ArrayList(
 class CommandSet(val commands: MutableList<Command>)
 
 @DiskordDsl
-fun CommandSet.command(command: String, action: suspend (Message) -> Unit) {
+fun CommandSet.command(command: String, action: suspend Command.(Message) -> Unit) {
     commands += Command(command, action)
 }
 
 @DiskordDsl
-class Command(val command: String, val action: suspend (Message) -> Unit)
+class Command(val command: String, val action: suspend Command.(Message) -> Unit)
