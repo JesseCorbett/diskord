@@ -2,27 +2,26 @@ package com.jessecorbett.diskord.dsl
 
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
-import com.jessecorbett.diskord.api.websocket.EventListener
 import com.jessecorbett.diskord.api.websocket.events.*
-import com.jessecorbett.diskord.util.ClientStore
-import com.jessecorbett.diskord.util.sendMessage
+import com.jessecorbett.diskord.util.EnhancedEventListener
 
 @DslMarker
 annotation class DiskordDsl
 
-class Bot(token: String) : EventListener() {
+class Bot(token: String) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this)
-    val clientStore = ClientStore(token)
+
+    /*
+     * Convenience methods for bot implementations
+     */
 
     fun shutdown(forceClose: Boolean = false) = websocket.close(forceClose)
 
     fun restart() = websocket.restart()
 
-    suspend fun Message.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
-    suspend fun Message.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
-
-    suspend fun MessageUpdate.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
-    suspend fun MessageUpdate.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
+    /*
+     * DSL mappings of the EventListener
+     */
 
     @DiskordDsl
     fun anyEvent(block: suspend (DiscordEvent, String) -> Unit) { anyEventHooks += block }
