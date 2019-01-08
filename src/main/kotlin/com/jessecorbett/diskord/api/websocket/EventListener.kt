@@ -1,20 +1,10 @@
 package com.jessecorbett.diskord.api.websocket
 
-import com.jessecorbett.diskord.api.model.Channel
-import com.jessecorbett.diskord.api.model.Guild
-import com.jessecorbett.diskord.api.model.Message
-import com.jessecorbett.diskord.api.model.User
+import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.events.*
-import com.jessecorbett.diskord.api.model.BulkMessageDelete
-import com.jessecorbett.diskord.api.model.MessageDelete
-import com.jessecorbett.diskord.api.model.VoiceState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asCoroutineDispatcher
-import java.util.concurrent.Executors
-import kotlin.coroutines.CoroutineContext
 
 abstract class EventListener {
-    open suspend fun onEvent(event: DiscordEvent) {
+    open suspend fun onEvent(event: DiscordEvent, json: String) {
 
     }
 

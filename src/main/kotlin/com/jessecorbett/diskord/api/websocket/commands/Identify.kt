@@ -14,6 +14,6 @@ data class Identify(
 
 data class IdentifyProperties(
         @JsonProperty("\$os") val os: String = System.getProperty("os.name"),
-        @JsonProperty("\$broswer") val browser: String = "diskord",
+        @JsonProperty("\$browser") val browser: String = "diskord",
         @JsonProperty("\$device") val device: String = "diskord"
 )
