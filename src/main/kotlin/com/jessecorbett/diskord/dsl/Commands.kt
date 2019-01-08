@@ -25,20 +25,3 @@ fun CommandSet.command(command: String, action: suspend (Message) -> Unit) {
 
 @DiskordDsl
 class Command(val command: String, val action: suspend (Message) -> Unit)
-
-fun main() {
-    bot("MzQ2NDQ0NjE1ODMxNzgxMzc2.DxWZWQ.cEAHWDZlun4H2Fj2fSt0-mlEcf8") {
-        commands {
-            command("ping") { message ->
-                message.delete()
-                println("hewwo")
-                message.reply("pong")
-            }
-
-            command("shutdown") {
-                it.delete()
-                shutdown(true)
-            }
-        }
-    }
-}
