@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.Response
 import java.util.concurrent.TimeUnit
 

@@ -20,6 +20,9 @@ class Bot(token: String) : EventListener() {
     suspend fun Message.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
     suspend fun Message.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
 
+    suspend fun MessageUpdate.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
+    suspend fun MessageUpdate.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
+
     @DiskordDsl
     fun messageCreated(block: suspend (Message) -> Unit) { messageCreateHooks += block }
     private val messageCreateHooks: MutableList<suspend (Message) -> Unit> = ArrayList()
