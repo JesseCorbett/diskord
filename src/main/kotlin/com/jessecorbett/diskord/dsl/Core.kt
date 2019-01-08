@@ -75,9 +75,11 @@ class Bot(token: String) : EventListener() {
     private val guildDeleteHooks: MutableList<suspend (Guild) -> Unit> = ArrayList()
     override suspend fun onGuildDelete(guild: Guild) { guildDeleteHooks.forEach { it(guild) } }
 
-    override suspend fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {
-        // TODO: Cache this perhaps, should we want to store this
-    }
+    // TODO: Cache this perhaps, should we want to store this
+    @DiskordDsl
+    fun guildMemberChunkReceived(block: suspend (GuildMembersChunk) -> Unit) { guildMemberChunkHooks += block }
+    private val guildMemberChunkHooks: MutableList<suspend (GuildMembersChunk) -> Unit> = ArrayList()
+    override suspend fun onGuildMemberChunk(guildMembers: GuildMembersChunk) { guildMemberChunkHooks.forEach { it(guildMembers) } }
 
     @DiskordDsl
     fun userBanned(block: suspend (GuildBan) -> Unit) { guildBanHooks += block }
