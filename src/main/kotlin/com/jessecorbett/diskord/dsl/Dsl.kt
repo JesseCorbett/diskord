@@ -17,6 +17,8 @@ class Bot(token: String) : EventListener() {
 
     fun shutdown(forceClose: Boolean = false) = websocket.close(forceClose)
 
+    fun restart() = websocket.restart()
+
     suspend fun Message.reply(text: String) = clientStore.channels[this.channelId].sendMessage(text)
     suspend fun Message.delete() = clientStore.channels[this.channelId].deleteMessage(this.id)
 
