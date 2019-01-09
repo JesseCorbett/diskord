@@ -3,15 +3,19 @@ buildscript {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
+    
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" as String
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 
 group 'com.jessecorbett'
 
 apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.dokka'
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -21,6 +25,13 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
 }
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "docs"
+}
+
+build.finalizedBy(dokka)
 
 repositories {
     mavenCentral()

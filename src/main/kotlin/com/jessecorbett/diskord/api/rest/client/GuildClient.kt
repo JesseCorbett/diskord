@@ -7,6 +7,13 @@ import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 import com.jessecorbett.diskord.internal.bodyAsList
 
+/*
+ * Note: Emoji don't follow standard rate limit behavior and the API responses may not accurately reflect rate limits.
+ * Diskord should handle any rate limit blocking automatically, but developers should be aware of this limitation.
+ *
+ * https://discordapp.com/developers/docs/resources/emoji
+ */
+
 class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsList<Emoji>()
 

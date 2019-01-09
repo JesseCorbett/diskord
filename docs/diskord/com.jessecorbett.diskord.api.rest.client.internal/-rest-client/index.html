@@ -1,0 +1,112 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>RestClient - diskord</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">diskord</a>&nbsp;/&nbsp;<a href="../index.html">com.jessecorbett.diskord.api.rest.client.internal</a>&nbsp;/&nbsp;<a href="./index.html">RestClient</a><br/>
+<br/>
+<h1>RestClient</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">RestClient</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">RestClient</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$<init>(kotlin.String, com.jessecorbett.diskord.api.DiscordUserType, kotlin.String, kotlin.String)/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$<init>(kotlin.String, com.jessecorbett.diskord.api.DiscordUserType, kotlin.String, kotlin.String)/userType">userType</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api/-discord-user-type/index.html"><span class="identifier">DiscordUserType</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$<init>(kotlin.String, com.jessecorbett.diskord.api.DiscordUserType, kotlin.String, kotlin.String)/botUrl">botUrl</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;defaultUserAgentUrl<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$<init>(kotlin.String, com.jessecorbett.diskord.api.DiscordUserType, kotlin.String, kotlin.String)/botVersion">botVersion</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;defaultUserAgentVersion<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="rate-limit-info.html">rateLimitInfo</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">rateLimitInfo</span><span class="symbol">: </span><a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="delete-request.html">deleteRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">deleteRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$deleteRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$deleteRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-request.html">getRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$getRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$getRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="patch-request.html">patchRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">patchRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="post-request.html">postRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">postRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">postRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="put-request.html">putRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">putRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">putRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client/-channel-client/index.html">ChannelClient</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">ChannelClient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">RestClient</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client/-discord-client/index.html">DiscordClient</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">DiscordClient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">RestClient</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client/-guild-client/index.html">GuildClient</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">GuildClient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">RestClient</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client/-webhook-client/index.html">WebhookClient</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">WebhookClient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">RestClient</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

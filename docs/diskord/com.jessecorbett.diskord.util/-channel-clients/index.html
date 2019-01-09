@@ -1,0 +1,46 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ChannelClients - diskord</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">diskord</a>&nbsp;/&nbsp;<a href="../index.html">com.jessecorbett.diskord.util</a>&nbsp;/&nbsp;<a href="./index.html">ChannelClients</a><br/>
+<br/>
+<h1>ChannelClients</h1>
+<code><span class="keyword">class </span><span class="identifier">ChannelClients</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-rest-clients/index.html"><span class="identifier">RestClients</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.rest.client/-channel-client/index.html"><span class="identifier">ChannelClient</span></a><span class="symbol">&gt;</span></code>
+<p>A group of <a href="../../com.jessecorbett.diskord.api.rest.client/-channel-client/index.html">ChannelClient</a> instances for a given user token.</p>
+<p>This class will automatically create a <a href="../../com.jessecorbett.diskord.api.rest.client/-channel-client/index.html">ChannelClient</a> if one does not already exist for a given channelId.</p>
+<h3>Parameters</h3>
+<p><a name="userToken"></a>
+<code>userToken</code> - the user token used by each <a href="../../com.jessecorbett.diskord.api.rest.client/-channel-client/index.html">ChannelClient</a>.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">ChannelClients</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.ChannelClients$<init>(kotlin.String)/userToken">userToken</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span></code>
+<p>Creates an empty group of clients.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-rest-clients/get.html">get</a></p>
+</td>
+<td>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="identifier">get</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.RestClients$get(kotlin.String)/resourceId">resourceId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../-rest-clients/index.html#T"><span class="identifier">T</span></a></code>
+<p>Gets a <a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/index.html">RestClient</a> implemented by class T for the given resourceId, creating it if it doesn't exist.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
