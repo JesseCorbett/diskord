@@ -46,8 +46,8 @@ abstract class RestClient(
             delay(rateLimit.resetTime.toEpochMilli() - Instant.now().toEpochMilli())
         }
 
-        try {
-            return suspendCoroutine { cont ->
+        return try {
+            suspendCoroutine { cont ->
                 httpClient.newCall(request).enqueue(object : Callback {
                     override fun onFailure(call: Call, exception: IOException) {
                         cont.resumeWithException(exception)
@@ -68,7 +68,7 @@ abstract class RestClient(
                 })
             }
         } catch (rateLimitException: DiscordRateLimitException) {
-            return makeRequest(request, rateLimit)
+            makeRequest(request, rateLimit)
         }
     }
 
