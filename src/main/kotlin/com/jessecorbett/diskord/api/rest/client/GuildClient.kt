@@ -14,6 +14,13 @@ import com.jessecorbett.diskord.internal.bodyAsList
  * https://discordapp.com/developers/docs/resources/emoji
  */
 
+/**
+ * A REST client for a a specific guild and it's content.
+ *
+ * @param token The user's API token.
+ * @param guildId The id of the guild.
+ * @param userType The user type, assumed to be a bot.
+ */
 class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsList<Emoji>()
 

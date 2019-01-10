@@ -10,5 +10,18 @@
 <h1>getGuilds</h1>
 <a name="com.jessecorbett.diskord.api.rest.client.DiscordClient$getGuilds(kotlin.Int, kotlin.String, kotlin.String)"></a>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getGuilds</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.DiscordClient$getGuilds(kotlin.Int, kotlin.String, kotlin.String)/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;100<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.DiscordClient$getGuilds(kotlin.Int, kotlin.String, kotlin.String)/before">before</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.DiscordClient$getGuilds(kotlin.Int, kotlin.String, kotlin.String)/after">after</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.rest.response/-partial-guild/index.html"><span class="identifier">PartialGuild</span></a><span class="symbol">&gt;</span></code>
+<p>Get a list of guilds that the current user is in.</p>
+<h3>Parameters</h3>
+<p><a name="limit"></a>
+<code>limit</code> - The max number of guilds to return. Defaults to 100.</p>
+<p><a name="before"></a>
+<code>before</code> - Specifies the query to only return guilds before this one.</p>
+<p><a name="after"></a>
+<code>after</code> - Specifies the query to only return guilds after this one.</p>
+<h3>Exceptions</h3>
+<p><a name="DiscordException"></a>
+<code>DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+A list of partial guilds matching the query.</p>
 </BODY>
 </HTML>

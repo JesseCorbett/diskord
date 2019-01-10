@@ -9,6 +9,13 @@ import com.jessecorbett.diskord.api.rest.BulkMessageDelete
 import com.jessecorbett.diskord.internal.*
 import java.time.Instant
 
+/**
+ * A REST client for a a specific channel and it's content.
+ *
+ * @param token The user's API token.
+ * @param channelId The id of the channel.
+ * @param userType The user type, assumed to be a bot.
+ */
 class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 

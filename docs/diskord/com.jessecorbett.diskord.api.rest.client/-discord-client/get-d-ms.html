@@ -10,7 +10,13 @@
 <h1>getDMs</h1>
 <a name="com.jessecorbett.diskord.api.rest.client.DiscordClient$getDMs()"></a>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><s><span class="identifier">getDMs</span></s><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">&gt;</span></code><br/>
-<strong>Deprecated:</strong> Currently Discord does not return anything from the endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()<br/>
+<strong>Deprecated:</strong> Currently Discord does not return anything from this endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()<br/>
 <br/>
+<p>Get the DM channels this user is in.</p>
+<h3>Exceptions</h3>
+<p><a name="DiscordException"></a>
+<code>DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+List of DM channels for the current user.</p>
 </BODY>
 </HTML>

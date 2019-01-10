@@ -7,6 +7,13 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 
+/**
+ * A REST client for a a specific webhook.
+ *
+ * @param token The user's API token.
+ * @param webhookId The id of the webhook.
+ * @param userType The user type, assumed to be a bot.
+ */
 class WebhookClient(token: String, val webhookId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
     suspend fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
 
