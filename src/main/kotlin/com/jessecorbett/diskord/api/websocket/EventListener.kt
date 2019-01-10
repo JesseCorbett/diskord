@@ -68,7 +68,7 @@ abstract class EventListener {
 
     }
 
-    open suspend fun onGuildMemberRemove(guildMemberRemove: GuildMemeberRemove) {
+    open suspend fun onGuildMemberRemove(guildMemberRemove: GuildMemberRemove) {
 
     }
 
