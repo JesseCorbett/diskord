@@ -16,6 +16,13 @@ import kotlin.coroutines.suspendCoroutine
 private const val AUTH_CODE = "authorization_code"
 private const val REFRESH_TOKEN = "refresh_token"
 
+/**
+ * Basic implementation of the OAuth endpoints.
+ *
+ * @property clientId The OAuth clientId.
+ * @property clientSecret the OAuth secret.
+ * @property redirectUri The uri to redirect to as part of the OAuth flow.
+ */
 class OAuthClient(private val clientId: String, private val clientSecret: String, private val redirectUri: String) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -52,10 +59,26 @@ class OAuthClient(private val clientId: String, private val clientSecret: String
         }
     }
 
+    /**
+     * Get the access token from a user's API token.
+     *
+     * @param token The user's API token.
+     *
+     * @return The bearer token information.
+     * @throws DiscordException
+     */
     suspend fun getAccessToken(token: String): BearerToken {
         return getToken(token, AUTH_CODE)
     }
 
+    /**
+     * Get the access token from a user's refresh.
+     *
+     * @param token The user's refresh token.
+     *
+     * @return The bearer token information.
+     * @throws DiscordException
+     */
     suspend fun getFromRefreshToken(token: String): BearerToken {
         return getToken(token, REFRESH_TOKEN)
     }
