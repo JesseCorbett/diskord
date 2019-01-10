@@ -5,6 +5,13 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.internal.jsonMapper
 
+/**
+ * Maps events from [DiscordEvent] to corresponding [EventListener] method implementations.
+ *
+ * @param eventListener The event listener to map events to.
+ * @param event The discord event being mapped.
+ * @param data The event data to be deserialized.
+ */
 suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonNode) {
     eventListener.onEvent(event, data.asText())
     when (event) {

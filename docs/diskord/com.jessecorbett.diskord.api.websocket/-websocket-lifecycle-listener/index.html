@@ -9,6 +9,7 @@
 <br/>
 <h1>WebsocketLifecycleListener</h1>
 <code><span class="keyword">interface </span><span class="identifier">WebsocketLifecycleListener</span></code>
+<p>An optional lifecycle listener of the lower level websocket connection.</p>
 <h3>Functions</h3>
 <table>
 <tbody>
@@ -17,28 +18,36 @@
 <p><a href="closed.html">closed</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">closed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closed(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/code">code</span><span class="symbol">:</span>&nbsp;<a href="../-web-socket-close-code/index.html"><span class="identifier">WebSocketCloseCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closed(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/reason">reason</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">closed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closed(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/code">code</span><span class="symbol">:</span>&nbsp;<a href="../-web-socket-close-code/index.html"><span class="identifier">WebSocketCloseCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closed(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/reason">reason</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Runs when a websocket has closed.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="closing.html">closing</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">closing</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closing(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/code">code</span><span class="symbol">:</span>&nbsp;<a href="../-web-socket-close-code/index.html"><span class="identifier">WebSocketCloseCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closing(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/reason">reason</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">closing</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closing(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/code">code</span><span class="symbol">:</span>&nbsp;<a href="../-web-socket-close-code/index.html"><span class="identifier">WebSocketCloseCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$closing(com.jessecorbett.diskord.api.websocket.WebSocketCloseCode, kotlin.String)/reason">reason</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Runs when a websocket is closing.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="failed.html">failed</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">failed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$failed(kotlin.Throwable, okhttp3.Response)/failure">failure</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html"><span class="identifier">Throwable</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$failed(kotlin.Throwable, okhttp3.Response)/response">response</span><span class="symbol">:</span>&nbsp;<span class="identifier">Response</span><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">failed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$failed(kotlin.Throwable, okhttp3.Response)/failure">failure</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html"><span class="identifier">Throwable</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.WebsocketLifecycleListener$failed(kotlin.Throwable, okhttp3.Response)/response">response</span><span class="symbol">:</span>&nbsp;<span class="identifier">Response</span><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Runs when a websocket connection has failed.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="started.html">started</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">started</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">started</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Runs when a websocket has started.</p>
+</td>
 </tr>
 </tbody>
 </table>

@@ -19,6 +19,21 @@ import okhttp3.WebSocket
 import org.slf4j.LoggerFactory
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * Representation and container of a websocket connection to the discord gateway.
+ *
+ * @property token The user API token.
+ * @property eventListener The event listener to call for gateway events.
+ * @property sessionId The id of the session, null if this is a new connection.
+ * @property sequenceNumber The gateway sequence number, initially null if this is a new connection.
+ * @property shardId The id of this shard of the bot, 0 if this is the DM shard or the only shard.
+ * @property userType The type of API user, assumed to be a bot.
+ * @property websocketLifecycleListener Lifecycle hooks for the low level websocket connection.
+ * @property eventListenerContext The coroutine context to run [EventListener] events in.
+ * @property heartbeatContext The coroutine context to process heartbeat events to the gateway in.
+ *
+ * @constructor Provisions and connects a websocket connection for the user to discord.
+ */
 class DiscordWebSocket(
         private val token: String,
         private val eventListener: EventListener,
@@ -70,6 +85,12 @@ class DiscordWebSocket(
         }))
     }
 
+    /**
+     * Shuts down the connection.
+     *
+     * @param forceClose Forces closed the connection. False by default. Only set to true if this is the only connection
+     * in this program as it force closes the http client shared by all websocket and REST client instances.
+     */
     fun close(forceClose: Boolean = false) {
         logger.debug("Closing")
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
@@ -82,6 +103,11 @@ class DiscordWebSocket(
         logger.info("Closed connection")
     }
 
+    /**
+     * Restarts the connection.
+     *
+     * Maintains sessionId and sequenceNumber so events happening during restart and resumes.
+     */
     fun restart() {
         logger.debug("Restarting")
         close()
@@ -113,7 +139,7 @@ class DiscordWebSocket(
                  initializeSession(jsonMapper.treeToValue(gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
-                // TODO: We should handle errors to do with a lack of heartbeat ack. Low priority though
+                // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart. Low priority.
             }
             else -> {
                 throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")

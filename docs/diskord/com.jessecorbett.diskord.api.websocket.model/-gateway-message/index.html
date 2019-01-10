@@ -9,6 +9,7 @@
 <br/>
 <h1>GatewayMessage</h1>
 <code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">GatewayMessage</span></code>
+<p>A message sent through the websocket gateway.</p>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -17,7 +18,9 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">GatewayMessage</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/opCode">opCode</span><span class="symbol">:</span>&nbsp;<a href="../-op-code/index.html"><span class="identifier">OpCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/dataPayload">dataPayload</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonNode</span><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/sequenceNumber">sequenceNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code></td>
+<code><span class="identifier">GatewayMessage</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/opCode">opCode</span><span class="symbol">:</span>&nbsp;<a href="../-op-code/index.html"><span class="identifier">OpCode</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/dataPayload">dataPayload</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonNode</span><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/sequenceNumber">sequenceNumber</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.model.GatewayMessage$<init>(com.jessecorbett.diskord.api.websocket.model.OpCode, com.fasterxml.jackson.databind.JsonNode, kotlin.Int, kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span></code>
+<p>A message sent through the websocket gateway.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -29,28 +32,36 @@
 <p><a href="data-payload.html">dataPayload</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">dataPayload</span><span class="symbol">: </span><span class="identifier">JsonNode</span><span class="symbol">?</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">dataPayload</span><span class="symbol">: </span><span class="identifier">JsonNode</span><span class="symbol">?</span></code>
+<p>The JSON payload, if one is present.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="event.html">event</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">event</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">event</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>the event name, only for <a href="../-op-code/-d-i-s-p-a-t-c-h.html">OpCode.DISPATCH</a>.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="op-code.html">opCode</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">opCode</span><span class="symbol">: </span><a href="../-op-code/index.html"><span class="identifier">OpCode</span></a></code></td>
+<code><span class="keyword">val </span><span class="identifier">opCode</span><span class="symbol">: </span><a href="../-op-code/index.html"><span class="identifier">OpCode</span></a></code>
+<p>The code representing the type of message.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="sequence-number.html">sequenceNumber</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">sequenceNumber</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">sequenceNumber</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">?</span></code>
+<p>The message sequence, used for tracking order of messages.</p>
+</td>
 </tr>
 </tbody>
 </table>

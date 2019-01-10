@@ -16,7 +16,9 @@
 <p><a href="-discord-web-socket/index.html">DiscordWebSocket</a></p>
 </td>
 <td>
-<code><span class="keyword">class </span><span class="identifier">DiscordWebSocket</span></code></td>
+<code><span class="keyword">class </span><span class="identifier">DiscordWebSocket</span></code>
+<p>Representation and container of a websocket connection to the discord gateway.</p>
+</td>
 </tr>
 <tr>
 <td>
@@ -27,24 +29,21 @@
 </tr>
 <tr>
 <td>
-<p><a href="-gateway-event-code/index.html">GatewayEventCode</a></p>
-</td>
-<td>
-<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">GatewayEventCode</span></code></td>
-</tr>
-<tr>
-<td>
 <p><a href="-web-socket-close-code/index.html">WebSocketCloseCode</a></p>
 </td>
 <td>
-<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">WebSocketCloseCode</span></code></td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">WebSocketCloseCode</span></code>
+<p>Standard and discord specific close codes.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="-websocket-lifecycle-listener/index.html">WebsocketLifecycleListener</a></p>
 </td>
 <td>
-<code><span class="keyword">interface </span><span class="identifier">WebsocketLifecycleListener</span></code></td>
+<code><span class="keyword">interface </span><span class="identifier">WebsocketLifecycleListener</span></code>
+<p>An optional lifecycle listener of the lower level websocket connection.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -56,7 +55,9 @@
 <p><a href="dispatch-event.html">dispatchEvent</a></p>
 </td>
 <td>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">dispatchEvent</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/eventListener">eventListener</span><span class="symbol">:</span>&nbsp;<a href="-event-listener/index.html"><span class="identifier">EventListener</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/event">event</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html"><span class="identifier">DiscordEvent</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/data">data</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonNode</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">dispatchEvent</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/eventListener">eventListener</span><span class="symbol">:</span>&nbsp;<a href="-event-listener/index.html"><span class="identifier">EventListener</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/event">event</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html"><span class="identifier">DiscordEvent</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket$dispatchEvent(com.jessecorbett.diskord.api.websocket.EventListener, com.jessecorbett.diskord.api.websocket.events.DiscordEvent, com.fasterxml.jackson.databind.JsonNode)/data">data</span><span class="symbol">:</span>&nbsp;<span class="identifier">JsonNode</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Maps events from <a href="../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html">DiscordEvent</a> to corresponding <a href="-event-listener/index.html">EventListener</a> method implementations.</p>
+</td>
 </tr>
 </tbody>
 </table>
