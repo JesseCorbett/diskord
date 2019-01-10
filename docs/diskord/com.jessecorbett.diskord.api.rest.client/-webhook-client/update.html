@@ -9,8 +9,27 @@
 <br/>
 <h1>update</h1>
 <a name="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook)"></a>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">update</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook)/webhook">webhook</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-webhook/index.html"><span class="identifier">PatchWebhook</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-webhook/index.html"><span class="identifier">Webhook</span></a></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">update</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook)/webhook">webhook</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-webhook/index.html"><span class="identifier">PatchWebhook</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-webhook/index.html"><span class="identifier">Webhook</span></a></code>
+<p>Update this webhook.</p>
+<h3>Parameters</h3>
+<p><a name="webhook"></a>
+<code>webhook</code> - The patched webhook.</p>
+<h3>Exceptions</h3>
+<p><a name="DiscordException"></a>
+<code>DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+The updated webhook.</p>
 <a name="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook, kotlin.String)"></a>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">update</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook, kotlin.String)/webhook">webhook</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-webhook/index.html"><span class="identifier">PatchWebhook</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.WebhookClient$update(com.jessecorbett.diskord.api.rest.PatchWebhook, kotlin.String)/webhookToken">webhookToken</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-webhook/index.html"><span class="identifier">Webhook</span></a></code>
+<p>Update this webhook using the secure token.</p>
+<p>Does not require authentication and does not include the <a href="#">User</a>.</p>
+<h3>Parameters</h3>
+<p><a name="webhook"></a>
+<code>webhook</code> - The patched webhook.</p>
+<h3>Exceptions</h3>
+<p><a name="DiscordException"></a>
+<code>DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+The updated webhook, minus the user.</p>
 </BODY>
 </HTML>
