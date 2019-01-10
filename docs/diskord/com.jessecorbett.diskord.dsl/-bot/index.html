@@ -1,0 +1,438 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Bot - diskord</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">diskord</a>&nbsp;/&nbsp;<a href="../index.html">com.jessecorbett.diskord.dsl</a>&nbsp;/&nbsp;<a href="./index.html">Bot</a><br/>
+<br/>
+<h1>Bot</h1>
+<code><span class="keyword">class </span><span class="identifier">Bot</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/index.html"><span class="identifier">EnhancedEventListener</span></a></code>
+<p>A bot implementation built using <a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/index.html">EnhancedEventListener</a> and providing a DSL for consuming and acting on events.</p>
+<p>The usage principle behind this class is assuming reasonable defaults for threading and resource management,
+allowing the developer to focus on building a bot which reacts to events witnessed by the bot. By design there
+is the ability to attach an arbitrary number of hooks to any event listener via DSL so that plugins such as the
+command DSL (via the <a href="../commands.html">commands</a> and <a href="../command.html">command</a> functions) can be added via extension functions without needing to
+modify or interrupt this base class.</p>
+<h3>Parameters</h3>
+<p><a name="token"></a>
+<code>token</code> - The bot token from the discord application management page https://discordapp.com/developers/applications/.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">Bot</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String)/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span></code>
+<p>A bot implementation built using <a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/index.html">EnhancedEventListener</a> and providing a DSL for consuming and acting on events.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/channel.html">channel</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">channel</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a></code>
+<p>Convenience property for getting the full <a href="../../com.jessecorbett.diskord.api.model/-channel/index.html">Channel</a> from a <a href="../../com.jessecorbett.diskord.api.model/-message/index.html">Message</a> instance.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/client-store.html">clientStore</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">clientStore</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.util/-client-store/index.html"><span class="identifier">ClientStore</span></a></code>
+<p>A common <a href="../../com.jessecorbett.diskord.util/-client-store/index.html">ClientStore</a> for use by a class implementing this one.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/guild.html">guild</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">guild</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">?</span></code>
+<p>Convenience property for getting the full <a href="../../com.jessecorbett.diskord.api.model/-guild/index.html">Guild</a> from a <a href="../../com.jessecorbett.diskord.api.model/-message/index.html">Message</a> instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="all-reactions-removed.html">allReactionsRemoved</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">allReactionsRemoved</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$allReactionsRemoved(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.MessageReactionRemoveAll, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction-remove-all/index.html"><span class="identifier">MessageReactionRemoveAll</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when all reactions are removed from a message.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="any-event.html">anyEvent</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">anyEvent</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$anyEvent(kotlin.SuspendFunction2((com.jessecorbett.diskord.api.websocket.events.DiscordEvent, kotlin.String, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html"><span class="identifier">DiscordEvent</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when any event happens, passing the <a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html">DiscordEvent</a> and the data in JSON string format.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="channel-created.html">channelCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">channelCreated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$channelCreated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Channel, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-channel/index.html">Channel</a> has been created.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="channel-deleted.html">channelDeleted</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">channelDeleted</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$channelDeleted(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Channel, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-channel/index.html">Channel</a> is deleted.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="channel-updated.html">channelUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">channelUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$channelUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Channel, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-channel/index.html">Channel</a> has been updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-created.html">guildCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildCreated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildCreated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.CreatedGuild, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-created-guild/index.html"><span class="identifier">CreatedGuild</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-guild/index.html">Guild</a> is created, the user joins a guild, or lazy loading guilds just after <a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/-r-e-a-d-y.html">DiscordEvent.READY</a>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-deleted.html">guildDeleted</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildDeleted</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildDeleted(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Guild, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-guild/index.html">Guild</a> is deleted.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-emoji-updated.html">guildEmojiUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildEmojiUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildEmojiUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildEmojiUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-emoji-update/index.html"><span class="identifier">GuildEmojiUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a custom emoji is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-integrations-updated.html">guildIntegrationsUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildIntegrationsUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildIntegrationsUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildIntegrationUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-integration-update/index.html"><span class="identifier">GuildIntegrationUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-guild-integration/index.html">GuildIntegration</a> is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-member-chunk-received.html">guildMemberChunkReceived</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildMemberChunkReceived</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildMemberChunkReceived(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildMembersChunk, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-members-chunk/index.html"><span class="identifier">GuildMembersChunk</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a chunk of guild members is received.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-member-updated.html">guildMemberUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildMemberUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildMemberUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildMemberUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-update/index.html"><span class="identifier">GuildMemberUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a guild member is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="guild-updated.html">guildUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">guildUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$guildUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Guild, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-guild/index.html">Guild</a> is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="message-created.html">messageCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messageCreated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$messageCreated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-message/index.html">Message</a> is created.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="message-deleted.html">messageDeleted</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messageDeleted</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$messageDeleted(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.MessageDelete, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-message-delete/index.html"><span class="identifier">MessageDelete</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-message/index.html">Message</a> is deleted.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="message-updated.html">messageUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messageUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$messageUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.MessageUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-message/index.html">Message</a> is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="messages-bulk-deleted.html">messagesBulkDeleted</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messagesBulkDeleted</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$messagesBulkDeleted(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.BulkMessageDelete, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-bulk-message-delete/index.html"><span class="identifier">BulkMessageDelete</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when messages are bulk deleted.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="pins-updated.html">pinsUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">pinsUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$pinsUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.ChannelPinUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-channel-pin-update/index.html"><span class="identifier">ChannelPinUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when the pins in a channel are updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="reaction-added.html">reactionAdded</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">reactionAdded</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$reactionAdded(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.MessageReaction, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a reaction is added to a message.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="reaction-removed.html">reactionRemoved</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">reactionRemoved</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$reactionRemoved(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.MessageReaction, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when all reactions are removed from a message.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="restart.html">restart</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">restart</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Restarts the websocket connection.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="resumed.html">resumed</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">resumed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$resumed(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.Resumed, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-resumed/index.html"><span class="identifier">Resumed</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when the connection has reached a <a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/-r-e-s-u-m-e-d.html">DiscordEvent.RESUMED</a> state.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="role-created.html">roleCreated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">roleCreated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$roleCreated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildRoleCreate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-create/index.html"><span class="identifier">GuildRoleCreate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-role/index.html">Role</a> is created.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="role-deleted.html">roleDeleted</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">roleDeleted</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$roleDeleted(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildRoleDelete, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-delete/index.html"><span class="identifier">GuildRoleDelete</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-role/index.html">Role</a> is deleted.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="role-updated.html">roleUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">roleUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$roleUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildRoleUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-update/index.html"><span class="identifier">GuildRoleUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-role/index.html">Role</a> is updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="shutdown.html">shutdown</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">shutdown</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$shutdown(kotlin.Boolean)/forceClose">forceClose</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Shuts down the bot.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="started.html">started</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">started</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$started(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.Ready, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-ready/index.html"><span class="identifier">Ready</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when the connection has reached a <a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/-r-e-a-d-y.html">DiscordEvent.READY</a> state.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-banned.html">userBanned</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userBanned</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userBanned(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildBan, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user is banned.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-joined-guild.html">userJoinedGuild</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userJoinedGuild</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userJoinedGuild(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildMemberAdd, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-add/index.html"><span class="identifier">GuildMemberAdd</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user joins a guild.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-left-guild.html">userLeftGuild</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userLeftGuild</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userLeftGuild(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildMemberRemove, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-remove/index.html"><span class="identifier">GuildMemberRemove</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user leaves a guild.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-presence-updated.html">userPresenceUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userPresenceUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userPresenceUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.PresenceUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-presence-update/index.html"><span class="identifier">PresenceUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user's presence has been updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-typing.html">userTyping</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userTyping</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userTyping(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.TypingStart, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-typing-start/index.html"><span class="identifier">TypingStart</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user starts typing.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-unbanned.html">userUnbanned</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userUnbanned</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userUnbanned(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.GuildBan, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user is unbanned.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-updated.html">userUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.User, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-user/index.html"><span class="identifier">User</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-user/index.html">User</a> has been updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="user-voice-state-changed.html">userVoiceStateChanged</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">userVoiceStateChanged</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$userVoiceStateChanged(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.VoiceState, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.model/-voice-state/index.html"><span class="identifier">VoiceState</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a user's <a href="../../com.jessecorbett.diskord.api.model/-voice-state/index.html">VoiceState</a> has been changed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="voice-server-updated.html">voiceServerUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">voiceServerUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$voiceServerUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.VoiceServerUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-voice-server-update/index.html"><span class="identifier">VoiceServerUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a guild's voice server has been updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="webhook-updated.html">webhookUpdated</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">webhookUpdated</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$webhookUpdated(kotlin.SuspendFunction1((com.jessecorbett.diskord.api.websocket.events.WebhookUpdate, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><span class="symbol">(</span><a href="../../com.jessecorbett.diskord.api.websocket.events/-webhook-update/index.html"><span class="identifier">WebhookUpdate</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Registers a lambda to be called when a <a href="../../com.jessecorbett.diskord.api.model/-webhook/index.html">Webhook</a> has been updated.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/delete.html">delete</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">delete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Convenience property for deleting a message.</p>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">.</span><span class="identifier">delete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Convenience property for deleting a message that was updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/reply.html">reply</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.model.Message, kotlin.String)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
+<p>Convenience property for sending a message in response to another.</p>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.websocket.events.MessageUpdate, kotlin.String)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
+<p>Convenience property for sending a message in response to another being edited.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../commands.html">commands</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="./index.html"><span class="identifier">Bot</span></a><span class="symbol">.</span><span class="identifier">commands</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/prefix">prefix</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"."<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/commands">commands</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../-command/index.html"><span class="identifier">Command</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">=</span>&nbsp;ArrayList()<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../-command-set/index.html"><span class="identifier">CommandSet</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL function for hooking a <a href="../-command-set/index.html">CommandSet</a> into a <a href="./index.html">Bot</a> DSL instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

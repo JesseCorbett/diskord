@@ -1,0 +1,412 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GuildClient - diskord</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">diskord</a>&nbsp;/&nbsp;<a href="../index.html">com.jessecorbett.diskord.api.rest.client</a>&nbsp;/&nbsp;<a href="./index.html">GuildClient</a><br/>
+<br/>
+<h1>GuildClient</h1>
+<code><span class="keyword">class </span><span class="identifier">GuildClient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/index.html"><span class="identifier">RestClient</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GuildClient</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$<init>(kotlin.String, kotlin.String, com.jessecorbett.diskord.api.DiscordUserType)/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$<init>(kotlin.String, kotlin.String, com.jessecorbett.diskord.api.DiscordUserType)/guildId">guildId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$<init>(kotlin.String, kotlin.String, com.jessecorbett.diskord.api.DiscordUserType)/userType">userType</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api/-discord-user-type/index.html"><span class="identifier">DiscordUserType</span></a>&nbsp;<span class="symbol">=</span>&nbsp;DiscordUserType.BOT<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="guild-id.html">guildId</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">guildId</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/rate-limit-info.html">rateLimitInfo</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">rateLimitInfo</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a></code>
+<p>The rate limit info for this discord object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="add-member.html">addMember</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">addMember</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$addMember(kotlin.String, com.jessecorbett.diskord.api.rest.AddGuildMember)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$addMember(kotlin.String, com.jessecorbett.diskord.api.rest.AddGuildMember)/addGuildMember">addGuildMember</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-add-guild-member/index.html"><span class="identifier">AddGuildMember</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="add-member-role.html">addMemberRole</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">addMemberRole</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$addMemberRole(kotlin.String, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$addMemberRole(kotlin.String, kotlin.String)/roleId">roleId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="change-member-nickname.html">changeMemberNickname</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">changeMemberNickname</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$changeMemberNickname(com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname)/guildMember">guildMember</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-guild-member-nickname/index.html"><span class="identifier">PatchGuildMemberNickname</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-ban.html">createBan</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">createBan</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createBan(kotlin.String, kotlin.Int, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createBan(kotlin.String, kotlin.Int, kotlin.String)/deleteMessageDays">deleteMessageDays</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createBan(kotlin.String, kotlin.Int, kotlin.String)/reason">reason</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-channel.html">createChannel</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">createChannel</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createChannel(com.jessecorbett.diskord.api.rest.CreateChannel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-create-channel/index.html"><span class="identifier">CreateChannel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-emoji.html">createEmoji</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">createEmoji</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createEmoji(com.jessecorbett.diskord.api.rest.CreateEmoji)/createEmoji">createEmoji</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-create-emoji/index.html"><span class="identifier">CreateEmoji</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-integration.html">createIntegration</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">createIntegration</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createIntegration(com.jessecorbett.diskord.api.rest.CreateGuildIntegration)/guildIntegration">guildIntegration</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-create-guild-integration/index.html"><span class="identifier">CreateGuildIntegration</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-role.html">createRole</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">createRole</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$createRole(com.jessecorbett.diskord.api.rest.CreateGuildRole)/guildRole">guildRole</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-create-guild-role/index.html"><span class="identifier">CreateGuildRole</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-role/index.html"><span class="identifier">Role</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delete.html">delete</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">delete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delete-emoji.html">deleteEmoji</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">deleteEmoji</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$deleteEmoji(kotlin.String)/emojiId">emojiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delete-integration.html">deleteIntegration</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">deleteIntegration</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$deleteIntegration(kotlin.String)/guildIntegrationId">guildIntegrationId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delete-role.html">deleteRole</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">deleteRole</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$deleteRole(kotlin.String)/roleId">roleId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get.html">get</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">get</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-audit-log.html">getAuditLog</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getAuditLog</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-audit-log/index.html"><span class="identifier">AuditLog</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-bans.html">getBans</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getBans</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.rest/-ban/index.html"><span class="identifier">Ban</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-channels.html">getChannels</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getChannels</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-embed.html">getEmbed</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getEmbed</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild-embed/index.html"><span class="identifier">GuildEmbed</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-emoji.html">getEmoji</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getEmoji</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a><span class="symbol">&gt;</span></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getEmoji</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$getEmoji(kotlin.String)/emojiId">emojiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-integrations.html">getIntegrations</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getIntegrations</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-guild-integration/index.html"><span class="identifier">GuildIntegration</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-invites.html">getInvites</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getInvites</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-invite/index.html"><span class="identifier">Invite</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-member.html">getMember</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getMember</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$getMember(kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild-member/index.html"><span class="identifier">GuildMember</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-members.html">getMembers</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getMembers</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$getMembers(kotlin.Int, kotlin.String)/limit">limit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$getMembers(kotlin.Int, kotlin.String)/afterMember">afterMember</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"0"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-guild-member/index.html"><span class="identifier">GuildMember</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-prune-potential.html">getPrunePotential</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getPrunePotential</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$getPrunePotential(kotlin.Int)/days">days</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-pruned/index.html"><span class="identifier">Pruned</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-roles.html">getRoles</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getRoles</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-role/index.html"><span class="identifier">Role</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-vanity-url.html">getVanityUrl</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getVanityUrl</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-invite/index.html"><span class="identifier">Invite</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-voice-regions.html">getVoiceRegions</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getVoiceRegions</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-voice-region/index.html"><span class="identifier">VoiceRegion</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="get-webhooks.html">getWebhooks</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getWebhooks</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-webhook/index.html"><span class="identifier">Webhook</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="leave.html">leave</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">leave</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="modify-channel-positions.html">modifyChannelPositions</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">modifyChannelPositions</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$modifyChannelPositions(kotlin.collections.List((com.jessecorbett.diskord.api.rest.GuildPosition)))/positions">positions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.rest/-guild-position/index.html"><span class="identifier">GuildPosition</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="modify-role-positions.html">modifyRolePositions</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">modifyRolePositions</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$modifyRolePositions(kotlin.collections.List((com.jessecorbett.diskord.api.rest.GuildPosition)))/positions">positions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.rest/-guild-position/index.html"><span class="identifier">GuildPosition</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="prune.html">prune</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">prune</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$prune(kotlin.Int)/days">days</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-pruned/index.html"><span class="identifier">Pruned</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="remove-ban.html">removeBan</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeBan</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$removeBan(kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="remove-member.html">removeMember</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeMember</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$removeMember(kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="remove-member-role.html">removeMemberRole</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeMemberRole</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$removeMemberRole(kotlin.String, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$removeMemberRole(kotlin.String, kotlin.String)/roleId">roleId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="sync-integration.html">syncIntegration</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">syncIntegration</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$syncIntegration(kotlin.String)/guildIntegrationId">guildIntegrationId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update.html">update</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">update</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$update(com.jessecorbett.diskord.api.rest.PatchGuild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-guild/index.html"><span class="identifier">PatchGuild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-embed.html">updateEmbed</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">updateEmbed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateEmbed(com.jessecorbett.diskord.api.model.GuildEmbed)/guildEmbed">guildEmbed</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-guild-embed/index.html"><span class="identifier">GuildEmbed</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-guild-embed/index.html"><span class="identifier">GuildEmbed</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-emoji.html">updateEmoji</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">updateEmoji</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateEmoji(kotlin.String, com.jessecorbett.diskord.api.rest.PatchEmoji)/emojiId">emojiId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateEmoji(kotlin.String, com.jessecorbett.diskord.api.rest.PatchEmoji)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-emoji/index.html"><span class="identifier">PatchEmoji</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-integration.html">updateIntegration</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">updateIntegration</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateIntegration(kotlin.String, com.jessecorbett.diskord.api.rest.PatchGuildIntegration)/guildIntegrationId">guildIntegrationId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateIntegration(kotlin.String, com.jessecorbett.diskord.api.rest.PatchGuildIntegration)/guildIntegration">guildIntegration</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-guild-integration/index.html"><span class="identifier">PatchGuildIntegration</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-member.html">updateMember</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">updateMember</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateMember(kotlin.String, com.jessecorbett.diskord.api.rest.PatchGuildMember)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateMember(kotlin.String, com.jessecorbett.diskord.api.rest.PatchGuildMember)/guildMember">guildMember</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-guild-member/index.html"><span class="identifier">PatchGuildMember</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="update-role.html">updateRole</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">updateRole</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateRole(kotlin.String, com.jessecorbett.diskord.api.rest.PatchRole)/roleId">roleId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.GuildClient$updateRole(kotlin.String, com.jessecorbett.diskord.api.rest.PatchRole)/role">role</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-patch-role/index.html"><span class="identifier">PatchRole</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-role/index.html"><span class="identifier">Role</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/delete-request.html">deleteRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">deleteRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$deleteRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$deleteRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code>
+<p>Make a DELETE request for this discord object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/get-request.html">getRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$getRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$getRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code>
+<p>Make a GET request for this discord object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/patch-request.html">patchRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">patchRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$patchRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code>
+<p>Make a PATCH request for this discord object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/post-request.html">postRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">postRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">postRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$postRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code>
+<p>Make a POST request for this discord object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rest-client/put-request.html">putRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">putRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/body">body</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, kotlin.Any, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">putRequest</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.internal.RestClient$putRequest(kotlin.String, com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo)/rateLimit">rateLimit</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest.client.internal/-rate-limit-info/index.html"><span class="identifier">RateLimitInfo</span></a>&nbsp;<span class="symbol">=</span>&nbsp;rateLimitInfo<span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Response</span></code>
+<p>Make a PUT request for this discord object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/change-nickname.html">changeNickname</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="./index.html"><span class="identifier">GuildClient</span></a><span class="symbol">.</span><span class="identifier">changeNickname</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util$changeNickname(com.jessecorbett.diskord.api.rest.client.GuildClient, kotlin.String)/nickname">nickname</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Changes the user's nickname in this client's guild.</p>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="./index.html"><span class="identifier">GuildClient</span></a><span class="symbol">.</span><span class="identifier">changeNickname</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util$changeNickname(com.jessecorbett.diskord.api.rest.client.GuildClient, kotlin.String, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.util$changeNickname(com.jessecorbett.diskord.api.rest.client.GuildClient, kotlin.String, kotlin.String)/nickname">nickname</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Changes a user's nickname in this client's guild.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
