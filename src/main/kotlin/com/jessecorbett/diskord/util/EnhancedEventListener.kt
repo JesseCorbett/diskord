@@ -50,8 +50,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
 
     /**
      * Convenience property for deleting a message that was updated.
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      *
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
     suspend fun MessageUpdate.delete() = clientStore.channels[channelId].deleteMessage(id)
 

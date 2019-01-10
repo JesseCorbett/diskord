@@ -142,6 +142,7 @@ suspend fun ChannelClient.sendMessage(message: String) = createMessage(CreateMes
  * Changes the user's nickname in this client's guild.
  *
  * @param nickname the new nickname.
+ *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
@@ -152,6 +153,7 @@ suspend fun GuildClient.changeNickname(nickname: String) = changeMemberNickname(
  *
  * @param userId the id of the user whose nickname to change.
  * @param nickname the new nickname.
+ *
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
 suspend fun GuildClient.changeNickname(userId: String, nickname: String) = updateMember(userId, PatchGuildMember(nickname))

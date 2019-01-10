@@ -83,6 +83,7 @@ abstract class RestClients<T: RestClient>(private val userToken: String, private
      * Gets a [RestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.
      *
      * @param resourceId the id of the requested resource client, such as channelId or guildId
+     *
      * @return a [RestClient] implementation for the specified resource
      */
     operator fun get(resourceId: String) = clients.getOrPut(resourceId) { gen(resourceId) }

@@ -5,9 +5,24 @@ import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.util.EnhancedEventListener
 
+/**
+ * Marks a class or function as belonging to the Diskord DSL.
+ */
 @DslMarker
 annotation class DiskordDsl
 
+
+/**
+ * A bot implementation built using [EnhancedEventListener] and providing a DSL for consuming and acting on events.
+ *
+ * The usage principle behind this class is assuming reasonable defaults for threading and resource management,
+ * allowing the developer to focus on building a bot which reacts to events witnessed by the bot. By design there
+ * is the ability to attach an arbitrary number of hooks to any event listener via DSL so that plugins such as the
+ * command DSL (via the [commands] and [command] functions) can be added via extension functions without needing to
+ * modify or interrupt this base class.
+ *
+ * @param token The bot token from the discord application management page https://discordapp.com/developers/applications/.
+ */
 class Bot(token: String) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this)
 
@@ -15,8 +30,19 @@ class Bot(token: String) : EnhancedEventListener(token) {
      * Convenience methods for bot implementations
      */
 
+    /**
+     * Shuts down the bot.
+     *
+     * @param forceClose Forces closed the bot. False by default. Only set to true if this is the only bot in this instance
+     * as it force closes the http client shared by all [DiscordWebSocket] and [RestClient] instances.
+     */
     fun shutdown(forceClose: Boolean = false) = websocket.close(forceClose)
 
+    /**
+     * Restarts the websocket connection.
+     *
+     * Persists the session so that any events which occur during the restart should still be received.
+     */
     fun restart() = websocket.restart()
 
     /*
@@ -196,5 +222,13 @@ class Bot(token: String) : EnhancedEventListener(token) {
     override suspend fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) { webhookUpdatesHooks.forEach { it(webhookUpdate) } }
 }
 
+/**
+ * DSL function for initializing a bot.
+ *
+ * @param token The bot token for the bot user.
+ * @param block The DSL lambda to execute.
+ *
+ * @return A [Bot] instance using the token and DSL hooks specified in the block.
+ */
 @DiskordDsl
 fun bot(token: String, block: Bot.() -> Unit) = Bot(token).apply(block)
