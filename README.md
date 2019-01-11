@@ -43,6 +43,8 @@ Simply instantiate a bot using the bot DSL, such as in the examples below.
 
 Nearly all discord API and bot gateway features can be accessed from the DSL!
 
+You can access the documentation [here.](https://jessecorbett.github.io/Diskord/diskord/)
+
 ### Ping Pong Example
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
