@@ -95,10 +95,10 @@ class DiscordWebSocket(
     /**
      * Starts the websocket.
      *
-     * Not technically different from [DiscordWebSocket.restart] in functionality at this time.
+     * Not technically different from [DiscordWebSocket.restart] in functionality if the bot isn't already running.
      */
     fun start() {
-        restart()
+        socket = startConnection()
     }
 
     /**
