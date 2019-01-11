@@ -41,7 +41,9 @@ dependencies {
 
 Simply instantiate a bot using the bot DSL, such as in the examples below.
 
-Nearly all discord API and bot gateway features can be accessed from the DSL!
+Any function in the scope of the DSL will have access to a ClientStore to access clients for the bot user.
+
+Additionally, extensions on the bot DSL, like the command DSL, can be done simply by writing extension functions which hook into the bot DSL on instantiation.
 
 You can access the documentation [here.](https://jessecorbett.github.io/Diskord/diskord/)
 
