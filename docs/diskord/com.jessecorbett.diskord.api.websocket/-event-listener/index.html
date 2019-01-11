@@ -9,6 +9,7 @@
 <br/>
 <h1>EventListener</h1>
 <code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">EventListener</span></code>
+<p>The base listener that <a href="../-discord-web-socket/index.html">DiscordWebSocket</a> uses to dispatch events to the library consumer.</p>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -17,7 +18,9 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">EventListener</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
+<code><span class="identifier">EventListener</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>The base listener that <a href="../-discord-web-socket/index.html">DiscordWebSocket</a> uses to dispatch events to the library consumer.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -29,238 +32,306 @@
 <p><a href="on-channel-create.html">onChannelCreate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelCreate(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelCreate(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a channel is created, the current user gets access to a channel, or the current user receives a DM.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-channel-delete.html">onChannelDelete</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelDelete(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelDelete(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a channel is deleted.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-channel-pins-update.html">onChannelPinsUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelPinsUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelPinsUpdate(com.jessecorbett.diskord.api.websocket.events.ChannelPinUpdate)/channelPinUpdate">channelPinUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-channel-pin-update/index.html"><span class="identifier">ChannelPinUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelPinsUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelPinsUpdate(com.jessecorbett.diskord.api.websocket.events.ChannelPinUpdate)/channelPinUpdate">channelPinUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-channel-pin-update/index.html"><span class="identifier">ChannelPinUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when the pins in a channel are updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-channel-update.html">onChannelUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelUpdate(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onChannelUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onChannelUpdate(com.jessecorbett.diskord.api.model.Channel)/channel">channel</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-channel/index.html"><span class="identifier">Channel</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when the a channel is updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-event.html">onEvent</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onEvent</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onEvent(com.jessecorbett.diskord.api.websocket.events.DiscordEvent, kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html"><span class="identifier">DiscordEvent</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onEvent(com.jessecorbett.diskord.api.websocket.events.DiscordEvent, kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onEvent</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onEvent(com.jessecorbett.diskord.api.websocket.events.DiscordEvent, kotlin.String)/event">event</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-discord-event/index.html"><span class="identifier">DiscordEvent</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onEvent(com.jessecorbett.diskord.api.websocket.events.DiscordEvent, kotlin.String)/json">json</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired on any event.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-ban-add.html">onGuildBanAdd</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildBanAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildBanAdd(com.jessecorbett.diskord.api.websocket.events.GuildBan)/ban">ban</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildBanAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildBanAdd(com.jessecorbett.diskord.api.websocket.events.GuildBan)/ban">ban</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user was banned from a guild.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-ban-remove.html">onGuildBanRemove</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildBanRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildBanRemove(com.jessecorbett.diskord.api.websocket.events.GuildBan)/ban">ban</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildBanRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildBanRemove(com.jessecorbett.diskord.api.websocket.events.GuildBan)/ban">ban</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-ban/index.html"><span class="identifier">GuildBan</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user was unbanned from a guild.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-create.html">onGuildCreate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildCreate(com.jessecorbett.diskord.api.websocket.events.CreatedGuild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-created-guild/index.html"><span class="identifier">CreatedGuild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildCreate(com.jessecorbett.diskord.api.websocket.events.CreatedGuild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-created-guild/index.html"><span class="identifier">CreatedGuild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild is created, the current user is added to a guild, the guild became available, or just after <a href="on-ready.html">onReady</a> to lazy load guilds the user is in.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-delete.html">onGuildDelete</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildDelete(com.jessecorbett.diskord.api.model.Guild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildDelete(com.jessecorbett.diskord.api.model.Guild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild is deleted, made unavailable, or the user left or was removed from the guild.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-emoji-update.html">onGuildEmojiUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildEmojiUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildEmojiUpdate(com.jessecorbett.diskord.api.websocket.events.GuildEmojiUpdate)/emojiUpdate">emojiUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-emoji-update/index.html"><span class="identifier">GuildEmojiUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildEmojiUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildEmojiUpdate(com.jessecorbett.diskord.api.websocket.events.GuildEmojiUpdate)/emojiUpdate">emojiUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-emoji-update/index.html"><span class="identifier">GuildEmojiUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild has changed their set of custom emoji.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-integrations-update.html">onGuildIntegrationsUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildIntegrationsUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildIntegrationsUpdate(com.jessecorbett.diskord.api.websocket.events.GuildIntegrationUpdate)/integrationUpdate">integrationUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-integration-update/index.html"><span class="identifier">GuildIntegrationUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildIntegrationsUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildIntegrationsUpdate(com.jessecorbett.diskord.api.websocket.events.GuildIntegrationUpdate)/integrationUpdate">integrationUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-integration-update/index.html"><span class="identifier">GuildIntegrationUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild has updated their integrations.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-member-add.html">onGuildMemberAdd</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberAdd(com.jessecorbett.diskord.api.websocket.events.GuildMemberAdd)/guildMember">guildMember</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-add/index.html"><span class="identifier">GuildMemberAdd</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberAdd(com.jessecorbett.diskord.api.websocket.events.GuildMemberAdd)/guildMember">guildMember</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-add/index.html"><span class="identifier">GuildMemberAdd</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user joins a guild.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-member-chunk.html">onGuildMemberChunk</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberChunk</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberChunk(com.jessecorbett.diskord.api.websocket.events.GuildMembersChunk)/guildMembers">guildMembers</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-members-chunk/index.html"><span class="identifier">GuildMembersChunk</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberChunk</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberChunk(com.jessecorbett.diskord.api.websocket.events.GuildMembersChunk)/guildMembers">guildMembers</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-members-chunk/index.html"><span class="identifier">GuildMembersChunk</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when the gateway lazy loads chunks of guild members.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-member-remove.html">onGuildMemberRemove</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberRemove(com.jessecorbett.diskord.api.websocket.events.GuildMemberRemove)/guildMemberRemove">guildMemberRemove</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-remove/index.html"><span class="identifier">GuildMemberRemove</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberRemove(com.jessecorbett.diskord.api.websocket.events.GuildMemberRemove)/guildMemberRemove">guildMemberRemove</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-remove/index.html"><span class="identifier">GuildMemberRemove</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user leaves a guild.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-member-update.html">onGuildMemberUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberUpdate(com.jessecorbett.diskord.api.websocket.events.GuildMemberUpdate)/guildMemberUpdate">guildMemberUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-update/index.html"><span class="identifier">GuildMemberUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildMemberUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildMemberUpdate(com.jessecorbett.diskord.api.websocket.events.GuildMemberUpdate)/guildMemberUpdate">guildMemberUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-member-update/index.html"><span class="identifier">GuildMemberUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild member is updated, such as changing nickname.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-role-create.html">onGuildRoleCreate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleCreate(com.jessecorbett.diskord.api.websocket.events.GuildRoleCreate)/guildRoleCreate">guildRoleCreate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-create/index.html"><span class="identifier">GuildRoleCreate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleCreate(com.jessecorbett.diskord.api.websocket.events.GuildRoleCreate)/guildRoleCreate">guildRoleCreate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-create/index.html"><span class="identifier">GuildRoleCreate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a role has been created.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-role-delete.html">onGuildRoleDelete</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleDelete(com.jessecorbett.diskord.api.websocket.events.GuildRoleDelete)/guildRoleDelete">guildRoleDelete</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-delete/index.html"><span class="identifier">GuildRoleDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleDelete(com.jessecorbett.diskord.api.websocket.events.GuildRoleDelete)/guildRoleDelete">guildRoleDelete</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-delete/index.html"><span class="identifier">GuildRoleDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a role has been deleted.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-role-update.html">onGuildRoleUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleUpdate(com.jessecorbett.diskord.api.websocket.events.GuildRoleUpdate)/guildRoleUpdate">guildRoleUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-update/index.html"><span class="identifier">GuildRoleUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildRoleUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildRoleUpdate(com.jessecorbett.diskord.api.websocket.events.GuildRoleUpdate)/guildRoleUpdate">guildRoleUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-guild-role-update/index.html"><span class="identifier">GuildRoleUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a role has been updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-guild-update.html">onGuildUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildUpdate(com.jessecorbett.diskord.api.model.Guild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onGuildUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onGuildUpdate(com.jessecorbett.diskord.api.model.Guild)/guild">guild</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-guild/index.html"><span class="identifier">Guild</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild is updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-bulk-delete.html">onMessageBulkDelete</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageBulkDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageBulkDelete(com.jessecorbett.diskord.api.model.BulkMessageDelete)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-bulk-message-delete/index.html"><span class="identifier">BulkMessageDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageBulkDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageBulkDelete(com.jessecorbett.diskord.api.model.BulkMessageDelete)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-bulk-message-delete/index.html"><span class="identifier">BulkMessageDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when there has been a bulk message delete.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-create.html">onMessageCreate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageCreate(com.jessecorbett.diskord.api.model.Message)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageCreate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageCreate(com.jessecorbett.diskord.api.model.Message)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a message has been created.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-delete.html">onMessageDelete</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageDelete(com.jessecorbett.diskord.api.model.MessageDelete)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-message-delete/index.html"><span class="identifier">MessageDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageDelete</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageDelete(com.jessecorbett.diskord.api.model.MessageDelete)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-message-delete/index.html"><span class="identifier">MessageDelete</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a message has been deleted.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-reaction-add.html">onMessageReactionAdd</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionAdd(com.jessecorbett.diskord.api.websocket.events.MessageReaction)/reactionAdd">reactionAdd</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionAdd</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionAdd(com.jessecorbett.diskord.api.websocket.events.MessageReaction)/reactionAdd">reactionAdd</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a reaction was added to a message.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-reaction-remove.html">onMessageReactionRemove</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionRemove(com.jessecorbett.diskord.api.websocket.events.MessageReaction)/reactionRemove">reactionRemove</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionRemove</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionRemove(com.jessecorbett.diskord.api.websocket.events.MessageReaction)/reactionRemove">reactionRemove</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction/index.html"><span class="identifier">MessageReaction</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a reaction was remove from a message.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-reaction-remove-all.html">onMessageReactionRemoveAll</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionRemoveAll</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionRemoveAll(com.jessecorbett.diskord.api.websocket.events.MessageReactionRemoveAll)/messageReactionRemoveAll">messageReactionRemoveAll</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction-remove-all/index.html"><span class="identifier">MessageReactionRemoveAll</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageReactionRemoveAll</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageReactionRemoveAll(com.jessecorbett.diskord.api.websocket.events.MessageReactionRemoveAll)/messageReactionRemoveAll">messageReactionRemoveAll</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-reaction-remove-all/index.html"><span class="identifier">MessageReactionRemoveAll</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when all reactions are removed from a message.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-message-update.html">onMessageUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageUpdate(com.jessecorbett.diskord.api.websocket.events.MessageUpdate)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onMessageUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onMessageUpdate(com.jessecorbett.diskord.api.websocket.events.MessageUpdate)/message">message</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a message has been updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-presence-update.html">onPresenceUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onPresenceUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onPresenceUpdate(com.jessecorbett.diskord.api.websocket.events.PresenceUpdate)/presenceUpdate">presenceUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-presence-update/index.html"><span class="identifier">PresenceUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onPresenceUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onPresenceUpdate(com.jessecorbett.diskord.api.websocket.events.PresenceUpdate)/presenceUpdate">presenceUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-presence-update/index.html"><span class="identifier">PresenceUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user's presence has updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-ready.html">onReady</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onReady</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onReady(com.jessecorbett.diskord.api.websocket.events.Ready)/ready">ready</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-ready/index.html"><span class="identifier">Ready</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onReady</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onReady(com.jessecorbett.diskord.api.websocket.events.Ready)/ready">ready</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-ready/index.html"><span class="identifier">Ready</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when the gateway acknowledges the connection as ready.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-resumed.html">onResumed</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onResumed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onResumed(com.jessecorbett.diskord.api.websocket.events.Resumed)/resumed">resumed</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-resumed/index.html"><span class="identifier">Resumed</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onResumed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onResumed(com.jessecorbett.diskord.api.websocket.events.Resumed)/resumed">resumed</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-resumed/index.html"><span class="identifier">Resumed</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when the gateway acknowledges the connection has resumed.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-typing-start.html">onTypingStart</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onTypingStart</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onTypingStart(com.jessecorbett.diskord.api.websocket.events.TypingStart)/typingStart">typingStart</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-typing-start/index.html"><span class="identifier">TypingStart</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onTypingStart</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onTypingStart(com.jessecorbett.diskord.api.websocket.events.TypingStart)/typingStart">typingStart</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-typing-start/index.html"><span class="identifier">TypingStart</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user has started typing.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-user-update.html">onUserUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onUserUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onUserUpdate(com.jessecorbett.diskord.api.model.User)/user">user</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-user/index.html"><span class="identifier">User</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onUserUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onUserUpdate(com.jessecorbett.diskord.api.model.User)/user">user</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-user/index.html"><span class="identifier">User</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user has been updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-voice-server-update.html">onVoiceServerUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onVoiceServerUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onVoiceServerUpdate(com.jessecorbett.diskord.api.websocket.events.VoiceServerUpdate)/voiceServerUpdate">voiceServerUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-voice-server-update/index.html"><span class="identifier">VoiceServerUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onVoiceServerUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onVoiceServerUpdate(com.jessecorbett.diskord.api.websocket.events.VoiceServerUpdate)/voiceServerUpdate">voiceServerUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-voice-server-update/index.html"><span class="identifier">VoiceServerUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a guild's voice server has updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-voice-state-update.html">onVoiceStateUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onVoiceStateUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onVoiceStateUpdate(com.jessecorbett.diskord.api.model.VoiceState)/voiceState">voiceState</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-voice-state/index.html"><span class="identifier">VoiceState</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onVoiceStateUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onVoiceStateUpdate(com.jessecorbett.diskord.api.model.VoiceState)/voiceState">voiceState</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-voice-state/index.html"><span class="identifier">VoiceState</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a user's voice state has updated.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="on-webhooks-update.html">onWebhooksUpdate</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onWebhooksUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onWebhooksUpdate(com.jessecorbett.diskord.api.websocket.events.WebhookUpdate)/webhookUpdate">webhookUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-webhook-update/index.html"><span class="identifier">WebhookUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">open</span> <span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">onWebhooksUpdate</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.websocket.EventListener$onWebhooksUpdate(com.jessecorbett.diskord.api.websocket.events.WebhookUpdate)/webhookUpdate">webhookUpdate</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.websocket.events/-webhook-update/index.html"><span class="identifier">WebhookUpdate</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Fired when a webhook is updated.</p>
+</td>
 </tr>
 </tbody>
 </table>
