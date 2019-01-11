@@ -37,6 +37,7 @@ import kotlin.coroutines.CoroutineContext
 class DiscordWebSocket(
         private val token: String,
         private val eventListener: EventListener,
+        autoStart: Boolean = true,
         var sessionId: String? = null,
         var sequenceNumber: Int? = null,
         private val shardId: Int = 0,
@@ -47,8 +48,14 @@ class DiscordWebSocket(
         private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-    private var socket = startConnection()
+    private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
+
+    init {
+        if (autoStart) {
+            socket = startConnection()
+        }
+    }
 
     private fun startConnection(): WebSocket {
         val gatewayUrl = runBlocking { DiscordClient(token, userType).getBotGateway().url }
@@ -86,6 +93,15 @@ class DiscordWebSocket(
     }
 
     /**
+     * Starts the websocket.
+     *
+     * Not technically different from [DiscordWebSocket.restart] in functionality at this time.
+     */
+    fun start() {
+        restart()
+    }
+
+    /**
      * Shuts down the connection.
      *
      * @param forceClose Forces closed the connection. False by default. Only set to true if this is the only connection
@@ -96,7 +112,7 @@ class DiscordWebSocket(
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         runBlocking { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
-        socket.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
+        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
         if (forceClose) {
             httpClient.dispatcher().executorService().shutdown()
         }
@@ -186,6 +202,6 @@ class DiscordWebSocket(
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, eventName)))
+        socket?.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, eventName)))
     }
 }

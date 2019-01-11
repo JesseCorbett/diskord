@@ -22,13 +22,19 @@ annotation class DiskordDsl
  * modify or interrupt this base class.
  *
  * @param token The bot token from the discord application management page https://discordapp.com/developers/applications/.
+ * @param autoStart Automatically start the bot. Defaults to true.
  */
-class Bot(token: String) : EnhancedEventListener(token) {
-    private val websocket = DiscordWebSocket(token, this)
+class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
+    private val websocket = DiscordWebSocket(token, this, autoStart, shardId = shardId, shardCount = shardCount)
 
     /*
      * Convenience methods for bot implementations
      */
+
+    /**
+     * Starts the bot if not already started.
+     */
+
 
     /**
      * Shuts down the bot.
