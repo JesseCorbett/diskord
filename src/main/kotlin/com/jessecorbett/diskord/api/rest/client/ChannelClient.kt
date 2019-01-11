@@ -17,6 +17,10 @@ import java.time.Instant
  * @param userType The user type, assumed to be a bot.
  */
 class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
+
+    /**
+     * Message deletion per channel has it's own rate limit.
+     */
     val messageDeleteRateInfo = RateLimitInfo(1, 1, Instant.MAX)
 
     suspend fun get() = getRequest("/channels/$channelId").bodyAs<Channel>()

@@ -27,7 +27,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get this guild's emoji.
      *
      * @return A list of the guild's custom emoji
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis").bodyAsList<Emoji>()
 
@@ -37,7 +37,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param emojiId The emoji's id.
      *
      * @return The custom emoji.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getEmoji(emojiId: String) = getRequest("/guilds/$guildId/emojis/$emojiId").bodyAs<Emoji>()
 
@@ -47,7 +47,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param createEmoji The emoji to create.
      *
      * @return The created emoji.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guilds/$guildId/emojis", createEmoji).bodyAs<Emoji>()
 
@@ -58,7 +58,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param emoji The updated emoji.
      *
      * @return The updated emoji.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guilds/$guildId/emojis/$emojiId", emoji).bodyAs<Emoji>()
 
@@ -67,7 +67,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param emojiId The emoji to delete.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId").close()
 
@@ -75,7 +75,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get this guild.
      *
      * @return This guild.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun get() = getRequest("/guilds/$guildId").bodyAs<Guild>()
 
@@ -85,14 +85,14 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param guild The updates to the guild.
      *
      * @return The updated guild.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs<Guild>()
 
     /**
      * Delete this guild.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun delete() = deleteRequest("/guilds/$guildId").close()
 
@@ -100,7 +100,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get this guild's channels.
      *
      * @return The guild's channels.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getChannels() = getRequest("/guilds/$guildId/channels").bodyAsList<Channel>()
 
@@ -110,7 +110,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param channel The channel to create.
      *
      * @return The created channel.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel).bodyAs<Channel>()
 
@@ -119,7 +119,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param positions List of channel position descriptors.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun modifyChannelPositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/channels", positions).close()
 
@@ -129,7 +129,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param userId The id of the member.
      *
      * @return The guild member.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").bodyAs<GuildMember>()
 
@@ -140,7 +140,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param afterMember Member id to start querying after.
      *
      * @return List of guild members.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").bodyAsList<GuildMember>()
 
@@ -152,7 +152,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param userId The user to add.
      * @param addGuildMember Options around adding the user.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun addMember(userId: String, addGuildMember: AddGuildMember) = putRequest("/guilds/$guildId/members/$userId", addGuildMember).close()
 
@@ -162,7 +162,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param userId The user to update.
      * @param guildMember The updates to the user.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun updateMember(userId: String, guildMember: PatchGuildMember) = patchRequest("/guilds/$guildId/members/$userId", guildMember).close()
 
@@ -171,7 +171,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param guildMember The nickname update.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) = patchRequest("/guilds/$guildId/members/@me/nick", guildMember).close()
 
@@ -181,7 +181,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param userId The user to add the role to.
      * @param roleId The role to add.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun addMemberRole(userId: String, roleId: String) = putRequest("/guilds/$guildId/members/$userId/roles/$roleId").close()
 
@@ -191,7 +191,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param userId The user to remove the role from.
      * @param roleId The role to remove.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun removeMemberRole(userId: String, roleId: String) = deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId").close()
 
@@ -200,7 +200,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param userId The user to kick.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun removeMember(userId: String) = deleteRequest("/guilds/$guildId/members/$userId").close()
 
@@ -208,7 +208,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get user bans.
      *
      * @return The list of bans.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getBans() = getRequest("/guilds/$guildId/bans").bodyAsList<Ban>()
 
@@ -219,7 +219,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param deleteMessageDays How many days worth of messages to delete.
      * @param reason Why the user is being banned.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) = putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason").close()
 
@@ -228,7 +228,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param userId The user to unban.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun removeBan(userId: String) = deleteRequest("/guilds/$guildId/bans/$userId").close()
 
@@ -236,7 +236,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get all roles for this guild.
      *
      * @return The list of all roles.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getRoles() = getRequest("/guilds/$guildId/roles").bodyAsList<Role>()
 
@@ -246,7 +246,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param guildRole The role to create.
      *
      * @return The created role.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole).bodyAs<Role>()
 
@@ -255,7 +255,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param positions List of role position descriptors.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun modifyRolePositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/roles", positions).close()
 
@@ -266,7 +266,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param role The role updates.
      *
      * @return The updated role.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role).bodyAs<Role>()
 
@@ -275,7 +275,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param roleId The role to delete.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun deleteRole(roleId: String) = deleteRequest("/guilds/$guildId/roles/$roleId").close()
 
@@ -285,7 +285,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param days How many days of pruning to check.
      *
      * @return The potential results.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").bodyAs<Pruned>()
 
@@ -295,7 +295,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param days How many days to prune.
      *
      * @return The pruning results.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").bodyAs<Pruned>()
 
@@ -303,7 +303,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the guild's voice regions.
      *
      * @return The voice regions.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getVoiceRegions() = getRequest("/guilds/$guildId/regions").bodyAsList<VoiceRegion>()
 
@@ -311,7 +311,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the guild invites.
      *
      * @return All guild invites.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getInvites() = getRequest("/guilds/$guildId/invites").bodyAsList<Invite>()
 
@@ -319,7 +319,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the list of integrations for the guild.
      *
      * @return The list fo guild integrations.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getIntegrations() = getRequest("/guilds/$guildId/integrations").bodyAsList<GuildIntegration>()
 
@@ -328,7 +328,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param guildIntegration The guild integration to create.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createIntegration(guildIntegration: CreateGuildIntegration) = postRequest("/guilds/$guildId/integrations", guildIntegration).close()
 
@@ -347,7 +347,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param guildIntegrationId The integration to delete.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun deleteIntegration(guildIntegrationId: String) = deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId").close()
 
@@ -356,7 +356,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @param guildIntegrationId The integration to sync.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun syncIntegration(guildIntegrationId: String) = postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync").close()
 
@@ -364,7 +364,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the guild embed.
      *
      * @return The guild embed.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getEmbed() = getRequest("/guilds/$guildId/embed").bodyAs<GuildEmbed>()
 
@@ -374,7 +374,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @param guildEmbed The updates to make.
      *
      * @return The updated guild embed.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed).bodyAs<GuildEmbed>()
 
@@ -382,7 +382,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the guild's vanity url.
      *
      * @return The vanity url in [Invite] form.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url").bodyAs<Invite>()
 
@@ -390,14 +390,14 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the guild's webhooks.
      *
      * @return All the guild's webhooks.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").bodyAsList<Webhook>()
 
     /**
      * Leave the server.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun leave() = deleteRequest("/users/@me/guilds/$guildId").close()
 
@@ -405,7 +405,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * Get the audit log.
      *
      * @return The audit log.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs").bodyAs<AuditLog>()
 }

@@ -20,19 +20,19 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * Get this webhook.
      *
      * @return This webhook.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
 
     /**
      * Get this webhook using the secure token.
      *
-     * Does not require authentication and does not include the [User].
+     * Does not require authentication and does not include the [com.jessecorbett.diskord.api.model.User].
      *
      * @param webhookToken The webhook's secure token.
      *
      * @return This webhook, minus the user.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs<Webhook>()
 
@@ -42,26 +42,26 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @param webhook The patched webhook.
      *
      * @return The updated webhook.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs<Webhook>()
 
     /**
      * Update this webhook using the secure token.
      *
-     * Does not require authentication and does not include the [User].
+     * Does not require authentication and does not include the [com.jessecorbett.diskord.api.model.User].
      *
      * @param webhook The patched webhook.
      *
      * @return The updated webhook, minus the user.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs<Webhook>()
 
     /**
      * Delete this webhook.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun delete() = deleteRequest("/webhooks/$webhookId").close()
 
@@ -70,7 +70,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      *
      * Does not require authentication.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun delete(webhookToken: String) = deleteRequest("/webhooks/$webhookId/$webhookToken").close()
 
@@ -82,7 +82,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @param webhookSubmission The post the webhook will make.
      * @param waitForValidation Wait for the message to be posted before the call returns. Defaults to false.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) =
             postRequest("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission).close()
