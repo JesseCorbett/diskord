@@ -90,7 +90,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
     suspend fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild).bodyAs<Guild>()
 
     /**
-     * Delete this guild.
+     * Delete this guild. Use with caution, cannot be undone.
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
