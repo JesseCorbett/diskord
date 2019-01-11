@@ -34,9 +34,11 @@ class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount
      */
 
     /**
-     * Starts the bot if not already started.
+     * Starts the websocket connection.
+     *
+     * Only necessary if autostart is disabled. Functionally identical to [Bot.restart]
      */
-
+    fun start() = websocket.start()
 
     /**
      * Shuts down the bot.
