@@ -1,11 +1,12 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
-import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.CreateMessage
+import com.jessecorbett.diskord.api.rest.Embed
 import com.jessecorbett.diskord.api.rest.PatchGuildMember
 import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname
+import com.jessecorbett.diskord.api.rest.client.ChannelClient
+import com.jessecorbett.diskord.api.rest.client.GuildClient
 
 
 /*
@@ -133,10 +134,13 @@ val Emoji.tag: String
 /**
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
  *
+ * @param message The text message to send.
+ * @param embed The optional embed to include with the message.
+ *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(message: String) = createMessage(CreateMessage(message))
+suspend fun ChannelClient.sendMessage(message: String, embed: Embed? = null) = createMessage(CreateMessage(content = message, embed = embed))
 
 /**
  * Changes the user's nickname in this client's guild.
