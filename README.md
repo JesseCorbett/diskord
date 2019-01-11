@@ -1,4 +1,4 @@
-# Diskord [![](https://jitpack.io/v/com.jessecorbett/Diskord.svg)](https://jitpack.io/#com.jessecorbett/Diskord) 
+# Diskord [![](https://jitpack.io/v/com.jessecorbett/Diskord.svg)](https://jitpack.io/#com.jessecorbett/Diskord) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
@@ -6,7 +6,7 @@ Built as a lean, opinionated client using coroutines that gets the intricacies o
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
-Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by our [Discord server](https://discord.gg/UPTWsZ5) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
+Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by our [Discord server.](https://discord.gg/UPTWsZ5)
 
 ## How do I import this?
 
