@@ -23,6 +23,8 @@ annotation class DiskordDsl
  *
  * @param token The bot token from the discord application management page https://discordapp.com/developers/applications/.
  * @param autoStart Automatically start the bot. Defaults to true.
+ * @param shardId The shard id, if this bot is sharded.
+ * @param shardCount The count of shards, if the bot is sharded.
  */
 class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this, autoStart, shardId = shardId, shardCount = shardCount)
@@ -508,8 +510,10 @@ class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount
  *
  * @param token The bot token for the bot user.
  * @param block The DSL lambda to execute.
+ * @param shardId The shard id, if this bot is sharded.
+ * @param shardCount The count of shards, if the bot is sharded.
  *
  * @return A [Bot] instance using the token and DSL hooks specified in the block.
  */
 @DiskordDsl
-fun bot(token: String, block: Bot.() -> Unit) = Bot(token).apply(block)
+fun bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit) = Bot(token, autoStart, shardId, shardCount).apply(block)
