@@ -16,7 +16,7 @@ fun Bot.commands(prefix: String = ".", commands: MutableList<Command> = ArrayLis
 
     messageCreated { message ->
         commands.filter { message.content.startsWith(prefix + it.command) }.forEach {
-            it.action(it, message)
+            it.action(message)
         }
     }
 }
@@ -39,7 +39,7 @@ class CommandSet(val commands: MutableList<Command>)
  * @param action The lambda to run when a [Message] is created that matches the command and prefix.
  */
 @DiskordDsl
-fun CommandSet.command(command: String, action: suspend Command.(Message) -> Unit) {
+fun CommandSet.command(command: String, action: suspend Message.() -> Unit) {
     commands += Command(command, action)
 }
 
@@ -52,4 +52,4 @@ fun CommandSet.command(command: String, action: suspend Command.(Message) -> Uni
  * @param action The lambda to run when a [Message] is created that matches the command and prefix.
  */
 @DiskordDsl
-class Command(val command: String, val action: suspend Command.(Message) -> Unit)
+class Command(val command: String, val action: suspend Message.() -> Unit)
