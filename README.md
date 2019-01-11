@@ -92,6 +92,33 @@ fun main() {
 }
 ```
 
+### Combined Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+fun main() {
+    bot(BOT_TOKEN) {
+        messageCreated {
+            if (it.content.contains("diskord")) {
+                it.react("💯")
+            }
+        }
+        
+        commands {
+            command("ping") {
+                reply("pong")
+                delete()
+            }
+            
+            command("echo") {
+                reply(words.drop(1).joinToString(" "))
+                delete()
+            }            
+        }
+    }
+}
+```
+
 ## FAQ
 * Does this support voice chat?
     * No, voice chat is not supported at this time. If you need it I recommend checking out [JDA](https://github.com/DV8FromTheWorld/JDA) or [Discord4J](https://github.com/Discord4J/Discord4J)
