@@ -21,7 +21,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      *
      * Also used by convenience methods and extensions in this class.
      */
-    protected val clientStore = ClientStore(token)
+    val clientStore = ClientStore(token)
 
 
     /**
