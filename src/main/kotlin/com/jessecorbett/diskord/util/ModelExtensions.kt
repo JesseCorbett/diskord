@@ -135,12 +135,12 @@ val Emoji.tag: String
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
  *
  * @param message The text message to send.
- * @param embed The optional embed to include with the message.
+ * @param embed The embed to include with the message.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(message: String, embed: Embed? = null) = createMessage(CreateMessage(content = message, embed = embed))
+suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null) = createMessage(CreateMessage(content = message, embed = embed))
 
 /**
  * Changes the user's nickname in this client's guild.

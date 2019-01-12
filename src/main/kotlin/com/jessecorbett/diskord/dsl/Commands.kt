@@ -13,7 +13,7 @@ import com.jessecorbett.diskord.util.isFromUser
  */
 @DiskordDsl
 fun Bot.commands(prefix: String = ".", commands: MutableList<Command> = ArrayList(), block: CommandSet.() -> Unit) {
-    CommandSet(commands).apply(block)
+    val set = CommandSet(prefix, commands).apply(block)
 
     messageCreated { message ->
         commands.filter { message.content.startsWith(prefix + it.command) }.forEach {
@@ -27,10 +27,11 @@ fun Bot.commands(prefix: String = ".", commands: MutableList<Command> = ArrayLis
  *
  * Simple container of [Command] instances wrapped in [DiskordDsl] to indicate to compiler that this is a DSL class.
  *
+ * @param prefix The prefix the bot is looking for to determine if a message is a command.
  * @param commands The list of commands this class wraps.
  */
 @DiskordDsl
-class CommandSet(val commands: MutableList<Command>)
+class CommandSet(var prefix: String = ".", val commands: MutableList<Command>)
 
 /**
  * DSL function for adding a [Command] to a [CommandSet].

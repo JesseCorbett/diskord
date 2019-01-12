@@ -83,4 +83,4 @@ fun Embed.fields(block: MutableList<EmbedField>.() -> Unit) = fields.apply(block
  * @param inline Should this field be displayed inline.
  */
 @DiskordDsl
-fun MutableList<EmbedField>.field(name: String, value: String, inline: Boolean) = add(EmbedField(name, value, inline))
+fun Embed.field(name: String, value: String, inline: Boolean) = fields.add(EmbedField(name, value, inline))

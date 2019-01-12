@@ -12,6 +12,8 @@
 <p>Command DSL set of commands.</p>
 <p>Simple container of <a href="../-command/index.html">Command</a> instances wrapped in <a href="../-diskord-dsl/index.html">DiskordDsl</a> to indicate to compiler that this is a DSL class.</p>
 <h3>Parameters</h3>
+<p><a name="prefix"></a>
+<code>prefix</code> - The prefix the bot is looking for to determine if a message is a command.</p>
 <p><a name="commands"></a>
 <code>commands</code> - The list of commands this class wraps.</p>
 <h3>Constructors</h3>
@@ -22,7 +24,7 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">CommandSet</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.CommandSet$<init>(kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)))/commands">commands</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../-command/index.html"><span class="identifier">Command</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code>
+<code><span class="identifier">CommandSet</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.CommandSet$<init>(kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)))/prefix">prefix</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"."<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl.CommandSet$<init>(kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)))/commands">commands</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../-command/index.html"><span class="identifier">Command</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code>
 <p>Command DSL set of commands.</p>
 </td>
 </tr>
@@ -38,6 +40,15 @@
 <td>
 <code><span class="keyword">val </span><span class="identifier">commands</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../-command/index.html"><span class="identifier">Command</span></a><span class="symbol">&gt;</span></code>
 <p>The list of commands this class wraps.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="prefix.html">prefix</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">prefix</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The prefix the bot is looking for to determine if a message is a command.</p>
 </td>
 </tr>
 </tbody>
