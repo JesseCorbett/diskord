@@ -25,7 +25,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * Get the gateway url from the API.
      *
      * @return The gateway url.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getApiGateway() = getRequest("/gateway").bodyAs<GatewayUrl>()
 
@@ -33,7 +33,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * Get the bot specific gateway information from the API.
      *
      * @return The gateway url with bot specific data.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getBotGateway() = getRequest("/gateway/bot").bodyAs<GatewayBotUrl>()
 
@@ -43,7 +43,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param guild The guild to create.
      *
      * @return The created guild.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild).bodyAs<Guild>()
 
@@ -53,7 +53,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param inviteCode The invite's code.
      *
      * @return The invite.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").bodyAs<Invite>()
 
@@ -62,7 +62,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      *
      * @param inviteCode The invite's code.
      *
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun deleteInvite(inviteCode: String) = deleteRequest("/invites/$inviteCode").close()
 
@@ -72,7 +72,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param userId The user's id. Defaults to the current user.
      *
      * @return The requested user.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getUser(userId: String = "@me") = getRequest("/users/$userId").bodyAs<User>()
 
@@ -82,7 +82,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param user The modifications to make to the user.
      *
      * @return The updated user.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user).bodyAs<User>()
 
@@ -94,7 +94,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param after Specifies the query to only return guilds after this one.
      *
      * @return A list of partial guilds matching the query.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<PartialGuild> {
         var url = "/users/@me/guilds?limit=$limit"
@@ -111,7 +111,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * Get the DM channels this user is in.
      *
      * @return List of DM channels for the current user.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     @Deprecated("Currently Discord does not return anything from this endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
     suspend fun getDMs() = getRequest("/users/@me/channels").bodyAsList<Channel>()
@@ -124,7 +124,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param createDM The user to create a DM with.
      *
      * @return The DM channel.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM).bodyAs<Channel>()
 
@@ -136,7 +136,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @param groupDM The group DM definition.
      *
      * @return The group DM channel.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createGroupDM(groupDM: CreateGroupDM) = postRequest("/users/@me/channels", groupDM).bodyAs<Channel>()
 
@@ -146,7 +146,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * Only relevant to real users, not bots.
      *
      * @return The user's connections.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getUserConnections() = getRequest("/users/@me/connections").bodyAsList<UserConnection>()
 
@@ -154,7 +154,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * Get the voice regions available for creating a guild.
      *
      * @return The list of voice regions.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getVoiceRegions() = getRequest("/voice/regions").bodyAsList<VoiceRegion>()
 }

@@ -14,6 +14,10 @@ class DiscordRateLimitException(override val message: String, val retryAt: Insta
 
 /**
  * Over the wire representation of a [DiscordRateLimitException].
+ *
+ * @property message The error returned by the API.
+ * @property retryAfter When the rate limit resets.
+ * @property isGlobal if the rate limit is API specific or global.
  */
 data class RateLimitExceeded(
         @JsonProperty("message") val message: String,

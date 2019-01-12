@@ -9,6 +9,31 @@
 <br/>
 <h1>getMessageReactions</h1>
 <a name="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, kotlin.String)"></a>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getMessageReactions</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, kotlin.String)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, kotlin.String)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-reaction/index.html"><span class="identifier">Reaction</span></a><span class="symbol">&gt;</span></code>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getMessageReactions</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, kotlin.String)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, kotlin.String)/textEmoji">textEmoji</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-reaction/index.html"><span class="identifier">Reaction</span></a><span class="symbol">&gt;</span></code>
+<p>Get all reactions from a message for a given emoji.</p>
+<p>Required for unicode emoji, custom emoji must be formatted.</p>
+<h3>Parameters</h3>
+<p><a name="messageId"></a>
+<code>messageId</code> - The message to get reactions from.</p>
+<p><a name="textEmoji"></a>
+<code>textEmoji</code> - The text of the emoji to get reactions for.</p>
+<h3>Exceptions</h3>
+<p><a name="com.jessecorbett.diskord.api.exception.DiscordException"></a>
+<code>com.jessecorbett.diskord.api.exception.DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+The reactions for the given emoji on the given message.</p>
+<a name="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, com.jessecorbett.diskord.api.model.Emoji)"></a>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">getMessageReactions</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, com.jessecorbett.diskord.api.model.Emoji)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$getMessageReactions(kotlin.String, com.jessecorbett.diskord.api.model.Emoji)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="../../com.jessecorbett.diskord.api.model/-reaction/index.html"><span class="identifier">Reaction</span></a><span class="symbol">&gt;</span></code>
+<p>Get all reactions from a message for a given custom emoji.</p>
+<h3>Parameters</h3>
+<p><a name="messageId"></a>
+<code>messageId</code> - The message to get reactions from.</p>
+<p><a name="emoji"></a>
+<code>emoji</code> - The custom emoji to get reactions for.</p>
+<h3>Exceptions</h3>
+<p><a name="com.jessecorbett.diskord.api.exception.DiscordException"></a>
+<code>com.jessecorbett.diskord.api.exception.DiscordException</code> - </p>
+<p><strong>Return</strong><br/>
+The reactions for the given emoji on the given message.</p>
 </BODY>
 </HTML>

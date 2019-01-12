@@ -9,6 +9,31 @@
 <br/>
 <h1>removeMessageReaction</h1>
 <a name="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)"></a>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeMessageReaction</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"@me"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeMessageReaction</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/emojiText">emojiText</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, kotlin.String, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"@me"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Remove a reaction from a message.</p>
+<p>Required for unicode emoji, custom emoji must be formatted.</p>
+<h3>Parameters</h3>
+<p><a name="messageId"></a>
+<code>messageId</code> - The message to remove the reaction from.</p>
+<p><a name="emojiText"></a>
+<code>emojiText</code> - The text of the emoji to remove.</p>
+<p><a name="userId"></a>
+<code>userId</code> - The user whose reaction to remove. Defaults to the current user's reaction.</p>
+<h3>Exceptions</h3>
+<p><a name="com.jessecorbett.diskord.api.exception.DiscordException"></a>
+<code>com.jessecorbett.diskord.api.exception.DiscordException</code> - </p>
+<a name="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, com.jessecorbett.diskord.api.model.Emoji, kotlin.String)"></a>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">removeMessageReaction</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, com.jessecorbett.diskord.api.model.Emoji, kotlin.String)/messageId">messageId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, com.jessecorbett.diskord.api.model.Emoji, kotlin.String)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.api.rest.client.ChannelClient$removeMessageReaction(kotlin.String, com.jessecorbett.diskord.api.model.Emoji, kotlin.String)/userId">userId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"@me"<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Remove a reaction from a message.</p>
+<h3>Parameters</h3>
+<p><a name="messageId"></a>
+<code>messageId</code> - The message to remove the reaction from.</p>
+<p><a name="emoji"></a>
+<code>emoji</code> - The custom emoji to remove.</p>
+<p><a name="userId"></a>
+<code>userId</code> - The user whose reaction to remove. Defaults to the current user's reaction.</p>
+<h3>Exceptions</h3>
+<p><a name="com.jessecorbett.diskord.api.exception.DiscordException"></a>
+<code>com.jessecorbett.diskord.api.exception.DiscordException</code> - </p>
 </BODY>
 </HTML>

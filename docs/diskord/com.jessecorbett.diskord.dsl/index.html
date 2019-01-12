@@ -54,15 +54,36 @@
 </tr>
 </tbody>
 </table>
+<h3>Extensions for External Classes</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="kotlin.collections.-mutable-list/index.html">kotlin.collections.MutableList</a></p>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 <h3>Functions</h3>
 <table>
 <tbody>
 <tr>
 <td>
+<p><a href="author.html">author</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">author</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$author(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedAuthor, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$author(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedAuthor, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.rest/-embed-author/index.html"><span class="identifier">EmbedAuthor</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL command to add an author field to an embed.</p>
+</td>
+</tr>
+<tr>
+<td>
 <p><a href="bot.html">bot</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">bot</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-bot/index.html"><span class="identifier">Bot</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-bot/index.html"><span class="identifier">Bot</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">bot</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/autoStart">autoStart</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;true<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/shardId">shardId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/shardCount">shardCount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$bot(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Function1((com.jessecorbett.diskord.dsl.Bot, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-bot/index.html"><span class="identifier">Bot</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-bot/index.html"><span class="identifier">Bot</span></a></code>
 <p>DSL function for initializing a bot.</p>
 </td>
 </tr>
@@ -71,7 +92,7 @@
 <p><a href="command.html">command</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><a href="-command-set/index.html"><span class="identifier">CommandSet</span></a><span class="symbol">.</span><span class="identifier">command</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$command(com.jessecorbett.diskord.dsl.CommandSet, kotlin.String, kotlin.SuspendFunction2((com.jessecorbett.diskord.dsl.Command, com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/command">command</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$command(com.jessecorbett.diskord.dsl.CommandSet, kotlin.String, kotlin.SuspendFunction2((com.jessecorbett.diskord.dsl.Command, com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><a href="-command/index.html"><span class="identifier">Command</span></a><span class="symbol">.</span><span class="symbol">(</span><a href="../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><a href="-command-set/index.html"><span class="identifier">CommandSet</span></a><span class="symbol">.</span><span class="identifier">command</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$command(com.jessecorbett.diskord.dsl.CommandSet, kotlin.String, kotlin.Boolean, kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/command">command</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$command(com.jessecorbett.diskord.dsl.CommandSet, kotlin.String, kotlin.Boolean, kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/allowBots">allowBots</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$command(com.jessecorbett.diskord.dsl.CommandSet, kotlin.String, kotlin.Boolean, kotlin.SuspendFunction1((com.jessecorbett.diskord.api.model.Message, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="keyword">suspend </span><a href="../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>DSL function for adding a <a href="-command/index.html">Command</a> to a <a href="-command-set/index.html">CommandSet</a>.</p>
 </td>
 </tr>
@@ -82,6 +103,60 @@
 <td>
 <code><span class="keyword">fun </span><a href="-bot/index.html"><span class="identifier">Bot</span></a><span class="symbol">.</span><span class="identifier">commands</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/prefix">prefix</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a>&nbsp;<span class="symbol">=</span>&nbsp;"."<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/commands">commands</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="-command/index.html"><span class="identifier">Command</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">=</span>&nbsp;ArrayList()<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$commands(com.jessecorbett.diskord.dsl.Bot, kotlin.String, kotlin.collections.MutableList((com.jessecorbett.diskord.dsl.Command)), kotlin.Function1((com.jessecorbett.diskord.dsl.CommandSet, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="-command-set/index.html"><span class="identifier">CommandSet</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>DSL function for hooking a <a href="-command-set/index.html">CommandSet</a> into a <a href="-bot/index.html">Bot</a> DSL instance.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="embed.html">embed</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">embed</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$embed(kotlin.Function1((com.jessecorbett.diskord.api.rest.Embed, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a></code>
+<p>DSL command to create a message embed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="fields.html">fields</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">fields</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$fields(com.jessecorbett.diskord.api.rest.Embed, kotlin.Function1((kotlin.collections.MutableList((com.jessecorbett.diskord.api.rest.EmbedField)), kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../com.jessecorbett.diskord.api.rest/-embed-field/index.html"><span class="identifier">EmbedField</span></a><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="../com.jessecorbett.diskord.api.rest/-embed-field/index.html"><span class="identifier">EmbedField</span></a><span class="symbol">&gt;</span></code>
+<p>DSL command to add a set of fields to an embed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="footer.html">footer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">footer</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$footer(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedFooter, kotlin.Unit)))/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$footer(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedFooter, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.rest/-embed-footer/index.html"><span class="identifier">EmbedFooter</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL command to add a footer to an embed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="image.html">image</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">image</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$image(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedImage, kotlin.Unit)))/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$image(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedImage, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.rest/-embed-image/index.html"><span class="identifier">EmbedImage</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL command to add an image to an embed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="provider.html">provider</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">provider</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$provider(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$provider(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.String)/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL command to add a provider field to an embed.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="video.html">video</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">.</span><span class="identifier">video</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl$video(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedVideo, kotlin.Unit)))/url">url</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl$video(com.jessecorbett.diskord.api.rest.Embed, kotlin.String, kotlin.Function1((com.jessecorbett.diskord.api.rest.EmbedVideo, kotlin.Unit)))/block">block</span><span class="symbol">:</span>&nbsp;<a href="../com.jessecorbett.diskord.api.rest/-embed-video/index.html"><span class="identifier">EmbedVideo</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{}<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>DSL command to add a video to an embed.</p>
 </td>
 </tr>
 </tbody>

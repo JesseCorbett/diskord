@@ -1,6 +1,6 @@
 $dokka.format:html
 $dokka.linkExtension:html
-$dokka.location:com.jessecorbett.diskord.api.rest$field(kotlin.collections.MutableList((com.jessecorbett.diskord.api.rest.EmbedField)), kotlin.String, kotlin.String, kotlin.Boolean)com.jessecorbett.diskord.api.rest/kotlin.collections.-mutable-list/field.html
+$dokka.location:com.jessecorbett.diskord.dsl$field(kotlin.collections.MutableList((com.jessecorbett.diskord.api.rest.EmbedField)), kotlin.String, kotlin.String, kotlin.Boolean)com.jessecorbett.diskord.dsl/kotlin.collections.-mutable-list/field.html
 $dokka.location:com.jessecorbett.diskord.util$toBase64(java.io.File)com.jessecorbett.diskord.util/java.io.-file/to-base64.html
 $dokka.location:com.jessecorbett.diskord.util$toByteArray(java.io.File)com.jessecorbett.diskord.util/java.io.-file/to-byte-array.html
 $dokka.location:com.jessecorbett.diskord.util$toRoleMention(kotlin.String)com.jessecorbett.diskord.util/kotlin.-string/to-role-mention.html

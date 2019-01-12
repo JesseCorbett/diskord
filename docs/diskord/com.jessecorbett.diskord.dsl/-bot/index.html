@@ -18,6 +18,12 @@ modify or interrupt this base class.</p>
 <h3>Parameters</h3>
 <p><a name="token"></a>
 <code>token</code> - The bot token from the discord application management page https://discordapp.com/developers/applications/.</p>
+<p><a name="autoStart"></a>
+<code>autoStart</code> - Automatically start the bot. Defaults to true.</p>
+<p><a name="shardId"></a>
+<code>shardId</code> - The shard id, if this bot is sharded.</p>
+<p><a name="shardCount"></a>
+<code>shardCount</code> - The count of shards, if the bot is sharded.</p>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -26,7 +32,7 @@ modify or interrupt this base class.</p>
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">Bot</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String)/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span></code>
+<code><span class="identifier">Bot</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int)/token">token</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int)/autoStart">autoStart</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;true<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int)/shardId">shardId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.dsl.Bot$<init>(kotlin.String, kotlin.Boolean, kotlin.Int, kotlin.Int)/shardCount">shardCount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;0<span class="symbol">)</span></code>
 <p>A bot implementation built using <a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/index.html">EnhancedEventListener</a> and providing a DSL for consuming and acting on events.</p>
 </td>
 </tr>
@@ -294,6 +300,15 @@ modify or interrupt this base class.</p>
 </tr>
 <tr>
 <td>
+<p><a href="start.html">start</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">start</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Starts the websocket connection.</p>
+</td>
+</tr>
+<tr>
+<td>
 <p><a href="started.html">started</a></p>
 </td>
 <td>
@@ -402,9 +417,19 @@ modify or interrupt this base class.</p>
 </td>
 <td>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">delete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Convenience property for deleting a message.</p>
+<p>Convenience function for deleting a message.</p>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">.</span><span class="identifier">delete</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Convenience property for deleting a message that was updated.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/react.html">react</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">react</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$react(com.jessecorbett.diskord.api.model.Message, kotlin.String)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">react</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$react(com.jessecorbett.diskord.api.model.Message, com.jessecorbett.diskord.api.model.Emoji)/emoji">emoji</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.model/-emoji/index.html"><span class="identifier">Emoji</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Convenience function to react to a message.</p>
 </td>
 </tr>
 <tr>
@@ -412,10 +437,10 @@ modify or interrupt this base class.</p>
 <p><a href="../../com.jessecorbett.diskord.util/-enhanced-event-listener/reply.html">reply</a></p>
 </td>
 <td>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.model.Message, kotlin.String)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.model.Message, kotlin.String, com.jessecorbett.diskord.api.rest.Embed)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.model.Message, kotlin.String, com.jessecorbett.diskord.api.rest.Embed)/embed">embed</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
+<p>Convenience function for sending a message in response to another.</p>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.websocket.events.MessageUpdate, kotlin.String, com.jessecorbett.diskord.api.rest.Embed)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.websocket.events.MessageUpdate, kotlin.String, com.jessecorbett.diskord.api.rest.Embed)/embed">embed</span><span class="symbol">:</span>&nbsp;<a href="../../com.jessecorbett.diskord.api.rest/-embed/index.html"><span class="identifier">Embed</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
 <p>Convenience property for sending a message in response to another.</p>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="../../com.jessecorbett.diskord.api.websocket.events/-message-update/index.html"><span class="identifier">MessageUpdate</span></a><span class="symbol">.</span><span class="identifier">reply</span><span class="symbol">(</span><span class="identifier" id="com.jessecorbett.diskord.util.EnhancedEventListener$reply(com.jessecorbett.diskord.api.websocket.events.MessageUpdate, kotlin.String)/text">text</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.jessecorbett.diskord.api.model/-message/index.html"><span class="identifier">Message</span></a></code>
-<p>Convenience property for sending a message in response to another being edited.</p>
 </td>
 </tr>
 </tbody>

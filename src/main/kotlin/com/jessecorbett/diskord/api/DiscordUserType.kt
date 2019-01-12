@@ -15,5 +15,8 @@ enum class DiscordUserType(val type: String) {
      */
     BEARER("Bearer");
 
+    /**
+     * Over the wire we want to send the type string, not enum name.
+     */
     override fun toString() = type
 }

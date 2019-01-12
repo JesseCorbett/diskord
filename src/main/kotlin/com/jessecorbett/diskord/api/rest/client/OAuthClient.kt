@@ -65,7 +65,7 @@ class OAuthClient(private val clientId: String, private val clientSecret: String
      * @param token The user's API token.
      *
      * @return The bearer token information.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getAccessToken(token: String): BearerToken {
         return getToken(token, AUTH_CODE)
@@ -77,7 +77,7 @@ class OAuthClient(private val clientId: String, private val clientSecret: String
      * @param token The user's refresh token.
      *
      * @return The bearer token information.
-     * @throws DiscordException
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getFromRefreshToken(token: String): BearerToken {
         return getToken(token, REFRESH_TOKEN)
