@@ -68,14 +68,6 @@ fun Embed.footer(text: String, block: EmbedFooter.() -> Unit = {}) {
 }
 
 /**
- * DSL command to add a set of fields to an embed.
- *
- * @param block The DSL lambda in which to specify the fields.
- */
-@DiskordDsl
-fun Embed.fields(block: MutableList<EmbedField>.() -> Unit) = fields.apply(block)
-
-/**
  * DSL command to add a field to a set of fields in an embed.
  *
  * @param name The name of the field.
