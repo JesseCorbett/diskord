@@ -1,21 +1,25 @@
-buildscript {
-    ext.kotlin_version = '1.3.11'
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" as String
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
-    }
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.11"
+    id "org.jetbrains.dokka" version "0.9.17"
+    id "maven-publish"
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
-group 'com.jessecorbett'
+dokka {
+    outputFormat = "html"
+    outputDirectory = "docs"
+}
 
-apply plugin: 'kotlin'
-apply plugin: 'org.jetbrains.dokka'
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = javadoc.destinationDir
+    inputs.dir 'src/main/kotlin'
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -24,14 +28,68 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 artifacts {
     archives sourcesJar
+    archives javadocJar
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "docs"
+group = 'com.jessecorbett'
+version = '1.0.1'
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+
+    pkg {
+        repo = "diskord"
+        name = "diskord"
+        licenses = ["Apache-2.0"]
+        vcsUrl = "https://gitlab.com/jesselcorbett/Diskord"
+        publications = ['DiskordPublication']
+        version {
+            name = "1.0.1"
+        }
+    }
 }
 
-build.finalizedBy(dokka)
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "jesse corbett"
+            name "Jesse Corbett"
+            email "jesselcorbett@gmail.com"
+        }
+    }
+
+    scm {
+        url "https://gitlab.com/jesselcorbett/Diskord"
+    }
+}
+
+publishing {
+    publications {
+        DiskordPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId project.group
+            artifactId 'diskord'
+            version project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'A Kotlin wrapper around the Discord API')
+                root.appendNode('name', 'Diskord')
+                root.appendNode('url', 'https://gitlab.com/jesselcorbett/Diskord')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
 
 repositories {
     mavenCentral()
