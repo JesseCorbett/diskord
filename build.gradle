@@ -46,7 +46,7 @@ bintray {
         vcsUrl = "https://gitlab.com/jesselcorbett/Diskord"
         publications = ['DiskordPublication']
         version {
-            name = version
+            name = diskordVersion
         }
     }
 }
