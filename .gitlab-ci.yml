@@ -8,10 +8,19 @@ buildAndTest:
   stage: build
   script:
     - gradle build
-    - gradle dokka
   artifacts:
     paths:
       - build/libs/
+  tags:
+    - docker
+document:
+  stage: build
+  script:
+    - gradle dokka
+    - gradle dokkaJavadoc
+  artifacts:
+    paths:
+      - build/docs/
       - docs/
   tags:
     - docker
