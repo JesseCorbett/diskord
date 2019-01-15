@@ -13,7 +13,7 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ### Gradle
 ```
 repositories {
-   	jcenter()
+    jcenter()
 }
 
 dependencies {
@@ -145,9 +145,9 @@ fun main() {
 * Does this support voice chat?
     * No, voice chat is not supported at this time. If you need it I recommend checking out [JDA](https://github.com/DV8FromTheWorld/JDA) or [Discord4J](https://github.com/Discord4J/Discord4J)
 * Is this library done?
-    * It still needs some tests written, but Diskord is actively maintained and API complete, so it should be safe to use for a real program
+    * It still needs some tests written, but Diskord is actively maintained and API complete, so it should be safe to use
 * Can I contact you to ask a question/contribute to the project/report a bug/tell you this is all shit?
-    * Go for it!
+    * [Go for it!](https://discord.gg/UPTWsZ5)
 
 ## Things to do
 - Add more testing
