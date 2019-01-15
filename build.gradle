@@ -6,6 +6,9 @@ plugins {
     id "com.jfrog.bintray" version "1.8.4"
 }
 
+group = 'com.jessecorbett'
+version = diskordVersion
+
 dokka {
     outputFormat = "html"
     outputDirectory = "docs"
@@ -31,9 +34,6 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
-
-group = 'com.jessecorbett'
-version = '1.0.1'
 
 bintray {
     user = System.getenv("BINTRAY_USER")
