@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.util.EnhancedEventListener
+import com.jessecorbett.diskord.util.words
 
 /**
  * Marks a class or function as belonging to the Diskord DSL.

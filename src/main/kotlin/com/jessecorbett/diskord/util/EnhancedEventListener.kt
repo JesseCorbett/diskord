@@ -1,13 +1,18 @@
 package com.jessecorbett.diskord.util
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.jessecorbett.diskord.api.model.Channel
 import com.jessecorbett.diskord.api.model.Emoji
 import com.jessecorbett.diskord.api.model.Guild
 import com.jessecorbett.diskord.api.model.Message
-import com.jessecorbett.diskord.api.rest.Embed
+import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.api.rest.client.ChannelClient
 import com.jessecorbett.diskord.api.websocket.EventListener
 import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
+import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
+import com.jessecorbett.diskord.dsl.embed
 import kotlinx.coroutines.runBlocking
+import java.time.Instant
 
 
 /**
@@ -35,7 +40,30 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun Message.reply(text: String = "", embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+    suspend fun Message.reply(text: String, embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+
+    /**
+     * Convenience function for sending a message in response to another.
+     *
+     * @param text The message to send.
+     * @param embedDsl A usage of the message embed DSL to create the embed object.
+     * @see embed
+     *
+     * @return the [Message] created
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend fun Message.reply(text: String, embedDsl: Embed.() -> Unit) = clientStore.channels[channelId].sendMessage(text, embedDsl)
+
+    /**
+     * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
+     *
+     * @param block The DSL call to build a combination text and embed content.
+     * @see com.jessecorbett.diskord.dsl.message
+     *
+     * @return the created [Message].
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend fun Message.reply(block: CombinedMessageEmbed.() -> Unit) = clientStore.channels[channelId].sendMessage(block)
 
     /**
      * Convenience function for deleting a message.
@@ -71,7 +99,30 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun MessageUpdate.reply(text: String = "", embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+    suspend fun MessageUpdate.reply(text: String, embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+
+    /**
+     * Convenience function for sending a message in response to another.
+     *
+     * @param text The message to send.
+     * @param embedDsl A usage of the message embed DSL to create the embed object.
+     * @see embed
+     *
+     * @return the [Message] created
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend fun MessageUpdate.reply(text: String, embedDsl: Embed.() -> Unit) = clientStore.channels[channelId].sendMessage(text, embedDsl)
+
+    /**
+     * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
+     *
+     * @param block The DSL call to build a combination text and embed content.
+     * @see com.jessecorbett.diskord.dsl.message
+     *
+     * @return the created [Message].
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend fun MessageUpdate.reply(block: CombinedMessageEmbed.() -> Unit) = clientStore.channels[channelId].sendMessage(block)
 
     /**
      * Convenience property for deleting a message that was updated.

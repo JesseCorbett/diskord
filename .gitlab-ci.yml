@@ -1,0 +1,34 @@
+image: gradle
+
+stages:
+  - build
+  - release
+
+buildAndTest:
+  stage: build
+  script:
+    - gradle build
+  artifacts:
+    paths:
+      - build/libs/
+  tags:
+    - docker
+document:
+  stage: build
+  script:
+    - gradle dokka
+    - gradle dokkaJavadoc
+  artifacts:
+    paths:
+      - build/docs/
+      - docs/
+  tags:
+    - docker
+releaseToBintray:
+  stage: release
+  script:
+    - gradle bintrayUpload
+  tags:
+    - docker
+  only:
+    - master

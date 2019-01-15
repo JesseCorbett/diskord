@@ -1,4 +1,4 @@
-# Diskord [![](https://jitpack.io/v/com.jessecorbett/Diskord.svg)](https://jitpack.io/#com.jessecorbett/Diskord) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
+# Diskord [![jcenter](https://api.bintray.com/packages/jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
@@ -13,11 +13,11 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ### Gradle
 ```
 repositories {
-   	maven { url 'https://jitpack.io' }
+   	jcenter()
 }
 
 dependencies {
-    implementation 'com.jessecorbett:Diskord:1.0.1'
+    implementation 'com.jessecorbett:diskord:1.1.0'
 }
 ```
 
@@ -25,15 +25,15 @@ dependencies {
 ```
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com/</url>
     </repository>
 </repositories>
 
 <dependency>
     <groupId>com.jessecorbett</groupId>
-    <artifactId>Diskord</artifactId>
-    <version>1.0.1</version>
+    <artifactId>diskord</artifactId>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -73,6 +73,26 @@ fun main() {
             command("echo") {
                 reply(words.drop(1).joinToString(" "))
                 delete()
+            }
+        }
+    }
+}
+```
+
+### Embed Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+fun main() {
+    bot(BOT_TOKEN) {
+        commands {
+            command("embed") {
+                delete()
+                reply {
+                    text = "This is an embed"
+                    title = "Embed title"
+                    description = "You can declare all the things here"
+                }
             }
         }
     }

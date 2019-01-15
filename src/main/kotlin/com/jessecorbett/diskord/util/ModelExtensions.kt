@@ -7,6 +7,8 @@ import com.jessecorbett.diskord.api.rest.PatchGuildMember
 import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname
 import com.jessecorbett.diskord.api.rest.client.ChannelClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
+import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
+import com.jessecorbett.diskord.dsl.embed
 
 
 /*
@@ -141,6 +143,29 @@ val Emoji.tag: String
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
 suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null) = createMessage(CreateMessage(content = message, embed = embed))
+
+/**
+ * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
+ *
+ * @param message The text message to send.
+ * @param embedDsl A usage of the message embed DSL to create the embed object.
+ * @see embed
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ */
+suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -> Unit) = sendMessage(message,  embed(embedDsl))
+
+/**
+ * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
+ *
+ * @param block The DSL call to build a combination text and embed content.
+ * @see com.jessecorbett.diskord.dsl.message
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ */
+suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) = CombinedMessageEmbed().apply(block).let { sendMessage(it.text,  it.embed()) }
 
 /**
  * Changes the user's nickname in this client's guild.
