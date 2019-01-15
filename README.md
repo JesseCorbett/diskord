@@ -79,6 +79,26 @@ fun main() {
 }
 ```
 
+### Embed Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+fun main() {
+    bot(BOT_TOKEN) {
+        commands {
+            command("embed") {
+                delete()
+                reply {
+                    text = "This is an embed"
+                    title = "Embed title"
+                    description = "You can declare all the things here"
+                }
+            }
+        }
+    }
+}
+```
+
 ### Reaction Example
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
