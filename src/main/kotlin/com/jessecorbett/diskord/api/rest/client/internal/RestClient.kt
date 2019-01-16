@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
+import java.time.format.DateTimeFormatter
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -65,9 +66,12 @@ abstract class RestClient(
                     }
 
                     override fun onResponse(call: Call, response: Response) {
+                        val instantAtDiscordServer = DateTimeFormatter.RFC_1123_DATE_TIME.parse(response.header("Date"), Instant::from)
+                        val discordAheadBySeconds = instantAtDiscordServer.epochSecond - Instant.now().epochSecond // Count the seconds in the future Discord is
+
                         rateLimitInfo.limit = response.header("X-RateLimit-Limit")?.toInt() ?: rateLimit.limit
                         rateLimit.remaining = response.header("X-RateLimit-Remaining")?.toInt() ?: rateLimit.remaining
-                        rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong() ?: rateLimit.resetTime.epochSecond)
+                        rateLimit.resetTime = Instant.ofEpochSecond(response.headers().get("X-RateLimit-Reset")?.toLong()?.plus(discordAheadBySeconds) ?: rateLimit.resetTime.epochSecond)
 
                         if (!response.isSuccessful) {
                             cont.resumeWithException(captureFailure(response))
