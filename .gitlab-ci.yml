@@ -4,10 +4,10 @@ stages:
   - build
   - release
 
-buildAndTest:
+test:
   stage: build
   script:
-    - gradle build
+    - gradle test
   artifacts:
     paths:
       - build/libs/
@@ -17,10 +17,8 @@ document:
   stage: build
   script:
     - gradle dokka
-    - gradle dokkaJavadoc
   artifacts:
     paths:
-      - build/docs/
       - docs/
   tags:
     - docker
