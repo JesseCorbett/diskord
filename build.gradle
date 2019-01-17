@@ -11,7 +11,7 @@ version = diskordVersion
 
 dokka {
     outputFormat = "html"
-    outputDirectory = "docs"
+    outputDirectory = "public"
 }
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {

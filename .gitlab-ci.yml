@@ -17,7 +17,7 @@ pages:
     - gradle dokka --no-daemon
   artifacts:
     paths:
-      - docs
+      - public/
   tags:
     - docker
   only:
@@ -29,7 +29,7 @@ releaseToBintray:
     - gradle bintrayUpload --no-daemon
   artifacts:
     paths:
-      - build/libs
+      - build/libs/
   tags:
     - docker
   only:
