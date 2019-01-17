@@ -1,11 +1,12 @@
 package com.jessecorbett.diskord.api.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.util.Color
 
 data class Role(
         @JsonProperty("id") val id: String,
         @JsonProperty("name") val name: String,
-        @JsonProperty("color") val color: Int,  // TODO: Convert to RGB
+        @JsonProperty("color") val color: Color,
         @JsonProperty("hoist") val isUserListPinned: Boolean,
         @JsonProperty("position") val position: Int,
         @JsonProperty("permissions") val permissions: Int,
