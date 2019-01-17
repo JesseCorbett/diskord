@@ -10,6 +10,7 @@ test:
     - gradle test --no-daemon
   tags:
     - docker
+
 pages:
   stage: build
   script:
@@ -21,6 +22,7 @@ pages:
     - docker
   only:
     - master
+
 releaseToBintray:
   stage: release
   script:
@@ -32,3 +34,4 @@ releaseToBintray:
     - docker
   only:
     - master
+  when: manual
