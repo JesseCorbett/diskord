@@ -124,6 +124,10 @@ publishing {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 repositories {
     mavenCentral()
 }
@@ -139,5 +143,7 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
     implementation "org.slf4j:slf4j-api:1.7.25"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
+    testImplementation "com.willowtreeapps.assertk:assertk-jvm:0.12"
+    testImplementation "io.mockk:mockk:1.9"
 }
