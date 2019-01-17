@@ -10,22 +10,25 @@ test:
     - gradle test --no-daemon
   tags:
     - docker
-document:
+    -
+pages:
   stage: build
   script:
     - gradle dokka --no-daemon
   artifacts:
     paths:
-      - docs/
+      - docs
   tags:
     - docker
+  only:
+    - master
 releaseToBintray:
   stage: release
   script:
     - gradle bintrayUpload --no-daemon
   artifacts:
     paths:
-      - build/libs/
+      - build/libs
   tags:
     - docker
   only:
