@@ -10,7 +10,6 @@ test:
     - gradle test --no-daemon
   tags:
     - docker
-    -
 pages:
   stage: build
   script:
