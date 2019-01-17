@@ -7,16 +7,13 @@ stages:
 test:
   stage: build
   script:
-    - gradle test
-  artifacts:
-    paths:
-      - build/libs/
+    - gradle test --no-daemon
   tags:
     - docker
 document:
   stage: build
   script:
-    - gradle dokka
+    - gradle dokka --no-daemon
   artifacts:
     paths:
       - docs/
@@ -25,7 +22,10 @@ document:
 releaseToBintray:
   stage: release
   script:
-    - gradle bintrayUpload
+    - gradle bintrayUpload --no-daemon
+  artifacts:
+    paths:
+      - build/libs/
   tags:
     - docker
   only:
