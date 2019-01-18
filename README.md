@@ -148,6 +148,10 @@ fun main() {
     * It still needs some tests written, but Diskord is actively maintained and API complete, so it should be safe to use
 * Can I contact you to ask a question/contribute to the project/report a bug/tell you this is all shit?
     * [Go for it!](https://discord.gg/UPTWsZ5)
+* What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
+    * You can use our snapshot versions by adding the gitlab maven repository
+        * Repository URL https://gitlab.com/api/v4/projects/10363714/packages/maven
+        * Artifact directory https://gitlab.com/jesselcorbett/Diskord/-/packages
 
 ## Things to do
 - Add more testing
