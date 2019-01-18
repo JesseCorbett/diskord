@@ -33,5 +33,5 @@ internal inline fun <reified T> Response.bodyAsList(): List<T> {
     return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, T::class.java))
 }
 
-internal const val defaultUserAgentUrl = "https://github.com/JesseCorbett/Diskord"
-internal const val defaultUserAgentVersion = "0.3.0"
+internal const val defaultUserAgentUrl = "https://gitlab.com/jesselcorbett/Diskord"
+internal const val defaultUserAgentVersion = "1.1.1"
