@@ -46,7 +46,7 @@ bintray {
         name = "diskord"
         licenses = ["Apache-2.0"]
         vcsUrl = "https://gitlab.com/jesselcorbett/Diskord"
-        publications = ['DiskordPublication']
+        publications = ['Release']
         version {
             name = diskordVersion
         }
@@ -75,14 +75,44 @@ def pomConfig = {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "gitlab"
+            url = "https://gitlab.com/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+
     publications {
-        DiskordPublication(MavenPublication) {
+        Release(MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact javadocJar
             groupId project.group
             artifactId 'diskord'
             version project.version
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'A Kotlin wrapper around the Discord API')
+                root.appendNode('name', 'Diskord')
+                root.appendNode('url', 'https://gitlab.com/jesselcorbett/Diskord')
+                root.children().last() + pomConfig
+            }
+        }
+
+        Snapshot(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId project.group
+            artifactId 'diskord'
+            version "${project.version}-SNAPSHOT"
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', 'A Kotlin wrapper around the Discord API')

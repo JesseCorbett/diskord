@@ -23,13 +23,19 @@ pages:
   only:
     - master
 
-releaseToBintray:
+publishSnapshot:
   stage: release
   script:
-    - gradle bintrayUpload --no-daemon
-  artifacts:
-    paths:
-      - build/libs/
+    - gradle publishSnapshotPublicationToGitlabRepository --no-daemon
+  tags:
+    - docker
+  only:
+    - develop
+
+publishReleaseVersion:
+  stage: release
+  script:
+    - gradle bintrayUpload publishReleasePublicationToGitlabRepository --no-daemon
   tags:
     - docker
   only:
