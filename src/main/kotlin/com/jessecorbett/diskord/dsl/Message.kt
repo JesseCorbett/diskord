@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.dsl
 
+import com.jessecorbett.diskord.api.model.Color
 import com.jessecorbett.diskord.api.rest.*
 import java.time.Instant
 
@@ -95,7 +96,7 @@ class CombinedMessageEmbed(
         var description: String? = null,
         var url: String? = null,
         var timestamp: Instant? = null,
-        var color: Int? = null,
+        var color: Color? = null,
         var footer: EmbedFooter? = null,
         var image: EmbedImage? = null,
         var thumbnail: EmbedImage? = null,

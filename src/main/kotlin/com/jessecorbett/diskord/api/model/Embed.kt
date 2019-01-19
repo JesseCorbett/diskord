@@ -8,7 +8,7 @@ data class Embed(
         @JsonProperty("description") val description: String? = null,
         @JsonProperty("url") val url: String? = null,
         @JsonProperty("timestamp") val timestamp: Instant? = null,
-        @JsonProperty("color") val color: Int? = null,
+        @JsonProperty("color") val color: Color? = null,
         @JsonProperty("footer") val footer: EmbedFooter? = null,
         @JsonProperty("image") val image: EmbedImage? = null,
         @JsonProperty("thumbnail") val thumbnail: EmbedImage? = null,

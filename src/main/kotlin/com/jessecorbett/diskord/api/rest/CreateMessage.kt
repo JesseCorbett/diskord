@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.jessecorbett.diskord.api.model.Color
 import java.time.Instant
 
 data class CreateMessage(
@@ -17,7 +18,7 @@ data class Embed(
         @JsonProperty("description") var description: String? = null,
         @JsonProperty("url") var url: String? = null,
         @JsonProperty("timestamp") var timestamp: Instant? = null,
-        @JsonProperty("color") var color: Int? = null,
+        @JsonProperty("color") var color: Color? = null,
         @JsonProperty("footer") var footer: EmbedFooter? = null,
         @JsonProperty("image") var image: EmbedImage? = null,
         @JsonProperty("thumbnail") var thumbnail: EmbedImage? = null,

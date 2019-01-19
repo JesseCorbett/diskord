@@ -1,18 +1,22 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.model.Webhook
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
-import com.jessecorbett.diskord.api.rest.client.WebhookClient
+import assertk.assert
+import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
+import assertk.assertions.isNotEqualTo
+import assertk.assertions.isTrue
 import com.jessecorbett.diskord.api.exception.DiscordException
 import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
+import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.CreateWebhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
+import com.jessecorbett.diskord.api.rest.client.ChannelClient
+import com.jessecorbett.diskord.api.rest.client.WebhookClient
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class WebhookClientIntegration {
     private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
@@ -21,14 +25,14 @@ class WebhookClientIntegration {
     private lateinit var webhook: Webhook
     private lateinit var webhookClient: WebhookClient
 
-    @Before fun setup() {
+    @BeforeEach fun setup() {
         runBlocking {
             webhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
             webhookClient = WebhookClient(token, webhook.id)
         }
     }
 
-    @After fun clean() {
+    @AfterEach fun clean() {
         runBlocking {
             webhookClient.delete()
         }
@@ -52,11 +56,11 @@ class WebhookClientIntegration {
         runBlocking {
             webhookClient.update(PatchWebhook(randomString()))
             val newName = webhookClient.getWebhook().defaultName
-            Assert.assertNotEquals(originalName, newName)
+            assert(originalName).isNotEqualTo(newName)
 
             webhookClient.update(PatchWebhook(originalName))
             val revertedName = webhookClient.getWebhook().defaultName
-            Assert.assertEquals(originalName, revertedName)
+            assert(originalName).isEqualTo(revertedName)
         }
     }
 
@@ -66,11 +70,11 @@ class WebhookClientIntegration {
         runBlocking {
             webhookClient.update(PatchWebhook(randomString()), webhook.token)
             val newName = webhookClient.getWebhook().defaultName
-            Assert.assertNotEquals(originalName, newName)
+            assert(originalName).isNotEqualTo(newName)
 
             webhookClient.update(PatchWebhook(originalName), webhook.token)
             val revertedName = webhookClient.getWebhook().defaultName
-            Assert.assertEquals(originalName, revertedName)
+            assert(originalName).isEqualTo(revertedName)
         }
     }
 
@@ -86,11 +90,11 @@ class WebhookClientIntegration {
             try {
                 client.getWebhook()
             } catch (e: DiscordException) {
-                Assert.assertTrue(e is DiscordNotFoundException)
+                assert(e).isInstanceOf(DiscordNotFoundException::class)
                 deleted = true
             }
 
-            Assert.assertTrue(deleted)
+            assert(deleted).isTrue()
         }
     }
 
@@ -106,11 +110,11 @@ class WebhookClientIntegration {
             try {
                 client.getWebhook()
             } catch (e: DiscordException) {
-                Assert.assertTrue(e is DiscordNotFoundException)
+                assert(e).isInstanceOf(DiscordNotFoundException::class)
                 deleted = true
             }
 
-            Assert.assertTrue(deleted)
+            assert(deleted).isTrue()
         }
     }
 
@@ -123,8 +127,8 @@ class WebhookClientIntegration {
             val channelClient = ChannelClient(token, webhookChannel)
             val message = channelClient.getMessage(channelClient.get().lastMessageId!!)
 
-            Assert.assertEquals(content, message.content)
-            Assert.assertEquals(name, message.author.username)
+            assert(content).isEqualTo(message.content)
+            assert(name).isEqualTo(message.author.username)
         }
     }
 }
