@@ -5,7 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import org.junit.jupiter.api.Test
 
-class ColorTest {
+class ColorsTest {
     @Test
     fun `should convert rgb floats to color`() {
         assert(Colors.rgb(1F, 0F, 0F)).isEqualTo(0xFF0000)

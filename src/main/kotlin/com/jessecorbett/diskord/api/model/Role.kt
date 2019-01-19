@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.api.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.jessecorbett.diskord.util.Color
 
 data class Role(
         @JsonProperty("id") val id: String,

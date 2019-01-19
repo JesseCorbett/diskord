@@ -1,9 +1,7 @@
 package com.jessecorbett.diskord.util
 
-/**
- * A representation of a color for use with Discord's embed API.
- */
-typealias Color = Int
+import com.jessecorbett.diskord.api.model.Color
+
 
 /**
  * A collection of convenience methods and predefined colors for working with the color field in embeds.
@@ -212,6 +210,8 @@ object Colors {
 
     /**
      * Converts a [Color] instance into a [Triple] containing the `red`, `green`, and `blue` values of the color.
+     *
+     * @param color the color to convert
      */
     fun toRGB(color: Color) = Triple(color shr 16 and 0xFF, color shr 8 and 0xFF, color and 0xFF)
 }

@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.dsl
 
+import com.jessecorbett.diskord.api.model.Color
 import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.util.Color
 import java.time.Instant
 
 /**
