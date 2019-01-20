@@ -58,38 +58,40 @@ class DiscordWebSocket(
     }
 
     private fun startConnection(): WebSocket {
-        val gatewayUrl = runBlocking { DiscordClient(token, userType).getBotGateway().url }
+        GlobalScope.launch {
+            val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-        val request = Request.Builder()
-                .url("$gatewayUrl?encoding=json&v=6")
-                .addHeader("Authorization", "Bot $token")
-                .build()
+            val request = Request.Builder()
+                    .url("$gatewayUrl?encoding=json&v=6")
+                    .addHeader("Authorization", "Bot $token")
+                    .build()
 
-        return httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
-            override fun start() {
-                websocketLifecycleListener?.started()
-            }
+            socket = httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
+                override fun start() {
+                    websocketLifecycleListener?.started()
+                }
 
-            override fun closing(code: WebSocketCloseCode, reason: String) {
-                logger.info("Closing with code '$code' and reason '$reason'")
-                if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                override fun closing(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closing with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                        restart()
+                    websocketLifecycleListener?.closing(code, reason)
+                }
+
+                override fun closed(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closed with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                        restart()
+                    websocketLifecycleListener?.closed(code, reason)
+                }
+
+                override fun failed(failure: Throwable, response: Response?) {
+                    logger.error("Socket connection encountered an exception", failure)
                     restart()
-                websocketLifecycleListener?.closing(code, reason)
-            }
-
-            override fun closed(code: WebSocketCloseCode, reason: String) {
-                logger.info("Closed with code '$code' and reason '$reason'")
-                if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                    restart()
-                websocketLifecycleListener?.closed(code, reason)
-            }
-
-            override fun failed(failure: Throwable, response: Response?) {
-                logger.error("Socket connection encountered an exception", failure)
-                restart()
-                websocketLifecycleListener?.failed(failure, response)
-            }
-        }))
+                    websocketLifecycleListener?.failed(failure, response)
+                }
+            }))
+        }
     }
 
     /**
@@ -110,7 +112,7 @@ class DiscordWebSocket(
     fun close(forceClose: Boolean = false) {
         logger.debug("Closing")
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
-        runBlocking { heartbeatJob?.cancelAndJoin() }
+        GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
         socket?.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
         if (forceClose) {
