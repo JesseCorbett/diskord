@@ -18,9 +18,8 @@ import kotlin.test.Test
 import kotlin.test.Ignore
 
 class DiscordClientIntegration {
-    private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
     private val tokensUser = "346444615831781376"
-    private val discordClient = DiscordClient(token)
+    private val discordClient = DiscordClient(BOT_TEST_TOKEN)
     private val userForDM = "321775636798504962"
 
     @Test fun getApiGatewayTest() {
@@ -41,7 +40,7 @@ class DiscordClientIntegration {
 
         val guild = runBlocking { discordClient.createGuild(createGuild) }
 
-        val guildClient = GuildClient(token, guild.id)
+        val guildClient = GuildClient(BOT_TEST_TOKEN, guild.id)
         runBlocking {
             guildClient.get()
             guildClient.delete()

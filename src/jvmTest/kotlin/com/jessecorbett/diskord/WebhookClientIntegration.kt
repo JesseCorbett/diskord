@@ -19,7 +19,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class WebhookClientIntegration {
-    private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
     private val webhookChannel = "424046633253339136"
 
     private lateinit var webhook: Webhook
@@ -27,8 +26,8 @@ class WebhookClientIntegration {
 
     @BeforeTest fun setup() {
         runBlocking {
-            webhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
-            webhookClient = WebhookClient(token, webhook.id)
+            webhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
+            webhookClient = WebhookClient(BOT_TEST_TOKEN, webhook.id)
         }
     }
 
@@ -80,8 +79,8 @@ class WebhookClientIntegration {
 
     @Test fun deleteWebhookTest() {
         runBlocking {
-            val webhookId = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString())).id
-            val client = WebhookClient(token, webhookId)
+            val webhookId = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString())).id
+            val client = WebhookClient(BOT_TEST_TOKEN, webhookId)
 
             client.getWebhook()
             client.delete()
@@ -100,8 +99,8 @@ class WebhookClientIntegration {
 
     @Test fun deleteWebhookWithTokenTest() {
         runBlocking {
-            val ourWebhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
-            val client = WebhookClient(token, ourWebhook.id)
+            val ourWebhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
+            val client = WebhookClient(BOT_TEST_TOKEN, ourWebhook.id)
 
             client.getWebhook()
             client.delete(ourWebhook.token)
@@ -124,7 +123,7 @@ class WebhookClientIntegration {
             val name = randomString()
             webhookClient.execute(webhook.token, WebhookSubmission(content, name))
 
-            val channelClient = ChannelClient(token, webhookChannel)
+            val channelClient = ChannelClient(BOT_TEST_TOKEN, webhookChannel)
             val message = channelClient.getMessage(channelClient.get().lastMessageId!!)
 
             assertThat(content).isEqualTo(message.content)

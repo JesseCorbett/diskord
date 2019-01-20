@@ -1,3 +1,13 @@
-rootProject.name = 'diskord'
-include 'jvm'
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlin-multiplatform") {
+                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+}
 
+rootProject.name = 'diskord'
+
+enableFeaturePreview('GRADLE_METADATA')

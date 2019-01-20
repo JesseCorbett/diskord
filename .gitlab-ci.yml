@@ -1,5 +1,8 @@
 image: gradle
 
+variables:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
 stages:
   - build
   - release
@@ -7,14 +10,14 @@ stages:
 test:
   stage: build
   script:
-    - gradle test --no-daemon
+    - gradle check
   tags:
     - docker
 
 pages:
   stage: build
   script:
-    - gradle dokka --no-daemon
+    - gradle dokka
   artifacts:
     paths:
       - public/
@@ -26,7 +29,7 @@ pages:
 publishSnapshot:
   stage: release
   script:
-    - gradle publishSnapshotPublicationToGitlabRepository --no-daemon
+    - gradle publishJvmPublicationToGitlabRepository
   tags:
     - docker
   only:
@@ -35,7 +38,7 @@ publishSnapshot:
 publishReleaseVersion:
   stage: release
   script:
-    - gradle publishReleasePublicationToGitlabRepository bintrayUpload --no-daemon
+    - gradle publishJvmPublicationToGitlabRepository bintrayUpload
   tags:
     - docker
   only:

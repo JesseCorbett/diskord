@@ -45,7 +45,7 @@ Any function in the scope of the DSL will have access to a ClientStore to access
 
 Additionally, extensions on the bot DSL, like the command DSL, can be done simply by writing extension functions which hook into the bot DSL on instantiation.
 
-You can access the documentation [here.](https://jesselcorbett.gitlab.io/Diskord/jvm/)
+You can access the documentation [here.](https://jesselcorbett.gitlab.io/Diskord/diskord/)
 
 ### Ping Pong Example
 ```kotlin
@@ -149,7 +149,7 @@ fun main() {
 * Can I contact you to ask a question/contribute to the project/report a bug/tell you this is all shit?
     * [Go for it!](https://discord.gg/UPTWsZ5)
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
-    * You can use our snapshot versions by adding the gitlab maven repository
+    * You can use our development versions by using the gitlab maven repository
         * Repository URL https://gitlab.com/api/v4/projects/10363714/packages/maven
         * Artifact directory https://gitlab.com/jesselcorbett/Diskord/-/packages
 
