@@ -1,7 +1,7 @@
-image: gradle
+image: gradle:4.10.3-alpine
 
 variables:
-  GRADLE_OPTS: -Dorg.gradle.daemon=false
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
 
 stages:
   - build
