@@ -26,7 +26,7 @@ pages:
 publishSnapshot:
   stage: release
   script:
-    - gradle publishSnapshotPublicationToGitlabRepository --no-daemon
+    - gradle publishJvmPublicationToGitlabRepository --no-daemon
   tags:
     - docker
   only:
@@ -35,7 +35,7 @@ publishSnapshot:
 publishReleaseVersion:
   stage: release
   script:
-    - gradle bintrayUpload publishReleasePublicationToGitlabRepository --no-daemon
+    - gradle bintrayUpload publishJvmPublicationToGitlabRepository --no-daemon
   tags:
     - docker
   only:

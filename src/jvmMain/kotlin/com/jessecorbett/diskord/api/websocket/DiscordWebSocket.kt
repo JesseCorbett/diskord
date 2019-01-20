@@ -53,11 +53,11 @@ class DiscordWebSocket(
 
     init {
         if (autoStart) {
-            socket = startConnection()
+            startConnection()
         }
     }
 
-    private fun startConnection(): WebSocket {
+    private fun startConnection() {
         GlobalScope.launch {
             val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
@@ -100,7 +100,7 @@ class DiscordWebSocket(
      * Not technically different from [DiscordWebSocket.restart] in functionality if the bot isn't already running.
      */
     fun start() {
-        socket = startConnection()
+        startConnection()
     }
 
     /**
@@ -129,7 +129,7 @@ class DiscordWebSocket(
     fun restart() {
         logger.debug("Restarting")
         close()
-        socket = startConnection()
+        startConnection()
         logger.info("Restarted connection")
     }
 
