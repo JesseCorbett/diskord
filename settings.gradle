@@ -1,1 +1,3 @@
 rootProject.name = 'diskord'
+include 'jvm'
+

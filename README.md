@@ -1,4 +1,4 @@
-# Diskord [![jcenter](https://api.bintray.com/packages/jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
+# Diskord [![jcenter](https://api.bintray.com/packages/com.jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/com.jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.2.0'
+    implementation 'com.com.jessecorbett:diskord:1.2.0'
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
 </repositories>
 
 <dependency>
-    <groupId>com.jessecorbett</groupId>
+    <groupId>com.com.jessecorbett</groupId>
     <artifactId>diskord</artifactId>
     <version>1.2.0</version>
 </dependency>
