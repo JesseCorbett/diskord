@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEqualTo
@@ -14,9 +14,9 @@ import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.api.rest.client.ChannelClient
 import com.jessecorbett.diskord.api.rest.client.WebhookClient
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class WebhookClientIntegration {
     private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
@@ -25,14 +25,14 @@ class WebhookClientIntegration {
     private lateinit var webhook: Webhook
     private lateinit var webhookClient: WebhookClient
 
-    @BeforeEach fun setup() {
+    @BeforeTest fun setup() {
         runBlocking {
             webhook = ChannelClient(token, webhookChannel).createWebhook(CreateWebhook(randomString()))
             webhookClient = WebhookClient(token, webhook.id)
         }
     }
 
-    @AfterEach fun clean() {
+    @AfterTest fun clean() {
         runBlocking {
             webhookClient.delete()
         }
@@ -56,11 +56,11 @@ class WebhookClientIntegration {
         runBlocking {
             webhookClient.update(PatchWebhook(randomString()))
             val newName = webhookClient.getWebhook().defaultName
-            assert(originalName).isNotEqualTo(newName)
+            assertThat(originalName).isNotEqualTo(newName)
 
             webhookClient.update(PatchWebhook(originalName))
             val revertedName = webhookClient.getWebhook().defaultName
-            assert(originalName).isEqualTo(revertedName)
+            assertThat(originalName).isEqualTo(revertedName)
         }
     }
 
@@ -70,11 +70,11 @@ class WebhookClientIntegration {
         runBlocking {
             webhookClient.update(PatchWebhook(randomString()), webhook.token)
             val newName = webhookClient.getWebhook().defaultName
-            assert(originalName).isNotEqualTo(newName)
+            assertThat(originalName).isNotEqualTo(newName)
 
             webhookClient.update(PatchWebhook(originalName), webhook.token)
             val revertedName = webhookClient.getWebhook().defaultName
-            assert(originalName).isEqualTo(revertedName)
+            assertThat(originalName).isEqualTo(revertedName)
         }
     }
 
@@ -90,11 +90,11 @@ class WebhookClientIntegration {
             try {
                 client.getWebhook()
             } catch (e: DiscordException) {
-                assert(e).isInstanceOf(DiscordNotFoundException::class)
+                assertThat(e).isInstanceOf(DiscordNotFoundException::class)
                 deleted = true
             }
 
-            assert(deleted).isTrue()
+            assertThat(deleted).isTrue()
         }
     }
 
@@ -110,11 +110,11 @@ class WebhookClientIntegration {
             try {
                 client.getWebhook()
             } catch (e: DiscordException) {
-                assert(e).isInstanceOf(DiscordNotFoundException::class)
+                assertThat(e).isInstanceOf(DiscordNotFoundException::class)
                 deleted = true
             }
 
-            assert(deleted).isTrue()
+            assertThat(deleted).isTrue()
         }
     }
 
@@ -127,8 +127,8 @@ class WebhookClientIntegration {
             val channelClient = ChannelClient(token, webhookChannel)
             val message = channelClient.getMessage(channelClient.get().lastMessageId!!)
 
-            assert(content).isEqualTo(message.content)
-            assert(name).isEqualTo(message.author.username)
+            assertThat(content).isEqualTo(message.content)
+            assertThat(name).isEqualTo(message.author.username)
         }
     }
 }

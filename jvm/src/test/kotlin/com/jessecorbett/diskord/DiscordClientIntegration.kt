@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.*
 import com.jessecorbett.diskord.api.exception.DiscordBadPermissionsException
 import com.jessecorbett.diskord.api.exception.DiscordException
@@ -14,8 +14,8 @@ import com.jessecorbett.diskord.api.rest.ModifyUser
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.Ignore
 
 class DiscordClientIntegration {
     private val token = "MzQ2NDQ0NjE1ODMxNzgxMzc2.DtS9xw.vqBteMXax6dwTrQ8ghJD5QyKX_8"
@@ -25,13 +25,13 @@ class DiscordClientIntegration {
 
     @Test fun getApiGatewayTest() {
         val result = runBlocking { discordClient.getApiGateway() }
-        assert(result.url).isNotEmpty()
+        assertThat(result.url).isNotEmpty()
     }
 
     @Test fun getBotApiGatewayTest() {
         val result = runBlocking { discordClient.getBotGateway() }
-        assert(result.url).isNotEmpty()
-        assert(result.shards).isGreaterThan(0)
+        assertThat(result.url).isNotEmpty()
+        assertThat(result.shards).isGreaterThan(0)
     }
 
     @Test fun createGuildTest() {
@@ -50,21 +50,21 @@ class DiscordClientIntegration {
         try {
             runBlocking { guildClient.get() }
         } catch (e: DiscordException) {
-            assert(e).isInstanceOf(DiscordBadPermissionsException::class)
+            assertThat(e).isInstanceOf(DiscordBadPermissionsException::class)
             guildDeleted = true
         }
 
-        assert(guildDeleted).isTrue()
+        assertThat(guildDeleted).isTrue()
     }
 
-    @Disabled
+    @Ignore
     @Test fun getInviteTest() {
         runBlocking {
             discordClient.getInvite(randomString())
         }
     }
 
-    @Disabled
+    @Ignore
     @Test fun deleteInviteTest() {
         runBlocking {
             discordClient.deleteInvite(randomString())
@@ -80,12 +80,12 @@ class DiscordClientIntegration {
     @Test fun getUserTest() {
         runBlocking {
             val user = discordClient.getUser(tokensUser)
-            assert(tokensUser).isEqualTo(user.id)
-            assert(user.isBot).isTrue()
+            assertThat(tokensUser).isEqualTo(user.id)
+            assertThat(user.isBot).isTrue()
         }
     }
 
-    @Disabled("This test is broken and needs to be fixed")
+    @Ignore("This test is broken and needs to be fixed")
     @Test fun modifyUserTest() {
         runBlocking {
             val existingUser = discordClient.getUser()
@@ -93,36 +93,36 @@ class DiscordClientIntegration {
 
             discordClient.modifyUser(ModifyUser(randomString()))
             val modifiedUser = discordClient.getUser()
-            assert(existingUser.username).isNotEqualTo(modifiedUser.username)
+            assertThat(existingUser.username).isNotEqualTo(modifiedUser.username)
 
             discordClient.modifyUser(ModifyUser(existingUsername))
             val revertedUser = discordClient.getUser()
-            assert(existingUsername).isEqualTo(revertedUser.username)
+            assertThat(existingUsername).isEqualTo(revertedUser.username)
         }
     }
 
     @Test fun getGuildsTest() {
         runBlocking {
             val guilds = discordClient.getGuilds()
-            assert(guilds).isNotEmpty()
-            assert(guilds.size).isEqualTo(guilds.distinctBy { it.id }.size)
+            assertThat(guilds).isNotEmpty()
+            assertThat(guilds.size).isEqualTo(guilds.distinctBy { it.id }.size)
         }
     }
 
     @Test fun getDMsTest() {
-        runBlocking { assert(discordClient.getDMs()).isEmpty() }
+        runBlocking { assertThat(discordClient.getDMs()).isEmpty() }
     }
 
     @Test fun createDMTest() {
         runBlocking { discordClient.createDM(CreateDM(userForDM)) }
     }
 
-    @Disabled
+    @Ignore
     @Test fun createGroupDMTest() {
         runBlocking { discordClient.createGroupDM(CreateGroupDM(emptyList())) }
     }
 
-    @Disabled
+    @Ignore
     @Test fun getUserConnectionsTest() {
         runBlocking { discordClient.getUserConnections() }
         TODO("Find data to assert against")
@@ -131,7 +131,7 @@ class DiscordClientIntegration {
     @Test fun getVoiceRegionsTest() {
         runBlocking {
             val regions = discordClient.getVoiceRegions()
-            assert(regions).isNotEmpty()
+            assertThat(regions).isNotEmpty()
         }
     }
 }

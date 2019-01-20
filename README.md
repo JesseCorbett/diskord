@@ -1,4 +1,4 @@
-# Diskord [![jcenter](https://api.bintray.com/packages/jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
+# Diskord [![jcenter](https://api.bintray.com/packages/com.jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/com.jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.2.0'
+    implementation 'com.com.jessecorbett:diskord:1.2.0'
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
 </repositories>
 
 <dependency>
-    <groupId>com.jessecorbett</groupId>
+    <groupId>com.com.jessecorbett</groupId>
     <artifactId>diskord</artifactId>
     <version>1.2.0</version>
 </dependency>
@@ -45,7 +45,7 @@ Any function in the scope of the DSL will have access to a ClientStore to access
 
 Additionally, extensions on the bot DSL, like the command DSL, can be done simply by writing extension functions which hook into the bot DSL on instantiation.
 
-You can access the documentation [here.](https://jesselcorbett.gitlab.io/Diskord/diskord/)
+You can access the documentation [here.](https://jesselcorbett.gitlab.io/Diskord/jvm/)
 
 ### Ping Pong Example
 ```kotlin

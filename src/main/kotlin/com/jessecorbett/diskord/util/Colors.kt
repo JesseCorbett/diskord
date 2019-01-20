@@ -2,7 +2,6 @@ package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.model.Color
 
-
 /**
  * A collection of convenience methods and predefined colors for working with the color field in embeds.
  */
@@ -155,9 +154,9 @@ object Colors {
      *
      * Each specified value should be between 0.0 and 1.0.
      *
-     * @param red the red value
-     * @param green the green value
-     * @param blue the blue value
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
      */
     fun rgb(red: Float, green: Float, blue: Float): Color {
         require(red in 0.0F..1.0F) { "$red is not between 0 and 1." }
@@ -172,9 +171,9 @@ object Colors {
      *
      * Each specified value should be between 0 and 255.
      *
-     * @param red the red value
-     * @param green the green value
-     * @param blue the blue value
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
      */
     fun rgb(red: Int, green: Int, blue: Int): Color {
         require(red in 0..255) { "$red is not between 0 and 255." }
@@ -187,7 +186,7 @@ object Colors {
     /**
      * Creates a [Color] instance which represents the specified hex value.
      *
-     * @param hex the integer value
+     * @param hex The integer value.
      */
     fun hex(hex: Int): Color {
         require(hex in 0..0xFFFFFF) { "$hex is not between 0x000000 and 0xFFFFFF." }
@@ -198,7 +197,7 @@ object Colors {
     /**
      * Creates a [Color] instance which represents the specified hex string (e.g. `#FF0000`).
      *
-     * @param hex the hex string
+     * @param hex The hex string.
      */
     fun hex(hex: String): Color {
         require(hex matches "#[0-9A-F]{6}".toRegex(RegexOption.IGNORE_CASE)) {
@@ -211,7 +210,7 @@ object Colors {
     /**
      * Converts a [Color] instance into a [Triple] containing the `red`, `green`, and `blue` values of the color.
      *
-     * @param color the color to convert
+     * @param color The color to convert.
      */
     fun toRGB(color: Color) = Triple(color shr 16 and 0xFF, color shr 8 and 0xFF, color and 0xFF)
 }

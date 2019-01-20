@@ -16,7 +16,7 @@ fun Bot.commands(prefix: String = ".", commands: MutableList<Command> = ArrayLis
     val set = CommandSet(prefix, commands).apply(block)
 
     messageCreated { message ->
-        commands.filter { message.content.startsWith(prefix + it.command) }.forEach {
+        commands.filter { message.content.startsWith(set.prefix + it.command) }.forEach {
             if (it.allowBots || message.isFromUser) it.action(message)
         }
     }

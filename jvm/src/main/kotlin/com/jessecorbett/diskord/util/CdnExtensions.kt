@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.util
 
+import com.jessecorbett.diskord.api.exception.DiscordBadRequestException
 import com.jessecorbett.diskord.api.model.Emoji
 import com.jessecorbett.diskord.api.model.Guild
 import com.jessecorbett.diskord.api.model.User
-import com.jessecorbett.diskord.api.exception.DiscordBadRequestException
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
 
 /**

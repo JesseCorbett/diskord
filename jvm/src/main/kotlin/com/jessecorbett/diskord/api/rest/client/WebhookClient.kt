@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.api.rest.client
 
+import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
-import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.internal.bodyAs
 

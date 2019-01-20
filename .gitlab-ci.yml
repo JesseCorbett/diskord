@@ -35,7 +35,7 @@ publishSnapshot:
 publishReleaseVersion:
   stage: release
   script:
-    - gradle bintrayUpload publishReleasePublicationToGitlabRepository --no-daemon
+    - gradle publishReleasePublicationToGitlabRepository bintrayUpload --no-daemon
   tags:
     - docker
   only:

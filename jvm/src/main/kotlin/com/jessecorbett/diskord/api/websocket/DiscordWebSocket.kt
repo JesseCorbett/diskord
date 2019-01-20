@@ -2,13 +2,13 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.DiscordUserType
+import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
 import com.jessecorbett.diskord.api.websocket.commands.Resume
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
 import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
-import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.internal.*
@@ -53,43 +53,45 @@ class DiscordWebSocket(
 
     init {
         if (autoStart) {
-            socket = startConnection()
+            startConnection()
         }
     }
 
-    private fun startConnection(): WebSocket {
-        val gatewayUrl = runBlocking { DiscordClient(token, userType).getBotGateway().url }
+    private fun startConnection() {
+        GlobalScope.launch {
+            val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-        val request = Request.Builder()
-                .url("$gatewayUrl?encoding=json&v=6")
-                .addHeader("Authorization", "Bot $token")
-                .build()
+            val request = Request.Builder()
+                    .url("$gatewayUrl?encoding=json&v=6")
+                    .addHeader("Authorization", "Bot $token")
+                    .build()
 
-        return httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
-            override fun start() {
-                websocketLifecycleListener?.started()
-            }
+            socket = httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
+                override fun start() {
+                    websocketLifecycleListener?.started()
+                }
 
-            override fun closing(code: WebSocketCloseCode, reason: String) {
-                logger.info("Closing with code '$code' and reason '$reason'")
-                if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                override fun closing(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closing with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                        restart()
+                    websocketLifecycleListener?.closing(code, reason)
+                }
+
+                override fun closed(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closed with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                        restart()
+                    websocketLifecycleListener?.closed(code, reason)
+                }
+
+                override fun failed(failure: Throwable, response: Response?) {
+                    logger.error("Socket connection encountered an exception", failure)
                     restart()
-                websocketLifecycleListener?.closing(code, reason)
-            }
-
-            override fun closed(code: WebSocketCloseCode, reason: String) {
-                logger.info("Closed with code '$code' and reason '$reason'")
-                if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                    restart()
-                websocketLifecycleListener?.closed(code, reason)
-            }
-
-            override fun failed(failure: Throwable, response: Response?) {
-                logger.error("Socket connection encountered an exception", failure)
-                restart()
-                websocketLifecycleListener?.failed(failure, response)
-            }
-        }))
+                    websocketLifecycleListener?.failed(failure, response)
+                }
+            }))
+        }
     }
 
     /**
@@ -98,7 +100,7 @@ class DiscordWebSocket(
      * Not technically different from [DiscordWebSocket.restart] in functionality if the bot isn't already running.
      */
     fun start() {
-        socket = startConnection()
+        startConnection()
     }
 
     /**
@@ -110,7 +112,7 @@ class DiscordWebSocket(
     fun close(forceClose: Boolean = false) {
         logger.debug("Closing")
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
-        runBlocking { heartbeatJob?.cancelAndJoin() }
+        GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
         socket?.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
         if (forceClose) {
@@ -127,7 +129,7 @@ class DiscordWebSocket(
     fun restart() {
         logger.debug("Restarting")
         close()
-        socket = startConnection()
+        startConnection()
         logger.info("Restarted connection")
     }
 

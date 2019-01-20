@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.api.rest.client
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.jessecorbett.diskord.api.rest.BearerToken
 import com.jessecorbett.diskord.api.exception.DiscordUnauthorizedException
+import com.jessecorbett.diskord.api.rest.BearerToken
 import com.jessecorbett.diskord.internal.httpClient
 import com.jessecorbett.diskord.internal.jsonMapper
 import okhttp3.*
