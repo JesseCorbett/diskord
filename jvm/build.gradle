@@ -43,8 +43,8 @@ artifacts {
 }
 
 bintray {
-    user = 'com.jessecorbett'
-    key = 'de1c72574d8329ed9b762d3cd2b327f4a6c6d5a9'
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
 
     publish = true
 
