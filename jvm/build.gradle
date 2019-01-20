@@ -69,7 +69,7 @@ def pomConfig = {
         }
     }
 
-    developers = {
+    developers {
         developer {
             id 'jesse corbett'
             name 'Jesse Corbett'
