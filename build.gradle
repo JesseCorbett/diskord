@@ -117,7 +117,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
-                implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
                 implementation 'com.willowtreeapps.assertk:assertk-jvm:0.13'
                 implementation 'io.mockk:mockk:1.9'
             }
