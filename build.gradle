@@ -1,9 +1,8 @@
-
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.3.11"
-    id "org.jetbrains.dokka" version "0.9.17"
-    id "maven-publish"
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.11'
+    id 'maven-publish'
     id "com.jfrog.bintray" version "1.8.4"
+    id "org.jetbrains.dokka" version "0.9.17"
 }
 
 group = 'com.jessecorbett'
@@ -12,85 +11,37 @@ version = diskordVersion
 dokka {
     outputFormat = "html"
     outputDirectory = "public"
-}
-
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = javadoc.destinationDir
-    inputs.dir 'src/main/kotlin'
-}
-
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-    
-    publish = true
-
-    pkg {
-        repo = "diskord"
-        name = "diskord"
-        licenses = ["Apache-2.0"]
-        vcsUrl = "https://gitlab.com/jesselcorbett/Diskord"
-        publications = ['DiskordPublication']
-        version {
-            name = diskordVersion
-        }
+    kotlinTasks {
+        // dokka fails to retrieve sources from MPP-tasks so they must be set empty to avoid exception
+        []
     }
-}
-
-def pomConfig = {
-    licenses {
-        license {
-            name "The Apache Software License, Version 2.0"
-            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            distribution "repo"
-        }
+    sourceRoot {
+        path = "src/commonMain/kotlin"
+        platforms = ["Common"]
     }
-    developers {
-        developer {
-            id "jesse corbett"
-            name "Jesse Corbett"
-            email "jesselcorbett@gmail.com"
-        }
+    sourceRoot {
+        path = "src/jvmMain/kotlin"
+        platforms = ["JVM"]
+    }
+    sourceRoot {
+        path = "src/jsMain/kotlin"
+        platforms = ["JS"]
     }
 
-    scm {
-        url "https://gitlab.com/jesselcorbett/Diskord"
+    linkMapping {
+        dir = "src/commonMain/kotlin"
+        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/commonMain/kotlin"
+        suffix = "#L"
     }
-}
-
-publishing {
-    publications {
-        DiskordPublication(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-            groupId project.group
-            artifactId 'diskord'
-            version project.version
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('description', 'A Kotlin wrapper around the Discord API')
-                root.appendNode('name', 'Diskord')
-                root.appendNode('url', 'https://gitlab.com/jesselcorbett/Diskord')
-                root.children().last() + pomConfig
-            }
-        }
+    linkMapping {
+        dir = "src/jvmMain/kotlin"
+        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/jvmMain/kotlin"
+        suffix = "#L"
+    }
+    linkMapping {
+        dir = "src/jsMain/kotlin"
+        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/jsMain/kotlin"
+        suffix = "#L"
     }
 }
 
@@ -98,16 +49,123 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0"
-    implementation "com.squareup.okhttp3:okhttp:3.12.1"
-    implementation "com.fasterxml.jackson.core:jackson-core:2.9.8"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:2.9.8"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
-    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-    implementation "org.slf4j:slf4j-api:1.7.25"
+def pomConfig = {
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
 
-    testImplementation 'junit:junit:4.12'
+    developers {
+        developer {
+            id 'jesse corbett'
+            name 'Jesse Corbett'
+            email 'jesselcorbett@gmail.com'
+        }
+    }
+
+    scm {
+        url 'https://gitlab.com/jesselcorbett/Diskord'
+    }
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'jvm') {
+            mavenPublication {
+                artifactId 'diskord'
+                pom.withXml {
+                    def root = asNode()
+                    root.appendNode('description', 'A Kotlin wrapper around the Discord API')
+                    root.appendNode('name', 'Diskord')
+                    root.appendNode('url', 'https://gitlab.com/jesselcorbett/Diskord')
+                    root.children().last() + pomConfig
+                }
+            }
+        }
+        fromPreset(presets.js, 'js')
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                implementation "org.jetbrains.kotlin:kotlin-reflect"
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+                implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+                implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+                implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+                implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
+                implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8'
+                implementation 'org.slf4j:slf4j-api:1.7.25'
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+                implementation 'com.willowtreeapps.assertk:assertk-jvm:0.13'
+                implementation 'io.mockk:mockk:1.9'
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test-js'
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+
+    publish = true
+
+    pkg {
+        repo = 'diskord'
+        name = 'diskord'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://gitlab.com/jesselcorbett/Diskord'
+        publications = ['jvm']
+        version {
+            name = diskordVersion
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "gitlab"
+            url = "https://gitlab.com/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
 }
