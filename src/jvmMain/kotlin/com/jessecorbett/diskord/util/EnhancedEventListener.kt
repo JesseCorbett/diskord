@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.util
 
+import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
 import com.jessecorbett.diskord.api.model.Channel
 import com.jessecorbett.diskord.api.model.Emoji
 import com.jessecorbett.diskord.api.model.Guild
@@ -68,7 +69,11 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun Message.delete() = clientStore.channels[channelId].deleteMessage(id)
+    suspend fun Message.delete() = try {
+        clientStore.channels[channelId].deleteMessage(id)
+    } catch (exception: DiscordNotFoundException) {
+        // This exception is fine, as it means the message was already deleted by someone else, and we don't care that we didn't get there first
+    }
 
     /**
      * Convenience function to react to a message.
@@ -127,7 +132,11 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun MessageUpdate.delete() = clientStore.channels[channelId].deleteMessage(id)
+    suspend fun MessageUpdate.delete() = try {
+        clientStore.channels[channelId].deleteMessage(id)
+    } catch (exception: DiscordNotFoundException) {
+        // This exception is fine, as it means the message was already deleted by someone else, and we don't care that we didn't get there first
+    }
 
 
     /**
