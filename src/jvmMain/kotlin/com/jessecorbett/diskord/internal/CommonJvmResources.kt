@@ -21,14 +21,14 @@ internal val jsonMapper = ObjectMapper().findAndRegisterModules().registerModule
         .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
 
-internal inline fun <reified T> Response.bodyAs(): T {
-    val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
-    this.body()?.close()
-    return jsonMapper.readValue(bodyString, T::class.java)!!
-}
-
-internal inline fun <reified T> Response.bodyAsList(): List<T> {
-    val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
-    this.body()?.close()
-    return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, T::class.java))
-}
+//internal inline fun <reified T> Response.bodyAs(): T {
+//    val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
+//    this.body()?.close()
+//    return jsonMapper.readValue(bodyString, T::class.java)!!
+//}
+//
+//internal inline fun <reified T> Response.bodyAsList(): List<T> {
+//    val bodyString = this.body()?.string() ?: throw DiscordCompatibilityException("Received a null body, but expected it to be present")
+//    this.body()?.close()
+//    return jsonMapper.readValue(bodyString, jsonMapper.typeFactory.constructCollectionType(List::class.java, T::class.java))
+//}

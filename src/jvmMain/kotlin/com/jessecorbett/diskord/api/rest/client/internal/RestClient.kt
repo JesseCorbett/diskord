@@ -2,8 +2,12 @@ package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*
-import com.jessecorbett.diskord.internal.*
+import com.jessecorbett.diskord.internal.defaultUserAgentUrl
+import com.jessecorbett.diskord.internal.defaultUserAgentVersion
+import com.jessecorbett.diskord.internal.httpClient
+import com.jessecorbett.diskord.internal.jsonMapper
 import kotlinx.coroutines.delay
+import kotlinx.serialization.json.JSON
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
@@ -40,8 +44,8 @@ abstract class RestClient(
             401 -> DiscordUnauthorizedException()
             403 -> DiscordBadPermissionsException()
             404 -> DiscordNotFoundException()
-            429 -> response.bodyAs<RateLimitExceeded>().let {
-                DiscordRateLimitException(it.message, Instant.now().plusMillis(it.retryAfter), it.isGlobal)
+            429 -> response.body()?.string()?.let { JSON.parse(RateLimitExceeded.serializer(), it) }!!.let {
+                DiscordRateLimitException(it.message, Instant.now().plusMillis(it.retryAfter).epochSecond, it.isGlobal)
             }
             502 -> DiscordGatewayException()
             in 500..599 -> DiscordInternalServerException()

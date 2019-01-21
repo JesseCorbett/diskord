@@ -5,7 +5,7 @@ import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
-import com.jessecorbett.diskord.internal.bodyAs
+import kotlinx.serialization.json.JSON
 
 /**
  * A REST client for a a specific webhook.
@@ -22,7 +22,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return This webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhook() = getRequest("/webhooks/$webhookId").bodyAs<Webhook>()
+    suspend fun getWebhook() = getRequest("/webhooks/$webhookId").body()?.string()?.let { JSON.parse(Webhook.serializer(), it) }!!
 
     /**
      * Get this webhook using the secure token.
@@ -34,7 +34,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return This webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").bodyAs<Webhook>()
+    suspend fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken").body()?.string()?.let { JSON.parse(Webhook.serializer(), it) }!!
 
     /**
      * Update this webhook.
@@ -44,7 +44,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return The updated webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).bodyAs<Webhook>()
+    suspend fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook).body()?.string()?.let { JSON.parse(Webhook.serializer(), it) }!!
 
     /**
      * Update this webhook using the secure token.
@@ -56,7 +56,7 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return The updated webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).bodyAs<Webhook>()
+    suspend fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook).body()?.string()?.let { JSON.parse(Webhook.serializer(), it) }!!
 
     /**
      * Delete this webhook.

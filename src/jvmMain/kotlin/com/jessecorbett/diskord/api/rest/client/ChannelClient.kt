@@ -1,12 +1,14 @@
 package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
-import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
-import com.jessecorbett.diskord.internal.*
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
+import kotlinx.serialization.parseList
 import java.time.Instant
 
 /**
@@ -29,7 +31,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return This channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun get() = getRequest("/channels/$channelId").bodyAs<Channel>()
+    suspend fun get() = getRequest("/channels/$channelId").body()?.string()?.let { JSON.parse(Channel.serializer(), it) }!!
 
     /**
      * Update this channel.
@@ -39,7 +41,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The updated channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(channel: Channel) = putRequest("/channels/$channelId", channel).bodyAs<Channel>()
+    suspend fun update(channel: Channel) = putRequest("/channels/$channelId", channel).body()?.string()?.let { JSON.parse(Channel.serializer(), it) }!!
 
     /**
      * Delete this channel. Use with caution, cannot be undone except for DMs.
@@ -56,7 +58,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessages(limit: Int = 50) = getRequest("/channels/$channelId/messages?limit=$limit").bodyAsList<Message>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessages(limit: Int = 50) = getRequest("/channels/$channelId/messages?limit=$limit").body()?.string()?.let { JSON.parseList<Message>(it) }!!
 
     /**
      * Get messages from this channel, around a given message.
@@ -67,7 +70,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages around the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesAround(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&around=$messageId").bodyAsList<Message>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessagesAround(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&around=$messageId").body()?.string()?.let { JSON.parseList<Message>(it) }!!
 
     /**
      * Get messages from this channel, before a given message.
@@ -78,7 +82,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages before the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesBefore(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&before=$messageId").bodyAsList<Message>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessagesBefore(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&before=$messageId").body()?.string()?.let { JSON.parseList<Message>(it) }!!
 
     /**
      * Get messages from this channel, after a given message.
@@ -89,7 +94,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages after the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesAfter(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&after=$messageId").bodyAsList<Message>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessagesAfter(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&after=$messageId").body()?.string()?.let { JSON.parseList<Message>(it) }!!
 
     /**
      * Get a specific message from this channel.
@@ -99,7 +105,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The requested message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").bodyAs<Message>()
+    suspend fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId").body()?.string()?.let { JSON.parse(Message.serializer(), it) }!!
 
     /**
      * Create a message in this channel.
@@ -109,7 +115,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).bodyAs<Message>()
+    suspend fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message).body()?.string()?.let { JSON.parse(Message.serializer(), it) }!!
 
     /**
      * Add a reaction to a message.
@@ -168,7 +174,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The reactions for the given emoji on the given message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessageReactions(messageId: String, textEmoji: String) = getRequest("/channels/$channelId/messages/$messageId/reaction/$textEmoji").bodyAsList<Reaction>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessageReactions(messageId: String, textEmoji: String) = getRequest("/channels/$channelId/messages/$messageId/reaction/$textEmoji").body()?.string()?.let { JSON.parseList<Reaction>(it) }!!
 
     /**
      * Get all reactions from a message for a given custom emoji.
@@ -179,7 +186,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The reactions for the given emoji on the given message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest("/channels/$channelId/messages/$messageId/reaction/${emoji.name}:${emoji.id}").bodyAsList<Reaction>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest("/channels/$channelId/messages/$messageId/reaction/${emoji.name}:${emoji.id}").body()?.string()?.let { JSON.parseList<Reaction>(it) }!!
 
     /**
      * Delete all reactions from a message.
@@ -199,7 +207,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The edited message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit).bodyAs<Message>()
+    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit).body()?.string()?.let { JSON.parse(Message.serializer(), it) }!!
 
     /**
      * Delete a message in this channel.
@@ -234,7 +242,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The list of invites for this channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getInvites() = getRequest("/channels/$channelId/invites").bodyAsList<Invite>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getInvites() = getRequest("/channels/$channelId/invites").body()?.string()?.let { JSON.parseList<Invite>(it) }!!
 
     /**
      * Create an invite for this channel.
@@ -244,7 +253,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created invite.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).bodyAs<Invite>()
+    suspend fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite).body()?.string()?.let { JSON.parse(Invite.serializer(), it) }!!
 
     /**
      * Delete a permissions set for this channel.
@@ -268,7 +277,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The pinned messages.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getPinnedMessages() = getRequest("/channels/$channelId/pins").bodyAsList<Message>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getPinnedMessages() = getRequest("/channels/$channelId/pins").body()?.string()?.let { JSON.parseList<Message>(it) }!!
 
     /**
      * Pin a message in this channel.
@@ -317,7 +327,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The list webhooks present.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhooks() = getRequest("/channels/$channelId/webhooks").bodyAsList<Webhook>()
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    suspend fun getWebhooks() = getRequest("/channels/$channelId/webhooks").body()?.string()?.let { JSON.parseList<Webhook>(it) }!!
 
     /**
      * Create a webhook for this channel.
@@ -327,5 +338,5 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).bodyAs<Webhook>()
+    suspend fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook).body()?.string()?.let { JSON.parse(Webhook.serializer(), it) }!!
 }

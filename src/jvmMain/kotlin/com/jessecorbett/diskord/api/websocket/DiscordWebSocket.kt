@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.api.websocket
 
-import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
@@ -11,8 +10,11 @@ import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
-import com.jessecorbett.diskord.internal.*
+import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.*
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.Mapper
+import kotlinx.serialization.json.JSON
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -154,7 +156,7 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                 initializeSession(jsonMapper.treeToValue(gatewayMessage.dataPayload!!))
+                 initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart. Low priority.
@@ -193,7 +195,7 @@ class DiscordWebSocket(
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = jsonMapper.treeToValue<Ready>(gatewayMessage.dataPayload).sessionId
+            sessionId = Mapper.unmapNullable(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         GlobalScope.launch(eventListenerContext) {
@@ -201,9 +203,10 @@ class DiscordWebSocket(
         }
     }
 
+    @UseExperimental(ImplicitReflectionSerializer::class)
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(jsonMapper.writeValueAsString(GatewayMessage(opCode, jsonMapper.valueToTree(data), sequenceNumber, eventName)))
+        socket?.send(JSON.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data?.let { Mapper.mapNullable(it) }, sequenceNumber, eventName)))
     }
 }
