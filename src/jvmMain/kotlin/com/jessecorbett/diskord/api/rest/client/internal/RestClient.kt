@@ -5,9 +5,10 @@ import com.jessecorbett.diskord.api.exception.*
 import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.httpClient
-import com.jessecorbett.diskord.internal.jsonMapper
 import kotlinx.coroutines.delay
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
+import kotlinx.serialization.stringify
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
@@ -18,7 +19,8 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val discordApi = "https://discordapp.com/api"
 
-private fun jsonBody(value: Any?) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), jsonMapper.writeValueAsString(value))
+@UseExperimental(ImplicitReflectionSerializer::class)
+private fun jsonBody(value: Any?) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), value?.let { JSON.stringify(value) } ?: "")
 
 /**
  * A generic REST client for a discord resource with it's own rate limit scope.
