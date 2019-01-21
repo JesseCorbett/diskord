@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.com.jessecorbett:diskord:1.2.0'
+    implementation 'com.jessecorbett:diskord:1.2.0'
 }
 ```
 
@@ -31,7 +31,7 @@ dependencies {
 </repositories>
 
 <dependency>
-    <groupId>com.com.jessecorbett</groupId>
+    <groupId>com.jessecorbett</groupId>
     <artifactId>diskord</artifactId>
     <version>1.2.0</version>
 </dependency>

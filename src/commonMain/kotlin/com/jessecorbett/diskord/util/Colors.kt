@@ -211,6 +211,8 @@ object Colors {
      * Converts a [Color] instance into a [Triple] containing the `red`, `green`, and `blue` values of the color.
      *
      * @param color The color to convert.
+     *
+     * @return A Triple of the color values in RGB order.
      */
     fun toRGB(color: Color) = Triple(color shr 16 and 0xFF, color shr 8 and 0xFF, color and 0xFF)
 }

@@ -26,7 +26,7 @@ pages:
   only:
     - master
 
-publishSnapshot:
+publishDevelopmentVersion:
   stage: release
   script:
     - gradle publishJvmPublicationToGitlabRepository
@@ -38,7 +38,7 @@ publishSnapshot:
 publishReleaseVersion:
   stage: release
   script:
-    - gradle publishJvmPublicationToGitlabRepository bintrayUpload
+    - gradle bintrayUpload
   tags:
     - docker
   only:
