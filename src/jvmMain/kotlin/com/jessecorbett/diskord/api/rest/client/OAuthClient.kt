@@ -1,10 +1,9 @@
 package com.jessecorbett.diskord.api.rest.client
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.jessecorbett.diskord.api.exception.DiscordUnauthorizedException
 import com.jessecorbett.diskord.api.rest.BearerToken
 import com.jessecorbett.diskord.internal.httpClient
-import com.jessecorbett.diskord.internal.jsonMapper
+import kotlinx.serialization.json.JSON
 import okhttp3.*
 import org.slf4j.LoggerFactory
 import java.io.IOException
@@ -48,7 +47,7 @@ class OAuthClient(private val clientId: String, private val clientSecret: String
 
                 override fun onResponse(call: Call?, response: Response?) {
                     try {
-                        cont.resume(jsonMapper.readValue(response!!.body()!!.string()))
+                        cont.resume(JSON.parse(BearerToken.serializer(), response!!.body()!!.string()))
                     } catch (e: Exception) {
                         logger.error("Failed to authenticate against discord", e)
                         cont.resumeWithException(DiscordUnauthorizedException())
