@@ -4,7 +4,7 @@
 
 ### Added
 - Added a typealias `Color` for `Int` to be used in embeds and roles.
-- Added object `Colors`, providing a list of predefined `Color` list, as well as conversion functions for RGB and hex values.
+- Added object `Colors`, providing a list of predefined `Color` values, as well as conversion functions for RGB and hex values.
 
 ### Changed
 - SNAPSHOT builds now maintain same naming scheme as release builds, remain in gitlab packages repository.
