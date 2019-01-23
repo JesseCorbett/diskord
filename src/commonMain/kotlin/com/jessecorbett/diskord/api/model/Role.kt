@@ -11,6 +11,6 @@ data class Role(
         @SerialName("hoist") val isUserListPinned: Boolean,
         @SerialName("position") val position: Int,
         @SerialName("permissions") val permissions: Int,
-        @SerialName("manager") val isManagedByIntegration: Boolean,
+        @SerialName("managed") val isManagedByIntegration: Boolean,
         @SerialName("mentionable") val isMentionable: Boolean
 )

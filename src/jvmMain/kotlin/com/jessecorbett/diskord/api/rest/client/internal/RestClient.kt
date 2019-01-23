@@ -6,9 +6,8 @@ import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.delay
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JSON
-import kotlinx.serialization.stringify
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
@@ -19,8 +18,9 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val discordApi = "https://discordapp.com/api"
 
-@UseExperimental(ImplicitReflectionSerializer::class)
-private fun jsonBody(value: Any?) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), value?.let { JSON.stringify(value) } ?: "")
+private fun <T> jsonBody(serializer: KSerializer<T>, value: T) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), JSON.stringify(serializer, value))
+
+private fun emptyBody() = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "")
 
 /**
  * A generic REST client for a discord resource with it's own rate limit scope.
@@ -46,7 +46,7 @@ abstract class RestClient(
             401 -> DiscordUnauthorizedException()
             403 -> DiscordBadPermissionsException()
             404 -> DiscordNotFoundException()
-            429 -> response.body()?.string()?.let { JSON.parse(RateLimitExceeded.serializer(), it) }!!.let {
+            429 -> response.body()?.string()?.let { JSON.nonstrict.parse(RateLimitExceeded.serializer(), it) }!!.let {
                 DiscordRateLimitException(it.message, Instant.now().plusMillis(it.retryAfter).epochSecond, it.isGlobal)
             }
             502 -> DiscordGatewayException()
@@ -99,10 +99,10 @@ abstract class RestClient(
      * @param url The url of the request.
      * @param rateLimit the rate limit info used for waiting if rate limited.
      *
-     * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun getRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).get().build(), rateLimit)
+    protected suspend fun getRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo)
+            = makeRequest(commonRequest(url).get().build(), rateLimit)
 
     /**
      * Make a POST request for this discord object.
@@ -114,7 +114,8 @@ abstract class RestClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun postRequest(url: String, body: Any, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).post(jsonBody(body)).build(), rateLimit)
+    protected suspend fun <T> postRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo)
+            = makeRequest(commonRequest(url).post(jsonBody(serializer, body)).build(), rateLimit)
 
     /**
      * Make a POST request for this discord object.
@@ -125,7 +126,8 @@ abstract class RestClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun postRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).post(jsonBody(null)).build(), rateLimit)
+    protected suspend fun postRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo)
+            = makeRequest(commonRequest(url).post(emptyBody()).build(), rateLimit)
 
     /**
      * Make a PUT request for this discord object.
@@ -137,7 +139,7 @@ abstract class RestClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun putRequest(url: String, body: Any, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).put(jsonBody(body)).build(), rateLimit)
+    protected suspend fun <T> putRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).put(jsonBody(serializer, body)).build(), rateLimit)
 
     /**
      * Make a PUT request for this discord object.
@@ -148,7 +150,7 @@ abstract class RestClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun putRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).put(jsonBody(null)).build(), rateLimit)
+    protected suspend fun putRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).put(emptyBody()).build(), rateLimit)
 
     /**
      * Make a PATCH request for this discord object.
@@ -160,7 +162,7 @@ abstract class RestClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun patchRequest(url: String, body: Any, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).patch(jsonBody(body)).build(), rateLimit)
+    protected suspend fun <T> patchRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo) = makeRequest(commonRequest(url).patch(jsonBody(serializer, body)).build(), rateLimit)
 
     /**
      * Make a DELETE request for this discord object.

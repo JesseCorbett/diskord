@@ -1,13 +1,15 @@
 package com.jessecorbett.diskord.api.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.IntDescriptor
 
 @Serializable
 data class Message(
     @SerialName("id") val id: String,
     @SerialName("channel_id") val channelId: String,
+    @Optional @SerialName("guild_id") val guildId: String? = null,
     @SerialName("author") val author: User,
+    @Optional @SerialName("member") val partialMember: GuildMember? = null,
     @SerialName("content") val content: String,
     @SerialName("timestamp") val sentAt: String,
     @SerialName("edited_timestamp") val editedAt: String?,
@@ -17,15 +19,16 @@ data class Message(
     @SerialName("mention_roles") val rolesIdsMentioned: List<String> = emptyList(),
     @SerialName("attachments") val attachments: List<Attachment> = emptyList(),
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
-    @SerialName("reactions") val reactions: List<Reaction> = emptyList(),
-    @SerialName("nonce") val validationNonce: String?,
+    @Optional @SerialName("reactions") val reactions: List<Reaction> = emptyList(),
+    @Optional @SerialName("nonce") val validationNonce: String? = null,
     @SerialName("pinned") val isPinned: Boolean,
-    @SerialName("webhook_id") val webhookId: String?,
+    @Optional @SerialName("webhook_id") val webhookId: String? = null,
     @SerialName("type") val type: MessageType,
-    @SerialName("activity") val activity: MessageActivity?,
-    @SerialName("application") val application: MessageApplication?
+    @Optional @SerialName("activity") val activity: MessageActivity? = null,
+    @Optional @SerialName("application") val application: MessageApplication? = null
 )
 
+@Serializable(with = MessageTypeSerializer::class)
 enum class MessageType(val code: Int) {
     DEFAULT(0),
     RECIPIENT_ADD(1),
@@ -37,17 +40,48 @@ enum class MessageType(val code: Int) {
     GUILD_MEMBER_JOIN(7)
 }
 
+object MessageTypeSerializer : KSerializer<MessageType> {
+    override val descriptor: SerialDescriptor = IntDescriptor.withName("MessageTypeSerializer")
+
+    override fun deserialize(input: Decoder): MessageType {
+        val target = input.decodeInt()
+        return MessageType.values().first {
+            it.code == target
+        }
+    }
+
+    override fun serialize(output: Encoder, obj: MessageType) {
+        output.encodeInt(obj.code)
+    }
+}
+
 @Serializable
 data class MessageActivity(
         @SerialName("type") val type: MessageActivityType,
         @SerialName("party_id") val partyId: String
 )
 
+@Serializable(with = MessageActivityTypeSerializer::class)
 enum class MessageActivityType(val code: Int) {
     JOIN(0),
     SPECTATE(1),
     LISTEN(2),
     JOIN_REQUEST(3)
+}
+
+object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
+    override val descriptor: SerialDescriptor = IntDescriptor.withName("MessageActivityTypeSerializer")
+
+    override fun deserialize(input: Decoder): MessageActivityType {
+        val target = input.decodeInt()
+        return MessageActivityType.values().first {
+            it.code == target
+        }
+    }
+
+    override fun serialize(output: Encoder, obj: MessageActivityType) {
+        output.encodeInt(obj.code)
+    }
 }
 
 @Serializable

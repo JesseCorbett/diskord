@@ -10,9 +10,8 @@ import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
 import com.jessecorbett.diskord.api.websocket.model.GatewayBotUrl
 import com.jessecorbett.diskord.api.websocket.model.GatewayUrl
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
-import kotlinx.serialization.parseList
+import kotlinx.serialization.list
 
 /**
  * A REST client for a user and their discord-wide content.
@@ -28,7 +27,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The gateway url.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getApiGateway() = getRequest("/gateway").body()?.string()?.let { JSON.parse(GatewayUrl.serializer(), it) }!!
+    suspend fun getApiGateway() = getRequest("/gateway").body()?.string()?.let { JSON.nonstrict.parse(GatewayUrl.serializer(), it) }!!
 
     /**
      * Get the bot specific gateway information from the API.
@@ -36,7 +35,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The gateway url with bot specific data.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getBotGateway() = getRequest("/gateway/bot").body()?.string()?.let { JSON.parse(GatewayBotUrl.serializer(), it) }!!
+    suspend fun getBotGateway() = getRequest("/gateway/bot").body()?.string()?.let { JSON.nonstrict.parse(GatewayBotUrl.serializer(), it) }!!
 
     /**
      * Create a guild.
@@ -46,7 +45,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The created guild.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild).body()?.string()?.let { println(it);JSON.parse(Guild.serializer(), it) }!!
+    suspend fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild, CreateGuild.serializer()).body()?.string()?.let { JSON.nonstrict.parse(Guild.serializer(), it) }!!
 
     /**
      * Get an invite.
@@ -56,7 +55,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The invite.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").body()?.string()?.let { JSON.parse(Invite.serializer(), it) }!!
+    suspend fun getInvite(inviteCode: String) = getRequest("/invites/$inviteCode").body()?.string()?.let { JSON.nonstrict.parse(Invite.serializer(), it) }!!
 
     /**
      * Delete an invite.
@@ -85,7 +84,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The updated user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user).body()?.string()?.let { JSON.parse(User.serializer(), it) }!!
+    suspend fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user, ModifyUser.serializer()).body()?.string()?.let { JSON.nonstrict.parse(User.serializer(), it) }!!
 
     /**
      * Get a list of guilds that the current user is in.
@@ -97,7 +96,6 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return A list of partial guilds matching the query.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     suspend fun getGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<PartialGuild> {
         var url = "/users/@me/guilds?limit=$limit"
         if (before != null) {
@@ -106,7 +104,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
         if (after != null) {
             url += "&after=$after"
         }
-        return getRequest(url).body()?.string()?.let { JSON.parseList<PartialGuild>(it) }!!
+        return getRequest(url).body()?.string()?.let { JSON.nonstrict.parse(PartialGuild.serializer().list, it) }!!
     }
 
     /**
@@ -115,9 +113,8 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return List of DM channels for the current user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     @Deprecated("Currently Discord does not return anything from this endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
-    suspend fun getDMs() = getRequest("/users/@me/channels").body()?.string()?.let { JSON.parseList<Channel>(it) }!!
+    suspend fun getDMs() = getRequest("/users/@me/channels").body()?.string()?.let { JSON.nonstrict.parse(Channel.serializer().list, it) }!!
 
     /**
      * Open a DM channel between the current user and another.
@@ -129,7 +126,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The DM channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM).body()?.string()?.let { JSON.parse(Channel.serializer(), it) }!!
+    suspend fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM, CreateDM.serializer()).body()?.string()?.let { JSON.nonstrict.parse(Channel.serializer(), it) }!!
 
     /**
      * Open a group DM channel between the current user and others.
@@ -141,7 +138,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The group DM channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createGroupDM(groupDM: CreateGroupDM) = postRequest("/users/@me/channels", groupDM).body()?.string()?.let { JSON.parse(Channel.serializer(), it) }!!
+    suspend fun createGroupDM(groupDM: CreateGroupDM) = postRequest("/users/@me/channels", groupDM, CreateGroupDM.serializer()).body()?.string()?.let { JSON.nonstrict.parse(Channel.serializer(), it) }!!
 
     /**
      * Get all connections to a given user.
@@ -151,8 +148,7 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The user's connections.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getUserConnections() = getRequest("/users/@me/connections").body()?.string()?.let { JSON.parseList<UserConnection>(it) }!!
+    suspend fun getUserConnections() = getRequest("/users/@me/connections").body()?.string()?.let { JSON.nonstrict.parse(UserConnection.serializer().list, it) }!!
 
     /**
      * Get the voice regions available for creating a guild.
@@ -160,6 +156,5 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The list of voice regions.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getVoiceRegions() = getRequest("/voice/regions").body()?.string()?.let { JSON.parseList<VoiceRegion>(it) }!!
+    suspend fun getVoiceRegions() = getRequest("/voice/regions").body()?.string()?.let { JSON.nonstrict.parse(VoiceRegion.serializer().list, it) }!!
 }

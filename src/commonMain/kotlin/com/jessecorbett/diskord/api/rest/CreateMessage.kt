@@ -9,7 +9,7 @@ data class CreateMessage(
         @SerialName("content") val content: String,
         @SerialName("nonce") val nonce: String? = null,
         @SerialName("tts") val tts: Boolean = false,
-        @SerialName("file") val fileContent: ByteArray? = null,
+        @SerialName("file") val fileContent: List<Byte>? = null,
         @SerialName("embed") val embed: Embed? = null,
         @SerialName("payload_json") val fileUploadEmbed: String? = null
 )

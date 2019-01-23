@@ -47,7 +47,7 @@ class OAuthClient(private val clientId: String, private val clientSecret: String
 
                 override fun onResponse(call: Call?, response: Response?) {
                     try {
-                        cont.resume(JSON.parse(BearerToken.serializer(), response!!.body()!!.string()))
+                        cont.resume(JSON.nonstrict.parse(BearerToken.serializer(), response!!.body()!!.string()))
                     } catch (e: Exception) {
                         logger.error("Failed to authenticate against discord", e)
                         cont.resumeWithException(DiscordUnauthorizedException())
