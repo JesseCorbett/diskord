@@ -20,7 +20,7 @@ internal class DiscordWebSocketListener(
         logger.error("Encountered an unexpected error, code: ${response.body()}")
     }
 
-    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(JSON.parse(GatewayMessage.serializer(), text))
+    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(JSON.nonstrict.parse(GatewayMessage.serializer(), text))
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         TODO("This should never be called, we'll need it though if we choose to implement ETF")
