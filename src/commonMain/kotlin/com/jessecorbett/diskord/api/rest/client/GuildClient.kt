@@ -3,11 +3,9 @@ package com.jessecorbett.diskord.api.rest.client
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.api.rest.client.internal.RestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.list
-import kotlinx.serialization.parseList
 
 /*
  * Note: Emoji don't follow standard rate limit behavior and the API responses may not accurately reflect rate limits.
@@ -23,7 +21,7 @@ import kotlinx.serialization.parseList
  * @param guildId The id of the guild.
  * @param userType The user type, assumed to be a bot.
  */
-class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) : RestClient(token, userType) {
+class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) : RateLimitedClient(token, userType) {
 
     /**
      * Get this guild's emoji.
@@ -31,7 +29,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return A list of the guild's custom emoji
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis").body()?.string()?.let { Json.nonstrict.parse(Emoji.serializer().list, it) }!!
+    suspend fun getEmoji() = getRequest("/guilds/$guildId/emojis", Emoji.serializer().list)
 
     /**
      * Get a custom emoji.
@@ -41,7 +39,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The custom emoji.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getEmoji(emojiId: String) = getRequest("/guilds/$guildId/emojis/$emojiId").body()?.string()?.let { Json.nonstrict.parse(Emoji.serializer(), it) }!!
+    suspend fun getEmoji(emojiId: String) = getRequest("/guilds/$guildId/emojis/$emojiId", Emoji.serializer())
 
     /**
      * Create a custom emoji.
@@ -51,7 +49,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The created emoji.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guilds/$guildId/emojis", createEmoji, CreateEmoji.serializer()).body()?.string()?.let { Json.nonstrict.parse(Emoji.serializer(), it) }!!
+    suspend fun createEmoji(createEmoji: CreateEmoji) = postRequest("/guilds/$guildId/emojis", createEmoji, CreateEmoji.serializer(), Emoji.serializer())
 
     /**
      * Update an emoji
@@ -62,7 +60,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The updated emoji.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guilds/$guildId/emojis/$emojiId", emoji, PatchEmoji.serializer()).body()?.string()?.let { Json.nonstrict.parse(Emoji.serializer(), it) }!!
+    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) = patchRequest("/guilds/$guildId/emojis/$emojiId", emoji, PatchEmoji.serializer(), Emoji.serializer())
 
     /**
      * Delete an emoji.
@@ -71,7 +69,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId").close()
+    suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId")
 
     /**
      * Get this guild.
@@ -79,7 +77,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return This guild.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun get() = getRequest("/guilds/$guildId").body()?.string()?.let { Json.nonstrict.parse(Guild.serializer(), it) }!!
+    suspend fun get() = getRequest("/guilds/$guildId", Guild.serializer())
 
     /**
      * Update this guild.
@@ -89,14 +87,14 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The updated guild.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild, PatchGuild.serializer()).body()?.string()?.let { Json.nonstrict.parse(Guild.serializer(), it) }!!
+    suspend fun update(guild: PatchGuild) = patchRequest("/guilds/$guildId", guild, PatchGuild.serializer(), Guild.serializer())
 
     /**
      * Delete this guild. Use with caution, cannot be undone.
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun delete() = deleteRequest("/guilds/$guildId").close()
+    suspend fun delete() = deleteRequest("/guilds/$guildId")
 
     /**
      * Get this guild's channels.
@@ -104,7 +102,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The guild's channels.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getChannels() = getRequest("/guilds/$guildId/channels").body()?.string()?.let { Json.nonstrict.parse(Channel.serializer().list, it) }!!
+    suspend fun getChannels() = getRequest("/guilds/$guildId/channels", Channel.serializer().list)
 
     /**
      * Create a channel.
@@ -114,7 +112,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The created channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel, CreateChannel.serializer()).body()?.string()?.let { Json.nonstrict.parse(Channel.serializer(), it) }!!
+    suspend fun createChannel(channel: CreateChannel) = postRequest("/guilds/$guildId/channels", channel, CreateChannel.serializer(), Channel.serializer())
 
     /**
      * Modify the order of channels.
@@ -123,7 +121,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyChannelPositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/channels", positions, GuildPosition.serializer().list).close()
+    suspend fun modifyChannelPositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/channels", positions, GuildPosition.serializer().list)
 
     /**
      * Get a member of this guild.
@@ -133,7 +131,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The guild member.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId").body()?.string()?.let { Json.nonstrict.parse(GuildMember.serializer(), it) }!!
+    suspend fun getMember(userId: String) = getRequest("/guilds/$guildId/members/$userId", GuildMember.serializer())
 
     /**
      * Get a list of guild members.
@@ -144,7 +142,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return List of guild members.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember").body()?.string()?.let { Json.nonstrict.parse(GuildMember.serializer().list, it) }!!
+    suspend fun getMembers(limit: Int = 1, afterMember: String = "0") = getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember", GuildMember.serializer().list)
 
     /**
      * Add a member to this guild.
@@ -156,7 +154,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMember(userId: String, addGuildMember: AddGuildMember) = putRequest("/guilds/$guildId/members/$userId", addGuildMember, AddGuildMember.serializer()).close()
+    suspend fun addMember(userId: String, addGuildMember: AddGuildMember) = putRequest("/guilds/$guildId/members/$userId", addGuildMember, AddGuildMember.serializer())
 
     /**
      * Update a guild member.
@@ -166,7 +164,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateMember(userId: String, guildMember: PatchGuildMember) = patchRequest("/guilds/$guildId/members/$userId", guildMember, PatchGuildMember.serializer()).close()
+    suspend fun updateMember(userId: String, guildMember: PatchGuildMember) = patchRequest("/guilds/$guildId/members/$userId", guildMember, PatchGuildMember.serializer())
 
     /**
      * Change a guild member's nickname.
@@ -175,7 +173,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) = patchRequest("/guilds/$guildId/members/@me/nick", guildMember, PatchGuildMemberNickname.serializer()).close()
+    suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) = patchRequest("/guilds/$guildId/members/@me/nick", guildMember, PatchGuildMemberNickname.serializer())
 
     /**
      * Add a role to a user.
@@ -185,7 +183,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMemberRole(userId: String, roleId: String) = putRequest("/guilds/$guildId/members/$userId/roles/$roleId").close()
+    suspend fun addMemberRole(userId: String, roleId: String) = putRequest("/guilds/$guildId/members/$userId/roles/$roleId")
 
     /**
      * Remove a role from a user.
@@ -195,7 +193,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeMemberRole(userId: String, roleId: String) = deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId").close()
+    suspend fun removeMemberRole(userId: String, roleId: String) = deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId")
 
     /**
      * Kick a user from the server.
@@ -204,7 +202,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeMember(userId: String) = deleteRequest("/guilds/$guildId/members/$userId").close()
+    suspend fun removeMember(userId: String) = deleteRequest("/guilds/$guildId/members/$userId")
 
     /**
      * Get user bans.
@@ -212,7 +210,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The list of bans.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getBans() = getRequest("/guilds/$guildId/bans").body()?.string()?.let { Json.nonstrict.parse(Ban.serializer().list, it) }!!
+    suspend fun getBans() = getRequest("/guilds/$guildId/bans", Ban.serializer().list)
 
     /**
      * Ban a user.
@@ -223,7 +221,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) = putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason").close()
+    suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) = putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason")
 
     /**
      * Unban a user.
@@ -232,7 +230,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeBan(userId: String) = deleteRequest("/guilds/$guildId/bans/$userId").close()
+    suspend fun removeBan(userId: String) = deleteRequest("/guilds/$guildId/bans/$userId")
 
     /**
      * Get all roles for this guild.
@@ -241,7 +239,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getRoles() = getRequest("/guilds/$guildId/roles").body()?.string()?.let { Json.nonstrict.parseList<Role>(it) }!!
+    suspend fun getRoles() = getRequest("/guilds/$guildId/roles", Role.serializer().list)
 
     /**
      * Create a role.
@@ -251,7 +249,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The created role.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole, CreateGuildRole.serializer()).body()?.string()?.let { Json.nonstrict.parse(Role.serializer(), it) }!!
+    suspend fun createRole(guildRole: CreateGuildRole) = postRequest("/guilds/$guildId/roles", guildRole, CreateGuildRole.serializer(), Role.serializer())
 
     /**
      * Change role ordering.
@@ -260,7 +258,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyRolePositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/roles", positions, GuildPosition.serializer().list).close()
+    suspend fun modifyRolePositions(positions: List<GuildPosition>) = patchRequest("/guilds/$guildId/roles", positions, GuildPosition.serializer().list)
 
     /**
      * Update a role.
@@ -271,7 +269,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The updated role.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role, PatchRole.serializer()).body()?.string()?.let { Json.nonstrict.parse(Role.serializer(), it) }!!
+    suspend fun updateRole(roleId: String, role: PatchRole) = patchRequest("/guilds/$guildId/roles/$roleId", role, PatchRole.serializer(), Role.serializer())
 
     /**
      * Delete a role.
@@ -280,7 +278,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteRole(roleId: String) = deleteRequest("/guilds/$guildId/roles/$roleId").close()
+    suspend fun deleteRole(roleId: String) = deleteRequest("/guilds/$guildId/roles/$roleId")
 
     /**
      * Get the message prune potential.
@@ -290,7 +288,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The potential results.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days").body()?.string()?.let { Json.nonstrict.parse(Pruned.serializer(), it) }!!
+    suspend fun getPrunePotential(days: Int = 1) = getRequest("/guilds/$guildId/prune?days=$days", Pruned.serializer())
 
     /**
      * Prune messages.
@@ -300,7 +298,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The pruning results.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days").body()?.string()?.let { Json.nonstrict.parse(Pruned.serializer(), it) }!!
+    suspend fun prune(days: Int = 1) = postRequest("/guilds/$guildId/prune?days=$days", Pruned.serializer())
 
     /**
      * Get the guild's voice regions.
@@ -309,7 +307,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getVoiceRegions() = getRequest("/guilds/$guildId/regions").body()?.string()?.let { Json.nonstrict.parseList<VoiceRegion>(it) }!!
+    suspend fun getVoiceRegions() = getRequest("/guilds/$guildId/regions", VoiceRegion.serializer().list)
 
     /**
      * Get the guild invites.
@@ -318,7 +316,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getInvites() = getRequest("/guilds/$guildId/invites").body()?.string()?.let { Json.nonstrict.parseList<Invite>(it) }!!
+    suspend fun getInvites() = getRequest("/guilds/$guildId/invites", Invite.serializer().list)
 
     /**
      * Get the list of integrations for the guild.
@@ -327,7 +325,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     @UseExperimental(ImplicitReflectionSerializer::class)
-    suspend fun getIntegrations() = getRequest("/guilds/$guildId/integrations").body()?.string()?.let { Json.nonstrict.parseList<GuildIntegration>(it) }!!
+    suspend fun getIntegrations() = getRequest("/guilds/$guildId/integrations", GuildIntegration.serializer().list)
 
     /**
      * Create a guild integration.
@@ -336,7 +334,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createIntegration(guildIntegration: CreateGuildIntegration) = postRequest("/guilds/$guildId/integrations", guildIntegration, CreateGuildIntegration.serializer()).close()
+    suspend fun createIntegration(guildIntegration: CreateGuildIntegration) = postRequest("/guilds/$guildId/integrations", guildIntegration, CreateGuildIntegration.serializer())
 
     /**
      * Update a guild integration.
@@ -346,7 +344,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) = patchRequest("/guilds/$guildId/integrations/$guildIntegrationId", guildIntegration, PatchGuildIntegration.serializer()).close()
+    suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) = patchRequest("/guilds/$guildId/integrations/$guildIntegrationId", guildIntegration, PatchGuildIntegration.serializer())
 
     /**
      * Delete a guild integration.
@@ -355,7 +353,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteIntegration(guildIntegrationId: String) = deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId").close()
+    suspend fun deleteIntegration(guildIntegrationId: String) = deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId")
 
     /**
      * Sync an integration.
@@ -364,7 +362,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun syncIntegration(guildIntegrationId: String) = postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync").close()
+    suspend fun syncIntegration(guildIntegrationId: String) = postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync")
 
     /**
      * Get the guild embed.
@@ -372,7 +370,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The guild embed.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getEmbed() = getRequest("/guilds/$guildId/embed").body()?.string()?.let { Json.nonstrict.parse(GuildEmbed.serializer(), it) }!!
+    suspend fun getEmbed() = getRequest("/guilds/$guildId/embed", GuildEmbed.serializer())
 
     /**
      * Update the guild embed.
@@ -382,7 +380,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The updated guild embed.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed, GuildEmbed.serializer()).body()?.string()?.let { Json.nonstrict.parse(GuildEmbed.serializer(), it) }!!
+    suspend fun updateEmbed(guildEmbed: GuildEmbed) = patchRequest("/guilds/$guildId/embed", guildEmbed, GuildEmbed.serializer(), GuildEmbed.serializer())
 
     /**
      * Get the guild's vanity url.
@@ -390,7 +388,7 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The vanity url in [Invite] form.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url").body()?.string()?.let { Json.nonstrict.parse(Invite.serializer(), it) }!!
+    suspend fun getVanityUrl() = getRequest("/guilds/$guildId/vanity-url", Invite.serializer())
 
     /**
      * Get the guild's webhooks.
@@ -398,14 +396,14 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return All the guild's webhooks.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhooks() = getRequest("/guilds/$guildId/webhooks").body()?.string()?.let { Json.nonstrict.parse(Webhook.serializer().list, it) }!!
+    suspend fun getWebhooks() = getRequest("/guilds/$guildId/webhooks", Webhook.serializer().list)
 
     /**
      * Leave the server.
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun leave() = deleteRequest("/users/@me/guilds/$guildId").close()
+    suspend fun leave() = deleteRequest("/users/@me/guilds/$guildId")
 
     /**
      * Get the audit log.
@@ -413,5 +411,5 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The audit log.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs").body()?.string()?.let { Json.nonstrict.parse(AuditLog.serializer(), it) }!!
+    suspend fun getAuditLog() = getRequest("/guilds/$guildId/audit-logs", AuditLog.serializer())
 }

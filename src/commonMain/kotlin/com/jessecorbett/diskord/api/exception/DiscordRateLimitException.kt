@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * Thrown when a client calls an endpoint too many times.
  *
  * @property message The error returned by the API.
- * @property retryAt When the rate limit resets.
+ * @property retryAt When the rate limit resets in epoch seconds.
  * @property isGlobalRateLimit if the rate limit is API specific or global.
  */
 class DiscordRateLimitException(override val message: String, val retryAt: Long, val isGlobalRateLimit: Boolean) : DiscordException()
