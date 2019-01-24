@@ -100,7 +100,7 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.9.1'
+                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.10.0'
             }
         }
         commonTest {
@@ -115,7 +115,7 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
                 implementation "org.jetbrains.kotlin:kotlin-reflect"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.1'
+                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
                 implementation 'com.squareup.okhttp3:okhttp:3.12.1'
                 implementation 'org.slf4j:slf4j-api:1.7.25'
             }
