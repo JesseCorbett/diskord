@@ -37,15 +37,15 @@ enum class ChannelType(val code: Int) {
 object ChannelTypeSerializer : KSerializer<ChannelType> {
     override val descriptor: SerialDescriptor = IntDescriptor.withName("ChannelTypeSerializer")
 
-    override fun deserialize(input: Decoder): ChannelType {
-        val target = input.decodeInt()
+    override fun deserialize(decoder: Decoder): ChannelType {
+        val target = decoder.decodeInt()
         return ChannelType.values().first {
             it.code == target
         }
     }
 
-    override fun serialize(output: Encoder, obj: ChannelType) {
-        output.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, obj: ChannelType) {
+        encoder.encodeInt(obj.code)
     }
 }
 

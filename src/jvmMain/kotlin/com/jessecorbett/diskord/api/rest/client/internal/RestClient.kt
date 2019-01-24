@@ -7,7 +7,7 @@ import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.delay
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import okhttp3.*
 import java.io.IOException
 import java.time.Instant
@@ -18,7 +18,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val discordApi = "https://discordapp.com/api"
 
-private fun <T> jsonBody(serializer: KSerializer<T>, value: T) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), JSON.stringify(serializer, value))
+private fun <T> jsonBody(serializer: KSerializer<T>, value: T) = RequestBody.create(MediaType.get("application/json; charset=utf-8"), Json.stringify(serializer, value))
 
 private fun emptyBody() = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "")
 
@@ -46,7 +46,7 @@ abstract class RestClient(
             401 -> DiscordUnauthorizedException()
             403 -> DiscordBadPermissionsException()
             404 -> DiscordNotFoundException()
-            429 -> response.body()?.string()?.let { JSON.nonstrict.parse(RateLimitExceeded.serializer(), it) }!!.let {
+            429 -> response.body()?.string()?.let { Json.nonstrict.parse(RateLimitExceeded.serializer(), it) }!!.let {
                 DiscordRateLimitException(it.message, Instant.now().plusMillis(it.retryAfter).epochSecond, it.isGlobal)
             }
             502 -> DiscordGatewayException()

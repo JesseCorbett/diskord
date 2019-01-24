@@ -14,7 +14,7 @@ import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Mapper
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -207,6 +207,6 @@ class DiscordWebSocket(
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(JSON.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data?.let { Mapper.mapNullable(it) }, sequenceNumber, eventName)))
+        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data?.let { Mapper.mapNullable(it) }, sequenceNumber, eventName)))
     }
 }

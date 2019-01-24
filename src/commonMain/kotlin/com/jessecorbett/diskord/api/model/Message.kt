@@ -43,15 +43,15 @@ enum class MessageType(val code: Int) {
 object MessageTypeSerializer : KSerializer<MessageType> {
     override val descriptor: SerialDescriptor = IntDescriptor.withName("MessageTypeSerializer")
 
-    override fun deserialize(input: Decoder): MessageType {
-        val target = input.decodeInt()
+    override fun deserialize(decoder: Decoder): MessageType {
+        val target = decoder.decodeInt()
         return MessageType.values().first {
             it.code == target
         }
     }
 
-    override fun serialize(output: Encoder, obj: MessageType) {
-        output.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, obj: MessageType) {
+        encoder.encodeInt(obj.code)
     }
 }
 
@@ -72,15 +72,15 @@ enum class MessageActivityType(val code: Int) {
 object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
     override val descriptor: SerialDescriptor = IntDescriptor.withName("MessageActivityTypeSerializer")
 
-    override fun deserialize(input: Decoder): MessageActivityType {
-        val target = input.decodeInt()
+    override fun deserialize(decoder: Decoder): MessageActivityType {
+        val target = decoder.decodeInt()
         return MessageActivityType.values().first {
             it.code == target
         }
     }
 
-    override fun serialize(output: Encoder, obj: MessageActivityType) {
-        output.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, obj: MessageActivityType) {
+        encoder.encodeInt(obj.code)
     }
 }
 

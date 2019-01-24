@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
@@ -20,7 +20,7 @@ internal class DiscordWebSocketListener(
         logger.error("Encountered an unexpected error, code: ${response.body()}")
     }
 
-    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(JSON.nonstrict.parse(GatewayMessage.serializer(), text))
+    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         TODO("This should never be called, we'll need it though if we choose to implement ETF")
