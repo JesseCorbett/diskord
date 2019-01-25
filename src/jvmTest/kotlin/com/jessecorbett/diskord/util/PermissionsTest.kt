@@ -26,4 +26,27 @@ class PermissionsTest {
         assertThat(Permission.KICK_MEMBERS in permissions).isTrue()
         assertThat(Permission.BAN_MEMBERS in permissions).isFalse()
     }
+
+    @Test
+    fun `should handle adding permissions`() {
+        var permissions = Permissions.of(Permission.ADD_REACTIONS) + Permissions.of(Permission.READ_MESSAGE_HISTORY)
+
+        assertThat(Permission.ADD_REACTIONS in permissions).isTrue()
+        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
+        assertThat(Permission.BAN_MEMBERS in permissions).isFalse()
+
+        permissions += Permission.BAN_MEMBERS
+        assertThat(Permission.BAN_MEMBERS in permissions).isTrue()
+    }
+
+    @Test
+    fun `should handle removing permissions`() {
+        var permissions = Permissions.of(Permission.ADD_REACTIONS, Permission.READ_MESSAGE_HISTORY)
+
+        assertThat(Permission.ADD_REACTIONS in permissions).isTrue()
+        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
+
+        permissions -= Permission.READ_MESSAGE_HISTORY
+        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isFalse()
+    }
 }
