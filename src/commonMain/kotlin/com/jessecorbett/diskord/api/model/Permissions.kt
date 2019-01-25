@@ -42,37 +42,7 @@ class Permissions internal constructor(val value: Int) {
     }
 
     companion object {
-        val ALL = Permissions.of(
-            Permission.CREATE_INSTANT_INVITE,
-            Permission.KICK_MEMBERS,
-            Permission.BAN_MEMBERS,
-            Permission.ADMINISTRATOR,
-            Permission.MANAGE_CHANNELS,
-            Permission.MANAGE_GUILD,
-            Permission.ADD_REACTIONS,
-            Permission.VIEW_AUDIT_LOG,
-            Permission.VIEW_CHANNEL,
-            Permission.SEND_MESSAGES,
-            Permission.SEND_TTS_MESSAGES,
-            Permission.MANAGE_MESSAGES,
-            Permission.EMBED_LINKS,
-            Permission.ATTACH_FILES,
-            Permission.READ_MESSAGE_HISTORY,
-            Permission.MENTION_EVERYONE,
-            Permission.USE_EXTERNAL_EMOJIS,
-            Permission.CONNECT,
-            Permission.SPEAK,
-            Permission.MUTE_MEMBERS,
-            Permission.DEAFEN_MEMBERS,
-            Permission.MOVE_MEMBERS,
-            Permission.USE_VAD,
-            Permission.PRIORITY_SPEAKER,
-            Permission.CHANGE_NICKNAME,
-            Permission.MANAGE_NICKNAMES,
-            Permission.MANAGE_ROLES,
-            Permission.MANAGE_WEBHOOKS,
-            Permission.MANAGE_EMOJIS
-        )
+        val ALL = Permissions.of(*Permission.values())
 
         fun of(vararg permissions: Permission) =
             Permissions(permissions.map { permission -> permission.mask }.reduce { left, right -> left or right })
