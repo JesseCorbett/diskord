@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 
 // FIXME: Move this to commonMain source set once multi-platform refactoring is done.
 
-fun Permissions.Companion.computePermissions(user: User, channel: Channel, clients: ClientStore) = runBlocking {
+fun computePermissions(user: User, channel: Channel, clients: ClientStore) = runBlocking {
     val guildId = channel.guildId ?: TODO("Throw exception signifying the channel could not be identified")
     val guild = clients.guilds[guildId].get()
     val member = clients.guilds[guildId].getMember(user.id)
@@ -14,21 +14,12 @@ fun Permissions.Companion.computePermissions(user: User, channel: Channel, clien
     computeOverwrites(basePermissions, member, channel, guild)
 }
 
-private fun computeBasePermissions(member: GuildMember, guild: Guild): Permissions {
+internal fun computeBasePermissions(member: GuildMember, guild: Guild): Permissions {
     if (member.user.id == guild.ownerId) {
         return Permissions.ALL
     }
 
-    var permissions = Permissions(guild.permissions ?: 0)
-
-    guild.roles.find { it.name == "@everyone" }?.also {
-        permissions += it.permissions
-    }
-
-    guild.roles.filter { it.id in member.roleIds }.forEach {
-        permissions += it.permissions
-    }
-
+    val permissions = Permissions(guild.permissions ?: 0)
     if (Permission.ADMINISTRATOR in permissions) {
         return Permissions.ALL
     }
@@ -36,7 +27,7 @@ private fun computeBasePermissions(member: GuildMember, guild: Guild): Permissio
     return permissions
 }
 
-private suspend fun computeOverwrites(
+internal fun computeOverwrites(
     basePermissions: Permissions,
     member: GuildMember,
     channel: Channel,
@@ -46,16 +37,17 @@ private suspend fun computeOverwrites(
         return Permissions.ALL
     }
 
-    val everyone =
-        guild.roles.find { it.name == "@everyone" } ?: TODO("Throw exception signifying that the everyone role couldn't be found (will this ever actually happen?)")
+    val everyone = guild.roles.find { it.name == "@everyone" }
 
     return channel.permissionOverwrites.let { overwrites ->
         var deniedOverwrites = 0
         var allowedOverwrites = 0
 
-        overwrites.find { it.type == OverwriteType.ROLE && it.id == everyone.id }?.also {
-            deniedOverwrites -= it.denied
-            allowedOverwrites += it.allowed
+        if (everyone != null) {
+            overwrites.find { it.type == OverwriteType.ROLE && it.id == everyone.id }?.also {
+                deniedOverwrites -= it.denied
+                allowedOverwrites += it.allowed
+            }
         }
 
         overwrites.filter { it.type == OverwriteType.ROLE && it.id in member.roleIds }.forEach {

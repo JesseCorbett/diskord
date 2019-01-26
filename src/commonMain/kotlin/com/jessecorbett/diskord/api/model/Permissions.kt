@@ -190,13 +190,17 @@ enum class Permission(val mask: Int) {
     MANAGE_EMOJIS(0x40000000);
 }
 
-class Permissions internal constructor(val value: Int) {
+data class Permissions(val value: Int) {
     operator fun contains(permission: Permission): Boolean {
         if (Permission.ADMINISTRATOR in value) {
             return true
         }
 
         return permission in value
+    }
+
+    operator fun contains(permissions: Permissions): Boolean {
+        return value and permissions.value == permissions.value
     }
 
     operator fun plus(permissions: Int) = Permissions(value or permissions)
@@ -214,6 +218,8 @@ class Permissions internal constructor(val value: Int) {
     operator fun minus(permissions: Collection<Permission>) = permissions.forEach { minus(it.mask) }
 
     operator fun minus(permission: Permission) = minus(permission.mask)
+
+    override fun toString() = "Permissions($value) --> ${Permission.values().filter { it in value }.joinToString()}"
 
     companion object {
         val ALL = Permissions.of(*Permission.values())

@@ -92,6 +92,7 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
+                implementation 'io.github.microutils:kotlin-logging-common:1.6.22'
             }
         }
         commonTest {
@@ -111,7 +112,7 @@ kotlin {
                 implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
                 implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
                 implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8'
-                implementation 'org.slf4j:slf4j-api:1.7.25'
+                implementation 'io.github.microutils:kotlin-logging:1.6.22'
             }
         }
         jvmTest {
@@ -126,6 +127,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+                implementation 'io.github.microutils:kotlin-logging-js:1.6.22'
             }
         }
         jsTest {

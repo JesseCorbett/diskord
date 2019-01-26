@@ -1,52 +1,68 @@
 package com.jessecorbett.diskord.util
 
 import assertk.assertThat
-import assertk.assertions.isFalse
-import assertk.assertions.isTrue
-import com.jessecorbett.diskord.api.model.Permission
-import com.jessecorbett.diskord.api.model.Permissions
-import kotlin.test.Test
+import assertk.assertions.isEqualTo
+import assertk.assertions.matchesPredicate
+import com.jessecorbett.diskord.api.model.*
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(MockKExtension::class)
 class PermissionsTest {
-    @Test
-    fun `administrator should have all permissions`() {
-        val permissions = Permissions.of(Permission.ADMINISTRATOR)
+    private val ownerId = "owner id"
 
-        assertThat(Permission.ADMINISTRATOR in permissions).isTrue()
-        assertThat(Permission.VIEW_AUDIT_LOG in permissions).isTrue()
-        assertThat(Permission.MANAGE_CHANNELS in permissions).isTrue()
-        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
+    @MockK
+    lateinit var user: User
+
+    @MockK
+    lateinit var member: GuildMember
+
+    @MockK
+    lateinit var guild: Guild
+
+    @MockK
+    lateinit var channel: Channel
+
+    @BeforeEach
+    fun init() {
+        every { guild.ownerId } returns ownerId
+        every { member.user } returns user
     }
 
     @Test
-    fun `should handle roles which have certain permissions`() {
-        val permissions = Permissions.of(Permission.READ_MESSAGE_HISTORY, Permission.KICK_MEMBERS)
+    fun `should compute all base permissions for administrator`() {
+        every { user.id } returns ownerId
 
-        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
-        assertThat(Permission.KICK_MEMBERS in permissions).isTrue()
-        assertThat(Permission.BAN_MEMBERS in permissions).isFalse()
+        assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.ALL)
     }
 
     @Test
-    fun `should handle adding permissions`() {
-        var permissions = Permissions.of(Permission.ADD_REACTIONS) + Permissions.of(Permission.READ_MESSAGE_HISTORY)
+    fun `should compute base permissions for administrative user`() {
+        every { user.id } returns "user id"
+        every { guild.permissions } returns Permission.ADMINISTRATOR.mask
 
-        assertThat(Permission.ADD_REACTIONS in permissions).isTrue()
-        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
-        assertThat(Permission.BAN_MEMBERS in permissions).isFalse()
-
-        permissions += Permission.BAN_MEMBERS
-        assertThat(Permission.BAN_MEMBERS in permissions).isTrue()
+        assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.ALL)
     }
 
     @Test
-    fun `should handle removing permissions`() {
-        var permissions = Permissions.of(Permission.ADD_REACTIONS, Permission.READ_MESSAGE_HISTORY)
+    fun `should compute base permissions for user with no permissions`() {
+        every { user.id } returns "user id"
+        every { guild.permissions } returns 0
 
-        assertThat(Permission.ADD_REACTIONS in permissions).isTrue()
-        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isTrue()
+        assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions(0))
+    }
 
-        permissions -= Permission.READ_MESSAGE_HISTORY
-        assertThat(Permission.READ_MESSAGE_HISTORY in permissions).isFalse()
+    @Test
+    fun `should compute base permissions for user with some permissions`() {
+        val permissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+
+        every { user.id } returns "user id"
+        every { guild.permissions } returns permissions.value
+
+        assertThat(computeBasePermissions(member, guild)).matchesPredicate { permissions in it }
     }
 }
