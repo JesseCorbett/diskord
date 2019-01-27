@@ -12,9 +12,10 @@ import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.*
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Mapper
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -169,21 +170,21 @@ class DiscordWebSocket(
 
     private fun initializeSession(hello: Hello) {
         if (sessionId != null && sequenceNumber != null) {
-            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!))
+            sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
         } else {
             val identify = if (shardCount > 0) {
                 Identify(token, listOf(shardId, shardCount))
             } else {
                 Identify(token)
             }
-            sendGatewayMessage(OpCode.IDENTIFY, identify)
+            sendGatewayMessage(OpCode.IDENTIFY, identify, Identify.serializer())
         }
 
         heartbeatJob?.cancel()
 
         heartbeatJob = GlobalScope.launch(heartbeatContext) {
             while (this.isActive) {
-                sendGatewayMessage(OpCode.HEARTBEAT, sequenceNumber)
+                sendGatewayMessage(OpCode.HEARTBEAT, sequenceNumber!!, Int.serializer())
                 delay(hello.heartbeatInterval)
             }
         }
@@ -203,9 +204,15 @@ class DiscordWebSocket(
         }
     }
 
-    private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
+    private fun sendGatewayMessage(opCode: OpCode, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data?.let { Mapper.mapNullable(it) }, sequenceNumber, eventName)))
+        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, null, sequenceNumber, eventName)))
+    }
+
+    private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
+        logger.debug("Sending OpCode: $opCode")
+        val eventName = event?.name ?: ""
+        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
     }
 }
