@@ -12,6 +12,7 @@ import com.jessecorbett.diskord.api.rest.CreateWebhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.api.rest.client.ChannelClient
+import com.jessecorbett.diskord.api.rest.client.WebhookClient
 import kotlinx.coroutines.runBlocking
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
