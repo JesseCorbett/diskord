@@ -203,7 +203,6 @@ class DiscordWebSocket(
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     private fun sendGatewayMessage(opCode: OpCode, data: Any? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""

@@ -238,7 +238,6 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The list of all roles.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     suspend fun getRoles() = getRequest("/guilds/$guildId/roles", Role.serializer().list)
 
     /**
@@ -306,7 +305,6 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The voice regions.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     suspend fun getVoiceRegions() = getRequest("/guilds/$guildId/regions", VoiceRegion.serializer().list)
 
     /**
@@ -315,7 +313,6 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return All guild invites.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     suspend fun getInvites() = getRequest("/guilds/$guildId/invites", Invite.serializer().list)
 
     /**
@@ -324,7 +321,6 @@ class GuildClient(token: String, val guildId: String, userType: DiscordUserType 
      * @return The list fo guild integrations.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    @UseExperimental(ImplicitReflectionSerializer::class)
     suspend fun getIntegrations() = getRequest("/guilds/$guildId/integrations", GuildIntegration.serializer().list)
 
     /**
