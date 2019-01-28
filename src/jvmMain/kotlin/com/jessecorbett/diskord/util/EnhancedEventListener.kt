@@ -7,7 +7,6 @@ import com.jessecorbett.diskord.api.model.Guild
 import com.jessecorbett.diskord.api.model.Message
 import com.jessecorbett.diskord.api.rest.Embed
 import com.jessecorbett.diskord.api.rest.client.ChannelClient
-import com.jessecorbett.diskord.api.websocket.EventListener
 import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed

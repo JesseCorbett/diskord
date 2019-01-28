@@ -37,16 +37,6 @@ internal class DiscordWebSocketListener(
     }
 
     override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
-        lifecycleManager.failed(throwable, response)
+        lifecycleManager.failed(throwable, response?.code(), response?.body()?.string())
     }
-}
-
-internal interface WebsocketLifecycleManager {
-    fun start()
-
-    fun closing(code: WebSocketCloseCode, reason: String)
-
-    fun closed(code: WebSocketCloseCode, reason: String)
-
-    fun failed(failure: Throwable, response: Response?)
 }

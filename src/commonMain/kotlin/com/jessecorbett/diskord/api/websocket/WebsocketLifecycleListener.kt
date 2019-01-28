@@ -1,7 +1,5 @@
 package com.jessecorbett.diskord.api.websocket
 
-import okhttp3.Response
-
 /**
  * An optional lifecycle listener of the lower level websocket connection.
  */
@@ -32,7 +30,8 @@ interface WebsocketLifecycleListener {
      * Runs when a websocket connection has failed.
      *
      * @param failure The throwable source of the websocket failing.
-     * @param response The response from the server if one exists.
+     * @param code The response code from the server if one exists.
+     * @param body The response body from the server if one exists.
      */
-    fun failed(failure: Throwable, response: Response?)
+    fun failed(failure: Throwable, code: Int?, body: String?)
 }

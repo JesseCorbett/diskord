@@ -10,16 +10,12 @@ import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
-import com.jessecorbett.diskord.internal.httpClient
+import com.jessecorbett.diskord.internal.Logger
 import kotlinx.coroutines.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Mapper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import org.slf4j.LoggerFactory
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -50,7 +46,7 @@ class DiscordWebSocket(
         private val eventListenerContext: CoroutineContext = Dispatchers.Default,
         private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
-    private val logger = LoggerFactory.getLogger(this.javaClass)
+    private val logger = Logger("com.jessecorbett.diskord.api.websocket.DiscordWebSocket")
     private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
 
@@ -64,36 +60,33 @@ class DiscordWebSocket(
         GlobalScope.launch {
             val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-            val request = Request.Builder()
-                    .url("$gatewayUrl?encoding=json&v=6")
-                    .addHeader("Authorization", "Bot $token")
-                    .build()
+            socket = WebSocket().apply {
+                start("$gatewayUrl?encoding=json&v=6", token, object : WebsocketLifecycleManager {
+                    override fun start() {
+                        websocketLifecycleListener?.started()
+                    }
 
-            socket = httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
-                override fun start() {
-                    websocketLifecycleListener?.started()
-                }
+                    override fun closing(code: WebSocketCloseCode, reason: String) {
+                        logger.info("Closing with code '$code' and reason '$reason'")
+                        if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                            restart()
+                        websocketLifecycleListener?.closing(code, reason)
+                    }
 
-                override fun closing(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closing with code '$code' and reason '$reason'")
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                    override fun closed(code: WebSocketCloseCode, reason: String) {
+                        logger.info("Closed with code '$code' and reason '$reason'")
+                        if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                            restart()
+                        websocketLifecycleListener?.closed(code, reason)
+                    }
+
+                    override fun failed(failure: Throwable, code: Int?, body: String?) {
+                        logger.error("Socket connection encountered an exception", failure)
                         restart()
-                    websocketLifecycleListener?.closing(code, reason)
-                }
-
-                override fun closed(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closed with code '$code' and reason '$reason'")
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                        restart()
-                    websocketLifecycleListener?.closed(code, reason)
-                }
-
-                override fun failed(failure: Throwable, response: Response?) {
-                    logger.error("Socket connection encountered an exception", failure)
-                    restart()
-                    websocketLifecycleListener?.failed(failure, response)
-                }
-            }))
+                        websocketLifecycleListener?.failed(failure, code, body)
+                    }
+                }, ::receiveMessage)
+            }
         }
     }
 
@@ -117,10 +110,7 @@ class DiscordWebSocket(
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
-        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
-        if (forceClose) {
-            httpClient.dispatcher().executorService().shutdown()
-        }
+        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close", forceClose)
         logger.info("Closed connection")
     }
 
@@ -157,10 +147,10 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                 initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
-                // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart. Low priority.
+                // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
             }
             else -> {
                 throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")
@@ -207,12 +197,12 @@ class DiscordWebSocket(
     private fun sendGatewayMessage(opCode: OpCode, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, null, sequenceNumber, eventName)))
+        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, null, sequenceNumber, eventName)))
     }
 
     private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
+        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
     }
 }
