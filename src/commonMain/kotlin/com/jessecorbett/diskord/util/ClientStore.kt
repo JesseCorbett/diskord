@@ -5,7 +5,6 @@ import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.api.rest.client.WebhookClient
 import com.jessecorbett.diskord.api.rest.client.internal.BaseRestClient
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * A container of [RestClients] for each of the 3 resource clients and the [DiscordClient].
@@ -74,10 +73,10 @@ class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, {
  * @param T the BaseRestClient implementation class.
  * @param userToken the user token used for authentication by each [BaseRestClient].
  * @param gen a lambda which returns a new instance of class T when requested by the user.
- * @constructor Creates an instance and sets up a [ConcurrentHashMap] backing the group.
+ * @constructor Creates an instance and sets up a [MutableMap] backing the group.
  */
 abstract class RestClients<T: BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
-    private val clients: MutableMap<String, T> = ConcurrentHashMap()
+    private val clients: MutableMap<String, T> = mutableMapOf()
 
     /**
      * Gets a [BaseRestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.

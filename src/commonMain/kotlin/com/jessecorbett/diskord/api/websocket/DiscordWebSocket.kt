@@ -60,33 +60,31 @@ class DiscordWebSocket(
         GlobalScope.launch {
             val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-            socket = WebSocket().apply {
-                start("$gatewayUrl?encoding=json&v=6", token, object : WebsocketLifecycleManager {
-                    override fun start() {
-                        websocketLifecycleListener?.started()
-                    }
+            socket = WebSocket("$gatewayUrl?encoding=json&v=6", token, object : WebsocketLifecycleManager {
+                override fun start() {
+                    websocketLifecycleListener?.started()
+                }
 
-                    override fun closing(code: WebSocketCloseCode, reason: String) {
-                        logger.info("Closing with code '$code' and reason '$reason'")
-                        if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                            restart()
-                        websocketLifecycleListener?.closing(code, reason)
-                    }
-
-                    override fun closed(code: WebSocketCloseCode, reason: String) {
-                        logger.info("Closed with code '$code' and reason '$reason'")
-                        if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                            restart()
-                        websocketLifecycleListener?.closed(code, reason)
-                    }
-
-                    override fun failed(failure: Throwable, code: Int?, body: String?) {
-                        logger.error("Socket connection encountered an exception", failure)
+                override fun closing(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closing with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
                         restart()
-                        websocketLifecycleListener?.failed(failure, code, body)
-                    }
-                }, ::receiveMessage)
-            }
+                    websocketLifecycleListener?.closing(code, reason)
+                }
+
+                override fun closed(code: WebSocketCloseCode, reason: String) {
+                    logger.info("Closed with code '$code' and reason '$reason'")
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
+                        restart()
+                    websocketLifecycleListener?.closed(code, reason)
+                }
+
+                override fun failed(failure: Throwable, code: Int?, body: String?) {
+                    logger.error("Socket connection encountered an exception", failure)
+                    restart()
+                    websocketLifecycleListener?.failed(failure, code, body)
+                }
+            }, ::receiveMessage)
         }
     }
 
@@ -181,9 +179,11 @@ class DiscordWebSocket(
     }
 
     private fun receiveGatewayMessage(gatewayMessage: GatewayMessage) {
-        gatewayMessage.dataPayload ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
+        gatewayMessage.dataPayload
+                ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
-        val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
+        val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
+                ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         if (discordEvent == DiscordEvent.READY) {
             sessionId = Mapper.unmapNullable(Ready.serializer(), gatewayMessage.dataPayload).sessionId
