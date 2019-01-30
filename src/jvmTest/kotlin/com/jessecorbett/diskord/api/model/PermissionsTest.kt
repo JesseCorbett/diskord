@@ -44,9 +44,18 @@ class PermissionsTest {
             assertThat(it in permissions).isTrue()
         }
 
-        permissions -= Permission.READ_MESSAGE_HISTORY
+        permissions -= Permissions.of(Permission.READ_MESSAGE_HISTORY, Permission.ADMINISTRATOR)
         Permission.values().forEach {
-            if (it == Permission.READ_MESSAGE_HISTORY) {
+            if (it in arrayOf(Permission.READ_MESSAGE_HISTORY, Permission.ADMINISTRATOR)) {
+                assertThat(it in permissions).isFalse()
+            } else {
+                assertThat(it in permissions).isTrue()
+            }
+        }
+
+        permissions -= Permissions.of(Permission.SEND_MESSAGES)
+        Permission.values().forEach {
+            if (it in arrayOf(Permission.SEND_MESSAGES, Permission.READ_MESSAGE_HISTORY, Permission.ADMINISTRATOR)) {
                 assertThat(it in permissions).isFalse()
             } else {
                 assertThat(it in permissions).isTrue()
