@@ -7,9 +7,13 @@ import com.jessecorbett.diskord.api.model.*
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+
+// FIXME: Move to commonTest when class-under-test is moved to commonMain.
+//  This means that @MockK will need to be replaced with explicit mocks in init().
 
 @ExtendWith(MockKExtension::class)
 class PermissionsTest {
@@ -34,14 +38,14 @@ class PermissionsTest {
     }
 
     @Test
-    fun `should compute all base permissions for administrator`() {
+    fun `should compute all base permissions for server owner`() {
         every { user.id } returns ownerId
 
         assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.ALL)
     }
 
     @Test
-    fun `should compute base permissions for administrative user`() {
+    fun `should compute all base permissions for administrative user`() {
         every { user.id } returns "user id"
         every { guild.permissions } returns Permission.ADMINISTRATOR.mask
 
@@ -53,7 +57,7 @@ class PermissionsTest {
         every { user.id } returns "user id"
         every { guild.permissions } returns 0
 
-        assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions(0))
+        assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.NONE)
     }
 
     @Test
@@ -64,5 +68,57 @@ class PermissionsTest {
         every { guild.permissions } returns permissions.value
 
         assertThat(computeBasePermissions(member, guild)).matchesPredicate { permissions in it }
+    }
+
+    @Test
+    fun `should compute all overwrites for administrative user`() {
+        val permissions = Permissions.of(Permission.ADMINISTRATOR)
+
+        assertThat(computeOverwrites(permissions, member, channel, guild)).isEqualTo(Permissions.ALL)
+    }
+
+    @Test
+    fun `should compute all overwrites for user with no permissions and no overwrites`() {
+        val permissions = Permissions.NONE
+        val everyone = mockRole("@everyone")
+
+        every { guild.roles } returns listOf(everyone)
+        every { channel.permissionOverwrites } returns listOf()
+
+        assertThat(computeOverwrites(permissions, member, channel, guild)).isEqualTo(Permissions.NONE)
+    }
+
+    @Test
+    fun `should compute all overwrites for user with basic permissions and @everyone overwrites`() {
+        val permissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+        val everyone = mockRole("@everyone")
+        val everyoneOverwrites = mockOverwrite(OverwriteType.ROLE, "@everyone",
+            denied = Permission.SEND_MESSAGES.mask,
+            allowed = Permission.READ_MESSAGE_HISTORY.mask)
+
+        every { member.roleIds } returns listOf()
+        every { guild.roles } returns listOf(everyone)
+        every { channel.permissionOverwrites } returns listOf(everyoneOverwrites)
+
+        assertThat(computeOverwrites(permissions, member, channel, guild))
+            .isEqualTo(Permissions.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY))
+    }
+
+    private fun mockRole(id: String, name: String = id, permissions: Int = 0) = mockk<Role>().also {
+        every { it.id } returns id
+        every { it.name } returns name
+        every { it.permissions } returns permissions
+    }
+
+    private fun mockOverwrite(
+        type: OverwriteType,
+        id: String,
+        denied: Int = 0,
+        allowed: Int = 0
+    ) = mockk<Overwrite>().also {
+        every { it.type } returns type
+        every { it.id } returns id
+        every { it.denied } returns denied
+        every { it.allowed } returns allowed
     }
 }

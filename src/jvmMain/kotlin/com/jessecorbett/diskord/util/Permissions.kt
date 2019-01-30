@@ -60,7 +60,6 @@ internal fun computeOverwrites(
             allowedOverwrites += it.allowed
         }
 
-        val permissions = basePermissions - deniedOverwrites
-        permissions + allowedOverwrites
+        (basePermissions - deniedOverwrites) + allowedOverwrites
     }
 }

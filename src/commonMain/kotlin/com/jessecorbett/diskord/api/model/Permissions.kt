@@ -224,6 +224,8 @@ data class Permissions(val value: Int) {
     companion object {
         val ALL = Permissions.of(*Permission.values())
 
+        val NONE = Permissions(0)
+
         fun of(vararg permissions: Permission) =
             Permissions(permissions.map { permission -> permission.mask }.reduce { left, right -> left or right })
 
