@@ -98,6 +98,8 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-common'
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation 'com.willowtreeapps.assertk:assertk-common:0.13'
+                implementation 'io.mockk:mockk-common:1.9'
             }
         }
 
@@ -117,6 +119,7 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+                implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
                 implementation 'com.willowtreeapps.assertk:assertk-jvm:0.13'
                 implementation 'io.mockk:mockk:1.9'
             }
@@ -133,6 +136,10 @@ kotlin {
             }
         }
     }
+}
+
+jvmTest {
+    useJUnitPlatform()
 }
 
 bintray {
