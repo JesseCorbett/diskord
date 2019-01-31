@@ -101,6 +101,8 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-common'
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                implementation 'com.willowtreeapps.assertk:assertk-common:0.13'
+                implementation 'io.mockk:mockk-common:1.9'
             }
         }
 
