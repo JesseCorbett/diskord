@@ -45,19 +45,19 @@ internal fun computeOverwrites(
 
         if (everyone != null) {
             overwrites.find { it.type == OverwriteType.ROLE && it.id == everyone.id }?.also {
-                deniedOverwrites -= it.denied
-                allowedOverwrites += it.allowed
+                deniedOverwrites = deniedOverwrites or it.denied
+                allowedOverwrites = allowedOverwrites or it.allowed
             }
         }
 
         overwrites.filter { it.type == OverwriteType.ROLE && it.id in member.roleIds }.forEach {
-            deniedOverwrites -= it.denied
-            allowedOverwrites += it.allowed
+            deniedOverwrites = deniedOverwrites or it.denied
+            allowedOverwrites = allowedOverwrites or it.allowed
         }
 
         overwrites.find { it.type == OverwriteType.MEMBER && it.id == member.user.id }?.also {
-            deniedOverwrites -= it.denied
-            allowedOverwrites += it.allowed
+            deniedOverwrites = deniedOverwrites or it.denied
+            allowedOverwrites = allowedOverwrites or it.allowed
         }
 
         (basePermissions - deniedOverwrites) + allowedOverwrites

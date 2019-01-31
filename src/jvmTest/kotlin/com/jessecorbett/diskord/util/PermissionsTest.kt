@@ -79,46 +79,76 @@ class PermissionsTest {
 
     @Test
     fun `should compute all overwrites for user with no permissions and no overwrites`() {
-        val permissions = Permissions.NONE
+        val basePermissions = Permissions.NONE
         val everyone = mockRole("@everyone")
 
         every { guild.roles } returns listOf(everyone)
         every { channel.permissionOverwrites } returns listOf()
 
-        assertThat(computeOverwrites(permissions, member, channel, guild)).isEqualTo(Permissions.NONE)
+        assertThat(computeOverwrites(basePermissions, member, channel, guild)).isEqualTo(Permissions.NONE)
     }
 
     @Test
     fun `should compute all overwrites for user with basic permissions and @everyone overwrites`() {
-        val permissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+        val basePermissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+
         val everyone = mockRole("@everyone")
         val everyoneOverwrites = mockOverwrite(OverwriteType.ROLE, "@everyone",
-            denied = Permission.SEND_MESSAGES.mask,
-            allowed = Permission.READ_MESSAGE_HISTORY.mask)
+            denied = Permissions.of(Permission.SEND_MESSAGES),
+            allowed = Permissions.of(Permission.READ_MESSAGE_HISTORY))
 
         every { member.roleIds } returns listOf()
         every { guild.roles } returns listOf(everyone)
         every { channel.permissionOverwrites } returns listOf(everyoneOverwrites)
 
-        assertThat(computeOverwrites(permissions, member, channel, guild))
+        assertThat(computeOverwrites(basePermissions, member, channel, guild))
             .isEqualTo(Permissions.of(Permission.VIEW_CHANNEL, Permission.READ_MESSAGE_HISTORY))
     }
 
-    private fun mockRole(id: String, name: String = id, permissions: Int = 0) = mockk<Role>().also {
+    @Test
+    fun `should compute all overwrites for user with multiple roles and simple overwrites`() {
+        val basePermissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES,
+            Permission.KICK_MEMBERS, Permission.BAN_MEMBERS)
+
+        val everyone = mockRole("@everyone", Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+        val voice = mockRole("voice")
+        val moderator = mockRole("moderator", Permission.KICK_MEMBERS, Permission.BAN_MEMBERS)
+
+        val everyoneOverwrites = mockOverwrite(OverwriteType.ROLE, "@everyone")
+        val voiceOverwrites = mockOverwrite(OverwriteType.ROLE, "voice",
+            allowed = Permissions.of(Permission.SPEAK, Permission.CONNECT))
+        val moderatorOverwrites = mockOverwrite(OverwriteType.ROLE, "moderator")
+
+        every { member.roleIds } returns listOf("voice", "moderator")
+        every { guild.roles } returns listOf(everyone, voice, moderator)
+        every { channel.permissionOverwrites } returns listOf(everyoneOverwrites, voiceOverwrites, moderatorOverwrites)
+
+        assertThat(computeOverwrites(basePermissions, member, channel, guild))
+            .isEqualTo(Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES,
+                Permission.KICK_MEMBERS, Permission.BAN_MEMBERS, Permission.SPEAK, Permission.CONNECT))
+    }
+
+
+    fun `should compute all overwrites for user with multiple roles and complex overwrites`() {}
+
+    private fun mockRole(id: String, vararg permissions: Permission)
+            = mockRole(id, permissions = if (permissions.isEmpty()) { Permissions.NONE } else { Permissions.of(*permissions) })
+
+    private fun mockRole(id: String, name: String = id, permissions: Permissions) = mockk<Role>().also {
         every { it.id } returns id
         every { it.name } returns name
-        every { it.permissions } returns permissions
+        every { it.permissions } returns permissions.value
     }
 
     private fun mockOverwrite(
         type: OverwriteType,
         id: String,
-        denied: Int = 0,
-        allowed: Int = 0
+        denied: Permissions = Permissions.NONE,
+        allowed: Permissions = Permissions.NONE
     ) = mockk<Overwrite>().also {
         every { it.type } returns type
         every { it.id } returns id
-        every { it.denied } returns denied
-        every { it.allowed } returns allowed
+        every { it.denied } returns denied.value
+        every { it.allowed } returns allowed.value
     }
 }
