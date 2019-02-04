@@ -14,7 +14,7 @@ abstract class EventListener {
      * @param event The event type.
      * @param json The json data associated with the event.
      */
-    open suspend fun onEvent(event: DiscordEvent, json: String) {}
+    open suspend fun onEvent(event: DiscordEvent, data: Map<String, Any?>) {}
 
     /**
      * Fired when the gateway acknowledges the connection as ready.

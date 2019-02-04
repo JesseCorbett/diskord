@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0] - 2019-02-03
+
+### Changed
+- Ported internal structure to be a multiplatform project
+- Ported to kotlinx.serialization from jackson
+
 ## [1.2.0] - 2019-01-20
 
 ### Added

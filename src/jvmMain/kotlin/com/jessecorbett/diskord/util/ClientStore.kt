@@ -4,7 +4,7 @@ import com.jessecorbett.diskord.api.rest.client.ChannelClient
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.api.rest.client.WebhookClient
-import com.jessecorbett.diskord.api.rest.client.internal.RestClient
+import com.jessecorbett.diskord.api.rest.client.internal.BaseRestClient
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -67,24 +67,24 @@ class GuildClients(userToken: String): RestClients<GuildClient>(userToken, { Gui
 class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 /**
- * Generic container for [RestClient] instances.
+ * Generic container for [BaseRestClient] instances.
  *
- * Automatically creates and stores [RestClient] instances based on the id relevant to each client instance.
+ * Automatically creates and stores [BaseRestClient] instances based on the id relevant to each client instance.
  *
- * @param T the RestClient implementation class.
- * @param userToken the user token used for authentication by each [RestClient].
+ * @param T the BaseRestClient implementation class.
+ * @param userToken the user token used for authentication by each [BaseRestClient].
  * @param gen a lambda which returns a new instance of class T when requested by the user.
  * @constructor Creates an instance and sets up a [ConcurrentHashMap] backing the group.
  */
-abstract class RestClients<T: RestClient>(private val userToken: String, private val gen: (String) -> T) {
+abstract class RestClients<T: BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
     private val clients: MutableMap<String, T> = ConcurrentHashMap()
 
     /**
-     * Gets a [RestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.
+     * Gets a [BaseRestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.
      *
      * @param resourceId the id of the requested resource client, such as channelId or guildId
      *
-     * @return a [RestClient] implementation for the specified resource
+     * @return a [BaseRestClient] implementation for the specified resource
      */
     operator fun get(resourceId: String) = clients.getOrPut(resourceId) { gen(resourceId) }
 }

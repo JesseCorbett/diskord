@@ -1,13 +1,11 @@
 package com.jessecorbett.diskord.api.websocket
 
-import com.fasterxml.jackson.annotation.JsonValue
-
 /**
  * Standard and discord specific close codes.
  *
  * @property code the close code represented.
  */
-enum class WebSocketCloseCode(@JsonValue val code: Int) {
+enum class WebSocketCloseCode(val code: Int) {
     /*
      * Standard Socket Codes
      * https://tools.ietf.org/html/rfc6455#section-7.4
