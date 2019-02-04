@@ -5,34 +5,25 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.matchesPredicate
 import com.jessecorbett.diskord.api.model.*
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
-// FIXME: Move to commonTest when class-under-test is moved to commonMain.
-//  This means that @MockK will need to be replaced with explicit mocks in init().
-
-@ExtendWith(MockKExtension::class)
 class PermissionsTest {
     private val ownerId = "owner id"
 
-    @MockK
-    lateinit var user: User
+    private lateinit var user: User
+    private lateinit var member: GuildMember
+    private lateinit var guild: Guild
+    private lateinit var channel: Channel
 
-    @MockK
-    lateinit var member: GuildMember
-
-    @MockK
-    lateinit var guild: Guild
-
-    @MockK
-    lateinit var channel: Channel
-
-    @BeforeEach
+    @BeforeTest
     fun init() {
+        user = mockk()
+        member = mockk()
+        guild = mockk()
+        channel = mockk()
+
         every { guild.ownerId } returns ownerId
         every { member.user } returns user
     }
@@ -128,8 +119,29 @@ class PermissionsTest {
                 Permission.KICK_MEMBERS, Permission.BAN_MEMBERS, Permission.SPEAK, Permission.CONNECT))
     }
 
+    @Test
+    fun `should compute all overwrites for user with multiple roles and complex overwrites`() {
 
-    fun `should compute all overwrites for user with multiple roles and complex overwrites`() {}
+        val basePermissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES,
+            Permission.KICK_MEMBERS, Permission.BAN_MEMBERS)
+
+        val everyone = mockRole("@everyone", Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
+        val voice = mockRole("voice")
+        val moderator = mockRole("moderator", Permission.KICK_MEMBERS, Permission.BAN_MEMBERS)
+
+        val everyoneOverwrites = mockOverwrite(OverwriteType.ROLE, "@everyone")
+        val voiceOverwrites = mockOverwrite(OverwriteType.ROLE, "voice",
+            allowed = Permissions.of(Permission.SPEAK, Permission.CONNECT))
+        val moderatorOverwrites = mockOverwrite(OverwriteType.ROLE, "moderator")
+
+        every { member.roleIds } returns listOf("voice", "moderator")
+        every { guild.roles } returns listOf(everyone, voice, moderator)
+        every { channel.permissionOverwrites } returns listOf(everyoneOverwrites, voiceOverwrites, moderatorOverwrites)
+
+        assertThat(computeOverwrites(basePermissions, member, channel, guild))
+            .isEqualTo(Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES,
+                Permission.KICK_MEMBERS, Permission.BAN_MEMBERS, Permission.SPEAK, Permission.CONNECT))
+    }
 
     private fun mockRole(id: String, vararg permissions: Permission)
             = mockRole(id, permissions = if (permissions.isEmpty()) { Permissions.NONE } else { Permissions.of(*permissions) })

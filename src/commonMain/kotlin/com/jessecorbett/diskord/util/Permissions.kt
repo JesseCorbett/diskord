@@ -1,18 +1,9 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.model.*
-import kotlinx.coroutines.runBlocking
 
-// FIXME: Move this to commonMain source set once multi-platform refactoring is done.
-
-fun computePermissions(user: User, channel: Channel, clients: ClientStore) = runBlocking {
-    val guildId = channel.guildId ?: TODO("Throw exception signifying the channel could not be identified")
-    val guild = clients.guilds[guildId].get()
-    val member = clients.guilds[guildId].getMember(user.id)
-    val basePermissions = computeBasePermissions(member, guild)
-
-    computeOverwrites(basePermissions, member, channel, guild)
-}
+fun computePermissions(member: GuildMember, channel: Channel, guild: Guild) =
+    computeOverwrites(computeBasePermissions(member, guild), member, channel, guild)
 
 internal fun computeBasePermissions(member: GuildMember, guild: Guild): Permissions {
     if (member.user.id == guild.ownerId) {
