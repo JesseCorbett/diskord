@@ -13,7 +13,6 @@ import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import kotlinx.coroutines.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Mapper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import kotlin.coroutines.CoroutineContext
@@ -134,7 +133,8 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
+
+                initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart. Low priority.
@@ -173,7 +173,7 @@ class DiscordWebSocket(
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = Mapper.unmapNullable(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         GlobalScope.launch(eventListenerContext) {
@@ -188,6 +188,6 @@ class DiscordWebSocket(
 
     private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
         val eventName = event?.name ?: ""
-        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
+        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)))
     }
 }

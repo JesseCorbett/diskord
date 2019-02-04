@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.api.websocket.model
 
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.IntDescriptor
+import kotlinx.serialization.json.JsonElement
 
 /**
  * A message sent through the websocket gateway.
@@ -14,7 +15,7 @@ import kotlinx.serialization.internal.IntDescriptor
 @Serializable
 data class GatewayMessage(
     @SerialName("op") val opCode: OpCode,
-    @Optional @SerialName("d") val dataPayload: Map<String, Any?>? = null,
+    @Optional @SerialName("d") val dataPayload: JsonElement? = null,
     @Optional @SerialName("s") val sequenceNumber: Int? = null,
     @Optional @SerialName("t") val event: String? = null
 )
