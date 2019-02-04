@@ -4,7 +4,6 @@ import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.util.EnhancedEventListener
-import com.jessecorbett.diskord.util.words
 
 /**
  * Marks a class or function as belonging to the Diskord DSL.
@@ -66,12 +65,12 @@ class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount
      * @param block The lambda to call, passing the event enum and JSON string.
      */
     @DiskordDsl
-    fun anyEvent(block: suspend (DiscordEvent, String) -> Unit) { anyEventHooks += block }
-    private val anyEventHooks: MutableList<suspend (DiscordEvent, String) -> Unit> = ArrayList()
+    fun anyEvent(block: suspend (DiscordEvent, Map<String, Any?>) -> Unit) { anyEventHooks += block }
+    private val anyEventHooks: MutableList<suspend (DiscordEvent, Map<String, Any?>) -> Unit> = ArrayList()
     /**
      * @suppress Maps event to DSL hooks.
      */
-    override suspend fun onEvent(event: DiscordEvent, json: String) { anyEventHooks.forEach { it(event, json) } }
+    override suspend fun onEvent(event: DiscordEvent, data: Map<String, Any?>) { anyEventHooks.forEach { it(event, data) } }
 
     /**
      * Registers a lambda to be called when the connection has reached a [DiscordEvent.READY] state.

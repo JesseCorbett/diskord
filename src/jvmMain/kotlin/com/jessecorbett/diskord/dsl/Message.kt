@@ -2,7 +2,6 @@ package com.jessecorbett.diskord.dsl
 
 import com.jessecorbett.diskord.api.model.Color
 import com.jessecorbett.diskord.api.rest.*
-import java.time.Instant
 
 /**
  * DSL command to create a message embed.
@@ -95,7 +94,7 @@ class CombinedMessageEmbed(
         var title: String? = null,
         var description: String? = null,
         var url: String? = null,
-        var timestamp: Instant? = null,
+        var timestamp: String? = null,
         var color: Color? = null,
         var footer: EmbedFooter? = null,
         var image: EmbedImage? = null,
