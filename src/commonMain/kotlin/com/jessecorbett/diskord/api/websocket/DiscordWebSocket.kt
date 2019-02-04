@@ -59,7 +59,7 @@ class DiscordWebSocket(
         GlobalScope.launch {
             val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-            socket = WebSocket("$gatewayUrl?encoding=json&v=6", token, ::receiveMessage, object : WebSocketLifecycleManager {
+            socket = WebSocket(gatewayUrl, token, ::receiveMessage, object : WebSocketLifecycleManager {
                 override fun start() {
                     websocketLifecycleListener?.started()
                 }
