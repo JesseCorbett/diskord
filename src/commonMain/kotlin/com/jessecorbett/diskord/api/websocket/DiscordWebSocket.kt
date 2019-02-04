@@ -39,7 +39,7 @@ class DiscordWebSocket(
     var sessionId: String? = null,
     var sequenceNumber: Int? = null,
     private val shardId: Int = 0,
-    private val shardCount: Int = 0,
+    private val shardCount: Int = 1,
     private val userType: DiscordUserType = DiscordUserType.BOT,
     private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
     private val eventListenerContext: CoroutineContext = Dispatchers.Default,
@@ -133,7 +133,6 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-
                 initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
