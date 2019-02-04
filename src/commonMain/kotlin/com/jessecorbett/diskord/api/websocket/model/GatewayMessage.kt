@@ -13,10 +13,10 @@ import kotlinx.serialization.internal.IntDescriptor
  */
 @Serializable
 data class GatewayMessage(
-        @SerialName("op") val opCode: OpCode,
-        @SerialName("d") val dataPayload: Map<String, Any?>?,
-        @SerialName("s") val sequenceNumber: Int?,
-        @SerialName("t") val event: String? = null
+    @SerialName("op") val opCode: OpCode,
+    @Optional @SerialName("d") val dataPayload: Map<String, Any?>? = null,
+    @Optional @SerialName("s") val sequenceNumber: Int? = null,
+    @Optional @SerialName("t") val event: String? = null
 )
 
 /**
