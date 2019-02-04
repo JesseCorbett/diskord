@@ -1,5 +1,8 @@
 package com.jessecorbett.diskord.api.model
 
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.IntDescriptor
+
 enum class Permission(val mask: Int) {
     /**
      * Allows creation of instant invites.
@@ -190,6 +193,7 @@ enum class Permission(val mask: Int) {
     MANAGE_EMOJIS(0x40000000);
 }
 
+@Serializable(with = PermissionsSerializer::class)
 data class Permissions(val value: Int) {
     operator fun contains(permission: Permission): Boolean {
         if (Permission.ADMINISTRATOR in value) {
@@ -231,4 +235,12 @@ data class Permissions(val value: Int) {
 
         private operator fun Int.contains(permission: Permission) = this and permission.mask == permission.mask
     }
+}
+
+object PermissionsSerializer : KSerializer<Permissions> {
+    override val descriptor: SerialDescriptor = IntDescriptor.withName("Permissions")
+
+    override fun deserialize(decoder: Decoder) = Permissions(decoder.decodeInt())
+
+    override fun serialize(encoder: Encoder, obj: Permissions) = encoder.encodeInt(obj.value)
 }

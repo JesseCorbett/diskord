@@ -53,8 +53,8 @@ object ChannelTypeSerializer : KSerializer<ChannelType> {
 data class Overwrite(
         @SerialName("id") val id: String,
         @SerialName("type") val type: OverwriteType,
-        @SerialName("allow") val allowed: Int,// TODO: Parse int bit set
-        @SerialName("deny") val denied: Int
+        @SerialName("allow") val allowed: Permissions,
+        @SerialName("deny") val denied: Permissions
 )
 
 enum class OverwriteType(val value: String) {

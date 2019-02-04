@@ -38,7 +38,7 @@ class PermissionsTest {
     @Test
     fun `should compute all base permissions for administrative user`() {
         every { user.id } returns "user id"
-        every { guild.permissions } returns Permission.ADMINISTRATOR.mask
+        every { guild.permissions } returns Permissions.of(Permission.ADMINISTRATOR)
 
         assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.ALL)
     }
@@ -46,7 +46,7 @@ class PermissionsTest {
     @Test
     fun `should compute base permissions for user with no permissions`() {
         every { user.id } returns "user id"
-        every { guild.permissions } returns 0
+        every { guild.permissions } returns Permissions.NONE
 
         assertThat(computeBasePermissions(member, guild)).isEqualTo(Permissions.NONE)
     }
@@ -56,7 +56,7 @@ class PermissionsTest {
         val permissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES)
 
         every { user.id } returns "user id"
-        every { guild.permissions } returns permissions.value
+        every { guild.permissions } returns permissions
 
         assertThat(computeBasePermissions(member, guild)).matchesPredicate { permissions in it }
     }
@@ -149,7 +149,7 @@ class PermissionsTest {
     private fun mockRole(id: String, name: String = id, permissions: Permissions) = mockk<Role>().also {
         every { it.id } returns id
         every { it.name } returns name
-        every { it.permissions } returns permissions.value
+        every { it.permissions } returns permissions
     }
 
     private fun mockOverwrite(
@@ -160,7 +160,7 @@ class PermissionsTest {
     ) = mockk<Overwrite>().also {
         every { it.type } returns type
         every { it.id } returns id
-        every { it.denied } returns denied.value
-        every { it.allowed } returns allowed.value
+        every { it.denied } returns denied
+        every { it.allowed } returns allowed
     }
 }

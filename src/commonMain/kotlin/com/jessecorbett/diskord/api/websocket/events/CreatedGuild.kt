@@ -11,7 +11,7 @@ data class CreatedGuild(
         @SerialName("icon") val icon: String?,
         @SerialName("owner") val userIsOwner: Boolean,
         @SerialName("owner_id") val ownerId: String,
-        @SerialName("permissions") val permissions: Int?,
+        @SerialName("permissions") val permissions: Permissions?,
         @SerialName("region") val region: String,
         @SerialName("afk_channel_id") val afkChannelId: String?,
         @SerialName("afk_timeout") val afkTimeoutSeconds: Int,

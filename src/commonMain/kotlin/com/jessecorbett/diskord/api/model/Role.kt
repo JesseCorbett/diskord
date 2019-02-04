@@ -10,7 +10,7 @@ data class Role(
         @SerialName("color") val color: Color,
         @SerialName("hoist") val isUserListPinned: Boolean,
         @SerialName("position") val position: Int,
-        @SerialName("permissions") val permissions: Int,
+        @SerialName("permissions") val permissions: Permissions,
         @SerialName("managed") val isManagedByIntegration: Boolean,
         @SerialName("mentionable") val isMentionable: Boolean
 )

@@ -10,7 +10,7 @@ internal fun computeBasePermissions(member: GuildMember, guild: Guild): Permissi
         return Permissions.ALL
     }
 
-    val permissions = Permissions(guild.permissions ?: 0)
+    val permissions = guild.permissions ?: Permissions.NONE
     if (Permission.ADMINISTRATOR in permissions) {
         return Permissions.ALL
     }
@@ -54,3 +54,5 @@ internal fun computeOverwrites(
         (basePermissions - deniedOverwrites) + allowedOverwrites
     }
 }
+
+private infix fun Int.or(permissions: Permissions) = this or permissions.value

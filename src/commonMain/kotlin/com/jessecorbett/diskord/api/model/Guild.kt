@@ -11,7 +11,7 @@ data class Guild(
     @SerialName("splash") val splashHash: String?,
     @Optional @SerialName("owner") val userIsOwner: Boolean? = null,
     @SerialName("owner_id") val ownerId: String,
-    @Optional @SerialName("permissions") val permissions: Int? = null,
+    @Optional @SerialName("permissions") val permissions: Permissions? = null,
     @SerialName("region") val region: String,
     @SerialName("afk_channel_id") val afkChannelId: String?,
     @SerialName("afk_timeout") val afkTimeoutSeconds: Int,
