@@ -14,6 +14,7 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```
 repositories {
     jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
 }
 
 dependencies {
