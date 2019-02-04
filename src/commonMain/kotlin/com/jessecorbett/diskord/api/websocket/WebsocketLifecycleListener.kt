@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.api.websocket
 
-import okhttp3.Response
+import com.jessecorbett.diskord.api.rest.client.internal.Response
 
 /**
  * An optional lifecycle listener of the lower level websocket connection.

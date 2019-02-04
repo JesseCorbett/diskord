@@ -11,7 +11,6 @@ import com.jessecorbett.diskord.api.websocket.EventListener
 import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
-import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -140,13 +139,12 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
 
 
     /**
-     * Convenience property for getting the full [Channel] from a [Message] instance.
+     * Convenience function for getting the full [Channel] from a [Message] instance.
      *
      * @returns the channel object for the channel the message was sent in.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    val Message.channel: Channel
-        get() = runBlocking { clientStore.channels[channelId].get() }
+    suspend fun Message.channel() = clientStore.channels[channelId].get()
 
     /**
      * Convenience property for getting the full [Guild] from a [Message] instance.
@@ -154,6 +152,5 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @returns the guild object for the guild the message was sent in. Null if the message was a DM.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    val Message.guild: Guild?
-        get() = channel.guildId?.let { runBlocking { clientStore.guilds[it].get() } }
+    suspend fun Message.guild() = guildId?.let { clientStore.guilds[it].get() }
 }
