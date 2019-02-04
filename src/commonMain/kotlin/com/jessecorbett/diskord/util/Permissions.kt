@@ -2,9 +2,25 @@ package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.model.*
 
+/**
+ * Compute the permissions for the given guild member in the channel in the
+ * guild.  Takes into account the permission overwrites and whether or not
+ * the user is an administrator.
+ *
+ * @param member
+ * @param channel
+ * @param guild
+ */
 fun computePermissions(member: GuildMember, channel: Channel, guild: Guild) =
     computeOverwrites(computeBasePermissions(member, guild), member, channel, guild)
 
+/**
+ * Compute the base permissions for the given guild member in the guild.  If
+ * the member is an administrator then all permissions are granted.
+ *
+ * @param member
+ * @param guild
+ */
 internal fun computeBasePermissions(member: GuildMember, guild: Guild): Permissions {
     if (member.user.id == guild.ownerId) {
         return Permissions.ALL
@@ -18,6 +34,15 @@ internal fun computeBasePermissions(member: GuildMember, guild: Guild): Permissi
     return permissions
 }
 
+/**
+ * Computes the permissions for the given guild member using the specified
+ * base permissions and the overwrites pulled from the channel and guild.
+ *
+ * @param basePermissions
+ * @param member
+ * @param channel
+ * @param guild
+ */
 internal fun computeOverwrites(
     basePermissions: Permissions,
     member: GuildMember,
