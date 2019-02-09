@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.api.websocket
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
+import com.jessecorbett.diskord.api.rest.client.internal.Response
 import com.jessecorbett.diskord.api.websocket.commands.Identify
 import com.jessecorbett.diskord.api.websocket.commands.Resume
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
@@ -10,16 +11,10 @@ import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
-import com.jessecorbett.diskord.internal.httpClient
 import kotlinx.coroutines.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Mapper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import org.slf4j.LoggerFactory
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -38,19 +33,18 @@ import kotlin.coroutines.CoroutineContext
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
 class DiscordWebSocket(
-        private val token: String,
-        private val eventListener: EventListener,
-        autoStart: Boolean = true,
-        var sessionId: String? = null,
-        var sequenceNumber: Int? = null,
-        private val shardId: Int = 0,
-        private val shardCount: Int = 0,
-        private val userType: DiscordUserType = DiscordUserType.BOT,
-        private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
-        private val eventListenerContext: CoroutineContext = Dispatchers.Default,
-        private val heartbeatContext: CoroutineContext = Dispatchers.Default
+    private val token: String,
+    private val eventListener: EventListener,
+    autoStart: Boolean = true,
+    var sessionId: String? = null,
+    var sequenceNumber: Int? = null,
+    private val shardId: Int = 0,
+    private val shardCount: Int = 1,
+    private val userType: DiscordUserType = DiscordUserType.BOT,
+    private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
+    private val eventListenerContext: CoroutineContext = Dispatchers.Default,
+    private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
-    private val logger = LoggerFactory.getLogger(this.javaClass)
     private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
 
@@ -64,36 +58,28 @@ class DiscordWebSocket(
         GlobalScope.launch {
             val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
 
-            val request = Request.Builder()
-                    .url("$gatewayUrl?encoding=json&v=6")
-                    .addHeader("Authorization", "Bot $token")
-                    .build()
-
-            socket = httpClient.newWebSocket(request, DiscordWebSocketListener(::receiveMessage, object : WebsocketLifecycleManager {
+            socket = WebSocket(gatewayUrl, token, ::receiveMessage, object : WebSocketLifecycleManager {
                 override fun start() {
                     websocketLifecycleListener?.started()
                 }
 
                 override fun closing(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closing with code '$code' and reason '$reason'")
                     if (code != WebSocketCloseCode.NORMAL_CLOSURE)
                         restart()
                     websocketLifecycleListener?.closing(code, reason)
                 }
 
                 override fun closed(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closed with code '$code' and reason '$reason'")
                     if (code != WebSocketCloseCode.NORMAL_CLOSURE)
                         restart()
                     websocketLifecycleListener?.closed(code, reason)
                 }
 
                 override fun failed(failure: Throwable, response: Response?) {
-                    logger.error("Socket connection encountered an exception", failure)
                     restart()
                     websocketLifecycleListener?.failed(failure, response)
                 }
-            }))
+            })
         }
     }
 
@@ -113,15 +99,10 @@ class DiscordWebSocket(
      * in this program as it force closes the http client shared by all websocket and REST client instances.
      */
     fun close(forceClose: Boolean = false) {
-        logger.debug("Closing")
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
-        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE.code, "Requested close")
-        if (forceClose) {
-            httpClient.dispatcher().executorService().shutdown()
-        }
-        logger.info("Closed connection")
+        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close", forceClose)
     }
 
     /**
@@ -130,14 +111,11 @@ class DiscordWebSocket(
      * Maintains sessionId and sequenceNumber so events happening during restart and resumes.
      */
     fun restart() {
-        logger.debug("Restarting")
         close()
         startConnection()
-        logger.info("Restarted connection")
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
-        logger.debug("Received OpCode ${gatewayMessage.opCode}")
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
@@ -147,17 +125,15 @@ class DiscordWebSocket(
                 sendGatewayMessage(OpCode.HEARTBEAT_ACK)
             }
             OpCode.RECONNECT -> {
-                logger.info("Server requested a reconnect")
                 restart()
             }
             OpCode.INVALID_SESSION -> {
-                logger.warn("The session was invalid, falling back to new session behavior")
                 sessionId = null
                 sequenceNumber = null
                 restart()
             }
             OpCode.HELLO -> {
-                 initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart. Low priority.
@@ -196,7 +172,7 @@ class DiscordWebSocket(
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event } ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = Mapper.unmapNullable(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         GlobalScope.launch(eventListenerContext) {
@@ -205,14 +181,12 @@ class DiscordWebSocket(
     }
 
     private fun sendGatewayMessage(opCode: OpCode, event: DiscordEvent? = null) {
-        logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
         socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, null, sequenceNumber, eventName)))
     }
 
     private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
-        logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
+        socket?.send(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)))
     }
 }

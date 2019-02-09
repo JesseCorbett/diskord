@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.rest.client.internal.Response
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import kotlinx.serialization.json.Json
-import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory
 
 internal class DiscordWebSocketListener(
         private val acceptMessage: (GatewayMessage) -> Unit,
-        private val lifecycleManager: WebsocketLifecycleManager
+        private val lifecycleManager: WebSocketLifecycleManager
 ) : WebSocketListener() {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    override fun onOpen(webSocket: WebSocket, response: Response) {
+    override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
         if (response.code() == 101) return
         logger.error("Encountered an unexpected error, code: ${response.body()}")
     }
@@ -36,17 +36,11 @@ internal class DiscordWebSocketListener(
         lifecycleManager.closed(closeCode, reason)
     }
 
-    override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
-        lifecycleManager.failed(throwable, response)
+    override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: okhttp3.Response?) {
+        val mappedResponse = response?.let {
+            Response(it.code(), it.body()?.string(), it.headers().names().map { header -> Pair(header, it.header(header)) }.toMap())
+        }
+
+        lifecycleManager.failed(throwable, mappedResponse)
     }
-}
-
-internal interface WebsocketLifecycleManager {
-    fun start()
-
-    fun closing(code: WebSocketCloseCode, reason: String)
-
-    fun closed(code: WebSocketCloseCode, reason: String)
-
-    fun failed(failure: Throwable, response: Response?)
 }
