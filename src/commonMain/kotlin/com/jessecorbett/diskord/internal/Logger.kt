@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.internal
 
-
 expect class Logger constructor(name: String) {
     fun debug(message: String)
 

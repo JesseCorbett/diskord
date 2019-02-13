@@ -187,6 +187,8 @@ class DiscordWebSocket(
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
                 ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
+        logger.debug("Received Dispatch $discordEvent")
+
         if (discordEvent == DiscordEvent.READY) {
             sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
