@@ -112,7 +112,8 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
                 implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
-                implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+                implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+                implementation 'com.squareup.okio:okio:2.2.2'
                 implementation 'org.slf4j:slf4j-api:1.7.25'
             }
         }

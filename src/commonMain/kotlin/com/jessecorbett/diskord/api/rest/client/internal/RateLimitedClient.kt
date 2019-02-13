@@ -7,7 +7,6 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
-
 private fun captureFailure(code: Int, body: String?) = when (code) {
     400 -> DiscordBadRequestException(body)
     401 -> DiscordUnauthorizedException()

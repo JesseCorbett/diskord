@@ -73,10 +73,10 @@ class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, {
  * @param T the BaseRestClient implementation class.
  * @param userToken the user token used for authentication by each [BaseRestClient].
  * @param gen a lambda which returns a new instance of class T when requested by the user.
- * @constructor Creates an instance and sets up a [HashMap] backing the group.
+ * @constructor Creates an instance and sets up a [MutableMap] backing the group.
  */
 abstract class RestClients<T: BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
-    private val clients: MutableMap<String, T> = HashMap()
+    private val clients: MutableMap<String, T> = mutableMapOf()
 
     /**
      * Gets a [BaseRestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.

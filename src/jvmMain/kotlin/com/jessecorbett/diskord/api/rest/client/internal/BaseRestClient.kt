@@ -9,7 +9,6 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import okhttp3.Response as OkResponse
 
-
 actual open class BaseRestClient {
 
     protected actual suspend fun getRequest(url: String, headers: Map<String, String>) = request(commonRequest(url, headers).get().build())

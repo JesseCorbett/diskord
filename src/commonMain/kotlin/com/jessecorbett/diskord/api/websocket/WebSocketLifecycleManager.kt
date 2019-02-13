@@ -1,13 +1,11 @@
 package com.jessecorbett.diskord.api.websocket
 
-import com.jessecorbett.diskord.api.rest.client.internal.Response
-
-interface WebSocketLifecycleManager {
+interface WebsocketLifecycleManager {
     fun start()
 
     fun closing(code: WebSocketCloseCode, reason: String)
 
     fun closed(code: WebSocketCloseCode, reason: String)
 
-    fun failed(failure: Throwable, response: Response?)
+    fun failed(failure: Throwable, code: Int?, body: String?)
 }
