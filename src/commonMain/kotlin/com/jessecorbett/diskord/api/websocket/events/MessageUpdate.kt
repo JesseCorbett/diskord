@@ -10,7 +10,7 @@ data class MessageUpdate(
         @SerialName("id") val id: String,
         @SerialName("channel_id") val channelId: String,
         @Optional @SerialName("author") val author: User? = null,
-        @SerialName("content") val content: String?,
+        @Optional @SerialName("content") val content: String? = null,
         @SerialName("timestamp") val sentAt: String?,
         @SerialName("edited_timestamp") val editedAt: String?,
         @SerialName("tts") val isTTS: Boolean?,
