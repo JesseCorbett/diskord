@@ -10,6 +10,68 @@ import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
 
+/*
+ * Primitive extensions
+ */
+
+/**
+ * Shortcut to add a spoiler to text.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withSpoiler() = "||$this||"
+
+/**
+ * Shortcut to add a italics to text.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withItalics() = "*$this*"
+
+/**
+ * Shortcut to bold text.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withBold() = "**$this**"
+
+/**
+ * Shortcut to add an underline to text.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withUnderline() = "__${this}__"
+
+
+/**
+ * Shortcut to add a strikethrough to text.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withStrikethrough() = "~~$this~~"
+
+/**
+ * Shortcut to put the code in a single line code block.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withSingleLineCode() = "`$this`"
+
+/**
+ * Shortcut to put the code in a multi line code block.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withMultiLineCode() = "```$this```"
+
+/**
+ * Shortcut to put the code in a multi line code block with a language style.
+ *
+ * @param language The language to add style for.
+ *
+ * @return This string wrapped with markdown formatting.
+ */
+fun String.withMultiLineCode(language: String) = "```$language $this```"
 
 /*
  * Message extensions
@@ -142,7 +204,8 @@ val Emoji.tag: String
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null) = createMessage(CreateMessage(content = message, embed = embed))
+suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null) =
+    createMessage(CreateMessage(content = message, embed = embed))
 
 /**
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
@@ -154,7 +217,8 @@ suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -> Unit) = sendMessage(message,  embed(embedDsl))
+suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -> Unit) =
+    sendMessage(message, embed(embedDsl))
 
 /**
  * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
@@ -165,7 +229,8 @@ suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) = CombinedMessageEmbed().apply(block).let { sendMessage(it.text,  it.embed()) }
+suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
+    CombinedMessageEmbed().apply(block).let { sendMessage(it.text, it.embed()) }
 
 /**
  * Changes the user's nickname in this client's guild.
@@ -185,4 +250,5 @@ suspend fun GuildClient.changeNickname(nickname: String) = changeMemberNickname(
  *
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun GuildClient.changeNickname(userId: String, nickname: String) = updateMember(userId, PatchGuildMember(nickname))
+suspend fun GuildClient.changeNickname(userId: String, nickname: String) =
+    updateMember(userId, PatchGuildMember(nickname))
