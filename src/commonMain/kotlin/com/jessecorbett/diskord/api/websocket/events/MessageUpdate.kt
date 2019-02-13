@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.websocket.events
 
 import com.jessecorbett.diskord.api.model.*
+import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,7 +9,7 @@ import kotlinx.serialization.Serializable
 data class MessageUpdate(
         @SerialName("id") val id: String,
         @SerialName("channel_id") val channelId: String,
-        @SerialName("author") val author: User?,
+        @Optional @SerialName("author") val author: User? = null,
         @SerialName("content") val content: String?,
         @SerialName("timestamp") val sentAt: String?,
         @SerialName("edited_timestamp") val editedAt: String?,
