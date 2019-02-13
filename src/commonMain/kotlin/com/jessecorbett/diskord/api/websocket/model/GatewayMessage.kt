@@ -1,7 +1,8 @@
 package com.jessecorbett.diskord.api.websocket.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.IntDescriptor
+import kotlinx.serialization.json.JsonElement
 
 /**
  * A message sent through the websocket gateway.
@@ -13,10 +14,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class GatewayMessage(
-        @SerialName("op") val opCode: OpCode,
-        @SerialName("d") val dataPayload: Map<String, Any?>?,
-        @SerialName("s") val sequenceNumber: Int?,
-        @SerialName("t") val event: String? = null
+    @SerialName("op") val opCode: OpCode,
+    @SerialName("d") val dataPayload: JsonElement?,
+    @SerialName("s") val sequenceNumber: Int?,
+    @SerialName("t") val event: String? = null
 )
 
 /**
@@ -24,6 +25,7 @@ data class GatewayMessage(
  *
  * @property code the code represented.
  */
+@Serializable(with = OpCodeSerializer::class)
 enum class OpCode(val code: Int) {
     /**
      * A discord event has been sent to the client.
@@ -84,4 +86,19 @@ enum class OpCode(val code: Int) {
      * Acknowledgement of a [OpCode.HEARTBEAT].
      */
     HEARTBEAT_ACK(11)
+}
+
+object OpCodeSerializer : KSerializer<OpCode> {
+    override val descriptor: SerialDescriptor = IntDescriptor.withName("OpCodeSerializer")
+
+    override fun deserialize(decoder: Decoder): OpCode {
+        val target = decoder.decodeInt()
+        return OpCode.values().first {
+            it.code == target
+        }
+    }
+
+    override fun serialize(encoder: Encoder, obj: OpCode) {
+        encoder.encodeInt(obj.code)
+    }
 }

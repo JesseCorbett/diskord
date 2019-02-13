@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
+import com.jessecorbett.diskord.api.websocket.commands.IdentifyShard
 import com.jessecorbett.diskord.api.websocket.commands.Resume
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
 import com.jessecorbett.diskord.api.websocket.events.Hello
@@ -13,9 +14,9 @@ import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.internal.Logger
 import kotlinx.coroutines.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Mapper
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -145,7 +146,7 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                initializeSession(Mapper.unmapNullable(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
@@ -160,20 +161,21 @@ class DiscordWebSocket(
         if (sessionId != null && sequenceNumber != null) {
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
         } else {
-            val identify = if (shardCount > 0) {
-                Identify(token, listOf(shardId, shardCount))
+            if (shardCount > 0) {
+                sendGatewayMessage(OpCode.IDENTIFY, IdentifyShard(token, listOf(shardId, shardCount)), IdentifyShard.serializer())
             } else {
-                Identify(token)
+                sendGatewayMessage(OpCode.IDENTIFY, Identify(token), Identify.serializer())
             }
-            sendGatewayMessage(OpCode.IDENTIFY, identify, Identify.serializer())
         }
 
         heartbeatJob?.cancel()
 
         heartbeatJob = GlobalScope.launch(heartbeatContext) {
             while (this.isActive) {
-                sendGatewayMessage(OpCode.HEARTBEAT, sequenceNumber!!, Int.serializer())
-                delay(hello.heartbeatInterval)
+                if (sequenceNumber != null) {
+                    sendGatewayMessage(OpCode.HEARTBEAT, JsonPrimitive(sequenceNumber))
+                    delay(hello.heartbeatInterval)
+                }
             }
         }
     }
@@ -186,7 +188,7 @@ class DiscordWebSocket(
                 ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = Mapper.unmapNullable(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         GlobalScope.launch(eventListenerContext) {
@@ -194,15 +196,15 @@ class DiscordWebSocket(
         }
     }
 
-    private fun sendGatewayMessage(opCode: OpCode, event: DiscordEvent? = null) {
+    private fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, null, sequenceNumber, eventName)))
+        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data, sequenceNumber, eventName)))
     }
 
     private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Mapper.mapNullable(serializer, data), sequenceNumber, eventName)))
+        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)))
     }
 }

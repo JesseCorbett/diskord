@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.events.*
+import kotlinx.serialization.json.JsonElement
 
 /**
  * The base listener that [DiscordWebSocket] uses to dispatch events to the library consumer.
@@ -14,7 +15,7 @@ abstract class EventListener {
      * @param event The event type.
      * @param json The json data associated with the event.
      */
-    open suspend fun onEvent(event: DiscordEvent, data: Map<String, Any?>) {}
+    open suspend fun onEvent(event: DiscordEvent, data: JsonElement) {}
 
     /**
      * Fired when the gateway acknowledges the connection as ready.
