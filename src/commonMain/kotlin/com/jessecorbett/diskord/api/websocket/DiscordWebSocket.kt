@@ -68,8 +68,6 @@ class DiscordWebSocket(
 
                 override fun closing(code: WebSocketCloseCode, reason: String) {
                     logger.info("Closing with code '$code' and reason '$reason'")
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                        restart()
                     websocketLifecycleListener?.closing(code, reason)
                 }
 
