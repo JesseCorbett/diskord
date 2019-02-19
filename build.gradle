@@ -95,7 +95,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.1'
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.10.0'
-                implementation 'io.github.microutils:kotlin-logging-common:1.6.22'
+                implementation 'io.github.microutils:kotlin-logging-common:1.6.25'
             }
         }
         commonTest {
@@ -103,7 +103,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test-common:${kotlinVersion}"
                 implementation "org.jetbrains.kotlin:kotlin-test-annotations-common:${kotlinVersion}"
                 implementation 'com.willowtreeapps.assertk:assertk-common:0.13'
-                implementation 'io.mockk:mockk-common:1.9'
+                implementation 'io.mockk:mockk-common:1.9.1'
             }
         }
 
@@ -115,7 +115,7 @@ kotlin {
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
                 implementation 'com.squareup.okhttp3:okhttp:3.13.1'
                 implementation 'com.squareup.okio:okio:2.2.2'
-                implementation 'io.github.microutils:kotlin-logging:1.6.22'
+                implementation 'io.github.microutils:kotlin-logging:1.6.25'
             }
         }
         jvmTest {
@@ -123,7 +123,7 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
                 implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
                 implementation 'com.willowtreeapps.assertk:assertk-jvm:0.13'
-                implementation 'io.mockk:mockk:1.9'
+                implementation 'io.mockk:mockk:1.9.1'
             }
         }
 
@@ -131,7 +131,7 @@ kotlin {
 //            dependencies {
 //                implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${kotlinVersion}"
 //                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.10.0'
-//                implementation 'io.github.microutils:kotlin-logging-js:1.6.22'
+//                implementation 'io.github.microutils:kotlin-logging-js:1.6.25'
 //            }
 //        }
 //        jsTest {
