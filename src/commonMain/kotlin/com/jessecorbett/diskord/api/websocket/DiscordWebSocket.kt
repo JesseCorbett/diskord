@@ -51,6 +51,12 @@ class DiscordWebSocket(
     private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
 
+    /**
+     * Indicates if this websocket is currently connected.
+     */
+    val active: Boolean
+        get() = socket != null
+
     init {
         if (autoStart) {
             startConnection()
@@ -70,6 +76,8 @@ class DiscordWebSocket(
                     logger.info("Closing with code '$code' and reason '$reason'")
                     if (code != WebSocketCloseCode.NORMAL_CLOSURE)
                         restart()
+                    else
+                        socket = null
                     websocketLifecycleListener?.closing(code, reason)
                 }
 
@@ -77,6 +85,8 @@ class DiscordWebSocket(
                     logger.info("Closed with code '$code' and reason '$reason'")
                     if (code != WebSocketCloseCode.NORMAL_CLOSURE)
                         restart()
+                    else
+                        socket = null
                     websocketLifecycleListener?.closed(code, reason)
                 }
 
@@ -110,6 +120,7 @@ class DiscordWebSocket(
         GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
         socket?.close(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close", forceClose)
+        socket = null
         logger.info("Closed connection")
     }
 
