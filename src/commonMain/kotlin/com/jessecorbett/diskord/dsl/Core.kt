@@ -30,6 +30,12 @@ annotation class DiskordDsl
 class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this, autoStart, shardId = shardId, shardCount = shardCount)
 
+    /**
+     * Indicates if this bot currently has an active websocket connection.
+     */
+    val active: Boolean
+        get() = websocket.active
+
     /*
      * Convenience methods for bot implementations
      */

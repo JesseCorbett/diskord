@@ -94,7 +94,7 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.1'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.10.0'
+                api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.10.0'
                 implementation 'io.github.microutils:kotlin-logging-common:1.6.22'
             }
         }
@@ -112,8 +112,9 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
                 implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
-                implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+                api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
+                implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+                implementation 'com.squareup.okio:okio:2.2.2'
                 implementation 'io.github.microutils:kotlin-logging:1.6.22'
             }
         }

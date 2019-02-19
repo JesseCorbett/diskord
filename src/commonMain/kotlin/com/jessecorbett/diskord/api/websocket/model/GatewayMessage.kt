@@ -15,9 +15,9 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class GatewayMessage(
     @SerialName("op") val opCode: OpCode,
-    @Optional @SerialName("d") val dataPayload: JsonElement? = null,
-    @Optional @SerialName("s") val sequenceNumber: Int? = null,
-    @Optional @SerialName("t") val event: String? = null
+    @SerialName("d") val dataPayload: JsonElement?,
+    @SerialName("s") val sequenceNumber: Int?,
+    @SerialName("t") val event: String? = null
 )
 
 /**
@@ -89,7 +89,7 @@ enum class OpCode(val code: Int) {
 }
 
 object OpCodeSerializer : KSerializer<OpCode> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("MessageTypeSerializer")
+    override val descriptor: SerialDescriptor = IntDescriptor.withName("OpCodeSerializer")
 
     override fun deserialize(decoder: Decoder): OpCode {
         val target = decoder.decodeInt()
