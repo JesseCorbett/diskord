@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.model
 
+import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,6 +11,6 @@ data class Attachment(
         @SerialName("size") val sizeInBytes: Int,
         @SerialName("url") val url: String,
         @SerialName("proxy_url") val proxiedUrl: String,
-        @SerialName("height") val imageHeight: Int?,
-        @SerialName("width") val imageWidth: Int?
+        @Optional @SerialName("height") val imageHeight: Int? = null,
+        @Optional @SerialName("width") val imageWidth: Int? = null
 )
