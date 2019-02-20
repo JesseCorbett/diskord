@@ -12,5 +12,5 @@ data class Emoji(
     @Optional @SerialName("user") val creator: User? = null,
     @Optional @SerialName("require_colons") val requiresWrappingColons: Boolean? = null,
     @Optional @SerialName("managed") val isManaged: Boolean? = null,
-    @Optional @SerialName("animated") val isAnimated: Boolean = false
+    @Optional @SerialName("animated") val isAnimated: Boolean? = null
 )
