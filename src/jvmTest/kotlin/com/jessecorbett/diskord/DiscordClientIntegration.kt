@@ -100,11 +100,11 @@ class DiscordClientIntegration {
             val existingUser = discordClient.getUser()
             val existingUsername = existingUser.username
 
-            discordClient.modifyUser(ModifyUser(randomString()))
+            discordClient.modifyUser(ModifyUser(randomString(), null))
             val modifiedUser = discordClient.getUser()
             assertThat(existingUser.username).isNotEqualTo(modifiedUser.username)
 
-            discordClient.modifyUser(ModifyUser(existingUsername))
+            discordClient.modifyUser(ModifyUser(existingUsername, null))
             val revertedUser = discordClient.getUser()
             assertThat(existingUsername).isEqualTo(revertedUser.username)
         }

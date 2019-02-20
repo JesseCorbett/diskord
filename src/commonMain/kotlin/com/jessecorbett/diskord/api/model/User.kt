@@ -14,8 +14,8 @@ data class User(
     @Optional @SerialName("locale") val locale: String? = null,
     @Optional @SerialName("verified") val isVerified: Boolean? = null,
     @Optional @SerialName("email") val email: String? = null,
-    @SerialName("flags") val flags: List<Int>, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
-    @Optional @SerialName("premium_type") val premiumType: Int = 0
+    @Optional @SerialName("flags") val flags: Int = 0, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
+    @Optional @SerialName("premium_type") val premiumType: PremiumType = PremiumType.NONE
 )
 
 @Serializable(with = UserFlagsSerializer::class)
