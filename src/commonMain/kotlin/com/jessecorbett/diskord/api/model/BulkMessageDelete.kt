@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BulkMessageDelete(
-        @SerialName("ids") val ids: List<String>,
-        @SerialName("channel_id") val channelId: String
+    @SerialName("ids") val ids: List<String>,
+    @SerialName("channel_id") val channelId: String
 )

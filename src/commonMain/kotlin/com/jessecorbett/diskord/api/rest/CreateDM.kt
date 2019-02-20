@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateDM(
-        @SerialName("recipient_id") val recipientId: String
+    @SerialName("recipient_id") val recipientId: String
 )

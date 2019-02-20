@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MessageEdit(
-        @SerialName("content") val content: String,
-        @SerialName("embed") val embed: Embed? = null
+    @SerialName("content") val content: String,
+    @SerialName("embed") val embed: Embed? = null
 )

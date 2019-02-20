@@ -10,8 +10,8 @@ import okio.ByteString
 import org.slf4j.LoggerFactory
 
 internal class DiscordWebSocketListener(
-        private val acceptMessage: (GatewayMessage) -> Unit,
-        private val lifecycleManager: WebsocketLifecycleManager
+    private val acceptMessage: (GatewayMessage) -> Unit,
+    private val lifecycleManager: WebsocketLifecycleManager
 ) : WebSocketListener() {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -20,19 +20,22 @@ internal class DiscordWebSocketListener(
         logger.error("Encountered an unexpected error, code: ${response.body()}")
     }
 
-    override fun onMessage(webSocket: WebSocket, text: String) = acceptMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
+    override fun onMessage(webSocket: WebSocket, text: String) =
+        acceptMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         TODO("This should never be called, we'll need it though if we choose to implement ETF")
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-        val closeCode = WebSocketCloseCode.values().find { it.code == code } ?: throw DiscordCompatibilityException("Unexpected close code")
+        val closeCode = WebSocketCloseCode.values().find { it.code == code }
+            ?: throw DiscordCompatibilityException("Unexpected close code")
         lifecycleManager.closing(closeCode, reason)
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-        val closeCode = WebSocketCloseCode.values().find { it.code == code } ?: throw DiscordCompatibilityException("Unexpected close code")
+        val closeCode = WebSocketCloseCode.values().find { it.code == code }
+            ?: throw DiscordCompatibilityException("Unexpected close code")
         lifecycleManager.closed(closeCode, reason)
     }
 

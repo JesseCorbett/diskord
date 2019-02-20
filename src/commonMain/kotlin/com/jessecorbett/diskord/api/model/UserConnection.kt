@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserConnection(
-        @SerialName("id") val id: String,
-        @SerialName("name") val name: String,
-        @SerialName("type") val type: String,
-        @SerialName("revoked") val revoked: Boolean,
-        @SerialName("integrations") val integrations: List<GuildIntegration>
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("type") val type: String,
+    @SerialName("revoked") val revoked: Boolean,
+    @SerialName("integrations") val integrations: List<GuildIntegration>
 )

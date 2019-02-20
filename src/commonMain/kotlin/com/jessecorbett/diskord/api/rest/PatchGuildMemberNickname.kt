@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PatchGuildMemberNickname(
-        @SerialName("nick") val nickname: String
+    @SerialName("nick") val nickname: String
 )

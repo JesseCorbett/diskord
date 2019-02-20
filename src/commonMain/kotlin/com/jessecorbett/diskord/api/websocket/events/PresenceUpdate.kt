@@ -3,7 +3,6 @@ package com.jessecorbett.diskord.api.websocket.events
 import com.jessecorbett.diskord.api.model.BareUser
 import com.jessecorbett.diskord.api.model.UserStatus
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

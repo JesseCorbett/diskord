@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Ban(
-        @SerialName("reason") val reason: String? = null,
-        @SerialName("user") val user: User
+    @SerialName("reason") val reason: String? = null,
+    @SerialName("user") val user: User
 )

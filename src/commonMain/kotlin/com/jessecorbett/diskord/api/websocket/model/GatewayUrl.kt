@@ -19,7 +19,10 @@ data class GatewayUrl(val url: String)
  * @property sessionStartLimit Information on the limits on starting sessions for this bot.
  */
 @Serializable
-data class GatewayBotUrl(val url: String, val shards: Int, @SerialName("session_start_limit") val sessionStartLimit: SessionStartLimit)
+data class GatewayBotUrl(
+    val url: String,
+    val shards: Int, @SerialName("session_start_limit") val sessionStartLimit: SessionStartLimit
+)
 
 /**
  * Information on the limits on starting sessions.
@@ -30,7 +33,7 @@ data class GatewayBotUrl(val url: String, val shards: Int, @SerialName("session_
  */
 @Serializable
 data class SessionStartLimit(
-        @SerialName("total") val totalSessions: Int,
-        @SerialName("remaining") val remainingSessions: Int,
-        @SerialName("reset_after") val sessionLimitResetsIn: Int // Passed as int millis
+    @SerialName("total") val totalSessions: Int,
+    @SerialName("remaining") val remainingSessions: Int,
+    @SerialName("reset_after") val sessionLimitResetsIn: Int // Passed as int millis
 )

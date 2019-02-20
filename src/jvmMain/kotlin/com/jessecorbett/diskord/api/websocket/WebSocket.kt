@@ -5,14 +5,19 @@ import com.jessecorbett.diskord.internal.httpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 
-actual class WebSocket actual constructor(url: String, token: String, lifecycleManager: WebsocketLifecycleManager, receiveMessage: (GatewayMessage) -> Unit) {
+actual class WebSocket actual constructor(
+    url: String,
+    token: String,
+    lifecycleManager: WebsocketLifecycleManager,
+    receiveMessage: (GatewayMessage) -> Unit
+) {
     private var socket: WebSocket
 
     init {
         val request = Request.Builder()
-                .url(url)
-                .addHeader("Authorization", "Bot $token")
-                .build()
+            .url(url)
+            .addHeader("Authorization", "Bot $token")
+            .build()
 
         socket = httpClient.newWebSocket(request, DiscordWebSocketListener(receiveMessage, lifecycleManager))
     }

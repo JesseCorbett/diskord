@@ -24,32 +24,37 @@ class WebhookClientIntegration {
     private lateinit var webhook: Webhook
     private lateinit var webhookClient: WebhookClient
 
-    @BeforeTest fun setup() {
+    @BeforeTest
+    fun setup() {
         runBlocking {
             webhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
             webhookClient = WebhookClient(BOT_TEST_TOKEN, webhook.id)
         }
     }
 
-    @AfterTest fun clean() {
+    @AfterTest
+    fun clean() {
         runBlocking {
             webhookClient.delete()
         }
     }
 
-    @Test fun getWebhookTest() {
+    @Test
+    fun getWebhookTest() {
         runBlocking {
             webhookClient.getWebhook()
         }
     }
 
-    @Test fun getWebhookWithToken() {
+    @Test
+    fun getWebhookWithToken() {
         runBlocking {
             webhookClient.getWebhook(webhook.token)
         }
     }
 
-    @Test fun updateWebhookTest() {
+    @Test
+    fun updateWebhookTest() {
         val originalName = webhook.defaultName
 
         runBlocking {
@@ -63,7 +68,8 @@ class WebhookClientIntegration {
         }
     }
 
-    @Test fun updateWebhookWithTokenTest() {
+    @Test
+    fun updateWebhookWithTokenTest() {
         val originalName = webhook.defaultName
 
         runBlocking {
@@ -77,9 +83,11 @@ class WebhookClientIntegration {
         }
     }
 
-    @Test fun deleteWebhookTest() {
+    @Test
+    fun deleteWebhookTest() {
         runBlocking {
-            val webhookId = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString())).id
+            val webhookId =
+                ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString())).id
             val client = WebhookClient(BOT_TEST_TOKEN, webhookId)
 
             client.getWebhook()
@@ -97,7 +105,8 @@ class WebhookClientIntegration {
         }
     }
 
-    @Test fun deleteWebhookWithTokenTest() {
+    @Test
+    fun deleteWebhookWithTokenTest() {
         runBlocking {
             val ourWebhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
             val client = WebhookClient(BOT_TEST_TOKEN, ourWebhook.id)
@@ -117,7 +126,8 @@ class WebhookClientIntegration {
         }
     }
 
-    @Test fun executeWebhookTest() {
+    @Test
+    fun executeWebhookTest() {
         runBlocking {
             val content = randomString()
             val name = randomString()

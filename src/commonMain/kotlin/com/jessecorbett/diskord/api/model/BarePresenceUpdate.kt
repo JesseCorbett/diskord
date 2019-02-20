@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BarePresenceUpdate(
-        @SerialName("user") val user: BareUser,
-        @SerialName("status") val status: UserStatus
+    @SerialName("user") val user: BareUser,
+    @SerialName("status") val status: UserStatus
 )

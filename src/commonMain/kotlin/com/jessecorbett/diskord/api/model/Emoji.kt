@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Emoji(
-        @SerialName("id") val id: String?,
-        @SerialName("name") val name: String,
-        @Optional @SerialName("roles") val whitelistedRoles: List<Role>? = null,
-        @Optional @SerialName("user") val creator: User? = null,
-        @Optional @SerialName("require_colons") val requiresWrappingColons: Boolean? = null,
-        @Optional @SerialName("managed") val isManaged: Boolean? = null,
-        @Optional @SerialName("animated") val isAnimated: Boolean? = null
+    @SerialName("id") val id: String?,
+    @SerialName("name") val name: String,
+    @Optional @SerialName("roles") val whitelistedRoles: List<Role>? = null,
+    @Optional @SerialName("user") val creator: User? = null,
+    @Optional @SerialName("require_colons") val requiresWrappingColons: Boolean? = null,
+    @Optional @SerialName("managed") val isManaged: Boolean? = null,
+    @Optional @SerialName("animated") val isAnimated: Boolean? = null
 )

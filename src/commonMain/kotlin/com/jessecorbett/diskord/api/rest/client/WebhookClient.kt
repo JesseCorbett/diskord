@@ -13,7 +13,8 @@ import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
  * @param webhookId The id of the webhook.
  * @param userType The user type, assumed to be a bot.
  */
-class WebhookClient(token: String, val webhookId: String, userType: DiscordUserType = DiscordUserType.BOT) : RateLimitedClient(token, userType) {
+class WebhookClient(token: String, val webhookId: String, userType: DiscordUserType = DiscordUserType.BOT) :
+    RateLimitedClient(token, userType) {
 
     /**
      * Get this webhook.
@@ -33,7 +34,8 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return This webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhook(webhookToken: String) = getRequest("/webhooks/$webhookId/$webhookToken", Webhook.serializer())
+    suspend fun getWebhook(webhookToken: String) =
+        getRequest("/webhooks/$webhookId/$webhookToken", Webhook.serializer())
 
     /**
      * Update this webhook.
@@ -43,7 +45,8 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return The updated webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook) = patchRequest("/webhooks/$webhookId", webhook, PatchWebhook.serializer(), Webhook.serializer())
+    suspend fun update(webhook: PatchWebhook) =
+        patchRequest("/webhooks/$webhookId", webhook, PatchWebhook.serializer(), Webhook.serializer())
 
     /**
      * Update this webhook using the secure token.
@@ -55,7 +58,8 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      * @return The updated webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook, webhookToken: String) = patchRequest("/webhooks/$webhookId/$webhookToken", webhook, PatchWebhook.serializer(), Webhook.serializer())
+    suspend fun update(webhook: PatchWebhook, webhookToken: String) =
+        patchRequest("/webhooks/$webhookId/$webhookToken", webhook, PatchWebhook.serializer(), Webhook.serializer())
 
     /**
      * Delete this webhook.
@@ -83,5 +87,13 @@ class WebhookClient(token: String, val webhookId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false) = postRequest("/webhooks/$webhookId/$webhookToken?wait=$waitForValidation", webhookSubmission, WebhookSubmission.serializer())
+    suspend fun execute(
+        webhookToken: String,
+        webhookSubmission: WebhookSubmission,
+        waitForValidation: Boolean = false
+    ) = postRequest(
+        "/webhooks/$webhookId/$webhookToken?wait=$waitForValidation",
+        webhookSubmission,
+        WebhookSubmission.serializer()
+    )
 }

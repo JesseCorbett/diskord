@@ -57,8 +57,8 @@ object MessageTypeSerializer : KSerializer<MessageType> {
 
 @Serializable
 data class MessageActivity(
-        @SerialName("type") val type: MessageActivityType,
-        @SerialName("party_id") val partyId: String
+    @SerialName("type") val type: MessageActivityType,
+    @SerialName("party_id") val partyId: String
 )
 
 @Serializable(with = MessageActivityTypeSerializer::class)
@@ -86,9 +86,9 @@ object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
 
 @Serializable
 data class MessageApplication(
-        @SerialName("id") val id: String,
-        @SerialName("cover_image") val coverImage: String,
-        @SerialName("description") val description: String,
-        @SerialName("icon") val icon: String,
-        @SerialName("name") val name: String
+    @SerialName("id") val id: String,
+    @SerialName("cover_image") val coverImage: String,
+    @SerialName("description") val description: String,
+    @SerialName("icon") val icon: String,
+    @SerialName("name") val name: String
 )

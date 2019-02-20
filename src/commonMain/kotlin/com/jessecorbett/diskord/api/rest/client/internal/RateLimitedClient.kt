@@ -13,7 +13,7 @@ private fun captureFailure(code: Int, body: String?) = when (code) {
     403 -> DiscordBadPermissionsException()
     404 -> DiscordNotFoundException()
     429 -> Json.nonstrict.parse(RateLimitExceeded.serializer(), body!!).let {
-        DiscordRateLimitException(it.message,  (it.retryAfter + epochMillisNow()) / 1000, it.isGlobal)
+        DiscordRateLimitException(it.message, (it.retryAfter + epochMillisNow()) / 1000, it.isGlobal)
     }
     502 -> DiscordGatewayException()
     in 500..599 -> DiscordInternalServerException()
@@ -36,7 +36,8 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
 
     rateLimit.limit = response.headers["X-RateLimit-Limit"]?.toInt() ?: rateLimit.limit
     rateLimit.remaining = response.headers["X-RateLimit-Remaining"]?.toInt() ?: rateLimit.remaining
-    rateLimit.resetTime = response.headers["X-RateLimit-Reset"]?.toLong()?.plus(discordAheadBySeconds) ?: rateLimit.resetTime
+    rateLimit.resetTime =
+        response.headers["X-RateLimit-Reset"]?.toLong()?.plus(discordAheadBySeconds) ?: rateLimit.resetTime
 
     if (response.code !in 200..299) {
         throw captureFailure(response.code, response.body)
@@ -47,10 +48,10 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
 
 
 abstract class RateLimitedClient(
-        token: String,
-        userType: DiscordUserType,
-        botUrl: String = defaultUserAgentUrl,
-        botVersion: String = defaultUserAgentVersion
+    token: String,
+    userType: DiscordUserType,
+    botUrl: String = defaultUserAgentUrl,
+    botVersion: String = defaultUserAgentVersion
 ) : BaseRestClient() {
     /**
      * The rate limit info for this discord object.
@@ -58,8 +59,8 @@ abstract class RateLimitedClient(
     val rateLimitInfo = RateLimitInfo(1, 1, Long.MAX_VALUE)
 
     private val commonHeaders = mapOf(
-            "Authorization" to userType.type + " " + token,
-            "User-Agent" to "DiscordBot: ($botUrl, $botVersion)"
+        "Authorization" to userType.type + " " + token,
+        "User-Agent" to "DiscordBot: ($botUrl, $botVersion)"
     )
 
     /**
@@ -70,7 +71,11 @@ abstract class RateLimitedClient(
      *
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <R> getRequest(url: String, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <R> getRequest(
+        url: String,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.getRequest(url, commonHeaders)
         }
@@ -104,7 +109,12 @@ abstract class RateLimitedClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <T> postRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo) {
+    protected suspend fun <T> postRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ) {
         doRequest(rateLimit) {
             super.postRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -120,7 +130,11 @@ abstract class RateLimitedClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <R> postRequest(url: String, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <R> postRequest(
+        url: String,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.postRequest(url, null, commonHeaders)
         }
@@ -138,7 +152,13 @@ abstract class RateLimitedClient(
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <T, R> postRequest(url: String, body: T, serializer: KSerializer<T>, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <T, R> postRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.postRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -172,7 +192,12 @@ abstract class RateLimitedClient(
      * @return The API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <T> putRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo) {
+    protected suspend fun <T> putRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ) {
         doRequest(rateLimit) {
             super.putRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -188,7 +213,11 @@ abstract class RateLimitedClient(
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
-    protected suspend fun <R> putRequest(url: String, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <R> putRequest(
+        url: String,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.putRequest(url, null, commonHeaders)
         }
@@ -206,7 +235,13 @@ abstract class RateLimitedClient(
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
-    protected suspend fun <T, R> putRequest(url: String, body: T, serializer: KSerializer<T>, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <T, R> putRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.putRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -224,7 +259,12 @@ abstract class RateLimitedClient(
      *
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <T> patchRequest(url: String, body: T, serializer: KSerializer<T>, rateLimit: RateLimitInfo = rateLimitInfo) {
+    protected suspend fun <T> patchRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ) {
         doRequest(rateLimit) {
             super.patchRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -242,7 +282,13 @@ abstract class RateLimitedClient(
      * @return The API response.
      * @throws DiscordException representing an API error.
      */
-    protected suspend fun <T, R> patchRequest(url: String, body: T, serializer: KSerializer<T>, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <T, R> patchRequest(
+        url: String,
+        body: T,
+        serializer: KSerializer<T>,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.patchRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
@@ -274,7 +320,11 @@ abstract class RateLimitedClient(
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
-    protected suspend fun <R> deleteRequest(url: String, deserializer: KSerializer<R>, rateLimit: RateLimitInfo = rateLimitInfo): R {
+    protected suspend fun <R> deleteRequest(
+        url: String,
+        deserializer: KSerializer<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo
+    ): R {
         val response = doRequest(rateLimit) {
             super.deleteRequest(url, commonHeaders)
         }

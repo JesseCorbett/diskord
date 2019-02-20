@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Role(
-        @SerialName("id") val id: String,
-        @SerialName("name") val name: String,
-        @SerialName("color") val color: Color,
-        @SerialName("hoist") val isUserListPinned: Boolean,
-        @SerialName("position") val position: Int,
-        @SerialName("permissions") val permissions: Int,
-        @SerialName("managed") val isManagedByIntegration: Boolean,
-        @SerialName("mentionable") val isMentionable: Boolean
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("color") val color: Color,
+    @SerialName("hoist") val isUserListPinned: Boolean,
+    @SerialName("position") val position: Int,
+    @SerialName("permissions") val permissions: Int,
+    @SerialName("managed") val isManagedByIntegration: Boolean,
+    @SerialName("mentionable") val isMentionable: Boolean
 )

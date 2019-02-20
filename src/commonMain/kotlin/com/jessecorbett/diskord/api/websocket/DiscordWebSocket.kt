@@ -35,17 +35,17 @@ import kotlin.coroutines.CoroutineContext
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
 class DiscordWebSocket(
-        private val token: String,
-        private val eventListener: EventListener,
-        autoStart: Boolean = true,
-        var sessionId: String? = null,
-        var sequenceNumber: Int? = null,
-        private val shardId: Int = 0,
-        private val shardCount: Int = 0,
-        private val userType: DiscordUserType = DiscordUserType.BOT,
-        private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
-        private val eventListenerContext: CoroutineContext = Dispatchers.Default,
-        private val heartbeatContext: CoroutineContext = Dispatchers.Default
+    private val token: String,
+    private val eventListener: EventListener,
+    autoStart: Boolean = true,
+    var sessionId: String? = null,
+    var sequenceNumber: Int? = null,
+    private val shardId: Int = 0,
+    private val shardCount: Int = 0,
+    private val userType: DiscordUserType = DiscordUserType.BOT,
+    private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
+    private val eventListenerContext: CoroutineContext = Dispatchers.Default,
+    private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
     private val logger = Logger("com.jessecorbett.diskord.api.websocket.DiscordWebSocket")
     private var socket: WebSocket? = null
@@ -173,7 +173,11 @@ class DiscordWebSocket(
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
         } else {
             if (shardCount > 0) {
-                sendGatewayMessage(OpCode.IDENTIFY, IdentifyShard(token, listOf(shardId, shardCount)), IdentifyShard.serializer())
+                sendGatewayMessage(
+                    OpCode.IDENTIFY,
+                    IdentifyShard(token, listOf(shardId, shardCount)),
+                    IdentifyShard.serializer()
+                )
             } else {
                 sendGatewayMessage(OpCode.IDENTIFY, Identify(token), Identify.serializer())
             }
@@ -193,10 +197,10 @@ class DiscordWebSocket(
 
     private fun receiveGatewayMessage(gatewayMessage: GatewayMessage) {
         gatewayMessage.dataPayload
-                ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
+            ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
-                ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
+            ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
         logger.debug("Received Dispatch $discordEvent")
 
@@ -212,12 +216,27 @@ class DiscordWebSocket(
     private fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, data, sequenceNumber, eventName)))
+        socket?.sendMessage(
+            Json.stringify(
+                GatewayMessage.serializer(),
+                GatewayMessage(opCode, data, sequenceNumber, eventName)
+            )
+        )
     }
 
-    private fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: KSerializer<T>, event: DiscordEvent? = null) {
+    private fun <T> sendGatewayMessage(
+        opCode: OpCode,
+        data: T,
+        serializer: KSerializer<T>,
+        event: DiscordEvent? = null
+    ) {
         logger.debug("Sending OpCode: $opCode")
         val eventName = event?.name ?: ""
-        socket?.sendMessage(Json.stringify(GatewayMessage.serializer(), GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)))
+        socket?.sendMessage(
+            Json.stringify(
+                GatewayMessage.serializer(),
+                GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
+            )
+        )
     }
 }

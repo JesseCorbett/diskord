@@ -19,7 +19,7 @@ data class AuditLogEntry(
     @Optional @SerialName("changes") val changes: List<AuditLogChange> = emptyList(),
     @SerialName("user_id") val userId: String,
     @SerialName("action_type") val actionType: Int,
-    @Optional @SerialName("options") val optionalData: OptionalEntryData? = null, 
+    @Optional @SerialName("options") val optionalData: OptionalEntryData? = null,
     @Optional @SerialName("reason") val reason: String? = null
 )
 
@@ -33,13 +33,13 @@ data class AuditLogChange(
 
 @Serializable
 data class OptionalEntryData(
-        @SerialName("delete_member_days") val pruneKickedAfterDays: String,
-        @SerialName("members_removed") val pruneMembersPrunedCount: String,
-        @SerialName("channel_id") val deleteChannelId: String,
-        @SerialName("count") val deleteMessageCount: String,
-        @SerialName("id") val overwriteEntityId: String,
-        @SerialName("type") val overwriteEntityType: OverwrittenEntityType,
-        @SerialName("role_name") val overwriteRoleName: String
+    @SerialName("delete_member_days") val pruneKickedAfterDays: String,
+    @SerialName("members_removed") val pruneMembersPrunedCount: String,
+    @SerialName("channel_id") val deleteChannelId: String,
+    @SerialName("count") val deleteMessageCount: String,
+    @SerialName("id") val overwriteEntityId: String,
+    @SerialName("type") val overwriteEntityType: OverwrittenEntityType,
+    @SerialName("role_name") val overwriteRoleName: String
 )
 
 @Serializable(with = OverwrittenEntityTypeSerializer::class)
