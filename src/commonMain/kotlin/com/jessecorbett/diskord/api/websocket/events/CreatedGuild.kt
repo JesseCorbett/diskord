@@ -33,7 +33,7 @@ data class CreatedGuild(
     @Optional @SerialName("large") val isLargeGuild: Boolean? = null,
     @Optional @SerialName("unavailable") val isUnavailable: Boolean? = null,
     @Optional @SerialName("member_count") val memberCount: Int? = null,
-    @Optional @SerialName("voice_states") val voiceStates: List<VoiceState>? = null,
+    @SerialName("voice_states") val voiceStates: List<VoiceState>,
     @SerialName("members") val members: List<GuildMember>,
     @SerialName("presences") val userPresences: List<BarePresenceUpdate>
 )
