@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.api.websocket.commands
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

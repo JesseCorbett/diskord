@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GuildMemberRemove(
-        @SerialName("guild_id") val guildId: String,
-        @SerialName("user") val user: User
+    @SerialName("guild_id") val guildId: String,
+    @SerialName("user") val user: User
 )

@@ -13,7 +13,10 @@ data class UserStatusActivity(
         @Optional @SerialName("details") val details: String? = null,
         @Optional @SerialName("state") val partyStatus: String? = null,
         @Optional @SerialName("party") val party: ActivityParty? = null,
-        @Optional @SerialName("assets") val assets: Assets? = null
+        @Optional @SerialName("assets") val assets: Assets? = null,
+        @Optional @SerialName("secrets") val secrets: RichPresenceSecrets? = null,
+        @Optional @SerialName("instance") val activityIsInstanced: Boolean? = null,
+        @Optional @SerialName("flags") val activityFlags: Int? = null
 )
 
 @Serializable
@@ -25,7 +28,7 @@ data class Timestamps(
 @Serializable
 data class ActivityParty(
         @Optional @SerialName("id") val id: String? = null,
-        @Optional @SerialName("size") val size: List<Int>? = null
+        @Optional @SerialName("size") val size: Pair<Int, Int>? = null
 )
 
 @Serializable
@@ -34,6 +37,13 @@ data class Assets(
         @Optional @SerialName("large_text") val largeImageText: String? = null,
         @Optional @SerialName("small_image") val smallImage: String? = null,
         @Optional @SerialName("small_text") val smallImageText: String? = null
+)
+
+@Serializable
+data class RichPresenceSecrets(
+        @Optional @SerialName("join") val joinParty: String? = null,
+        @Optional @SerialName("spectate") val spectate: String? = null,
+        @Optional @SerialName("match") val joinInstance: String? = null
 )
 
 @Serializable(with = ActivityTypeSerializer::class)

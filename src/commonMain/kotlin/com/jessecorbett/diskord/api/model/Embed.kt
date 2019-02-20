@@ -18,28 +18,28 @@ data class Embed(
         @Optional @SerialName("provider") val provider: EmbedProvider? = null,
         @Optional @SerialName("author") val author: EmbedAuthor? = null,
         @Optional @SerialName("fields") val fields: List<EmbedField> = emptyList(),
-        @SerialName("type") val type: String = "rich"
+        @Optional @SerialName("type") val type: String = "rich"
 )
 
 @Serializable
 data class EmbedImage(
-        @SerialName("url") val url: String,
+        @Optional @SerialName("url") val url: String? = null,
         @Optional @SerialName("proxy_url") val proxyUrl: String? = null,
-        @SerialName("height") val imageHeight: Int = 0,
-        @SerialName("width") val imageWidth: Int = 0
+        @Optional @SerialName("height") val imageHeight: Int = 0,
+        @Optional @SerialName("width") val imageWidth: Int = 0
 )
 
 @Serializable
 data class EmbedVideo(
-        @SerialName("url") val url: String,
-        @SerialName("height") val videoHeight: Int = 0,
-        @SerialName("width") val videoWidth: Int = 0
+        @Optional @SerialName("url") val url: String? = null,
+        @Optional @SerialName("height") val videoHeight: Int = 0,
+        @Optional @SerialName("width") val videoWidth: Int = 0
 )
 
 @Serializable
 data class EmbedProvider(
-        @SerialName("name") val name: String,
-        @SerialName("url") val url: String?
+        @Optional @SerialName("name") val name: String? = null,
+        @Optional @SerialName("url") val url: String? = null
 )
 
 @Serializable
@@ -61,5 +61,5 @@ data class EmbedFooter(
 data class EmbedField(
         @SerialName("name") val name: String,
         @SerialName("value") val value: String,
-        @SerialName("inline") val inline: Boolean
+        @Optional @SerialName("inline") val inline: Boolean? = null
 )

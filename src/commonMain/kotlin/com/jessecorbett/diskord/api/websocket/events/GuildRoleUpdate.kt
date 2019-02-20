@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GuildRoleUpdate(
-        @SerialName("guild_id") val guildId: String,
-        @SerialName("role") val role: Role
+    @SerialName("guild_id") val guildId: String,
+    @SerialName("role") val role: Role
 )

@@ -9,5 +9,5 @@ data class UserConnection(
         @SerialName("name") val name: String,
         @SerialName("type") val type: String,
         @SerialName("revoked") val revoked: Boolean,
-        @SerialName("integrations") val integrations: List<GuildIntegration> = emptyList()
+        @SerialName("integrations") val integrations: List<GuildIntegration>
 )
