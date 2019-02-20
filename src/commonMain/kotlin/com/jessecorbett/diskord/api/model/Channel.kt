@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.IntDescriptor
+import kotlinx.serialization.internal.StringDescriptor
 
 @Serializable
 data class Channel(
@@ -57,7 +58,23 @@ data class Overwrite(
         @SerialName("deny") val denied: Permissions
 )
 
+@Serializable(with = OverwriteTypeSerializer::class)
 enum class OverwriteType(val value: String) {
     ROLE("role"),
     MEMBER("member")
+}
+
+object OverwriteTypeSerializer : KSerializer<OverwriteType> {
+    override val descriptor: SerialDescriptor = StringDescriptor.withName("OverwriteTypeSerializer")
+
+    override fun deserialize(decoder: Decoder): OverwriteType {
+        val target = decoder.decodeString()
+        return OverwriteType.values().first {
+            it.value == target
+        }
+    }
+
+    override fun serialize(encoder: Encoder, obj: OverwriteType) {
+        encoder.encodeString(obj.value)
+    }
 }
