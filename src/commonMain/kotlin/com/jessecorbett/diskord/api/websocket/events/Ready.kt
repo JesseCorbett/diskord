@@ -14,5 +14,5 @@ data class Ready(
     @SerialName("guilds") val guilds: List<UnavailableGuild>,
     @SerialName("session_id") val sessionId: String,
     @SerialName("_trace") val debug: List<String>,
-    @Optional @SerialName("shard") val shardIdAndNumber: Pair<Int, Int>? = null
+    @Optional @SerialName("shard") val shardIdAndNumber: List<Int>? = null
 )

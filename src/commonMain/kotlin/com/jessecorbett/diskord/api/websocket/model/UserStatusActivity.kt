@@ -28,7 +28,7 @@ data class Timestamps(
 @Serializable
 data class ActivityParty(
     @Optional @SerialName("id") val id: String? = null,
-    @Optional @SerialName("size") val size: Pair<Int, Int>? = null
+    @Optional @SerialName("size") val size: List<Int>? = null
 )
 
 @Serializable
