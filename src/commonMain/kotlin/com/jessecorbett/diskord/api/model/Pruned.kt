@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Pruned(
-        @SerialName("pruned") val prunedCount: Int
+    @SerialName("pruned") val prunedCount: Int
 )

@@ -33,8 +33,8 @@ private fun sizeFormat(size: Int?): String {
  * @return the url of the png formatted avatar or the url of the png formatted default avatar.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun User.pngAvatar(size: Int? = null): String
-        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png${sizeFormat(size)}" else pngDefaultAvatar(size)
+fun User.pngAvatar(size: Int? = null): String =
+    if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.png${sizeFormat(size)}" else pngDefaultAvatar(size)
 
 /**
  * Gets the url of the user's avatar in JPG format.
@@ -43,8 +43,8 @@ fun User.pngAvatar(size: Int? = null): String
  * @return the url of the jpg formatted avatar or null if there is no custom avatar.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun User.jpgAvatar(size: Int? = null): String?
-        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg${sizeFormat(size)}" else null
+fun User.jpgAvatar(size: Int? = null): String? =
+    if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.jpg${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the user's avatar in WEBP format.
@@ -53,8 +53,8 @@ fun User.jpgAvatar(size: Int? = null): String?
  * @return the url of the webp formatted avatar or null if there is no custom avatar.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun User.webpAvatar(size: Int? = null): String?
-        = if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp${sizeFormat(size)}" else null
+fun User.webpAvatar(size: Int? = null): String? =
+    if (avatarHash != null) "$discordCdn/avatars/$id/$avatarHash.webp${sizeFormat(size)}" else null
 
 
 /**
@@ -64,8 +64,8 @@ fun User.webpAvatar(size: Int? = null): String?
  * @return the url of the gif formatted avatar or null if there is no custom avatar.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun User.gifAvatar(size: Int? = null): String?
-        = if (avatarHash != null) "$discordCdn/avatars/$id/a_$avatarHash.gif${sizeFormat(size)}" else null
+fun User.gifAvatar(size: Int? = null): String? =
+    if (avatarHash != null) "$discordCdn/avatars/$id/a_$avatarHash.gif${sizeFormat(size)}" else null
 
 
 /**
@@ -77,8 +77,8 @@ fun User.gifAvatar(size: Int? = null): String?
  * @return the url of the png formatted avatar.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun User.pngDefaultAvatar(size: Int? = null): String
-        = "$discordCdn/embed/avatars/${discriminator % 5}.png${sizeFormat(size)}"
+fun User.pngDefaultAvatar(size: Int? = null): String =
+    "$discordCdn/embed/avatars/${discriminator % 5}.png${sizeFormat(size)}"
 
 
 /**
@@ -88,8 +88,7 @@ fun User.pngDefaultAvatar(size: Int? = null): String
  * @return the url of the png formatted emoji or null if it is unicode.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Emoji.png(size: Int? = null): String?
-        = if (!isUnicode) "$discordCdn/emojis/$id.png${sizeFormat(size)}" else null
+fun Emoji.png(size: Int? = null): String? = if (!isUnicode) "$discordCdn/emojis/$id.png${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the emoji in GIF format, null if the emoji is a unicode character.
@@ -98,8 +97,7 @@ fun Emoji.png(size: Int? = null): String?
  * @return the url of the gif formatted emoji or null if it is unicode.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Emoji.gif(size: Int? = null): String?
-        = if (!isUnicode) "$discordCdn/emojis/$id.gif${sizeFormat(size)}" else null
+fun Emoji.gif(size: Int? = null): String? = if (!isUnicode) "$discordCdn/emojis/$id.gif${sizeFormat(size)}" else null
 
 
 /**
@@ -109,8 +107,8 @@ fun Emoji.gif(size: Int? = null): String?
  * @return the url of the png formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.pngIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
+fun Guild.pngIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild icon in JPG format. Null if there is no custom icon.
@@ -119,8 +117,8 @@ fun Guild.pngIcon(size: Int? = null): String?
  * @return the url of the jpg formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.jpgIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
+fun Guild.jpgIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild icon in WEBP format. Null if there is no custom icon.
@@ -129,8 +127,8 @@ fun Guild.jpgIcon(size: Int? = null): String?
  * @return the url of the webp formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.webpIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
+fun Guild.webpIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild splash in PNG format. Null if there is no splash.
@@ -139,8 +137,8 @@ fun Guild.webpIcon(size: Int? = null): String?
  * @return the url of the png formatted splash or null if there is no splash.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.pngSplash(size: Int? = null): String?
-        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png${sizeFormat(size)}" else null
+fun Guild.pngSplash(size: Int? = null): String? =
+    if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.png${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild splash in JPG format. Null if there is no splash.
@@ -149,8 +147,8 @@ fun Guild.pngSplash(size: Int? = null): String?
  * @return the url of the jpg formatted splash or null if there is no splash.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.jpgSplash(size: Int? = null): String?
-        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg${sizeFormat(size)}" else null
+fun Guild.jpgSplash(size: Int? = null): String? =
+    if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.jpg${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild splash in WEBP format. Null if there is no splash.
@@ -159,8 +157,8 @@ fun Guild.jpgSplash(size: Int? = null): String?
  * @return the url of the webp formatted splash or null if there is no splash.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun Guild.webpSplash(size: Int? = null): String?
-        = if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
+fun Guild.webpSplash(size: Int? = null): String? =
+    if (splashHash != null) "$discordCdn/splashes/$id/$splashHash.webp${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild icon in PNG format. Null if there is no custom icon.
@@ -169,8 +167,8 @@ fun Guild.webpSplash(size: Int? = null): String?
  * @return the url of the png formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun PartialGuild.pngIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
+fun PartialGuild.pngIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.png${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild icon in PNG format. Null if there is no custom icon.
@@ -179,8 +177,8 @@ fun PartialGuild.pngIcon(size: Int? = null): String?
  * @return the url of the png formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun PartialGuild.jpgIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
+fun PartialGuild.jpgIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.jpg${sizeFormat(size)}" else null
 
 /**
  * Gets the url of the guild icon in PNG format. Null if there is no custom icon.
@@ -189,5 +187,5 @@ fun PartialGuild.jpgIcon(size: Int? = null): String?
  * @return the url of the png formatted emoji or null if there is no icon.
  * @throws DiscordBadRequestException when the size is not null or a power of two.
  */
-fun PartialGuild.webpIcon(size: Int? = null): String?
-        = if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null
+fun PartialGuild.webpIcon(size: Int? = null): String? =
+    if (iconHash != null) "$discordCdn/icons/$id/$iconHash.webp${sizeFormat(size)}" else null

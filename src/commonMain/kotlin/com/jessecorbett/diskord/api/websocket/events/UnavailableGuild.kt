@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UnavailableGuild(
-        @SerialName("id") val id: String,
-        @SerialName("unavailable") val unavailable: Boolean
+    @SerialName("id") val id: String,
+    @SerialName("unavailable") val unavailable: Boolean
 )

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GuildPosition(
-        @SerialName("id") val id: String,
-        @SerialName("position") val position: Int
+    @SerialName("id") val id: String,
+    @SerialName("position") val position: Int
 )

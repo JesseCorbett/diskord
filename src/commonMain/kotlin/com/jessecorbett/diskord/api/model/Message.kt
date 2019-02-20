@@ -15,10 +15,10 @@ data class Message(
     @SerialName("edited_timestamp") val editedAt: String?,
     @SerialName("tts") val isTTS: Boolean,
     @SerialName("mention_everyone") val mentionsEveryone: Boolean,
-    @SerialName("mentions") val usersMentioned: List<User> = emptyList(),
-    @SerialName("mention_roles") val rolesIdsMentioned: List<String> = emptyList(),
-    @SerialName("attachments") val attachments: List<Attachment> = emptyList(),
-    @SerialName("embeds") val embeds: List<Embed> = emptyList(),
+    @Optional @SerialName("mentions") val usersMentioned: List<User> = emptyList(),
+    @Optional @SerialName("mention_roles") val rolesIdsMentioned: List<String> = emptyList(),
+    @Optional @SerialName("attachments") val attachments: List<Attachment> = emptyList(),
+    @Optional @SerialName("embeds") val embeds: List<Embed> = emptyList(),
     @Optional @SerialName("reactions") val reactions: List<Reaction> = emptyList(),
     @Optional @SerialName("nonce") val validationNonce: String? = null,
     @SerialName("pinned") val isPinned: Boolean,
@@ -57,8 +57,8 @@ object MessageTypeSerializer : KSerializer<MessageType> {
 
 @Serializable
 data class MessageActivity(
-        @SerialName("type") val type: MessageActivityType,
-        @SerialName("party_id") val partyId: String
+    @SerialName("type") val type: MessageActivityType,
+    @SerialName("party_id") val partyId: String
 )
 
 @Serializable(with = MessageActivityTypeSerializer::class)
@@ -86,9 +86,9 @@ object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
 
 @Serializable
 data class MessageApplication(
-        @SerialName("id") val id: String,
-        @SerialName("cover_image") val coverImage: String,
-        @SerialName("description") val description: String,
-        @SerialName("icon") val icon: String,
-        @SerialName("name") val name: String
+    @SerialName("id") val id: String,
+    @SerialName("cover_image") val coverImage: String,
+    @SerialName("description") val description: String,
+    @SerialName("icon") val icon: String,
+    @SerialName("name") val name: String
 )

@@ -41,7 +41,7 @@ class ClientStore(userToken: String) {
  * @param userToken the user token used by each [ChannelClient].
  * @constructor Creates an empty group of clients.
  */
-class ChannelClients(userToken: String): RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
+class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
 
 
 /**
@@ -52,7 +52,7 @@ class ChannelClients(userToken: String): RestClients<ChannelClient>(userToken, {
  * @param userToken the user token used by each [GuildClient].
  * @constructor Creates an empty group of clients.
  */
-class GuildClients(userToken: String): RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
+class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
 
 
 /**
@@ -63,7 +63,7 @@ class GuildClients(userToken: String): RestClients<GuildClient>(userToken, { Gui
  * @param userToken the user token used by each [WebhookClient].
  * @constructor Creates an empty group of clients.
  */
-class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
+class WebhookClients(userToken: String) : RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 /**
  * Generic container for [BaseRestClient] instances.
@@ -75,7 +75,7 @@ class WebhookClients(userToken: String): RestClients<WebhookClient>(userToken, {
  * @param gen a lambda which returns a new instance of class T when requested by the user.
  * @constructor Creates an instance and sets up a [MutableMap] backing the group.
  */
-abstract class RestClients<T: BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
+abstract class RestClients<T : BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
     private val clients: MutableMap<String, T> = mutableMapOf()
 
     /**

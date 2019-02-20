@@ -90,20 +90,20 @@ fun Embed.field(name: String, value: String, inline: Boolean) = fields.add(Embed
  * @property message The string content of the message.
  */
 class CombinedMessageEmbed(
-        var text: String = "",
-        var title: String? = null,
-        var description: String? = null,
-        var url: String? = null,
-        var timestamp: String? = null,
-        var color: Color? = null,
-        var footer: EmbedFooter? = null,
-        var image: EmbedImage? = null,
-        var thumbnail: EmbedImage? = null,
-        var video: EmbedVideo? = null,
-        var provider: EmbedProvider? = null,
-        var author: EmbedAuthor? = null,
-        var fields: MutableList<EmbedField> = ArrayList(),
-        var type: String = "rich"
+    var text: String = "",
+    var title: String? = null,
+    var description: String? = null,
+    var url: String? = null,
+    var timestamp: String? = null,
+    var color: Color? = null,
+    var footer: EmbedFooter? = null,
+    var image: EmbedImage? = null,
+    var thumbnail: EmbedImage? = null,
+    var video: EmbedVideo? = null,
+    var provider: EmbedProvider? = null,
+    var author: EmbedAuthor? = null,
+    var fields: MutableList<EmbedField> = ArrayList(),
+    var type: String = "rich"
 ) {
     /**
      * The [Embed] object represented.
@@ -111,11 +111,38 @@ class CombinedMessageEmbed(
      * @return The embed. Null if no embed properties have been specified.
      */
     fun embed(): Embed? {
-        if (listOf(title, description, url, timestamp, color, footer, image, thumbnail, video, provider, author).all { it == null } && fields.isEmpty()) {
+        if (listOf(
+                title,
+                description,
+                url,
+                timestamp,
+                color,
+                footer,
+                image,
+                thumbnail,
+                video,
+                provider,
+                author
+            ).all { it == null } && fields.isEmpty()
+        ) {
             return null
         }
 
-        return Embed(title, description, url, timestamp, color, footer, image, thumbnail, video, provider, author, fields, type)
+        return Embed(
+            title,
+            description,
+            url,
+            timestamp,
+            color,
+            footer,
+            image,
+            thumbnail,
+            video,
+            provider,
+            author,
+            fields,
+            type
+        )
     }
 }
 
@@ -192,4 +219,5 @@ fun CombinedMessageEmbed.footer(text: String, block: EmbedFooter.() -> Unit = {}
  * @param inline Should this field be displayed inline.
  */
 @DiskordDsl
-fun CombinedMessageEmbed.field(name: String, value: String, inline: Boolean) = fields.add(EmbedField(name, value, inline))
+fun CombinedMessageEmbed.field(name: String, value: String, inline: Boolean) =
+    fields.add(EmbedField(name, value, inline))

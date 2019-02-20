@@ -37,7 +37,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun Message.reply(text: String, embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+    suspend fun Message.reply(text: String, embed: Embed? = null) =
+        clientStore.channels[channelId].sendMessage(text, embed)
 
     /**
      * Convenience function for sending a message in response to another.
@@ -49,7 +50,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun Message.reply(text: String, embedDsl: Embed.() -> Unit) = clientStore.channels[channelId].sendMessage(text, embedDsl)
+    suspend fun Message.reply(text: String, embedDsl: Embed.() -> Unit) =
+        clientStore.channels[channelId].sendMessage(text, embedDsl)
 
     /**
      * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
@@ -60,7 +62,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the created [Message].
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun Message.reply(block: CombinedMessageEmbed.() -> Unit) = clientStore.channels[channelId].sendMessage(block)
+    suspend fun Message.reply(block: CombinedMessageEmbed.() -> Unit) =
+        clientStore.channels[channelId].sendMessage(block)
 
     /**
      * Convenience function for deleting a message.
@@ -100,7 +103,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun MessageUpdate.reply(text: String, embed: Embed? = null) = clientStore.channels[channelId].sendMessage(text, embed)
+    suspend fun MessageUpdate.reply(text: String, embed: Embed? = null) =
+        clientStore.channels[channelId].sendMessage(text, embed)
 
     /**
      * Convenience function for sending a message in response to another.
@@ -112,7 +116,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the [Message] created
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun MessageUpdate.reply(text: String, embedDsl: Embed.() -> Unit) = clientStore.channels[channelId].sendMessage(text, embedDsl)
+    suspend fun MessageUpdate.reply(text: String, embedDsl: Embed.() -> Unit) =
+        clientStore.channels[channelId].sendMessage(text, embedDsl)
 
     /**
      * Calls [ChannelClient.createMessage] for sending messages from the [com.jessecorbett.diskord.dsl.CombinedMessageEmbed].
@@ -123,7 +128,8 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @return the created [Message].
      * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
      */
-    suspend fun MessageUpdate.reply(block: CombinedMessageEmbed.() -> Unit) = clientStore.channels[channelId].sendMessage(block)
+    suspend fun MessageUpdate.reply(block: CombinedMessageEmbed.() -> Unit) =
+        clientStore.channels[channelId].sendMessage(block)
 
     /**
      * Convenience property for deleting a message that was updated.

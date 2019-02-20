@@ -15,7 +15,8 @@ import kotlinx.serialization.list
  * @param channelId The id of the channel.
  * @param userType The user type, assumed to be a bot.
  */
-class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) : RateLimitedClient(token, userType) {
+class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) :
+    RateLimitedClient(token, userType) {
 
     /**
      * Message deletion per channel has it's own rate limit.
@@ -38,7 +39,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The updated channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(channel: Channel) = putRequest("/channels/$channelId", channel, Channel.serializer(), Channel.serializer())
+    suspend fun update(channel: Channel) =
+        putRequest("/channels/$channelId", channel, Channel.serializer(), Channel.serializer())
 
     /**
      * Delete this channel. Use with caution, cannot be undone except for DMs.
@@ -55,7 +57,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessages(limit: Int = 50) = getRequest("/channels/$channelId/messages?limit=$limit", Message.serializer().list)
+    suspend fun getMessages(limit: Int = 50) =
+        getRequest("/channels/$channelId/messages?limit=$limit", Message.serializer().list)
 
     /**
      * Get messages from this channel, around a given message.
@@ -66,7 +69,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages around the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesAround(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&around=$messageId", Message.serializer().list)
+    suspend fun getMessagesAround(limit: Int = 50, messageId: String) =
+        getRequest("/channels/$channelId/messages?limit=$limit&around=$messageId", Message.serializer().list)
 
     /**
      * Get messages from this channel, before a given message.
@@ -77,7 +81,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages before the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesBefore(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&before=$messageId", Message.serializer().list)
+    suspend fun getMessagesBefore(limit: Int = 50, messageId: String) =
+        getRequest("/channels/$channelId/messages?limit=$limit&before=$messageId", Message.serializer().list)
 
     /**
      * Get messages from this channel, after a given message.
@@ -88,7 +93,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return A list of messages after the specified message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessagesAfter(limit: Int = 50, messageId: String) = getRequest("/channels/$channelId/messages?limit=$limit&after=$messageId", Message.serializer().list)
+    suspend fun getMessagesAfter(limit: Int = 50, messageId: String) =
+        getRequest("/channels/$channelId/messages?limit=$limit&after=$messageId", Message.serializer().list)
 
     /**
      * Get a specific message from this channel.
@@ -98,7 +104,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The requested message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessage(messageId: String) = getRequest("/channels/$channelId/messages/$messageId", Message.serializer())
+    suspend fun getMessage(messageId: String) =
+        getRequest("/channels/$channelId/messages/$messageId", Message.serializer())
 
     /**
      * Create a message in this channel.
@@ -108,7 +115,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createMessage(message: CreateMessage) = postRequest("/channels/$channelId/messages", message, CreateMessage.serializer(), Message.serializer())
+    suspend fun createMessage(message: CreateMessage) =
+        postRequest("/channels/$channelId/messages", message, CreateMessage.serializer(), Message.serializer())
 
     /**
      * Add a reaction to a message.
@@ -120,7 +128,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMessageReaction(messageId: String, emojiText: String) = putRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/@me")
+    suspend fun addMessageReaction(messageId: String, emojiText: String) =
+        putRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/@me")
 
     /**
      * Add a reaction to a message.
@@ -130,7 +139,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMessageReaction(messageId: String, emoji: Emoji) = putRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/@me")
+    suspend fun addMessageReaction(messageId: String, emoji: Emoji) =
+        putRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/@me")
 
     /**
      * Remove a reaction from a message.
@@ -143,7 +153,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeMessageReaction(messageId: String, emojiText: String, userId: String = "@me") = deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/$userId")
+    suspend fun removeMessageReaction(messageId: String, emojiText: String, userId: String = "@me") =
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/$userId")
 
     /**
      * Remove a reaction from a message.
@@ -154,7 +165,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeMessageReaction(messageId: String, emoji: Emoji, userId: String = "@me") = deleteRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/$userId")
+    suspend fun removeMessageReaction(messageId: String, emoji: Emoji, userId: String = "@me") =
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/$userId")
 
     /**
      * Get all reactions from a message for a given emoji.
@@ -167,7 +179,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The reactions for the given emoji on the given message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessageReactions(messageId: String, textEmoji: String) = getRequest("/channels/$channelId/messages/$messageId/reaction/$textEmoji", Reaction.serializer().list)
+    suspend fun getMessageReactions(messageId: String, textEmoji: String) =
+        getRequest("/channels/$channelId/messages/$messageId/reaction/$textEmoji", Reaction.serializer().list)
 
     /**
      * Get all reactions from a message for a given custom emoji.
@@ -178,7 +191,10 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The reactions for the given emoji on the given message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest("/channels/$channelId/messages/$messageId/reaction/${emoji.name}:${emoji.id}", Reaction.serializer().list)
+    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest(
+        "/channels/$channelId/messages/$messageId/reaction/${emoji.name}:${emoji.id}",
+        Reaction.serializer().list
+    )
 
     /**
      * Delete all reactions from a message.
@@ -187,7 +203,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteAllMessageReactions(messageId: String) = deleteRequest("/channels/$channelId/messages/$messageId/reactions")
+    suspend fun deleteAllMessageReactions(messageId: String) =
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions")
 
     /**
      * Edit a message in this channel.
@@ -198,7 +215,12 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The edited message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest("/channels/$channelId/messages/$messageId", messageEdit, MessageEdit.serializer(), Message.serializer())
+    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest(
+        "/channels/$channelId/messages/$messageId",
+        messageEdit,
+        MessageEdit.serializer(),
+        Message.serializer()
+    )
 
     /**
      * Delete a message in this channel.
@@ -207,7 +229,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteMessage(messageId: String) = deleteRequest("/channels/$channelId/messages/$messageId", messageDeleteRateInfo)
+    suspend fun deleteMessage(messageId: String) =
+        deleteRequest("/channels/$channelId/messages/$messageId", messageDeleteRateInfo)
 
     /**
      * Bulk delete messages in this channel.
@@ -216,7 +239,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun bulkDeleteMessages(bulkMessageDelete: BulkMessageDelete) = postRequest("/channels/$channelId/messages/bulk-delete", bulkMessageDelete, BulkMessageDelete.serializer())
+    suspend fun bulkDeleteMessages(bulkMessageDelete: BulkMessageDelete) =
+        postRequest("/channels/$channelId/messages/bulk-delete", bulkMessageDelete, BulkMessageDelete.serializer())
 
     /**
      * Edit the permissions for this channel.
@@ -225,7 +249,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun editPermissions(overwrite: Overwrite) = putRequest("/channels/$channelId/permissions/${overwrite.id}", overwrite, Overwrite.serializer())
+    suspend fun editPermissions(overwrite: Overwrite) =
+        putRequest("/channels/$channelId/permissions/${overwrite.id}", overwrite, Overwrite.serializer())
 
     /**
      * Get the invites for this channel.
@@ -243,7 +268,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created invite.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createInvite(createInvite: CreateInvite) = postRequest("/channels/$channelId/invites", createInvite, CreateInvite.serializer(), Invite.serializer())
+    suspend fun createInvite(createInvite: CreateInvite) =
+        postRequest("/channels/$channelId/invites", createInvite, CreateInvite.serializer(), Invite.serializer())
 
     /**
      * Delete a permissions set for this channel.
@@ -297,7 +323,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addGroupDMRecipient(userId: String, groupDMAddRecipient: GroupDMAddRecipient) = putRequest("/channels/$channelId/recipients/$userId", groupDMAddRecipient, GroupDMAddRecipient.serializer())
+    suspend fun addGroupDMRecipient(userId: String, groupDMAddRecipient: GroupDMAddRecipient) =
+        putRequest("/channels/$channelId/recipients/$userId", groupDMAddRecipient, GroupDMAddRecipient.serializer())
 
     /**
      * Remove a user from this group DM.
@@ -326,5 +353,6 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The created webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createWebhook(webhook: CreateWebhook) = postRequest("/channels/$channelId/webhooks", webhook, CreateWebhook.serializer(), Webhook.serializer())
+    suspend fun createWebhook(webhook: CreateWebhook) =
+        postRequest("/channels/$channelId/webhooks", webhook, CreateWebhook.serializer(), Webhook.serializer())
 }

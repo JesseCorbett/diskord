@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateWebhook(
-        @SerialName("name") val name: String,
-        @SerialName("avatar") val base64AvatarData: String? = null
+    @SerialName("name") val name: String,
+    @SerialName("avatar") val base64AvatarData: String? = null
 )

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GuildEmbed(
-        @SerialName("enabled") val enabled: Boolean,
-        @SerialName("channel_id") val channelId: String
+    @SerialName("enabled") val enabled: Boolean,
+    @SerialName("channel_id") val channelId: String
 )

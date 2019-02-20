@@ -18,7 +18,8 @@ import kotlinx.serialization.list
  * @param token The user's API token.
  * @param userType The user type, assumed to be a bot.
  */
-class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.BOT) : RateLimitedClient(token, userType) {
+class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.BOT) :
+    RateLimitedClient(token, userType) {
 
     /**
      * Get the gateway url from the API.
@@ -44,7 +45,8 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The created guild.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createGuild(guild: CreateGuild) = postRequest("/guilds", guild, CreateGuild.serializer(), Guild.serializer())
+    suspend fun createGuild(guild: CreateGuild) =
+        postRequest("/guilds", guild, CreateGuild.serializer(), Guild.serializer())
 
     /**
      * Get an invite.
@@ -83,7 +85,8 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The updated user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyUser(user: ModifyUser) = patchRequest("/users/@me", user, ModifyUser.serializer(), User.serializer())
+    suspend fun modifyUser(user: ModifyUser) =
+        patchRequest("/users/@me", user, ModifyUser.serializer(), User.serializer())
 
     /**
      * Get a list of guilds that the current user is in.
@@ -125,7 +128,8 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The DM channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createDM(createDM: CreateDM) = postRequest("/users/@me/channels", createDM, CreateDM.serializer(), Channel.serializer())
+    suspend fun createDM(createDM: CreateDM) =
+        postRequest("/users/@me/channels", createDM, CreateDM.serializer(), Channel.serializer())
 
     /**
      * Open a group DM channel between the current user and others.
@@ -137,7 +141,8 @@ class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.B
      * @return The group DM channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createGroupDM(groupDM: CreateGroupDM) = postRequest("/users/@me/channels", groupDM, CreateGroupDM.serializer(), Channel.serializer())
+    suspend fun createGroupDM(groupDM: CreateGroupDM) =
+        postRequest("/users/@me/channels", groupDM, CreateGroupDM.serializer(), Channel.serializer())
 
     /**
      * Get all connections to a given user.
