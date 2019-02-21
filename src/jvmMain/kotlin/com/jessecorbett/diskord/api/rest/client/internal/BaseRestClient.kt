@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.api.exception.DiscordRateLimitException
 import com.jessecorbett.diskord.internal.httpClient
+import mu.KLogging
 import okhttp3.*
 import java.io.IOException
 import kotlin.coroutines.resume
@@ -74,4 +75,6 @@ actual open class BaseRestClient {
     } catch (rateLimitException: DiscordRateLimitException) {
         makeRequest(request)
     }
+
+    companion object : KLogging()
 }

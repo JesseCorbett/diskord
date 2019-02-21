@@ -3,21 +3,19 @@ package com.jessecorbett.diskord.api.websocket
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import kotlinx.serialization.json.Json
+import mu.KLogging
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import org.slf4j.LoggerFactory
 
 internal class DiscordWebSocketListener(
     private val acceptMessage: (GatewayMessage) -> Unit,
     private val lifecycleManager: WebsocketLifecycleManager
 ) : WebSocketListener() {
-    private val logger = LoggerFactory.getLogger(this.javaClass)
-
     override fun onOpen(webSocket: WebSocket, response: Response) {
         if (response.code() == 101) return
-        logger.error("Encountered an unexpected error, code: ${response.body()}")
+        logger.error { "Encountered an unexpected error, code: ${response.body()}" }
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) =
@@ -42,4 +40,6 @@ internal class DiscordWebSocketListener(
     override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
         lifecycleManager.failed(throwable, response?.code(), response?.body()?.string())
     }
+
+    companion object : KLogging()
 }
