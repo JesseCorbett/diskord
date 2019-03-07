@@ -14,10 +14,11 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```
 repositories {
     jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.2.0'
+    implementation 'com.jessecorbett:diskord:1.3.0'
 }
 ```
 
@@ -33,7 +34,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -156,4 +157,3 @@ fun main() {
 ## Things to do
 - Add more testing
 - Voice support
-- Multiplatform support
