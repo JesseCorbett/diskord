@@ -4,7 +4,8 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*
 import com.jessecorbett.diskord.internal.*
 import kotlinx.coroutines.delay
-import kotlinx.serialization.KSerializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 
 private fun captureFailure(code: Int, body: String?) = when (code) {
@@ -73,7 +74,7 @@ abstract class RateLimitedClient(
      */
     protected suspend fun <R> getRequest(
         url: String,
-        deserializer: KSerializer<R>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -112,7 +113,7 @@ abstract class RateLimitedClient(
     protected suspend fun <T> postRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
+        serializer: SerializationStrategy<T>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ) {
         doRequest(rateLimit) {
@@ -132,7 +133,7 @@ abstract class RateLimitedClient(
      */
     protected suspend fun <R> postRequest(
         url: String,
-        deserializer: KSerializer<R>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -155,8 +156,8 @@ abstract class RateLimitedClient(
     protected suspend fun <T, R> postRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
-        deserializer: KSerializer<R>,
+        serializer: SerializationStrategy<T>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -195,7 +196,7 @@ abstract class RateLimitedClient(
     protected suspend fun <T> putRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
+        serializer: SerializationStrategy<T>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ) {
         doRequest(rateLimit) {
@@ -215,7 +216,7 @@ abstract class RateLimitedClient(
      */
     protected suspend fun <R> putRequest(
         url: String,
-        deserializer: KSerializer<R>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -238,8 +239,8 @@ abstract class RateLimitedClient(
     protected suspend fun <T, R> putRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
-        deserializer: KSerializer<R>,
+        serializer: SerializationStrategy<T>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -262,7 +263,7 @@ abstract class RateLimitedClient(
     protected suspend fun <T> patchRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
+        serializer: SerializationStrategy<T>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ) {
         doRequest(rateLimit) {
@@ -285,8 +286,8 @@ abstract class RateLimitedClient(
     protected suspend fun <T, R> patchRequest(
         url: String,
         body: T,
-        serializer: KSerializer<T>,
-        deserializer: KSerializer<R>,
+        serializer: SerializationStrategy<T>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {
@@ -322,7 +323,7 @@ abstract class RateLimitedClient(
      */
     protected suspend fun <R> deleteRequest(
         url: String,
-        deserializer: KSerializer<R>,
+        deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
     ): R {
         val response = doRequest(rateLimit) {

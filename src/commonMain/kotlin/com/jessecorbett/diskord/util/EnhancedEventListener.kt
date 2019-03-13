@@ -29,6 +29,30 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
 
 
     /**
+     * Convenience function for sending a text message in response to another.
+     *
+     * @param text The message to send.
+     *
+     * @return the [Message] created
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend infix fun Message.reply(text: String) =
+        clientStore.channels[channelId].sendMessage(text, null)
+
+    /**
+     * Convenience function for sending a text message in response to another and deleting the original.
+     *
+     * @param text The message to send.
+     *
+     * @return the [Message] created
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     */
+    suspend infix fun Message.replyAndDelete(text: String): Message {
+        this.delete()
+        return clientStore.channels[channelId].sendMessage(text, null)
+    }
+
+    /**
      * Convenience function for sending a message in response to another.
      *
      * @param text The message to send.

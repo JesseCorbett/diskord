@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateGuildRole(
     @SerialName("name") val name: String,
-    @SerialName("permissions") val permissions: Permissions, // TODO: convert bitwise amounts
+    @SerialName("permissions") val permissions: Permissions,
     @SerialName("color") val color: Color = Colors.BLACK,
     @SerialName("hoist") val displayedSeparately: Boolean,
     @SerialName("mentionable") val mentionable: Boolean

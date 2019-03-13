@@ -110,7 +110,6 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-                implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
                 implementation 'com.squareup.okhttp3:okhttp:3.13.1'
