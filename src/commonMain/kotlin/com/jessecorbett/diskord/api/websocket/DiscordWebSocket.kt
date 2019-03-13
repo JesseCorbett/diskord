@@ -12,7 +12,7 @@ import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import kotlinx.coroutines.*
-import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -24,6 +24,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @property token The user API token.
  * @property eventListener The event listener to call for gateway events.
+ * @param autoStart If this connection should immediately start.
  * @property sessionId The id of the session, null if this is a new connection.
  * @property sequenceNumber The gateway sequence number, initially null if this is a new connection.
  * @property shardId The id of this shard of the bot, 0 if this is the DM shard or the only shard.
@@ -50,6 +51,7 @@ class DiscordWebSocket(
     private val logger = KotlinLogging.logger {}
     private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
+    private var gatewayUrl: String? = null
 
     /**
      * Indicates if this websocket is currently connected.
@@ -65,7 +67,9 @@ class DiscordWebSocket(
 
     private fun startConnection() {
         GlobalScope.launch {
-            val gatewayUrl = DiscordClient(token, userType).getBotGateway().url
+            if (gatewayUrl == null) {
+                gatewayUrl = DiscordClient(token, userType).getBotGateway().url
+            }
 
             socket = WebSocket("$gatewayUrl?encoding=json&v=6", token, object : WebsocketLifecycleManager {
                 override fun start() {
@@ -73,31 +77,30 @@ class DiscordWebSocket(
                 }
 
                 override fun closing(code: WebSocketCloseCode, reason: String) {
-                    logger.info { "Closing with code '$code' and reason '$reason'" }
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                        restart()
-                    else
-                        socket = null
+                    logger.info { "Closing with code '$code' with ${parseReason(reason)}" }
                     websocketLifecycleListener?.closing(code, reason)
                 }
 
                 override fun closed(code: WebSocketCloseCode, reason: String) {
-                    logger.info { "Closed with code '$code' and reason '$reason'" }
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE)
-                        restart()
-                    else
+                    logger.info { "Closed with code '$code' and reason '${parseReason(reason)}'" }
+                    if (code != WebSocketCloseCode.NORMAL_CLOSURE) {
                         socket = null
+                        restart()
+                    }
                     websocketLifecycleListener?.closed(code, reason)
                 }
 
                 override fun failed(failure: Throwable, code: Int?, body: String?) {
                     logger.error(failure) { "Socket connection encountered an exception" }
+                    socket = null
                     restart()
                     websocketLifecycleListener?.failed(failure, code, body)
                 }
             }, ::receiveMessage)
         }
     }
+
+    private fun parseReason(reason: String) = if (reason.isBlank()) "no reason provided" else "reason '$reason'"
 
     /**
      * Starts the websocket.
@@ -115,7 +118,7 @@ class DiscordWebSocket(
      * in this program as it force closes the http client shared by all websocket and REST client instances.
      */
     fun close(forceClose: Boolean = false) {
-        logger.debug { "Closing" }
+        logger.debug { "Closing connection" }
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
@@ -130,7 +133,7 @@ class DiscordWebSocket(
      * Maintains sessionId and sequenceNumber so events happening during restart and resumes.
      */
     fun restart() {
-        logger.debug { "Restarting" }
+        logger.debug { "Restarting connection" }
         close()
         startConnection()
         logger.info { "Restarted connection" }
@@ -161,6 +164,7 @@ class DiscordWebSocket(
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
+                // Additional note, I'm not sure discord is actually heartbeating
             }
             else -> {
                 throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")
@@ -169,18 +173,13 @@ class DiscordWebSocket(
     }
 
     private fun initializeSession(hello: Hello) {
-        if (sessionId != null && sequenceNumber != null) {
+        if (sessionId != null && sequenceNumber != null) { // RESUME
+            // Compiler doesn't understand 2 != null's so we have to assert they're non-null
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
-        } else {
-            if (shardCount > 0) {
-                sendGatewayMessage(
-                    OpCode.IDENTIFY,
-                    IdentifyShard(token, listOf(shardId, shardCount)),
-                    IdentifyShard.serializer()
-                )
-            } else {
-                sendGatewayMessage(OpCode.IDENTIFY, Identify(token), Identify.serializer())
-            }
+        } else if (shardCount > 0) { // IDENTIFY (sharded)
+            sendGatewayMessage(OpCode.IDENTIFY, IdentifyShard(token, listOf(shardId, shardCount)), IdentifyShard.serializer())
+        } else { // IDENTIFY (unsharded)
+            sendGatewayMessage(OpCode.IDENTIFY, Identify(token), Identify.serializer())
         }
 
         heartbeatJob?.cancel()
@@ -227,7 +226,7 @@ class DiscordWebSocket(
     private fun <T> sendGatewayMessage(
         opCode: OpCode,
         data: T,
-        serializer: KSerializer<T>,
+        serializer: SerializationStrategy<T>,
         event: DiscordEvent? = null
     ) {
         logger.debug { "Sending OpCode: $opCode" }
