@@ -59,12 +59,6 @@ class DiscordWebSocket(
     val active: Boolean
         get() = socket != null
 
-    /**
-     * Indicates if this websocket is currently connected.
-     */
-    val active: Boolean
-        get() = socket != null
-
     init {
         if (autoStart) {
             startConnection()
