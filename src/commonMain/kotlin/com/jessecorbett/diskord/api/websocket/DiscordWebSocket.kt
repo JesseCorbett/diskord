@@ -11,12 +11,12 @@ import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
-import com.jessecorbett.diskord.internal.Logger
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
+import mu.KotlinLogging
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -48,7 +48,7 @@ class DiscordWebSocket(
     private val eventListenerContext: CoroutineContext = Dispatchers.Default,
     private val heartbeatContext: CoroutineContext = Dispatchers.Default
 ) {
-    private val logger = Logger("com.jessecorbett.diskord.api.websocket.DiscordWebSocket")
+    private val logger = KotlinLogging.logger {}
     private var socket: WebSocket? = null
     private var heartbeatJob: Job? = null
     private var gatewayUrl: String? = null
@@ -77,12 +77,12 @@ class DiscordWebSocket(
                 }
 
                 override fun closing(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closing with code '$code' with ${parseReason(reason)}")
+                    logger.info { "Closing with code '$code' with ${parseReason(reason)}" }
                     websocketLifecycleListener?.closing(code, reason)
                 }
 
                 override fun closed(code: WebSocketCloseCode, reason: String) {
-                    logger.info("Closed with code '$code' with ${parseReason(reason)}")
+                    logger.info { "Closed with code '$code' and reason '${parseReason(reason)}'" }
                     if (code != WebSocketCloseCode.NORMAL_CLOSURE) {
                         socket = null
                         restart()
@@ -91,7 +91,7 @@ class DiscordWebSocket(
                 }
 
                 override fun failed(failure: Throwable, code: Int?, body: String?) {
-                    logger.error("Socket connection encountered an exception", failure)
+                    logger.error(failure) { "Socket connection encountered an exception" }
                     socket = null
                     restart()
                     websocketLifecycleListener?.failed(failure, code, body)
@@ -118,13 +118,13 @@ class DiscordWebSocket(
      * in this program as it force closes the http client shared by all websocket and REST client instances.
      */
     fun close(forceClose: Boolean = false) {
-        logger.debug("Closing connection")
+        logger.debug { "Closing connection" }
         // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
         GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
         heartbeatJob = null
         socket?.close(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close", forceClose)
         socket = null
-        logger.info("Closed connection")
+        logger.info { "Closed connection" }
     }
 
     /**
@@ -133,14 +133,14 @@ class DiscordWebSocket(
      * Maintains sessionId and sequenceNumber so events happening during restart and resumes.
      */
     fun restart() {
-        logger.debug("Restarting connection")
+        logger.debug { "Restarting connection" }
         close()
         startConnection()
-        logger.info("Restarted connection")
+        logger.info { "Restarted connection" }
     }
 
     private fun receiveMessage(gatewayMessage: GatewayMessage) {
-        logger.debug("Received OpCode ${gatewayMessage.opCode}")
+        logger.debug { "Received OpCode ${gatewayMessage.opCode}" }
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
@@ -150,11 +150,11 @@ class DiscordWebSocket(
                 sendGatewayMessage(OpCode.HEARTBEAT_ACK)
             }
             OpCode.RECONNECT -> {
-                logger.info("Server requested a reconnect")
+                logger.info { "Server requested a reconnect" }
                 restart()
             }
             OpCode.INVALID_SESSION -> {
-                logger.warn("The session was invalid, falling back to new session behavior")
+                logger.warn { "The session was invalid, falling back to new session behavior" }
                 sessionId = null
                 sequenceNumber = null
                 restart()
@@ -201,7 +201,7 @@ class DiscordWebSocket(
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
             ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
 
-        logger.debug("Received Dispatch $discordEvent")
+        logger.debug { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
             sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
@@ -213,7 +213,7 @@ class DiscordWebSocket(
     }
 
     private fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
-        logger.debug("Sending OpCode: $opCode")
+        logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         socket?.sendMessage(
             Json.stringify(
@@ -229,7 +229,7 @@ class DiscordWebSocket(
         serializer: SerializationStrategy<T>,
         event: DiscordEvent? = null
     ) {
-        logger.debug("Sending OpCode: $opCode")
+        logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         socket?.sendMessage(
             Json.stringify(

@@ -95,6 +95,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlinVersion}"
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.1'
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.10.0'
+                implementation 'io.github.microutils:kotlin-logging-common:1.6.25'
             }
         }
         commonTest {
@@ -112,16 +113,20 @@ kotlin {
                 implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0'
                 implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+                compileOnly 'com.squareup.okhttp3:logging-interceptor:3.13.1'
                 implementation 'com.squareup.okio:okio:2.2.2'
-                implementation 'org.slf4j:slf4j-api:1.7.25'
+                implementation 'io.github.microutils:kotlin-logging:1.6.25'
+                implementation 'org.slf4j:slf4j-api:1.7.26'
             }
         }
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
                 implementation 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+                implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
                 implementation 'com.willowtreeapps.assertk:assertk-jvm:0.13'
                 implementation 'io.mockk:mockk:1.9'
+                implementation 'org.slf4j:slf4j-simple:1.7.26'
             }
         }
 
@@ -129,6 +134,7 @@ kotlin {
 //            dependencies {
 //                implementation "org.jetbrains.kotlin:kotlin-stdlib-js:${kotlinVersion}"
 //                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.10.0'
+//                implementation 'io.github.microutils:kotlin-logging-js:1.6.25'
 //            }
 //        }
 //        jsTest {
@@ -141,6 +147,8 @@ kotlin {
 
 jvmTest {
     useJUnitPlatform()
+
+    systemProperty("com.jessecorbett.diskord.debug", true)
 }
 
 bintray {
