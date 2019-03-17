@@ -2,15 +2,23 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.model.UserStatus
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
 import com.jessecorbett.diskord.api.websocket.commands.IdentifyShard
 import com.jessecorbett.diskord.api.websocket.commands.Resume
+import com.jessecorbett.diskord.api.websocket.commands.UpdateStatus
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
 import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
+import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
+import io.ktor.client.HttpClient
+import io.ktor.client.features.websocket.WebSockets
+import io.ktor.client.features.websocket.wss
+import io.ktor.http.cio.websocket.*
+import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
@@ -24,106 +32,87 @@ import kotlin.coroutines.CoroutineContext
  *
  * @property token The user API token.
  * @property eventListener The event listener to call for gateway events.
- * @param autoStart If this connection should immediately start.
  * @property sessionId The id of the session, null if this is a new connection.
  * @property sequenceNumber The gateway sequence number, initially null if this is a new connection.
  * @property shardId The id of this shard of the bot, 0 if this is the DM shard or the only shard.
  * @property userType The type of API user, assumed to be a bot.
- * @property websocketLifecycleListener Lifecycle hooks for the low level websocket connection.
- * @property eventListenerContext The coroutine context to run [EventListener] events in.
- * @property heartbeatContext The coroutine context to process heartbeat events to the gateway in.
+ * @param eventListenerContext The coroutine context to run [EventListener] events in.
+ * @param heartbeatContext The coroutine context to process heartbeat events to the gateway in.
+ * @property gatewayUrl The url to connect to. Will be fetched it not provided.
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
+@KtorExperimentalAPI
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,
-    autoStart: Boolean = true,
-    var sessionId: String? = null,
-    var sequenceNumber: Int? = null,
+    private var sessionId: String? = null,
+    private var sequenceNumber: Int? = null,
     private val shardId: Int = 0,
     private val shardCount: Int = 0,
     private val userType: DiscordUserType = DiscordUserType.BOT,
-    private val websocketLifecycleListener: WebsocketLifecycleListener? = null,
-    private val eventListenerContext: CoroutineContext = Dispatchers.Default,
-    private val heartbeatContext: CoroutineContext = Dispatchers.Default
+    eventListenerContext: CoroutineContext = Dispatchers.Default,
+    heartbeatContext: CoroutineContext = Dispatchers.Default,
+    private var gatewayUrl: String? = null
 ) {
     private val logger = KotlinLogging.logger {}
-    private var socket: WebSocket? = null
+    private val socketClient: HttpClient = HttpClient { install(WebSockets) }
+
+    private val heartbeatScope = CoroutineScope(heartbeatContext)
+    private val eventScope = CoroutineScope(eventListenerContext)
+
     private var heartbeatJob: Job? = null
-    private var gatewayUrl: String? = null
+    private var send: (suspend (String) -> Unit)? = null
+    private var stop: suspend (WebSocketCloseCode, String) -> Unit = { _, _ -> }
 
-    /**
-     * Indicates if this websocket is currently connected.
-     */
-    val active: Boolean
-        get() = socket != null
+    private suspend fun startConnection() {
+        val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().url.removePrefix("wss://")
+        gatewayUrl = url
 
-    init {
-        if (autoStart) {
-            startConnection()
-        }
-    }
+        socketClient.wss(host = url) {
+            send = ::send
+            stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
-    private fun startConnection() {
-        GlobalScope.launch {
-            if (gatewayUrl == null) {
-                gatewayUrl = DiscordClient(token, userType).getBotGateway().url
+            for (message in incoming) {
+                when (message) {
+                    is Frame.Text -> {
+                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
+                    }
+                    is Frame.Binary -> {
+                        TODO("Add support for binary formatted data")
+                    }
+                    is Frame.Close -> {
+                        logger.info { "Closing with message: $message" }
+                    }
+                    is Frame.Ping -> {
+                        // Not used
+                    }
+                    is Frame.Pong -> {
+                        // Not used
+                    }
+                }
             }
 
-            socket = WebSocket("$gatewayUrl?encoding=json&v=6", token, object : WebsocketLifecycleManager {
-                override fun start() {
-                    websocketLifecycleListener?.started()
-                }
-
-                override fun closing(code: WebSocketCloseCode, reason: String) {
-                    logger.info { "Closing with code '$code' with ${parseReason(reason)}" }
-                    websocketLifecycleListener?.closing(code, reason)
-                }
-
-                override fun closed(code: WebSocketCloseCode, reason: String) {
-                    logger.info { "Closed with code '$code' and reason '${parseReason(reason)}'" }
-                    if (code != WebSocketCloseCode.NORMAL_CLOSURE) {
-                        socket = null
-                        restart()
-                    }
-                    websocketLifecycleListener?.closed(code, reason)
-                }
-
-                override fun failed(failure: Throwable, code: Int?, body: String?) {
-                    logger.error(failure) { "Socket connection encountered an exception" }
-                    socket = null
-                    restart()
-                    websocketLifecycleListener?.failed(failure, code, body)
-                }
-            }, ::receiveMessage)
         }
-    }
 
-    private fun parseReason(reason: String) = if (reason.isBlank()) "no reason provided" else "reason '$reason'"
+        logger.info { "Socket connection has closed" }
+    }
 
     /**
      * Starts the websocket.
-     *
-     * Not technically different from [DiscordWebSocket.restart] in functionality if the bot isn't already running.
      */
-    fun start() {
+    suspend fun start() {
         startConnection()
     }
 
     /**
      * Shuts down the connection.
-     *
-     * @param forceClose Forces closed the connection. False by default. Only set to true if this is the only connection
-     * in this program as it force closes the http client shared by all websocket and REST client instances.
      */
-    fun close(forceClose: Boolean = false) {
+    suspend fun close() {
         logger.debug { "Closing connection" }
-        // Not sure if we want to join here or let it cancel async. Default safely to blocking behavior
-        GlobalScope.launch { heartbeatJob?.cancelAndJoin() }
+        heartbeatJob?.cancel()
         heartbeatJob = null
-        socket?.close(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close", forceClose)
-        socket = null
+        stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
         logger.info { "Closed connection" }
     }
 
@@ -132,14 +121,26 @@ class DiscordWebSocket(
      *
      * Maintains sessionId and sequenceNumber so events happening during restart and resumes.
      */
-    fun restart() {
+    suspend fun restart() {
         logger.debug { "Restarting connection" }
         close()
         startConnection()
         logger.info { "Restarted connection" }
     }
 
-    private fun receiveMessage(gatewayMessage: GatewayMessage) {
+    /**
+     * Sets the user status in Discord.
+     *
+     * @param status The user status to set to.
+     * @param isAfk If the user is AFK.
+     * @param idleTime How long the user has been idle, in milliseconds.
+     * @param activity The activity, if any, that the user is performing.
+     */
+    suspend fun setStatus(status: UserStatus, isAfk: Boolean = false, idleTime: Int? = null, activity: UserStatusActivity? = null) {
+        sendGatewayMessage(OpCode.STATUS_UPDATE, UpdateStatus(idleTime, activity, status, isAfk), UpdateStatus.serializer())
+    }
+
+    private suspend fun receiveMessage(gatewayMessage: GatewayMessage) {
         logger.debug { "Received OpCode ${gatewayMessage.opCode}" }
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
@@ -164,7 +165,7 @@ class DiscordWebSocket(
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
-                // Additional note, I'm not sure discord is actually heartbeating
+                // Additional note, I've not observed Discord actually sending heartbeats
             }
             else -> {
                 throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")
@@ -172,7 +173,7 @@ class DiscordWebSocket(
         }
     }
 
-    private fun initializeSession(hello: Hello) {
+    private suspend fun initializeSession(hello: Hello) {
         if (sessionId != null && sequenceNumber != null) { // RESUME
             // Compiler doesn't understand 2 != null's so we have to assert they're non-null
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
@@ -183,8 +184,7 @@ class DiscordWebSocket(
         }
 
         heartbeatJob?.cancel()
-
-        heartbeatJob = GlobalScope.launch(heartbeatContext) {
+        heartbeatJob = heartbeatScope.launch {
             while (this.isActive) {
                 if (sequenceNumber != null) {
                     sendGatewayMessage(OpCode.HEARTBEAT, JsonPrimitive(sequenceNumber))
@@ -194,7 +194,7 @@ class DiscordWebSocket(
         }
     }
 
-    private fun receiveGatewayMessage(gatewayMessage: GatewayMessage) {
+    private suspend fun receiveGatewayMessage(gatewayMessage: GatewayMessage) {
         gatewayMessage.dataPayload
             ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
@@ -207,35 +207,22 @@ class DiscordWebSocket(
             sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
-        GlobalScope.launch(eventListenerContext) {
+        eventScope.launch {
             dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
         }
     }
 
-    private fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
+    private suspend fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
-        socket?.sendMessage(
-            Json.stringify(
-                GatewayMessage.serializer(),
-                GatewayMessage(opCode, data, sequenceNumber, eventName)
-            )
-        )
+        val message = GatewayMessage(opCode, data, sequenceNumber, eventName)
+        send!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
     }
 
-    private fun <T> sendGatewayMessage(
-        opCode: OpCode,
-        data: T,
-        serializer: SerializationStrategy<T>,
-        event: DiscordEvent? = null
-    ) {
+    private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
-        socket?.sendMessage(
-            Json.stringify(
-                GatewayMessage.serializer(),
-                GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
-            )
-        )
+        val message = GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
+        send!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
     }
 }

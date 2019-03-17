@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.3.1'
+    implementation 'com.jessecorbett:diskord:1.4.0'
 }
 ```
 
@@ -34,7 +34,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -52,7 +52,7 @@ You can access the documentation [here.](https://jesselcorbett.gitlab.io/diskord
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
+fun main() = runBlocking {
     bot(BOT_TOKEN) {
         commands {
             command("ping") {
@@ -68,7 +68,7 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
+fun main() = runBlocking {
     bot(BOT_TOKEN) {
         commands {
             command("echo") {
@@ -84,7 +84,7 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
+fun main() = runBlocking {
     bot(BOT_TOKEN) {
         commands {
             command("embed") {
@@ -104,7 +104,7 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
+fun main() = runBlocking {
     bot(BOT_TOKEN) {
         messageCreated {
             if (it.content.contains("diskord")) {
@@ -119,7 +119,7 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
+fun main() = runBlocking {
     bot(BOT_TOKEN) {
         messageCreated {
             if (it.content.contains("diskord")) {

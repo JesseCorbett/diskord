@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0] - 2019-03-17
+
+### Added
+- User status support
+
+### Changed
+- Migrated from OkHttp to Ktor
+- Reworked coroutine usage on websocket interface
+- Enhanced logging tooling
+- Updated dependencies
+
+### Removed
+- Pretty much all of the JVM specific code
+
 ## [1.3.0] - 2019-02-03
 
 ### Changed
