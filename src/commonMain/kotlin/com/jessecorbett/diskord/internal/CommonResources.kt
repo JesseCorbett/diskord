@@ -1,4 +1,4 @@
 package com.jessecorbett.diskord.internal
 
 internal const val defaultUserAgentUrl = "https://gitlab.com/jesselcorbett/diskord"
-internal const val defaultUserAgentVersion = "1.3.1"
+internal const val defaultUserAgentVersion = "1.4.0"
