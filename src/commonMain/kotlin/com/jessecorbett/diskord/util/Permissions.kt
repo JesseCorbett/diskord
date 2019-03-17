@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.util
 
+import com.jessecorbett.diskord.api.exception.DiscordMissingDataException
 import com.jessecorbett.diskord.api.model.*
 
 /**
@@ -9,9 +10,11 @@ import com.jessecorbett.diskord.api.model.*
  * @param user the user whose permissions should be computed
  * @param channel the channel to compute the permissions for
  * @param clients the clients to use for lookup
+ *
+ * @throws DiscordMissingDataException if the provided channel has a null guildId
  */
 suspend fun computePermissions(user: User, channel: Channel, clients: ClientStore): Permissions {
-    val guildId = channel.guildId ?: throw RuntimeException("Specified channel does not have an associated guild ID.")
+    val guildId = channel.guildId ?: throw DiscordMissingDataException("Specified channel does not have an associated guild ID.")
     val client = clients.guilds[guildId]
 
     return computePermissions(client.getMember(user.id), channel, client.get())
