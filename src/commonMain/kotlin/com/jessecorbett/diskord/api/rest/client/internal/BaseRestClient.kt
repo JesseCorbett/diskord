@@ -1,24 +1,18 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
 import io.ktor.client.HttpClient
-import io.ktor.client.features.defaultRequest
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.response.HttpResponse
-import io.ktor.client.utils.EmptyContent
 import io.ktor.http.ContentType
-import io.ktor.http.contentType
+import io.ktor.http.content.TextContent
 import kotlinx.coroutines.io.readUTF8Line
 
 const val discordApi = "https://discordapp.com/api"
 
 open class BaseRestClient {
-    private val client = HttpClient {
-        defaultRequest {
-//            header("Date", printRfc1123(epochSecondNow()))
-        }
-    }
+    private val client = HttpClient { }
     private val contentType = ContentType.parse("application/json")
 
     protected suspend fun getRequest(url: String, headers: Map<String, String>): Response {
@@ -29,8 +23,9 @@ open class BaseRestClient {
     protected suspend fun postRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
         val result = client.post<HttpResponse>(discordApi + url) {
             headers.forEach { header(it.key, it.value) }
-            body = jsonBody ?: EmptyContent
-            contentType(contentType)
+            if (jsonBody != null) {
+                body = TextContent(jsonBody, contentType)
+            }
         }
         return result.toResponse()
     }
@@ -38,8 +33,9 @@ open class BaseRestClient {
     protected suspend fun putRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
         val result = client.put<HttpResponse>(discordApi + url) {
             headers.forEach { header(it.key, it.value) }
-            body = jsonBody ?: EmptyContent
-            contentType(contentType)
+            if (jsonBody != null) {
+                body = TextContent(jsonBody, contentType)
+            }
         }
         return result.toResponse()
     }
@@ -47,8 +43,9 @@ open class BaseRestClient {
     protected suspend fun patchRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
         val result = client.patch<HttpResponse>(discordApi + url) {
             headers.forEach { header(it.key, it.value) }
-            body = jsonBody ?: EmptyContent
-            contentType(contentType)
+            if (jsonBody != null) {
+                body = TextContent(jsonBody, contentType)
+            }
         }
         return result.toResponse()
     }
