@@ -5,7 +5,7 @@
 ### Added
 - Added class `Permissions` to help interact with permissions masks
 - Added enum class `Permission` containing all currently supported permissions
-- Added function `computeOverwrites` to determine permissions overwrites for a given channel (see Discord documentation for more information)
+- Added function `computePermissions` to determine permissions overwrites for a given channel (see Discord documentation for more information)
 
 ### Changed
 - `Permissions` class is now used where permissions `Int` properties were previously used
@@ -13,7 +13,7 @@
 ## [1.4.0] - 2019-03-17
 
 ### Added
-- User status support 
+- User status support
 
 ### Changed
 - Migrated from OkHttp to Ktor
