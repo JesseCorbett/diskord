@@ -78,8 +78,11 @@ class DiscordWebSocket(
             stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
             launch {
-                val closeReason = this@wss.closeReason.await() ?: return@launch
-                logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
+                val closeReason = this@wss.closeReason.await()
+                if (closeReason == null)
+                    logger.warn { "Closed with ne close reason, probably a connection issue" }
+                else
+                    logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
             }
 
             for (message in incoming) {
