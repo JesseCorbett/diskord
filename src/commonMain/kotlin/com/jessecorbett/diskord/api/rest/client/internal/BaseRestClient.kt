@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
+import com.jessecorbett.diskord.internal.httpClient
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
@@ -12,7 +13,6 @@ import kotlinx.coroutines.io.readUTF8Line
 const val discordApi = "https://discordapp.com/api"
 
 open class BaseRestClient {
-    private val client = HttpClient { }
     private val contentType = ContentType.parse("application/json")
 
     protected suspend fun getRequest(url: String, headers: Map<String, String>): Response {
@@ -85,5 +85,9 @@ open class BaseRestClient {
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())
+    }
+
+    private companion object {
+        private val client = HttpClient(httpClient())
     }
 }

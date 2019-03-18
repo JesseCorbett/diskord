@@ -14,9 +14,13 @@ import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
+import com.jessecorbett.diskord.internal.websocketClient
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.features.websocket.WebSockets
 import io.ktor.client.features.websocket.wss
+import io.ktor.http.cio.CIOHeaders
 import io.ktor.http.cio.websocket.*
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
@@ -53,10 +57,11 @@ class DiscordWebSocket(
     private val userType: DiscordUserType = DiscordUserType.BOT,
     eventListenerContext: CoroutineContext = Dispatchers.Default,
     heartbeatContext: CoroutineContext = Dispatchers.Default,
+    httpClient: HttpClientEngineFactory<HttpClientEngineConfig> = websocketClient(),
     private var gatewayUrl: String? = null
 ) {
     private val logger = KotlinLogging.logger {}
-    private val socketClient: HttpClient = HttpClient { install(WebSockets) }
+    private val socketClient: HttpClient = HttpClient(httpClient).config { install(WebSockets) }
 
     private val heartbeatScope = CoroutineScope(heartbeatContext)
     private val eventScope = CoroutineScope(eventListenerContext)
