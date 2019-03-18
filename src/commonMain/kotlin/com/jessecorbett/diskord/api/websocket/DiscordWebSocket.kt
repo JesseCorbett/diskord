@@ -20,7 +20,6 @@ import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.features.websocket.WebSockets
 import io.ktor.client.features.websocket.wss
-import io.ktor.http.cio.CIOHeaders
 import io.ktor.http.cio.websocket.*
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
@@ -77,6 +76,11 @@ class DiscordWebSocket(
         socketClient.wss(host = url) {
             send = ::send
             stop = { code, reason -> close(CloseReason(code.code, reason)) }
+
+            launch {
+                val closeReason = this@wss.closeReason.await() ?: return@launch
+                logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
+            }
 
             for (message in incoming) {
                 when (message) {
