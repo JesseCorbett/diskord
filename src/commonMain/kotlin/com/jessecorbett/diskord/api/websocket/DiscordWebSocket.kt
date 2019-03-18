@@ -70,8 +70,9 @@ class DiscordWebSocket(
     private var stop: suspend (WebSocketCloseCode, String) -> Unit = { _, _ -> }
 
     private var expectedOpen = false
+    private var isOpen = false
 
-    private suspend fun startConnection() {
+    private suspend fun initializeConnection() {
         val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().url.removePrefix("wss://")
         gatewayUrl = url
 
@@ -85,9 +86,11 @@ class DiscordWebSocket(
                     logger.warn { "Closed with no close reason, probably a connection issue" }
                 else
                     logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
+                isOpen = false
             }
 
             for (message in incoming) {
+                isOpen = true
                 when (message) {
                     is Frame.Text -> {
                         receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
@@ -117,7 +120,7 @@ class DiscordWebSocket(
      */
     suspend fun start() {
         expectedOpen = true
-        while (expectedOpen) startConnection()
+        while (expectedOpen) initializeConnection()
     }
 
     /**
@@ -129,6 +132,7 @@ class DiscordWebSocket(
         heartbeatJob?.cancel()
         heartbeatJob = null
         stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
+        while (isOpen) delay(1) // Block until the connection is confirmed closed, handling race conditions
         logger.info { "Closed connection" }
     }
 
@@ -140,7 +144,7 @@ class DiscordWebSocket(
     suspend fun restart() {
         logger.debug { "Restarting connection" }
         close()
-        startConnection()
+        start()
         logger.info { "Restarted connection" }
     }
 
