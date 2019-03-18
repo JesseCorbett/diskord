@@ -69,6 +69,8 @@ class DiscordWebSocket(
     private var send: (suspend (String) -> Unit)? = null
     private var stop: suspend (WebSocketCloseCode, String) -> Unit = { _, _ -> }
 
+    private var expectedOpen = false
+
     private suspend fun startConnection() {
         val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().url.removePrefix("wss://")
         gatewayUrl = url
@@ -80,7 +82,7 @@ class DiscordWebSocket(
             launch {
                 val closeReason = this@wss.closeReason.await()
                 if (closeReason == null)
-                    logger.warn { "Closed with ne close reason, probably a connection issue" }
+                    logger.warn { "Closed with no close reason, probably a connection issue" }
                 else
                     logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
             }
@@ -114,7 +116,8 @@ class DiscordWebSocket(
      * Starts the websocket.
      */
     suspend fun start() {
-        startConnection()
+        expectedOpen = true
+        while (expectedOpen) startConnection()
     }
 
     /**
@@ -122,6 +125,7 @@ class DiscordWebSocket(
      */
     suspend fun close() {
         logger.debug { "Closing connection" }
+        expectedOpen = false
         heartbeatJob?.cancel()
         heartbeatJob = null
         stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
