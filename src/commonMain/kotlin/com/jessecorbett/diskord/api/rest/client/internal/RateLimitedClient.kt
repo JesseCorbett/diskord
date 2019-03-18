@@ -32,7 +32,7 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
         doRequest(rateLimit, request)
     }
 
-    val instantAtDiscordServer = parseRfc1123(response.headers.getValue("Date") ?: response.headers.getValue("date")!!)
+    val instantAtDiscordServer = parseRfc1123(response.headers["Date"] ?: response.headers.getValue("date")!!)
     val discordAheadBySeconds = instantAtDiscordServer - epochSecondNow() // Count the seconds in the future Discord is
 
     rateLimit.limit = response.headers["X-RateLimit-Limit"]?.toInt() ?: rateLimit.limit
