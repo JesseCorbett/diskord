@@ -27,8 +27,7 @@ annotation class DiskordDsl
  * @param shardId The shard id, if this bot is sharded.
  * @param shardCount The count of shards, if the bot is sharded.
  */
-class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) :
-    EnhancedEventListener(token) {
+class Bot internal constructor(token: String, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount)
 
     /*
@@ -732,4 +731,8 @@ class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) :
  * @return A [Bot] instance using the token and DSL hooks specified in the block.
  */
 @DiskordDsl
-suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit) = Bot(token, shardId, shardCount).apply(block).start()
+suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit): Bot {
+    val bot = Bot(token, shardId, shardCount)
+    bot.apply(block).start()
+    return bot
+}

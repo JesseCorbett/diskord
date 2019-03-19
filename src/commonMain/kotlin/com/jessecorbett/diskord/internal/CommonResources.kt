@@ -6,5 +6,5 @@ import io.ktor.client.engine.HttpClientEngineFactory
 internal const val defaultUserAgentUrl = "https://gitlab.com/jesselcorbett/diskord"
 internal const val defaultUserAgentVersion = "1.4.0"
 
-expect fun websocketClient(): HttpClientEngineFactory<HttpClientEngineConfig>
-expect fun httpClient(): HttpClientEngineFactory<HttpClientEngineConfig>
+internal expect fun websocketClient(): HttpClientEngineFactory<HttpClientEngineConfig>
+internal expect fun httpClient(): HttpClientEngineFactory<HttpClientEngineConfig>

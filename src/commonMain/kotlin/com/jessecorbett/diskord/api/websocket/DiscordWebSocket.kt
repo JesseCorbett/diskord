@@ -66,7 +66,7 @@ class DiscordWebSocket(
     private val eventScope = CoroutineScope(eventListenerContext)
 
     private var heartbeatJob: Job? = null
-    private var send: (suspend (String) -> Unit)? = null
+    private var sendWebsocketMessage: (suspend (String) -> Unit)? = null
     private var stop: suspend (WebSocketCloseCode, String) -> Unit = { _, _ -> }
 
     private var expectedOpen = false
@@ -77,7 +77,7 @@ class DiscordWebSocket(
         gatewayUrl = url
 
         socketClient.wss(host = url) {
-            send = ::send
+            sendWebsocketMessage = this::send
             stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
             launch {
@@ -88,7 +88,7 @@ class DiscordWebSocket(
                     val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
                     logger.warn { "Closed with code '$closeCode' for reason '${closeReason.message}'"}
                 }
-                this@wss.terminate()
+                this@wss.terminate() // This may be unnecessary or at least less than ideal
                 isOpen = false
             }
 
@@ -104,11 +104,9 @@ class DiscordWebSocket(
                     is Frame.Close -> {
                         logger.info { "Closing with message: $message" }
                     }
-                    is Frame.Ping -> {
+                    is Frame.Ping, is Frame.Pong -> {
                         // Not used
-                    }
-                    is Frame.Pong -> {
-                        // Not used
+                        logger.debug { message }
                     }
                 }
             }
@@ -222,7 +220,7 @@ class DiscordWebSocket(
             ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
-            ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
+            ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not sendWebsocketMessage bots non-bot events
 
         logger.debug { "Received Dispatch $discordEvent" }
 
@@ -239,13 +237,13 @@ class DiscordWebSocket(
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, data, sequenceNumber, eventName)
-        send!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
     }
 
     private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
-        send!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
     }
 }
