@@ -82,10 +82,13 @@ class DiscordWebSocket(
 
             launch {
                 val closeReason = this@wss.closeReason.await()
-                if (closeReason == null)
+                if (closeReason == null) {
                     logger.warn { "Closed with no close reason, probably a connection issue" }
-                else
-                    logger.warn { "Closed with code '${WebSocketCloseCode.valueOf(closeReason.code.toString())}' for reason '${closeReason.message}'"}
+                } else {
+                    val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
+                    logger.warn { "Closed with code '$closeCode' for reason '${closeReason.message}'"}
+                }
+                this@wss.terminate()
                 isOpen = false
             }
 
@@ -132,7 +135,7 @@ class DiscordWebSocket(
         heartbeatJob?.cancel()
         heartbeatJob = null
         stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
-        while (isOpen) delay(1) // Block until the connection is confirmed closed, handling race conditions
+        while (isOpen) {} // Block until the connection is confirmed closed, handling race conditions
         logger.info { "Closed connection" }
     }
 
