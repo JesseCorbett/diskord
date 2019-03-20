@@ -232,6 +232,10 @@ suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -
 suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
     CombinedMessageEmbed().apply(block).let { sendMessage(it.text, it.embed()) }
 
+suspend fun ChannelClient.addMessageReaction(messageId: String, emojiId: String, emojiName: String) {
+    addMessageReaction(messageId, Emoji(emojiId, emojiName))
+}
+
 /**
  * Changes the user's nickname in this client's guild.
  *

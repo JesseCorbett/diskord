@@ -139,8 +139,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMessageReaction(messageId: String, emoji: Emoji) =
-        putRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/@me")
+    suspend fun addMessageReaction(messageId: String, emoji: Emoji) = addMessageReaction(messageId, emoji.stringified)
 
     /**
      * Remove a reaction from a message.

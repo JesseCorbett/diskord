@@ -14,3 +14,10 @@ data class Emoji(
     @Optional @SerialName("managed") val isManaged: Boolean? = null,
     @Optional @SerialName("animated") val isAnimated: Boolean = false
 )
+
+val Emoji.stringified: String
+    get() = if (id == null) {
+        name
+    } else {
+        "$id:$name"
+    }
