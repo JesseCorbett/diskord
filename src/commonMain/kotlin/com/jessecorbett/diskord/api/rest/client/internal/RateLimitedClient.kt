@@ -26,14 +26,7 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
         delay(rateLimit.resetTime - epochSecondNow())
     }
 
-    val response = try {
-        request()
-    } catch (rateLimitException: DiscordRateLimitException) {
-        rateLimit.remaining = 0
-        rateLimit.resetTime = rateLimitException.retryAt
-        delay(100) // Temporary safe lock
-        doRequest(rateLimit, request)
-    }
+    var response = request()
 
     val instantAtDiscordServer = parseRfc1123(response.headers.getValue("date")!!)
     val discordAheadBySeconds = instantAtDiscordServer - epochSecondNow() // Count the seconds in the future Discord is
@@ -44,7 +37,11 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
         response.headers["X-RateLimit-Reset"]?.toLong()?.plus(discordAheadBySeconds) ?: rateLimit.resetTime
 
     if (response.code !in 200..299) {
-        throw captureFailure(response.code, response.body)
+        try {
+            throw captureFailure(response.code, response.body)
+        } catch (exception: DiscordRateLimitException) {
+            response = doRequest(rateLimit, request)
+        }
     }
 
     return response
