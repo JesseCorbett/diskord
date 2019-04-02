@@ -29,6 +29,9 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
     val response = try {
         request()
     } catch (rateLimitException: DiscordRateLimitException) {
+        rateLimit.remaining = 0
+        rateLimit.resetTime = rateLimitException.retryAt
+        delay(100) // Temporary safe lock
         doRequest(rateLimit, request)
     }
 
