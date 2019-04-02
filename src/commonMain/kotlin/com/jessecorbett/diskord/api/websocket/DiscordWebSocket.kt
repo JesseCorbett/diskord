@@ -93,7 +93,6 @@ class DiscordWebSocket(
                     }
                     logger.warn { message }
                 }
-                this@wss.terminate() // This may be unnecessary or at least less than ideal
             }
 
             for (message in incoming) {
