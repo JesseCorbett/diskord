@@ -34,6 +34,7 @@ publishDevelopmentVersion:
     - docker
   only:
     - develop
+    - master
 
 publishReleaseVersion:
   stage: release
