@@ -86,10 +86,14 @@ class DiscordWebSocket(
                     logger.warn { "Closed with no close reason, probably a connection issue" }
                 } else {
                     val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
-                    logger.warn { "Closed with code '$closeCode' for reason '${closeReason.message}'"}
+                    val message = if (closeReason.message.isEmpty()) {
+                        "Closed with code '$closeCode' with no reason provided"
+                    } else {
+                        "Closed with code '$closeCode' for reason '${closeReason.message}'"
+                    }
+                    logger.warn { message }
                 }
                 this@wss.terminate() // This may be unnecessary or at least less than ideal
-                isOpen = false
             }
 
             for (message in incoming) {
@@ -113,6 +117,7 @@ class DiscordWebSocket(
 
         }
 
+        isOpen = false
         logger.info { "Socket connection has closed" }
     }
 
