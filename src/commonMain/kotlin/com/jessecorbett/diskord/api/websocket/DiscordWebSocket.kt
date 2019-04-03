@@ -95,21 +95,24 @@ class DiscordWebSocket(
                 }
             }
 
-            for (message in incoming) {
-                isOpen = true
-                when (message) {
-                    is Frame.Text -> {
-                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
-                    }
-                    is Frame.Binary -> {
-                        TODO("Add support for binary formatted data")
-                    }
-                    is Frame.Close -> {
-                        logger.info { "Closing with message: $message" }
-                    }
-                    is Frame.Ping, is Frame.Pong -> {
-                        // Not used
-                        logger.debug { message }
+            while (this.isActive) {
+                incoming.receive()
+                for (message in incoming) {
+                    isOpen = true
+                    when (message) {
+                        is Frame.Text -> {
+                            receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
+                        }
+                        is Frame.Binary -> {
+                            TODO("Add support for binary formatted data")
+                        }
+                        is Frame.Close -> {
+                            logger.info { "Closing with message: $message" }
+                        }
+                        is Frame.Ping, is Frame.Pong -> {
+                            // Not used
+                            logger.debug { message }
+                        }
                     }
                 }
             }
