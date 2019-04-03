@@ -96,7 +96,6 @@ class DiscordWebSocket(
             }
 
             while (this.isActive) {
-                incoming.receive()
                 for (message in incoming) {
                     isOpen = true
                     when (message) {
