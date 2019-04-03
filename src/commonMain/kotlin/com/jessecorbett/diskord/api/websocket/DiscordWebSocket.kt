@@ -23,8 +23,7 @@ import io.ktor.client.features.websocket.wss
 import io.ktor.http.cio.websocket.*
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.map
-import kotlinx.coroutines.channels.mapNotNull
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -97,7 +96,31 @@ class DiscordWebSocket(
                 }
             }
 
-            incoming.mapNotNull { it as Frame.Text }.map { receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), it.readText())) }
+            while (!incoming.isClosedForReceive) {
+                val message = try {
+                    incoming.receive()
+                } catch (e: ClosedReceiveChannelException) {
+                    break
+                }
+
+                when (message) {
+                    is Frame.Text -> {
+                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
+                    }
+                    is Frame.Binary -> {
+                        TODO("Add support for binary formatted data")
+                    }
+                    is Frame.Close -> {
+                        logger.info { "Closing with message: $message" }
+                    }
+                    is Frame.Ping, is Frame.Pong -> {
+                        // Not used
+                        logger.debug { message }
+                    }
+                    else -> {}
+                }
+            }
+
         }
 
         isOpen = false
