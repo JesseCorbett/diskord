@@ -15,6 +15,7 @@ import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
 import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.internal.websocketClient
+import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
@@ -102,6 +103,8 @@ class DiscordWebSocket(
                 } catch (e: ClosedReceiveChannelException) {
                     break
                 }
+
+                logger.trace { "Incoming Message:\n${message.data.toHexDump()}" }
 
                 when (message) {
                     is Frame.Text -> {
