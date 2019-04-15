@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
+import com.jessecorbett.diskord.internal.configureHttpClient
 import com.jessecorbett.diskord.internal.httpClient
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
@@ -88,6 +89,6 @@ open class BaseRestClient {
     }
 
     private companion object {
-        private val client = HttpClient(httpClient())
+        private val client = HttpClient(httpClient(), configureHttpClient())
     }
 }

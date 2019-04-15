@@ -124,6 +124,8 @@ kotlin {
                 implementation 'org.slf4j:slf4j-api:1.7.26'
                 implementation "io.ktor:ktor-client-cio:$ktorVersion"
                 implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
+                implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+                implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
             }
         }
         jvmTest {
@@ -153,6 +155,8 @@ kotlin {
 
 jvmTest {
     useJUnitPlatform()
+
+    systemProperty("com.jessecorbett.diskord.debug", project.findProperty("com.jessecorbett.diskord.debug") ?: false)
 }
 
 bintray {
