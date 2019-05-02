@@ -125,6 +125,7 @@ class DiscordWebSocket(
                     else -> {}
                 }
             }
+            logger.info { "Exited the incoming loop" }
 
         }
 
@@ -178,7 +179,7 @@ class DiscordWebSocket(
     }
 
     private suspend fun receiveMessage(gatewayMessage: GatewayMessage) {
-        logger.debug { "Received OpCode ${gatewayMessage.opCode}" }
+        logger.trace { "Received OpCode ${gatewayMessage.opCode}" }
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
