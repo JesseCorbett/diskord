@@ -101,6 +101,7 @@ class DiscordWebSocket(
                 val message = try {
                     incoming.receive()
                 } catch (e: ClosedReceiveChannelException) {
+                    logger.warn { "Receive channel is closed" }
                     break
                 }
 
@@ -108,7 +109,9 @@ class DiscordWebSocket(
 
                 when (message) {
                     is Frame.Text -> {
-                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), message.readText()))
+                        val text = message.readText()
+                        logger.debug { "Received frame with message: $text" }
+                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
                     }
                     is Frame.Binary -> {
                         TODO("Add support for binary formatted data")
