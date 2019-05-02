@@ -79,6 +79,8 @@ class DiscordWebSocket(
         gatewayUrl = url
 
         socketClient.wss(host = url) {
+            logger.info { "Starting socket connection" }
+
             sendWebsocketMessage = this::send
             stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
@@ -96,6 +98,8 @@ class DiscordWebSocket(
                     logger.warn { message }
                 }
             }
+
+            logger.info { "Starting incoming loop" }
 
             while (!incoming.isClosedForReceive) {
                 val message = try {
