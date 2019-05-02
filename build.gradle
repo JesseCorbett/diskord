@@ -68,7 +68,7 @@ def pomConfig = {
     }
 
     scm {
-        url 'https://gitlab.com/jesselcorbett/Diskord'
+        url 'https://gitlab.com/jesselcorbett/diskord'
     }
 }
 
