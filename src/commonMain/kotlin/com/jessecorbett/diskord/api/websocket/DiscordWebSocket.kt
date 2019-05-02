@@ -110,7 +110,6 @@ class DiscordWebSocket(
                 when (message) {
                     is Frame.Text -> {
                         val text = message.readText()
-                        logger.debug { "Received frame with message: $text" }
                         receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
                     }
                     is Frame.Binary -> {
