@@ -75,7 +75,10 @@ class DiscordWebSocket(
     private var isOpen = false
 
     private suspend fun initializeConnection() {
-        val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().url.removePrefix("wss://")
+        val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().let {
+            logger.debug { it }
+            it.url.removePrefix("wss://")
+        }
         gatewayUrl = url
 
         socketClient.wss(host = url) {
