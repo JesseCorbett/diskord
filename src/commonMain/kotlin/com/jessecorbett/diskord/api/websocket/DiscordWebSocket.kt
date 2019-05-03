@@ -81,6 +81,9 @@ class DiscordWebSocket(
         }
         gatewayUrl = url
 
+        isOpen = true
+
+        logger.trace { "Attempting a websocket connection" }
         socketClient.wss(host = url) {
             logger.info { "Starting socket connection" }
 
