@@ -104,6 +104,7 @@ kotlin {
                 implementation 'io.github.microutils:kotlin-logging-common:1.6.26'
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
                 implementation "io.ktor:ktor-client-websocket:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging:$ktorVersion"
             }
         }
         commonTest {
@@ -124,6 +125,7 @@ kotlin {
                 implementation 'org.slf4j:slf4j-api:1.7.26'
                 implementation "io.ktor:ktor-client-cio:$ktorVersion"
                 implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
                 implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
                 implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
             }
