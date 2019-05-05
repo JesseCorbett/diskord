@@ -97,7 +97,9 @@ class DiscordWebSocket(
         isOpen = true
 
         logger.trace { "Attempting a websocket connection" }
-        socketClient.wss(host = url) {
+        socketClient.wss(host = url, port = 443, request = {
+            logger.trace { "Building socket HttpRequest" }
+        }) {
             logger.info { "Starting socket connection" }
 
             sendWebsocketMessage = this::send
