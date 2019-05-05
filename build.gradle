@@ -103,7 +103,6 @@ kotlin {
                 api 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.0'
                 implementation 'io.github.microutils:kotlin-logging-common:1.6.26'
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
-                implementation "io.ktor:ktor-client-websocket:$ktorVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
             }
         }
