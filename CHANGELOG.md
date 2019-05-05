@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.3] - 2019--05-05
+
+### Changed
+- Fixed a bug where Emoji had a list of Role models instead of ids
+
 ## [1.3.0] - 2019-02-03
 
 ### Changed
