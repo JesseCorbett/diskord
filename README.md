@@ -11,7 +11,7 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ## How do I import this?
 
 ### Gradle
-```
+```groovy
 repositories {
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
@@ -23,7 +23,7 @@ dependencies {
 ```
 
 ### Maven
-```
+```xml
 <repositories>
     <repository>
       <id>jcenter</id>
