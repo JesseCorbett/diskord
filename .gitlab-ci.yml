@@ -1,4 +1,4 @@
-image: gradle:4.10.3-alpine
+image: gradle:5.4.1-alpine
 
 variables:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
@@ -30,6 +30,8 @@ publishDevelopmentVersion:
   stage: release
   script:
     - gradle publishJvmPublicationToGitlabRepository
+    - gradle publishMultiplatformPublicationToGitlabRepository
+    - gradle publishMetadataPublicationToGitlabRepository
   tags:
     - docker
   only:

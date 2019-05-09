@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.3.3] - 2019--05-05
+## [1.3.4] - 2019-05-09
+
+### Changed
+- Updated publications to use mpp defaults
+
+## [1.3.3] - 2019-05-05
 
 ### Changed
 - Fixed a bug where Emoji had a list of Role models instead of ids

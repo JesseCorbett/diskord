@@ -13,12 +13,13 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ### Gradle
 ```
 repositories {
+    mavenCentral()
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.3.3'
+    implementation 'com.jessecorbett:diskord-jvm:1.3.4'
 }
 ```
 
@@ -29,12 +30,16 @@ dependencies {
       <id>jcenter</id>
       <url>https://jcenter.bintray.com/</url>
     </repository>
+    <repository>
+      <id>kotlinx</id>
+      <url>https://kotlin.bintray.com/kotlinx</url>
+    </repository>
 </repositories>
 
 <dependency>
     <groupId>com.jessecorbett</groupId>
-    <artifactId>diskord</artifactId>
-    <version>1.3.3</version>
+    <artifactId>diskord-jvm</artifactId>
+    <version>1.3.4</version>
 </dependency>
 ```
 
@@ -53,11 +58,13 @@ You can access the documentation [here.](https://jesselcorbett.gitlab.io/diskord
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main() {
-    bot(BOT_TOKEN) {
-        commands {
-            command("ping") {
-                reply("pong")
-                delete()
+    runBlocking {
+        bot(BOT_TOKEN) {
+            commands {
+                command("ping") {
+                    reply("pong")
+                    delete()
+                }
             }
         }
     }
@@ -69,11 +76,13 @@ fun main() {
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main() {
-    bot(BOT_TOKEN) {
-        commands {
-            command("echo") {
-                reply(words.drop(1).joinToString(" "))
-                delete()
+    runBlocking {
+        bot(BOT_TOKEN) {
+            commands {
+                command("echo") {
+                    reply(words.drop(1).joinToString(" "))
+                    delete()
+                }
             }
         }
     }
@@ -85,14 +94,16 @@ fun main() {
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main() {
-    bot(BOT_TOKEN) {
-        commands {
-            command("embed") {
-                delete()
-                reply {
-                    text = "This is an embed"
-                    title = "Embed title"
-                    description = "You can declare all the things here"
+    runBlocking {
+        bot(BOT_TOKEN) {
+            commands {
+                command("embed") {
+                    delete()
+                    reply {
+                        text = "This is an embed"
+                        title = "Embed title"
+                        description = "You can declare all the things here"
+                    }
                 }
             }
         }
@@ -105,10 +116,12 @@ fun main() {
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main() {
-    bot(BOT_TOKEN) {
-        messageCreated {
-            if (it.content.contains("diskord")) {
-                it.react("💯")
+    runBlocking {
+        bot(BOT_TOKEN) {
+            messageCreated {
+                if (it.content.contains("diskord")) {
+                    it.react("💯")
+                }
             }
         }
     }
@@ -120,23 +133,25 @@ fun main() {
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
 fun main() {
-    bot(BOT_TOKEN) {
-        messageCreated {
-            if (it.content.contains("diskord")) {
-                it.react("💯")
-            }
-        }
-        
-        commands {
-            command("ping") {
-                reply("pong")
-                delete()
+    runBlocking {
+        bot(BOT_TOKEN) {
+            messageCreated {
+                if (it.content.contains("diskord")) {
+                    it.react("💯")
+                }
             }
             
-            command("echo") {
-                reply(words.drop(1).joinToString(" "))
-                delete()
-            }            
+            commands {
+                command("ping") {
+                    reply("pong")
+                    delete()
+                }
+                
+                command("echo") {
+                    reply(words.drop(1).joinToString(" "))
+                    delete()
+                }            
+            }
         }
     }
 }
@@ -152,7 +167,7 @@ fun main() {
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
     * You can use our development versions by using the gitlab maven repository
         * Repository URL https://gitlab.com/api/v4/projects/10363714/packages/maven
-        * Artifact directory https://gitlab.com/jesselcorbett/Diskord/-/packages
+        * Artifact directory https://gitlab.com/jesselcorbett/diskord/-/packages
 
 ## Things to do
 - Add more testing
