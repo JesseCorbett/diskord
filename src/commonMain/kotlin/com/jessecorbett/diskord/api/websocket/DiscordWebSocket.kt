@@ -46,7 +46,6 @@ import kotlin.coroutines.CoroutineContext
  * @property sequenceNumber The gateway sequence number, initially null if this is a new connection.
  * @property shardId The id of this shard of the bot, 0 if this is the DM shard or the only shard.
  * @property userType The type of API user, assumed to be a bot.
- * @param eventListenerContext The coroutine context to run [EventListener] events in.
  * @param heartbeatContext The coroutine context to process heartbeat events to the gateway in.
  * @property gatewayUrl The url to connect to. Will be fetched it not provided.
  *
@@ -61,7 +60,6 @@ class DiscordWebSocket(
     private val shardId: Int = 0,
     private val shardCount: Int = 0,
     private val userType: DiscordUserType = DiscordUserType.BOT,
-    eventListenerContext: CoroutineContext = Dispatchers.Default,
     heartbeatContext: CoroutineContext = Dispatchers.Default,
     httpClient: HttpClientEngineFactory<HttpClientEngineConfig> = websocketClient(),
     private var gatewayUrl: String? = null
@@ -78,7 +76,6 @@ class DiscordWebSocket(
     }
 
     private val heartbeatScope = CoroutineScope(heartbeatContext)
-    private val eventScope = CoroutineScope(eventListenerContext)
 
     private var heartbeatJob: Job? = null
     private var sendWebsocketMessage: (suspend (String) -> Unit)? = null
@@ -270,9 +267,7 @@ class DiscordWebSocket(
             sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
-        eventScope.launch {
-            dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
-        }
+        dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
     }
 
     private suspend fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
