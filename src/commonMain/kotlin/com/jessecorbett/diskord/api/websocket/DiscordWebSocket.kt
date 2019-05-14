@@ -267,7 +267,11 @@ class DiscordWebSocket(
             sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
-        dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
+        try {
+            dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
+        } catch (e: Throwable) {
+            logger.info(e) { "Dispatched event caused exception $e" }
+        }
     }
 
     private suspend fun sendGatewayMessage(opCode: OpCode, data: JsonElement? = null, event: DiscordEvent? = null) {
