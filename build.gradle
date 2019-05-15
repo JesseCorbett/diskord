@@ -35,17 +35,17 @@ dokka {
 
     linkMapping {
         dir = "src/commonMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/commonMain/kotlin"
+        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
         suffix = "#L"
     }
     linkMapping {
         dir = "src/jvmMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/jvmMain/kotlin"
+        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
         suffix = "#L"
     }
 //    linkMapping {
 //        dir = "src/jsMain/kotlin"
-//        url = "https://gitlab.com/jesselcorbett/Diskord/tree/master/src/jsMain/kotlin"
+//        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jsMain/kotlin"
 //        suffix = "#L"
 //    }
 }
@@ -82,12 +82,11 @@ kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm') {
             mavenPublication {
-                artifactId 'diskord'
                 pom.withXml {
                     def root = asNode()
                     root.appendNode('description', 'A Kotlin wrapper around the Discord API')
                     root.appendNode('name', 'Diskord')
-                    root.appendNode('url', 'https://gitlab.com/jesselcorbett/Diskord')
+                    root.appendNode('url', 'https://gitlab.com/jesselcorbett/diskord')
                     root.children().last() + pomConfig
                 }
             }
@@ -155,7 +154,6 @@ kotlin {
 
 jvmTest {
     useJUnitPlatform()
-
     systemProperty("com.jessecorbett.diskord.debug", project.findProperty("com.jessecorbett.diskord.debug") ?: false)
 }
 
@@ -169,7 +167,7 @@ bintray {
         repo = 'diskord'
         name = 'diskord'
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://gitlab.com/jesselcorbett/Diskord'
+        vcsUrl = 'https://gitlab.com/jesselcorbett/diskord'
         publications = ['jvm']
         version {
             name = diskordVersion
