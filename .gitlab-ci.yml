@@ -25,7 +25,7 @@ pages:
 publishDevelopmentVersion:
   stage: release
   script:
-    - gradle publishJvmPublicationToGitlabRepository
+    - gradle publishJvmPublicationToGitlabRepository publishMetadataPublicationToGitlabRepository
   only:
     - develop
     - master
