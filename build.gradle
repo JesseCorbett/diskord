@@ -82,6 +82,7 @@ kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm') {
             mavenPublication {
+                artifactId 'diskord'
                 pom.withXml {
                     def root = asNode()
                     root.appendNode('description', 'A Kotlin wrapper around the Discord API')
@@ -154,6 +155,7 @@ kotlin {
 
 jvmTest {
     useJUnitPlatform()
+
     systemProperty("com.jessecorbett.diskord.debug", project.findProperty("com.jessecorbett.diskord.debug") ?: false)
 }
 
@@ -168,7 +170,7 @@ bintray {
         name = 'diskord'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://gitlab.com/jesselcorbett/diskord'
-        publications = ['jvm']
+        publications = ['jvm', 'metadata']
         version {
             name = diskordVersion
         }
