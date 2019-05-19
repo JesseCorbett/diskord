@@ -6,6 +6,7 @@ import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
 import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
 import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.internal.urlEncode
 import kotlinx.serialization.list
 
 /**
@@ -179,7 +180,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getMessageReactions(messageId: String, textEmoji: String) =
-        getRequest("/channels/$channelId/messages/$messageId/reaction/$textEmoji", Reaction.serializer().list)
+        getRequest("/channels/$channelId/messages/$messageId/reactions/${urlEncode(textEmoji)}", User.serializer().list)
 
     /**
      * Get all reactions from a message for a given custom emoji.
@@ -191,8 +192,8 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest(
-        "/channels/$channelId/messages/$messageId/reaction/${emoji.name}:${emoji.id}",
-        Reaction.serializer().list
+        "/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}",
+        User.serializer().list
     )
 
     /**
