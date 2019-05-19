@@ -28,7 +28,6 @@ publishDevelopmentVersion:
     - gradle publishJvmPublicationToGitlabRepository publishMetadataPublicationToGitlabRepository
   only:
     - develop
-    - master
 
 publishReleaseVersion:
   stage: release
