@@ -19,5 +19,15 @@ val Emoji.stringified: String
     get() = if (id == null) {
         name
     } else {
-        "$id:$name"
+        "$name:$id"
+    }
+
+/**
+ * Formatted version of an emoji for use in a [Message].
+ */
+val Emoji.formatted: String
+    get() = when {
+        id == null -> stringified
+        isAnimated -> "<a:$stringified>"
+        else -> "<:$stringified>"
     }
