@@ -65,7 +65,7 @@ fun main() {
                 delete()
             }
         }
-    }
+    }.block()
 }
 ```
 
@@ -81,7 +81,7 @@ fun main() {
                 delete()
             }
         }
-    }
+    }.block()
 }
 ```
 
@@ -101,7 +101,7 @@ fun main() {
                 }
             }
         }
-    }
+    }.block()
 }
 ```
 
@@ -116,7 +116,7 @@ fun main() {
                 it.react("💯")
             }
         }
-    }
+    }.block()
 }
 ```
 
@@ -143,7 +143,7 @@ fun main() {
                 delete()
             }            
         }
-    }
+    }.block()
 }
 ```
 

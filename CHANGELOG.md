@@ -1,9 +1,10 @@
 # Changelog
 
-## [1.3.4] - 2019-05-09
+## [1.3.4] - 2019-05-18
 
 ### Changed
-- Updated publications to use mpp defaults
+- Fixed a bug where `ChannelClient.getMessageReactions` function invoked with a String containing a unicode emoji was indefinitely hanging
+- Fixed a bug where both `ChannelClient.getMessageReactions` functions were returning the incorrect type
 
 ## [1.3.3] - 2019-05-05
 
