@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.0] - 2019-05-22
+
+### Changed
+- Changed artifact path for jvm build from `diskord` to `diskord-jvm`, introducing `diskord` as the multiplatform artifact
+- Migrated backend to ktor multiplatform, allowing diskord to be built out for other platforms
+
 ## [1.3.4] - 2019-05-18
 
 ### Changed
