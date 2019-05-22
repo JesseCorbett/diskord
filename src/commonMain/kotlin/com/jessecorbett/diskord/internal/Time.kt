@@ -1,7 +1,5 @@
 package com.jessecorbett.diskord.internal
 
-expect fun epochSecondNow(): Long
-
-expect fun epochMillisNow(): Long
-
-expect fun parseRfc1123(timestamp: String): Long
+internal expect fun epochSecondNow(): Long
+internal expect fun epochMillisNow(): Long
+internal expect fun parseRfc1123(timestamp: String): Long

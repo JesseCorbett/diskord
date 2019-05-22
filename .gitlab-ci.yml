@@ -11,8 +11,6 @@ test:
   stage: build
   script:
     - gradle check
-  tags:
-    - docker
 
 pages:
   stage: build
@@ -21,8 +19,6 @@ pages:
   artifacts:
     paths:
       - public/
-  tags:
-    - docker
   only:
     - master
 
@@ -36,14 +32,11 @@ publishDevelopmentVersion:
     - docker
   only:
     - develop
-    - master
 
 publishReleaseVersion:
   stage: release
   script:
     - gradle bintrayUpload
-  tags:
-    - docker
   only:
     - master
   when: manual

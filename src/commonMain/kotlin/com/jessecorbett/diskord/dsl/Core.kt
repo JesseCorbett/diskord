@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.dsl
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
+import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.util.EnhancedEventListener
 import kotlinx.serialization.json.JsonElement
 
@@ -23,19 +24,11 @@ annotation class DiskordDsl
  * modify or interrupt this base class.
  *
  * @param token The bot token from the discord application management page https://discordapp.com/developers/applications/.
- * @param autoStart Automatically start the bot. Defaults to true.
  * @param shardId The shard id, if this bot is sharded.
  * @param shardCount The count of shards, if the bot is sharded.
  */
-class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0) :
-    EnhancedEventListener(token) {
-    private val websocket = DiscordWebSocket(token, this, autoStart, shardId = shardId, shardCount = shardCount)
-
-    /**
-     * Indicates if this bot currently has an active websocket connection.
-     */
-    val active: Boolean
-        get() = websocket.active
+class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
+    private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount)
 
     /*
      * Convenience methods for bot implementations
@@ -43,25 +36,67 @@ class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount
 
     /**
      * Starts the websocket connection.
-     *
-     * Only necessary if autostart is disabled. Functionally identical to [Bot.restart]
      */
-    fun start() = websocket.start()
+    suspend fun start() = websocket.start()
 
     /**
      * Shuts down the bot.
-     *
-     * @param forceClose Forces closed the bot. False by default. Only set to true if this is the only bot in this instance
-     * as it force closes the http client shared by all [DiscordWebSocket] and REST client instances.
      */
-    fun shutdown(forceClose: Boolean = false) = websocket.close(forceClose)
+    suspend fun shutdown() = websocket.close()
 
     /**
      * Restarts the websocket connection.
      *
      * Persists the session so that any events which occur during the restart should still be received.
      */
-    fun restart() = websocket.restart()
+    suspend fun restart() = websocket.restart()
+
+    /**
+     * Sets the user status in Discord.
+     *
+     * @param status The user status to set to.
+     * @param isAfk If the user is AFK.
+     * @param idleTime How long the user has been idle, in milliseconds.
+     * @param activity The activity, if any, that the user is performing.
+     */
+    suspend fun setStatus(status: UserStatus, isAfk: Boolean = false, idleTime: Int? = null, activity: UserStatusActivity? = null) {
+        websocket.setStatus(status, isAfk, idleTime, activity)
+    }
+
+    /**
+     * Sets the user's status to [UserStatus.ONLINE]
+     */
+    suspend fun setActive() {
+        setStatus(UserStatus.ONLINE)
+    }
+
+    /**
+     * Sets the user's status to [UserStatus.IDLE]
+     */
+    suspend fun setIdle() {
+        setStatus(UserStatus.IDLE)
+    }
+
+    /**
+     * Sets the user's status to [UserStatus.DO_NOT_DISTURB]
+     */
+    suspend fun setDoNotDisturb() {
+        setStatus(UserStatus.DO_NOT_DISTURB)
+    }
+
+    /**
+     * Sets the user's status to [UserStatus.INVISIBLE]
+     */
+    suspend fun setInvisible() {
+        setStatus(UserStatus.INVISIBLE)
+    }
+
+    /**
+     * Sets the user's status to [UserStatus.OFFLINE]
+     */
+    suspend fun setOffline() {
+        setStatus(UserStatus.OFFLINE)
+    }
 
     /*
      * DSL mappings of the EventListener
@@ -696,5 +731,8 @@ class Bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount
  * @return A [Bot] instance using the token and DSL hooks specified in the block.
  */
 @DiskordDsl
-fun bot(token: String, autoStart: Boolean = true, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit) =
-    Bot(token, autoStart, shardId, shardCount).apply(block)
+suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit): Bot {
+    val bot = Bot(token, shardId, shardCount)
+    bot.apply(block).start()
+    return bot
+}

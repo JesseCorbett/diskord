@@ -208,7 +208,7 @@ object Colors {
     }
 
     /**
-     * Converts a [Color] instance into a [Triple] containing the `red`, `green`, and `blue` values of the color.
+     * Converts a [Color] instance into a [kotlin.Triple] containing the `red`, `green`, and `blue` values of the color.
      *
      * @param color The color to convert.
      *

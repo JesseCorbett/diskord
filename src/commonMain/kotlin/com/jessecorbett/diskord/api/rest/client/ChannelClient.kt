@@ -130,7 +130,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun addMessageReaction(messageId: String, emojiText: String) =
-        putRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/@me")
+        putRequest("/channels/$channelId/messages/$messageId/reactions/${urlEncode(emojiText)}/@me")
 
     /**
      * Add a reaction to a message.
@@ -140,8 +140,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMessageReaction(messageId: String, emoji: Emoji) =
-        putRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/@me")
+    suspend fun addMessageReaction(messageId: String, emoji: Emoji) = addMessageReaction(messageId, emoji.stringified)
 
     /**
      * Remove a reaction from a message.
@@ -155,7 +154,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun removeMessageReaction(messageId: String, emojiText: String, userId: String = "@me") =
-        deleteRequest("/channels/$channelId/messages/$messageId/reactions/$emojiText/$userId")
+        deleteRequest("/channels/$channelId/messages/$messageId/reactions/${urlEncode(emojiText)}/$userId")
 
     /**
      * Remove a reaction from a message.
@@ -167,7 +166,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun removeMessageReaction(messageId: String, emoji: Emoji, userId: String = "@me") =
-        deleteRequest("/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}/$userId")
+        removeMessageReaction(messageId, emoji.stringified, userId)
 
     /**
      * Get all reactions from a message for a given emoji.
@@ -192,10 +191,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The reactions for the given emoji on the given message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getRequest(
-        "/channels/$channelId/messages/$messageId/reactions/${emoji.name}:${emoji.id}",
-        User.serializer().list
-    )
+    suspend fun getMessageReactions(messageId: String, emoji: Emoji) = getMessageReactions(messageId, emoji.stringified)
 
     /**
      * Delete all reactions from a message.
