@@ -39,7 +39,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.40.</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -65,7 +65,7 @@ fun main() = runBlocking {
                 delete()
             }
         }
-    }.block()
+    }
 }
 ```
 
@@ -81,7 +81,7 @@ fun main() = runBlocking {
                 delete()
             }
         }
-    }.block()
+    }
 }
 ```
 
@@ -101,7 +101,7 @@ fun main() = runBlocking {
                 }
             }
         }
-    }.block()
+    }
 }
 ```
 
@@ -116,7 +116,7 @@ fun main() = runBlocking {
                 it.react("💯")
             }
         }
-    }.block()
+    }
 }
 ```
 
@@ -143,7 +143,7 @@ fun main() = runBlocking {
                 delete()
             }            
         }
-    }.block()
+    }
 }
 ```
 
