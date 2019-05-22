@@ -178,7 +178,7 @@ abstract class RateLimitedClient(
      */
     protected suspend fun putRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo) {
         doRequest(rateLimit) {
-            super.putRequest(url, null, commonHeaders)
+            super.putRequest(url, "", commonHeaders)
         }
     }
 
