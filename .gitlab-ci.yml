@@ -25,9 +25,7 @@ pages:
 publishDevelopmentVersion:
   stage: release
   script:
-    - gradle publishJvmPublicationToGitlabRepository
-    - gradle publishMultiplatformPublicationToGitlabRepository
-    - gradle publishMetadataPublicationToGitlabRepository
+    - gradle publishJvmPublicationToGitlabRepository publishKotlinMultiplatformPublicationToGitlabRepository publishMetadataPublicationToGitlabRepository
   tags:
     - docker
   only:
