@@ -1,6 +1,18 @@
 # Changelog
 
-## [1.3.3] - 2019--05-05
+## [1.4.0] - 2019-05-22
+
+### Changed
+- Changed artifact path for jvm build from `diskord` to `diskord-jvm`, introducing `diskord` as the multiplatform artifact
+- Migrated backend to ktor multiplatform, allowing diskord to be built out for other platforms
+
+## [1.3.4] - 2019-05-18
+
+### Changed
+- Fixed a bug where `ChannelClient.getMessageReactions` function invoked with a String containing a unicode emoji was indefinitely hanging
+- Fixed a bug where both `ChannelClient.getMessageReactions` functions were returning the incorrect type
+
+## [1.3.3] - 2019-05-05
 
 ### Changed
 - Fixed a bug where Emoji had a list of Role models instead of ids

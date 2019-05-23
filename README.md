@@ -13,12 +13,13 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ### Gradle
 ```groovy
 repositories {
+    mavenCentral()
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
 }
 
 dependencies {
-    implementation 'com.jessecorbett:diskord:1.4.0'
+    implementation 'com.jessecorbett:diskord-jvm:1.4.0'
 }
 ```
 
@@ -29,11 +30,15 @@ dependencies {
       <id>jcenter</id>
       <url>https://jcenter.bintray.com/</url>
     </repository>
+    <repository>
+      <id>kotlinx</id>
+      <url>https://kotlin.bintray.com/kotlinx</url>
+    </repository>
 </repositories>
 
 <dependency>
     <groupId>com.jessecorbett</groupId>
-    <artifactId>diskord</artifactId>
+    <artifactId>diskord-jvm</artifactId>
     <version>1.4.0</version>
 </dependency>
 ```
@@ -126,13 +131,13 @@ fun main() = runBlocking {
                 it.react("💯")
             }
         }
-        
+            
         commands {
             command("ping") {
                 reply("pong")
                 delete()
             }
-            
+                
             command("echo") {
                 reply(words.drop(1).joinToString(" "))
                 delete()
@@ -152,7 +157,7 @@ fun main() = runBlocking {
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
     * You can use our development versions by using the gitlab maven repository
         * Repository URL https://gitlab.com/api/v4/projects/10363714/packages/maven
-        * Artifact directory https://gitlab.com/jesselcorbett/Diskord/-/packages
+        * Artifact directory https://gitlab.com/jesselcorbett/diskord/-/packages
 
 ## Things to do
 - Add more testing
