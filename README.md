@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+    // Only if gradle >= 5.3
+    implementation 'com.jessecorbett:diskord:1.4.0'
+    // Valid for all gradle versions
     implementation 'com.jessecorbett:diskord-jvm:1.4.0'
 }
 ```
