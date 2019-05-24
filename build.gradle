@@ -174,7 +174,7 @@ bintray {
         name = 'diskord'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://gitlab.com/jesselcorbett/diskord'
-        publications = ['jvm', 'kotlinmultiplatform', 'metadata']
+        publications = ['jvm', 'kotlinMultiplatform', 'metadata']
         version {
             name = diskordVersion
         }
