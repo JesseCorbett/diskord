@@ -4,6 +4,7 @@
 
 ### Changed
 - Updated ktor version
+- Removed deprecated kotlinx.serialization @Optional annotation
 
 ## [1.4.0] - 2019-05-22
 
