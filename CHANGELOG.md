@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 2019-05-29
+
+### Changed
+- Updated ktor version
+
 ## [1.4.0] - 2019-05-22
 
 ### Changed
