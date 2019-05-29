@@ -2,7 +2,9 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.events.*
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.json.JsonElement
 
 /**
@@ -12,6 +14,7 @@ import kotlinx.serialization.json.JsonElement
  * @param event The discord event being mapped.
  * @param data The event data to be deserialized.
  */
+@UnstableDefault
 suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonElement) {
     eventListener.onEvent(event, data)
     when (event) {
