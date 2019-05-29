@@ -7,25 +7,25 @@ import kotlinx.serialization.internal.IntDescriptor
 data class Message(
     @SerialName("id") val id: String,
     @SerialName("channel_id") val channelId: String,
-    @Optional @SerialName("guild_id") val guildId: String? = null,
+    @SerialName("guild_id") val guildId: String? = null,
     @SerialName("author") val author: User,
-    @Optional @SerialName("member") val partialMember: GuildMember? = null,
+    @SerialName("member") val partialMember: GuildMember? = null,
     @SerialName("content") val content: String,
     @SerialName("timestamp") val sentAt: String,
     @SerialName("edited_timestamp") val editedAt: String?,
     @SerialName("tts") val isTTS: Boolean,
     @SerialName("mention_everyone") val mentionsEveryone: Boolean,
-    @Optional @SerialName("mentions") val usersMentioned: List<User> = emptyList(),
-    @Optional @SerialName("mention_roles") val rolesIdsMentioned: List<String> = emptyList(),
-    @Optional @SerialName("attachments") val attachments: List<Attachment> = emptyList(),
-    @Optional @SerialName("embeds") val embeds: List<Embed> = emptyList(),
-    @Optional @SerialName("reactions") val reactions: List<Reaction> = emptyList(),
-    @Optional @SerialName("nonce") val validationNonce: String? = null,
+    @SerialName("mentions") val usersMentioned: List<User> = emptyList(),
+    @SerialName("mention_roles") val rolesIdsMentioned: List<String> = emptyList(),
+    @SerialName("attachments") val attachments: List<Attachment> = emptyList(),
+    @SerialName("embeds") val embeds: List<Embed> = emptyList(),
+    @SerialName("reactions") val reactions: List<Reaction> = emptyList(),
+    @SerialName("nonce") val validationNonce: String? = null,
     @SerialName("pinned") val isPinned: Boolean,
-    @Optional @SerialName("webhook_id") val webhookId: String? = null,
+    @SerialName("webhook_id") val webhookId: String? = null,
     @SerialName("type") val type: MessageType,
-    @Optional @SerialName("activity") val activity: MessageActivity? = null,
-    @Optional @SerialName("application") val application: MessageApplication? = null
+    @SerialName("activity") val activity: MessageActivity? = null,
+    @SerialName("application") val application: MessageApplication? = null
 )
 
 @Serializable(with = MessageTypeSerializer::class)

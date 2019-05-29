@@ -1,12 +1,11 @@
 package com.jessecorbett.diskord.api.model
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class VoiceState(
-    @Optional @SerialName("guild_id") val snowflakeId: String? = null,
+    @SerialName("guild_id") val snowflakeId: String? = null,
     @SerialName("channel_id") val channelId: String?,
     @SerialName("user_id") val userId: String,
     @SerialName("session_id") val sessionId: String,

@@ -16,8 +16,8 @@ import kotlinx.serialization.json.JsonElement
 data class GatewayMessage(
     @SerialName("op") val opCode: OpCode,
     @SerialName("d") val dataPayload: JsonElement?,
-    @Optional @SerialName("s") val sequenceNumber: Int? = null,
-    @Optional @SerialName("t") val event: String? = null // Not using DiscordEvent because there are undocumented events
+    @SerialName("s") val sequenceNumber: Int? = null,
+    @SerialName("t") val event: String? = null // Not using DiscordEvent because there are undocumented events
 )
 
 /**

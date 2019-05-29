@@ -7,43 +7,43 @@ import kotlinx.serialization.internal.IntDescriptor
 data class UserStatusActivity(
     @SerialName("name") val name: String,
     @SerialName("type") val type: ActivityType,
-    @Optional @SerialName("url") val streamUrl: String? = null,
-    @Optional @SerialName("timestamps") val timestamps: Timestamps? = null,
-    @Optional @SerialName("application_id") val applicationId: String? = null,
-    @Optional @SerialName("details") val details: String? = null,
-    @Optional @SerialName("state") val partyStatus: String? = null,
-    @Optional @SerialName("party") val party: ActivityParty? = null,
-    @Optional @SerialName("assets") val assets: Assets? = null,
-    @Optional @SerialName("secrets") val secrets: RichPresenceSecrets? = null,
-    @Optional @SerialName("instance") val activityIsInstanced: Boolean? = null,
-    @Optional @SerialName("flags") val activityFlags: Int? = null
+    @SerialName("url") val streamUrl: String? = null,
+    @SerialName("timestamps") val timestamps: Timestamps? = null,
+    @SerialName("application_id") val applicationId: String? = null,
+    @SerialName("details") val details: String? = null,
+    @SerialName("state") val partyStatus: String? = null,
+    @SerialName("party") val party: ActivityParty? = null,
+    @SerialName("assets") val assets: Assets? = null,
+    @SerialName("secrets") val secrets: RichPresenceSecrets? = null,
+    @SerialName("instance") val activityIsInstanced: Boolean? = null,
+    @SerialName("flags") val activityFlags: Int? = null
 )
 
 @Serializable
 data class Timestamps(
-    @Optional @SerialName("start") val start: String? = null,
-    @Optional @SerialName("end") val end: String? = null
+    @SerialName("start") val start: String? = null,
+    @SerialName("end") val end: String? = null
 )
 
 @Serializable
 data class ActivityParty(
-    @Optional @SerialName("id") val id: String? = null,
-    @Optional @SerialName("size") val size: List<Int>? = null
+    @SerialName("id") val id: String? = null,
+    @SerialName("size") val size: List<Int>? = null
 )
 
 @Serializable
 data class Assets(
-    @Optional @SerialName("large_image") val largeImage: String? = null,
-    @Optional @SerialName("large_text") val largeImageText: String? = null,
-    @Optional @SerialName("small_image") val smallImage: String? = null,
-    @Optional @SerialName("small_text") val smallImageText: String? = null
+    @SerialName("large_image") val largeImage: String? = null,
+    @SerialName("large_text") val largeImageText: String? = null,
+    @SerialName("small_image") val smallImage: String? = null,
+    @SerialName("small_text") val smallImageText: String? = null
 )
 
 @Serializable
 data class RichPresenceSecrets(
-    @Optional @SerialName("join") val joinParty: String? = null,
-    @Optional @SerialName("spectate") val spectate: String? = null,
-    @Optional @SerialName("match") val joinInstance: String? = null
+    @SerialName("join") val joinParty: String? = null,
+    @SerialName("spectate") val spectate: String? = null,
+    @SerialName("match") val joinInstance: String? = null
 )
 
 @Serializable(with = ActivityTypeSerializer::class)
