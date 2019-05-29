@@ -148,7 +148,6 @@ class DiscordWebSocket(
                         // Not used
                         logger.debug { message }
                     }
-                    else -> {}
                 }
             }
             logger.info { "Exited the incoming loop" }
