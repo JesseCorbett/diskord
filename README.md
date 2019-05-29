@@ -16,6 +16,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
+    maven { url "https://gitlab.com/api/v4/projects/10363714/packages/maven" } // Temporary while jcenter support is updated
 }
 
 dependencies {
