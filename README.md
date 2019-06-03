@@ -15,8 +15,6 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
-    maven { url "https://gitlab.com/api/v4/projects/10363714/packages/maven" } // Temporary while jcenter support is updated
 }
 
 dependencies {
@@ -33,10 +31,6 @@ dependencies {
     <repository>
       <id>jcenter</id>
       <url>https://jcenter.bintray.com/</url>
-    </repository>
-    <repository>
-      <id>kotlinx</id>
-      <url>https://kotlin.bintray.com/kotlinx</url>
     </repository>
 </repositories>
 
