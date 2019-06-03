@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.rest.BearerToken
-import com.jessecorbett.diskord.api.rest.client.internal.BaseRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
 import com.jessecorbett.diskord.api.rest.client.internal.discordApi
 import kotlinx.serialization.json.Json
 
@@ -17,8 +17,12 @@ private const val REFRESH_TOKEN = "refresh_token"
  * @property redirectUri The uri to redirect to as part of the OAuth flow.
  */
 
-class OAuthClient(private val clientId: String, private val clientSecret: String, private val redirectUri: String) :
-    BaseRestClient() {
+class OAuthClient(
+    private val clientId: String,
+    private val clientSecret: String,
+    private val redirectUri: String,
+    private val client: RestClient = DefaultRestClient()
+) : RestClient by client {
 
     private suspend fun getToken(code: String, grantType: String): BearerToken {
         val form = hashMapOf(

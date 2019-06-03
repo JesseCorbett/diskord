@@ -145,6 +145,7 @@ kotlin {
                 implementation("com.willowtreeapps.assertk:assertk-jvm:0.18")
                 implementation("io.mockk:mockk:1.9.3")
                 implementation("org.slf4j:slf4j-simple:1.7.26")
+                implementation("com.squareup.okhttp3:mockwebserver:$okhttpVersion")
             }
         }
 

@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.rest.client
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
 import kotlinx.serialization.list
 
 /*
@@ -20,8 +20,12 @@ import kotlinx.serialization.list
  * @param guildId The id of the guild.
  * @param userType The user type, assumed to be a bot.
  */
-class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) :
-    RateLimitedClient(token, userType) {
+class GuildClient(
+    token: String,
+    val guildId: String,
+    userType: DiscordUserType = DiscordUserType.BOT,
+    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
+) : RateLimitedRestClient by client {
 
     /**
      * Get this guild's emoji.

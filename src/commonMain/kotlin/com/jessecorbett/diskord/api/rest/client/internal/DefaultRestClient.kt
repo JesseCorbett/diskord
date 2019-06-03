@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
+import com.jessecorbett.diskord.api.rest.client.RestClient
 import com.jessecorbett.diskord.internal.configureHttpClient
 import com.jessecorbett.diskord.internal.httpClient
 import io.ktor.client.HttpClient
@@ -13,16 +14,16 @@ import kotlinx.coroutines.io.readUTF8Line
 
 const val discordApi = "https://discordapp.com/api"
 
-open class BaseRestClient {
+class DefaultRestClient(private val baseUrl: String = discordApi) : RestClient {
     private val contentType = ContentType.parse("application/json")
 
-    protected suspend fun getRequest(url: String, headers: Map<String, String>): Response {
-        val result = client.get<HttpResponse>(discordApi + url) { headers.forEach { header(it.key, it.value) } }
+    override suspend fun getRequest(url: String, headers: Map<String, String>): Response {
+        val result = client.get<HttpResponse>(baseUrl + url) { headers.forEach { header(it.key, it.value) } }
         return result.toResponse()
     }
 
-    protected suspend fun postRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.post<HttpResponse>(discordApi + url) {
+    override suspend fun postRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
+        val result = client.post<HttpResponse>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
@@ -31,8 +32,8 @@ open class BaseRestClient {
         return result.toResponse()
     }
 
-    protected suspend fun putRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.put<HttpResponse>(discordApi + url) {
+    override suspend fun putRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
+        val result = client.put<HttpResponse>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
@@ -41,8 +42,8 @@ open class BaseRestClient {
         return result.toResponse()
     }
 
-    protected suspend fun patchRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.patch<HttpResponse>(discordApi + url) {
+    override suspend fun patchRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
+        val result = client.patch<HttpResponse>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
@@ -51,17 +52,17 @@ open class BaseRestClient {
         return result.toResponse()
     }
 
-    protected suspend fun deleteRequest(url: String, headers: Map<String, String>): Response {
-        val result = client.delete<HttpResponse>(discordApi + url) {
+    override suspend fun deleteRequest(url: String, headers: Map<String, String>): Response {
+        val result = client.delete<HttpResponse>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
         }
         return result.toResponse()
     }
 
-    protected suspend fun postForm(url: String, form: Map<String, String>): Response {
+    override suspend fun postForm(url: String, form: Map<String, String>): Response {
         val result = client.submitForm<HttpResponse> {
             url {
-                host = discordApi
+                host = baseUrl
                 path(listOf(url))
             }
             body = formData {
