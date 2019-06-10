@@ -26,6 +26,7 @@ publishDevelopmentVersion:
   stage: release
   script:
     - gradle publishJvmPublicationToGitlabRepository publishKotlinMultiplatformPublicationToGitlabRepository publishMetadataPublicationToGitlabRepository
+    - gradle publishAllPublicationsToOssrhSnapshotsRespository
   tags:
     - docker
   only:
@@ -35,6 +36,7 @@ publishReleaseVersion:
   stage: release
   script:
     - gradle bintrayUpload
+    - gradle publishAllPublicationsToOssrhStagingRespository
   only:
     - master
   when: manual

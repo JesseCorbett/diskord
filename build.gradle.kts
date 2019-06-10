@@ -15,18 +15,13 @@ val kotlinVersion: String by project
 val ktorVersion: String by project
 val okhttpVersion: String by project
 
-// recommended to define this in ~/.gradle/gradle.properties or pass through -P
-val ossrhUsername: String? by project
-val ossrhPassword: String? by project
-
 group = "com.jessecorbett"
 version = diskordVersion
 
 repositories {
     mavenCentral()
     jcenter()
-    maven(url="https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
-    maven(url="https://kotlin.bintray.com/ktor") // ktor
+    maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
 }
 
 val dokka by tasks.existing(DokkaTask::class) {
@@ -238,8 +233,8 @@ publishing {
             url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
 
             credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
             }
         }
 
@@ -248,8 +243,8 @@ publishing {
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
 
             credentials {
-                username = ossrhUsername
-                password = ossrhPassword
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
             }
         }
     }
