@@ -256,8 +256,8 @@ val jvmTest by tasks.existing(Test::class) {
     systemProperty("com.jessecorbett.diskord.debug", project.findProperty("com.jessecorbett.diskord.debug") ?: false)
 }
 
-val signingKey: String? by project
-val signingPassword: String? by project
+val signingKey: String? = System.getenv("ORG_GRADLE_PROJECT_signingKey")
+val signingPassword: String? = System.getenv("ORG_GRADLE_PROJECT_signingPassword")
 
 signing {
     if (signingKey != null && signingPassword != null) {
