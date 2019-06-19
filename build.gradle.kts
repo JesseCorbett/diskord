@@ -261,7 +261,7 @@ val signingPassword: String? = System.getenv("ORG_GRADLE_PROJECT_signingPassword
 
 signing {
     if (signingKey != null && signingPassword != null) {
-        useInMemoryPgpKeys(signingKey, signingPassword)
+        useInMemoryPgpKeys(signingKey.trimMargin(), signingPassword)
     }
 
     publishing.publications.forEach { sign(it) }
