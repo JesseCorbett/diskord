@@ -46,4 +46,4 @@ publishMavenCentralVersion:
     - gradle publishAllPublicationsToOssrhStagingRespository
   only:
     - master
-    when: manual
+  when: manual
