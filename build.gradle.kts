@@ -256,9 +256,10 @@ val jvmTest by tasks.existing(Test::class) {
     systemProperty("com.jessecorbett.diskord.debug", project.findProperty("com.jessecorbett.diskord.debug") ?: false)
 }
 
+val signingKey: String? by project
+val signingPassword: String? by project
+
 signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(signingKey, signingPassword)
     }
