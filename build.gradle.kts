@@ -257,9 +257,11 @@ val jvmTest by tasks.existing(Test::class) {
 }
 
 signing {
-    val signingKey = System.getenv("SIGNING_KEY")
-    val signingPassword = System.getenv("SIGNING_PASSWORD")
-    useInMemoryPgpKeys(signingKey, signingPassword)
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    if (signingKey != null && signingPassword != null) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
 
     publishing.publications.forEach { sign(it) }
 }
