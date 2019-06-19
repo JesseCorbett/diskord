@@ -257,7 +257,11 @@ val jvmTest by tasks.existing(Test::class) {
 }
 
 signing {
-    listOf("kotlinMultiplatform", "metadata", "jvm").forEach {
-        sign(publishing.publications[it])
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    if (signingKey != null && signingPassword != null) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
     }
+
+    publishing.publications.forEach { sign(it) }
 }
