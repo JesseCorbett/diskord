@@ -5,6 +5,8 @@ import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.util.EnhancedEventListener
+import io.ktor.util.KtorExperimentalAPI
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.JsonElement
 
 /**
@@ -27,6 +29,8 @@ annotation class DiskordDsl
  * @param shardId The shard id, if this bot is sharded.
  * @param shardCount The count of shards, if the bot is sharded.
  */
+@UnstableDefault
+@KtorExperimentalAPI
 class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount)
 

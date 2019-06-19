@@ -1,17 +1,16 @@
 package com.jessecorbett.diskord.api.model
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Invite(
     @SerialName("code") val code: String,
-    @Optional @SerialName("guild") val guild: Guild? = null,
+    @SerialName("guild") val guild: Guild? = null,
     @SerialName("channel") val channel: Channel,
-    @Optional @SerialName("approximate_presence_count") val approximateOnlineMembers: Int? = null,
-    @Optional @SerialName("approximate_member_count") val approximateMembers: Int? = null,
-    @Optional @SerialName("invite_metadata") val metadata: InviteMetadata? = null
+    @SerialName("approximate_presence_count") val approximateOnlineMembers: Int? = null,
+    @SerialName("approximate_member_count") val approximateMembers: Int? = null,
+    @SerialName("invite_metadata") val metadata: InviteMetadata? = null
 )
 
 @Serializable

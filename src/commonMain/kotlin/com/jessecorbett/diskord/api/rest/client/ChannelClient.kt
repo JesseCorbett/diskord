@@ -212,7 +212,7 @@ class ChannelClient(token: String, val channelId: String, userType: DiscordUserT
      * @return The edited message.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = putRequest(
+    suspend fun editMessage(messageId: String, messageEdit: MessageEdit) = patchRequest(
         "/channels/$channelId/messages/$messageId",
         messageEdit,
         MessageEdit.serializer(),

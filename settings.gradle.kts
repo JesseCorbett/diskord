@@ -11,6 +11,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'diskord'
+rootProject.name = "diskord"
 
-enableFeaturePreview('GRADLE_METADATA')
+enableFeaturePreview("GRADLE_METADATA")

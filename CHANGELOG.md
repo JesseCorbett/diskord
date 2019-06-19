@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1] - 2019-05-30
+
+### Changed
+- Updated ktor version
+- Updated kotlin version to 1.3.40
+- Removed deprecated kotlinx.serialization @Optional annotation
+- Update Gradle build with Kotlin DSL & updates to publish to Maven instead of Bintray (to fix publishing issues)
+
 ## [1.4.0] - 2019-05-22
 
 ### Changed

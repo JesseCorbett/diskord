@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.api.websocket.events
 
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,5 +8,5 @@ data class TypingStart(
     @SerialName("user_id") val userId: String,
     @SerialName("timestamp") val timestamp: String,
     @SerialName("channel_id") val channelId: String,
-    @Optional @SerialName("guild_id") val guildId: String? = null
+    @SerialName("guild_id") val guildId: String? = null
 )

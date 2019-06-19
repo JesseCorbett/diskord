@@ -2,7 +2,6 @@ package com.jessecorbett.diskord.api.websocket.events
 
 import com.jessecorbett.diskord.api.model.Channel
 import com.jessecorbett.diskord.api.model.User
-import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,5 +13,5 @@ data class Ready(
     @SerialName("guilds") val guilds: List<UnavailableGuild>,
     @SerialName("session_id") val sessionId: String,
     @SerialName("_trace") val debug: List<String>,
-    @Optional @SerialName("shard") val shardIdAndNumber: List<Int>? = null
+    @SerialName("shard") val shardIdAndNumber: List<Int>? = null
 )

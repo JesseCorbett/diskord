@@ -16,18 +16,18 @@ data class AuditLog(
 data class AuditLogEntry(
     @SerialName("id") val id: String,
     @SerialName("target_id") val targetId: String?,
-    @Optional @SerialName("changes") val changes: List<AuditLogChange> = emptyList(),
+    @SerialName("changes") val changes: List<AuditLogChange> = emptyList(),
     @SerialName("user_id") val userId: String,
     @SerialName("action_type") val actionType: Int,
-    @Optional @SerialName("options") val optionalData: OptionalEntryData? = null,
-    @Optional @SerialName("reason") val reason: String? = null
+    @SerialName("options") val optionalData: OptionalEntryData? = null,
+    @SerialName("reason") val reason: String? = null
 )
 
 // TODO: Make super dynamic and all https://discordapp.com/developers/docs/resources/audit-log#audit-log-change-object
 @Serializable
 data class AuditLogChange(
-    @Optional @SerialName("new_value") val newValue: JsonElement? = null,
-    @Optional @SerialName("old_value") val oldValue: JsonElement? = null,
+    @SerialName("new_value") val newValue: JsonElement? = null,
+    @SerialName("old_value") val oldValue: JsonElement? = null,
     @SerialName("key") val key: String
 )
 

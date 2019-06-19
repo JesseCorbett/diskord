@@ -15,15 +15,13 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://kotlin.bintray.com/kotlinx" } // For kotlinx.serialization
-    maven { url "https://gitlab.com/api/v4/projects/10363714/packages/maven" } // Temporary while jcenter support is updated
 }
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.4.0'
+    implementation 'com.jessecorbett:diskord:1.4.1'
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.4.0'
+    implementation 'com.jessecorbett:diskord-jvm:1.4.1'
 }
 ```
 
@@ -34,16 +32,12 @@ dependencies {
       <id>jcenter</id>
       <url>https://jcenter.bintray.com/</url>
     </repository>
-    <repository>
-      <id>kotlinx</id>
-      <url>https://kotlin.bintray.com/kotlinx</url>
-    </repository>
 </repositories>
 
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
 </dependency>
 ```
 

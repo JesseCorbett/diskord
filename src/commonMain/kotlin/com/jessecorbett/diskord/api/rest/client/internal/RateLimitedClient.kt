@@ -6,6 +6,7 @@ import com.jessecorbett.diskord.internal.*
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 private fun captureFailure(code: Int, body: String?) = when (code) {
@@ -48,6 +49,7 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
 }
 
 
+@UnstableDefault
 abstract class RateLimitedClient(
     token: String,
     userType: DiscordUserType,

@@ -9,13 +9,13 @@ data class User(
     @SerialName("username") val username: String,
     @SerialName("discriminator") val discriminator: Long,
     @SerialName("avatar") val avatarHash: String?,
-    @Optional @SerialName("bot") val isBot: Boolean = false,
-    @Optional @SerialName("mfa_enabled") val twoFactorAuthEnabled: Boolean? = null,
-    @Optional @SerialName("locale") val locale: String? = null,
-    @Optional @SerialName("verified") val isVerified: Boolean? = null,
-    @Optional @SerialName("email") val email: String? = null
-//    @Optional @SerialName("flags") val flags: Int = 0, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
-//    @Optional @SerialName("premium_type") val premiumType: PremiumType? = null
+    @SerialName("bot") val isBot: Boolean = false,
+    @SerialName("mfa_enabled") val twoFactorAuthEnabled: Boolean? = null,
+    @SerialName("locale") val locale: String? = null,
+    @SerialName("verified") val isVerified: Boolean? = null,
+    @SerialName("email") val email: String? = null
+//    @SerialName("flags") val flags: Int = 0, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
+//    @SerialName("premium_type") val premiumType: PremiumType? = null
 )
 
 @Serializable(with = UserFlagsSerializer::class)
