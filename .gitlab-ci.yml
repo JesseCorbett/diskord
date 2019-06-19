@@ -32,11 +32,18 @@ publishDevelopmentVersion:
   only:
     - develop
 
-publishReleaseVersion:
+publishJCenterVersion:
   stage: release
   script:
     - gradle bintrayUpload
-    - gradle publishAllPublicationsToOssrhStagingRespository
   only:
     - master
   when: manual
+
+publishMavenCentralVersion:
+  stage: release
+  script:
+    - gradle publishAllPublicationsToOssrhStagingRespository
+  only:
+    - master
+    when: manual
