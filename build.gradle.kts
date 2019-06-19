@@ -257,7 +257,9 @@ val jvmTest by tasks.existing(Test::class) {
 }
 
 signing {
-    listOf("kotlinMultiplatform", "metadata", "jvm").forEach {
-        sign(publishing.publications[it])
-    }
+    val signingKey = findProperty("signingKey").toString()
+    val signingPassword = findProperty("signingPassword").toString()
+    useInMemoryPgpKeys(signingKey, signingPassword)
+
+    publishing.publications.forEach { sign(it) }
 }
