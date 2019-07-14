@@ -4,8 +4,8 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.40"
-    id("kotlinx-serialization") version "1.3.40"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.41"
+    id("kotlinx-serialization") version "1.3.41"
     id("com.jfrog.bintray") version "1.8.4"
     id("org.jetbrains.dokka") version "0.9.18"
 }
@@ -108,8 +108,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.1")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.2")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.1")
                 implementation("io.github.microutils:kotlin-logging-common:1.6.26")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
@@ -119,16 +119,16 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
-                implementation("com.willowtreeapps.assertk:assertk-common:0.13")
-                implementation("io.mockk:mockk-common:1.9.2")
+                implementation("com.willowtreeapps.assertk:assertk:0.18")
+                implementation("io.mockk:mockk-common:1.9.3")
             }
         }
 
         val jvmMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
                 implementation("io.github.microutils:kotlin-logging:1.6.26")
                 implementation("org.slf4j:slf4j-api:1.7.26")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -141,9 +141,9 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.4.0")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:0.13")
-                implementation("io.mockk:mockk:1.9.2")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.5.0")
+                implementation("com.willowtreeapps.assertk:assertk-jvm:0.18")
+                implementation("io.mockk:mockk:1.9.3")
                 implementation("org.slf4j:slf4j-simple:1.7.26")
             }
         }
