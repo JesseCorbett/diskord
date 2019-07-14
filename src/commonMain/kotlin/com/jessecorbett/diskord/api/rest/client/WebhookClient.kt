@@ -5,6 +5,8 @@ import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
+import com.jessecorbett.diskord.util.DiskordInternals
 
 /**
  * A REST client for a a specific webhook.
@@ -13,6 +15,7 @@ import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestC
  * @param webhookId The id of the webhook.
  * @param userType The user type, assumed to be a bot.
  */
+@UseExperimental(DiskordInternals::class)
 class WebhookClient(
     token: String,
     val webhookId: String,

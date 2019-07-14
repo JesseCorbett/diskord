@@ -1,10 +1,10 @@
-package com.jessecorbett.diskord.api.rest.client
+package com.jessecorbett.diskord.api.rest.client.internal
 
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
-import com.jessecorbett.diskord.api.rest.client.internal.rateLimitInfo
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
 
+@DiskordInternals
 interface RateLimitedRestClient : RestClient {
     /**
      * Make a GET request for this discord object.

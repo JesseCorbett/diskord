@@ -1,4 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `maven-publish`
@@ -106,6 +107,8 @@ kotlin {
 
     sourceSets {
         commonMain {
+            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.2")
@@ -125,6 +128,8 @@ kotlin {
         }
 
         val jvmMain by getting {
+            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
@@ -161,6 +166,12 @@ kotlin {
         //         implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
         //     }
         // }
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 

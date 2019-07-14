@@ -10,6 +10,6 @@ class ChannelClientTest {
     }
 
     fun `should get channel client`() {
-        val server = MockWebServer()
+        // val server = MockWebServer()
     }
 }

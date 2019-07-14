@@ -2,9 +2,8 @@ package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*
-import com.jessecorbett.diskord.api.rest.client.RateLimitedRestClient
-import com.jessecorbett.diskord.api.rest.client.RestClient
 import com.jessecorbett.diskord.internal.*
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
@@ -14,8 +13,11 @@ import kotlinx.serialization.json.Json
 /**
  * The rate limit info for this discord object.
  */
+@DiskordInternals
 val rateLimitInfo = RateLimitInfo(1, 1, Long.MAX_VALUE)
 
+@DiskordInternals
+@UseExperimental(UnstableDefault::class)
 private fun captureFailure(code: Int, body: String?) = when (code) {
     400 -> DiscordBadRequestException(body)
     401 -> DiscordUnauthorizedException()
@@ -29,6 +31,7 @@ private fun captureFailure(code: Int, body: String?) = when (code) {
     else -> DiscordException()
 }
 
+@DiskordInternals
 private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> Response): Response {
     if (rateLimit.remaining < 1) {
         delay(rateLimit.resetTime - epochSecondNow())
@@ -55,7 +58,8 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
     return response
 }
 
-@UnstableDefault
+@DiskordInternals
+@UseExperimental(UnstableDefault::class)
 class DefaultRateLimitedRestClient(
     token: String,
     userType: DiscordUserType,

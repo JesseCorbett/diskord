@@ -2,7 +2,10 @@ package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.rest.BearerToken
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.rest.client.internal.discordApi
+import com.jessecorbett.diskord.util.DiskordInternals
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 
@@ -16,7 +19,7 @@ private const val REFRESH_TOKEN = "refresh_token"
  * @property clientSecret the OAuth secret.
  * @property redirectUri The uri to redirect to as part of the OAuth flow.
  */
-
+@UseExperimental(DiskordInternals::class, UnstableDefault::class)
 class OAuthClient(
     private val clientId: String,
     private val clientSecret: String,

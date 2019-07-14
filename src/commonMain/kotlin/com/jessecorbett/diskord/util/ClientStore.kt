@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.rest.client.*
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 
 /**
  * A container of [RestClients] for each of the 3 resource clients and the [DiscordClient].
@@ -37,6 +38,7 @@ class ClientStore(userToken: String) {
  * @param userToken the user token used by each [ChannelClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
 
 
@@ -48,6 +50,7 @@ class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, 
  * @param userToken the user token used by each [GuildClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
 
 
@@ -59,6 +62,7 @@ class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { Gu
  * @param userToken the user token used by each [WebhookClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class WebhookClients(userToken: String) : RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 /**
@@ -71,7 +75,11 @@ class WebhookClients(userToken: String) : RestClients<WebhookClient>(userToken, 
  * @param gen a lambda which returns a new instance of class T when requested by the user.
  * @constructor Creates an instance and sets up a [MutableMap] backing the group.
  */
-abstract class RestClients<T : RestClient>(private val userToken: String, private val gen: (String) -> T) {
+@DiskordInternals
+abstract class RestClients<T : RestClient>(
+    private val userToken: String,
+    private val gen: (String) -> T
+) {
     private val clients: MutableMap<String, T> = mutableMapOf()
 
     /**

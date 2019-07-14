@@ -4,6 +4,8 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.list
 
 /*
@@ -20,6 +22,7 @@ import kotlinx.serialization.list
  * @param guildId The id of the guild.
  * @param userType The user type, assumed to be a bot.
  */
+@UseExperimental(DiskordInternals::class)
 class GuildClient(
     token: String,
     val guildId: String,

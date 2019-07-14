@@ -1,8 +1,11 @@
 package com.jessecorbett.diskord.util
 
+import assertk.all
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFailure
 import assertk.assertions.isInstanceOf
+import assertk.thrownError
 import kotlin.test.Test
 
 class ColorsTest {
@@ -16,12 +19,12 @@ class ColorsTest {
 
     @Test
     fun `should throw exception for out-of-range rgb floats`() {
-        assertThat { Colors.rgb(-1F, 0F, 0F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(2F, 0F, 0F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0F, -1F, 0F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0F, 2F, 0F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0F, 0F, -1F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0F, 0F, 2F) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
+        assertThat { Colors.rgb(-1F, 0F, 0F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(2F, 0F, 0F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0F, -1F, 0F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0F, 2F, 0F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0F, 0F, -1F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0F, 0F, 2F) }.isFailure().isInstanceOf(IllegalArgumentException::class)
     }
 
     @Test
@@ -34,12 +37,12 @@ class ColorsTest {
 
     @Test
     fun `should throw exception for out-of-range rgb integers`() {
-        assertThat { Colors.rgb(256, 0, 0) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(-1, 0, 0) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0, 256, 0) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0, -1, 0) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0, 0, 256) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.rgb(0, 0, -1) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
+        assertThat { Colors.rgb(256, 0, 0) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(-1, 0, 0) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0, 256, 0) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0, -1, 0) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0, 0, 256) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.rgb(0, 0, -1) }.isFailure().isInstanceOf(IllegalArgumentException::class)
     }
 
     @Test
@@ -60,20 +63,20 @@ class ColorsTest {
 
     @Test
     fun `should throw an exception for invalid hex strings`() {
-        assertThat { Colors.hex("#F00") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("FF0000") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("red") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("#cchars") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("#eleven") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("#-10101") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("something #FFF000") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex("#F00000 BAR") }.thrownError { isInstanceOf(IllegalArgumentException::class) }
+        assertThat { Colors.hex("#F00") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("FF0000") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("red") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("#cchars") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("#eleven") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("#-10101") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("something #FFF000") }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex("#F00000 BAR") }.isFailure().isInstanceOf(IllegalArgumentException::class)
     }
 
     @Test
     fun `should throw exception for out-of-range hex values`() {
-        assertThat { Colors.hex(0xF000000) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
-        assertThat { Colors.hex(-0x1) }.thrownError { isInstanceOf(IllegalArgumentException::class) }
+        assertThat { Colors.hex(0xF000000) }.isFailure().isInstanceOf(IllegalArgumentException::class)
+        assertThat { Colors.hex(-0x1) }.isFailure().isInstanceOf(IllegalArgumentException::class)
     }
 
     @Test

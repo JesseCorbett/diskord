@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
-import com.jessecorbett.diskord.api.rest.client.RestClient
 import com.jessecorbett.diskord.internal.configureHttpClient
 import com.jessecorbett.diskord.internal.httpClient
+import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
@@ -14,6 +14,7 @@ import kotlinx.coroutines.io.readUTF8Line
 
 const val discordApi = "https://discordapp.com/api"
 
+@DiskordInternals
 class DefaultRestClient(private val baseUrl: String = discordApi) : RestClient {
     private val contentType = ContentType.parse("application/json")
 
