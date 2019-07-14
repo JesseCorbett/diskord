@@ -51,7 +51,8 @@ enum class ActivityType(val code: Int) {
     GAME(0),
     STREAMING(1),
     LISTENING(2),
-    UNKNOWN(3)
+    UNKNOWN(3),
+    CUSTOM_STATUS(4)
 }
 
 object ActivityTypeSerializer : KSerializer<ActivityType> {
