@@ -9,14 +9,14 @@ import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.list
 
 /*
- * Note: Emoji don't follow standard rate limit behavior and the API responses may not accurately reflect rate limits.
+ * Note: Emoji don't follow standard rate limit behavior, and the API responses may not accurately reflect rate limits.
  * Diskord should handle any rate limit blocking automatically, but developers should be aware of this limitation.
  *
  * https://discordapp.com/developers/docs/resources/emoji
  */
 
 /**
- * A REST client for a a specific guild and it's content.
+ * A REST client for a specific guild and its content.
  *
  * @param token The user's API token.
  * @param guildId The id of the guild.

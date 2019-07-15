@@ -9,7 +9,7 @@ import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 
 /**
- * A REST client for a a specific webhook.
+ * A REST client for a specific webhook.
  *
  * @param token The user's API token.
  * @param webhookId The id of the webhook.
