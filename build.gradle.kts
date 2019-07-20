@@ -123,6 +123,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
+                implementation("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation("com.willowtreeapps.assertk:assertk:0.18")
                 implementation("io.mockk:mockk-common:1.9.3")
             }
@@ -148,11 +149,11 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
+                implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.0")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:0.18")
                 implementation("io.mockk:mockk:1.9.3")
                 implementation("org.slf4j:slf4j-simple:1.7.26")
-                implementation("com.squareup.okhttp3:mockwebserver:$okhttpVersion")
             }
         }
 
