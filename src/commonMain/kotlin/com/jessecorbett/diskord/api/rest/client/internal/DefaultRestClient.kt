@@ -12,10 +12,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.content.TextContent
 import kotlinx.coroutines.io.readUTF8Line
 
-const val discordApi = "https://discordapp.com/api"
+private val DEFAULT_CLIENT = HttpClient(httpClient(), configureHttpClient())
 
 @DiskordInternals
-class DefaultRestClient(private val baseUrl: String = discordApi) : RestClient {
+class DefaultRestClient(
+    private val baseUrl: String = DISCORD_API_URL,
+    private val client: HttpClient = DEFAULT_CLIENT
+) : RestClient {
     private val contentType = ContentType.parse("application/json")
 
     override suspend fun getRequest(url: String, headers: Map<String, String>): Response {
@@ -88,9 +91,5 @@ class DefaultRestClient(private val baseUrl: String = discordApi) : RestClient {
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())
-    }
-
-    private companion object {
-        private val client = HttpClient(httpClient(), configureHttpClient())
     }
 }

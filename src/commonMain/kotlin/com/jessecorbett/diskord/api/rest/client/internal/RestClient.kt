@@ -2,6 +2,8 @@ package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.util.DiskordInternals
 
+internal const val DISCORD_API_URL = "https://discordapp.com/api"
+
 @DiskordInternals
 interface RestClient {
     /**

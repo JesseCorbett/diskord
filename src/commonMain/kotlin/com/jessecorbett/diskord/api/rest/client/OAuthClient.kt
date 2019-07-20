@@ -1,9 +1,9 @@
 package com.jessecorbett.diskord.api.rest.client
 
 import com.jessecorbett.diskord.api.rest.BearerToken
+import com.jessecorbett.diskord.api.rest.client.internal.DISCORD_API_URL
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
-import com.jessecorbett.diskord.api.rest.client.internal.discordApi
 import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
@@ -24,6 +24,7 @@ class OAuthClient(
     private val clientId: String,
     private val clientSecret: String,
     private val redirectUri: String,
+    private val baseUrl: String = DISCORD_API_URL,
     private val client: RestClient = DefaultRestClient()
 ) : RestClient by client {
 
@@ -41,7 +42,7 @@ class OAuthClient(
             "refresh_token" to code
         }
 
-        val response = postForm("$discordApi/oauth2/token", form)
+        val response = postForm("$baseUrl/oauth2/token", form)
 
         return Json.nonstrict.parse(BearerToken.serializer(), response.body!!)
     }
