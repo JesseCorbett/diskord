@@ -13,6 +13,7 @@ plugins {
 
 val diskordVersion: String by project
 val kotlinVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val ktorVersion: String by project
 val okhttpVersion: String by project
 
@@ -111,7 +112,7 @@ kotlin {
 
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.2.2")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.1")
                 implementation("io.github.microutils:kotlin-logging-common:1.6.26")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -132,7 +133,7 @@ kotlin {
 
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
                 implementation("io.github.microutils:kotlin-logging:1.6.26")
                 implementation("org.slf4j:slf4j-api:1.7.26")
@@ -146,6 +147,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.0")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:0.18")
                 implementation("io.mockk:mockk:1.9.3")
