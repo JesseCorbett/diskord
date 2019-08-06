@@ -1,5 +1,19 @@
 # Changelog
 
+## [X.X.X] - XXXX-XX-XX
+
+*Note: Several classes and constants have been re-arranged in the* `com.jessecorbett.diskord.api.rest.client.internal` 
+*package to help facilitate better testing. Any code depending on these changes will break. It is highly recommended 
+not to depend on any code marked with the* `@DiskordInternals` *annotation in the future, as we provide no guarantee 
+that this code will not be changed between releases, even between minor or patch releases.*
+
+### Added
+- Added @DiskordInternals annotation to mark internal APIs.
+
+### Changed
+- REST clients have been refactored to better support testing.  This may break client code depending on Diskord internal code.
+- Updated Kotlin version to 1.3.41
+
 ## [1.4.1] - 2019-05-30
 
 ### Changed

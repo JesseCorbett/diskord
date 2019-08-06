@@ -5,19 +5,26 @@ import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
 import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
 import com.jessecorbett.diskord.internal.urlEncode
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.list
 
 /**
- * A REST client for a a specific channel and it's content.
+ * A REST client for a specific channel and it's content.
  *
  * @param token The user's API token.
  * @param channelId The id of the channel.
  * @param userType The user type, assumed to be a bot.
  */
-class ChannelClient(token: String, val channelId: String, userType: DiscordUserType = DiscordUserType.BOT) :
-    RateLimitedClient(token, userType) {
+@UseExperimental(DiskordInternals::class)
+class ChannelClient(
+    token: String,
+    val channelId: String,
+    userType: DiscordUserType = DiscordUserType.BOT,
+    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
+) : RateLimitedRestClient by client {
 
     /**
      * Message deletion per channel has it's own rate limit.

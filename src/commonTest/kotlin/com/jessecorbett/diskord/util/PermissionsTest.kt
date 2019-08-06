@@ -4,7 +4,9 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.matchesPredicate
 import com.jessecorbett.diskord.api.model.*
+import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -12,17 +14,21 @@ import kotlin.test.Test
 class PermissionsTest {
     private val ownerId = "owner id"
 
+    @MockK
     private lateinit var user: User
+
+    @MockK
     private lateinit var member: GuildMember
+
+    @MockK
     private lateinit var guild: Guild
+
+    @MockK
     private lateinit var channel: Channel
 
     @BeforeTest
     fun init() {
-        user = mockk()
-        member = mockk()
-        guild = mockk()
-        channel = mockk()
+        MockKAnnotations.init(this)
 
         every { guild.ownerId } returns ownerId
         every { member.user } returns user
@@ -121,7 +127,6 @@ class PermissionsTest {
 
     @Test
     fun `should compute all overwrites for user with multiple roles and complex overwrites`() {
-
         val basePermissions = Permissions.of(Permission.VIEW_CHANNEL, Permission.SEND_MESSAGES,
             Permission.KICK_MEMBERS, Permission.BAN_MEMBERS)
 

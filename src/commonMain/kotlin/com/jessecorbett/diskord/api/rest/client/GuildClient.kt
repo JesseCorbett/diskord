@@ -3,25 +3,32 @@ package com.jessecorbett.diskord.api.rest.client
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.list
 
 /*
- * Note: Emoji don't follow standard rate limit behavior and the API responses may not accurately reflect rate limits.
+ * Note: Emoji don't follow standard rate limit behavior, and the API responses may not accurately reflect rate limits.
  * Diskord should handle any rate limit blocking automatically, but developers should be aware of this limitation.
  *
  * https://discordapp.com/developers/docs/resources/emoji
  */
 
 /**
- * A REST client for a a specific guild and it's content.
+ * A REST client for a specific guild and its content.
  *
  * @param token The user's API token.
  * @param guildId The id of the guild.
  * @param userType The user type, assumed to be a bot.
  */
-class GuildClient(token: String, val guildId: String, userType: DiscordUserType = DiscordUserType.BOT) :
-    RateLimitedClient(token, userType) {
+@UseExperimental(DiskordInternals::class)
+class GuildClient(
+    token: String,
+    val guildId: String,
+    userType: DiscordUserType = DiscordUserType.BOT,
+    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
+) : RateLimitedRestClient by client {
 
     /**
      * Get this guild's emoji.
