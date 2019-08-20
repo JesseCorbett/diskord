@@ -4,17 +4,24 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
+import com.jessecorbett.diskord.util.DiskordInternals
 
 /**
- * A REST client for a a specific webhook.
+ * A REST client for a specific webhook.
  *
  * @param token The user's API token.
  * @param webhookId The id of the webhook.
  * @param userType The user type, assumed to be a bot.
  */
-class WebhookClient(token: String, val webhookId: String, userType: DiscordUserType = DiscordUserType.BOT) :
-    RateLimitedClient(token, userType) {
+@UseExperimental(DiskordInternals::class)
+class WebhookClient(
+    token: String,
+    val webhookId: String,
+    userType: DiscordUserType = DiscordUserType.BOT,
+    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
+) : RateLimitedRestClient by client {
 
     /**
      * Get this webhook.

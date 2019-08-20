@@ -54,8 +54,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
-@UnstableDefault
-@KtorExperimentalAPI
+@UseExperimental(UnstableDefault::class, KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,

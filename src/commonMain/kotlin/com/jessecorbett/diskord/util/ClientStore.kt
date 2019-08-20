@@ -1,10 +1,7 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
-import com.jessecorbett.diskord.api.rest.client.DiscordClient
-import com.jessecorbett.diskord.api.rest.client.GuildClient
-import com.jessecorbett.diskord.api.rest.client.WebhookClient
-import com.jessecorbett.diskord.api.rest.client.internal.BaseRestClient
+import com.jessecorbett.diskord.api.rest.client.*
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 
 /**
  * A container of [RestClients] for each of the 3 resource clients and the [DiscordClient].
@@ -41,6 +38,7 @@ class ClientStore(userToken: String) {
  * @param userToken the user token used by each [ChannelClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
 
 
@@ -52,6 +50,7 @@ class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, 
  * @param userToken the user token used by each [GuildClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
 
 
@@ -63,27 +62,32 @@ class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { Gu
  * @param userToken the user token used by each [WebhookClient].
  * @constructor Creates an empty group of clients.
  */
+@UseExperimental(DiskordInternals::class)
 class WebhookClients(userToken: String) : RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 /**
- * Generic container for [BaseRestClient] instances.
+ * Generic container for [RestClient] instances.
  *
- * Automatically creates and stores [BaseRestClient] instances based on the id relevant to each client instance.
+ * Automatically creates and stores [RestClient] instances based on the id relevant to each client instance.
  *
- * @param T the BaseRestClient implementation class.
- * @param userToken the user token used for authentication by each [BaseRestClient].
+ * @param T the [RestClient] implementation class.
+ * @param userToken the user token used for authentication by each [RestClient].
  * @param gen a lambda which returns a new instance of class T when requested by the user.
  * @constructor Creates an instance and sets up a [MutableMap] backing the group.
  */
-abstract class RestClients<T : BaseRestClient>(private val userToken: String, private val gen: (String) -> T) {
+@DiskordInternals
+abstract class RestClients<T : RestClient>(
+    private val userToken: String,
+    private val gen: (String) -> T
+) {
     private val clients: MutableMap<String, T> = mutableMapOf()
 
     /**
-     * Gets a [BaseRestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.
+     * Gets a [RestClient] implemented by class T for the given resourceId, creating it if it doesn't exist.
      *
      * @param resourceId the id of the requested resource client, such as channelId or guildId
      *
-     * @return a [BaseRestClient] implementation for the specified resource
+     * @return a [RestClient] implementation for the specified resource
      */
     operator fun get(resourceId: String) = clients.getOrPut(resourceId) { gen(resourceId) }
 }

@@ -6,10 +6,12 @@ import com.jessecorbett.diskord.api.rest.CreateDM
 import com.jessecorbett.diskord.api.rest.CreateGroupDM
 import com.jessecorbett.diskord.api.rest.CreateGuild
 import com.jessecorbett.diskord.api.rest.ModifyUser
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
 import com.jessecorbett.diskord.api.rest.response.PartialGuild
 import com.jessecorbett.diskord.api.websocket.model.GatewayBotUrl
 import com.jessecorbett.diskord.api.websocket.model.GatewayUrl
+import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.serialization.list
 
 /**
@@ -18,8 +20,12 @@ import kotlinx.serialization.list
  * @param token The user's API token.
  * @param userType The user type, assumed to be a bot.
  */
-class DiscordClient(token: String, userType: DiscordUserType = DiscordUserType.BOT) :
-    RateLimitedClient(token, userType) {
+@UseExperimental(DiskordInternals::class)
+class DiscordClient(
+    token: String,
+    userType: DiscordUserType = DiscordUserType.BOT,
+    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
+) : RateLimitedRestClient by client {
 
     /**
      * Get the gateway url from the API.
