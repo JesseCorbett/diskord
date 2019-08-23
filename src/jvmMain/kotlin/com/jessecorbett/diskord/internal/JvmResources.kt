@@ -23,12 +23,17 @@ internal actual fun configureHttpClient(): HttpClientConfig<HttpClientEngineConf
     this as HttpClientConfig<OkHttpConfig>
 
     engine {
-        addInterceptor(HttpLoggingInterceptor { message ->
-            httpLogger.trace(if (message.startsWith(BOT_AUTH_PREFIX) && !DEBUG_MODE) {
-                "$BOT_AUTH_PREFIX <token hidden>"
-            } else {
-                message
-            })
-        }.apply { level = HttpLoggingInterceptor.Level.BODY })
+
+        addInterceptor(HttpLoggingInterceptor(
+            object : HttpLoggingInterceptor.Logger {
+                override fun log(message: String) {
+                    httpLogger.trace(if (message.startsWith(BOT_AUTH_PREFIX) && !DEBUG_MODE) {
+                        "$BOT_AUTH_PREFIX <token hidden>"
+                    } else {
+                        message
+                    })
+                }
+            }
+        ).apply { level = HttpLoggingInterceptor.Level.BODY })
     }
 }

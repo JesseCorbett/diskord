@@ -2,7 +2,7 @@
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
-Built as a lean, opinionated client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use DSL.
+Built as a lean client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use SDK.
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
@@ -19,25 +19,18 @@ repositories {
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.4.1'
+    implementation 'com.jessecorbett:diskord:1.4.3'
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.4.1'
+    implementation 'com.jessecorbett:diskord-jvm:1.4.3'
 }
 ```
 
 ### Maven
 ```xml
-<repositories>
-    <repository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-    </repository>
-</repositories>
-
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.3</version>
 </dependency>
 ```
 
