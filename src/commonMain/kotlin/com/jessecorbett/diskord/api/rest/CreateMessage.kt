@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.rest
 
 import com.jessecorbett.diskord.api.model.Color
+import kotlinx.io.core.ByteReadPacket
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -73,3 +74,5 @@ data class EmbedField(
     @SerialName("value") val value: String,
     @SerialName("inline") val inline: Boolean
 )
+
+data class FileData(val packet: ByteReadPacket, val filename: String)

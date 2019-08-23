@@ -4,11 +4,14 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.BulkMessageDelete
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
 import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
 import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
+import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import kotlinx.serialization.list
 
 /**
@@ -125,6 +128,27 @@ class ChannelClient(
      */
     suspend fun createMessage(message: CreateMessage) =
         postRequest("/channels/$channelId/messages", message, CreateMessage.serializer(), Message.serializer())
+
+    /**
+     * Create a message in this channel with an attachment.
+     *
+     * @param message The message to create.
+     * @param attachment The attachment to add to the message.
+     *
+     * @return The created message.
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
+     */
+    suspend fun createMessage(
+        message: CreateMessage,
+        attachment: FileData
+    ) = postMultipartRequest("/channels/$channelId/messages", message, CreateMessage.serializer(), Message.serializer()) {
+        formData {
+            append("file", attachment.packet, Headers.build {
+                append(HttpHeaders.ContentDisposition,
+                    """form-data; name="file"; filename="${attachment.filename}"""")
+            })
+        }
+    }
 
     /**
      * Add a reaction to a message.

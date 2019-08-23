@@ -7,8 +7,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.ContentType
+import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import kotlinx.coroutines.io.readUTF8Line
 
@@ -32,6 +34,17 @@ class DefaultRestClient(
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
             }
+        }
+        return result.toResponse()
+    }
+
+    override suspend fun postMultipartRequest(
+        url: String,
+        parts: List<PartData>,
+        headers: Map<String, String>
+    ): Response {
+        val result = client.submitFormWithBinaryData<HttpResponse>(baseUrl + url, parts) {
+            headers.forEach { header(it.key, it.value) }
         }
         return result.toResponse()
     }
