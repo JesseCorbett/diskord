@@ -234,25 +234,14 @@ suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
 /**
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
  *
- * @param message The text message to send.
  * @param data The file to attach.
+ * @param comment The comment to send with the file.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendMessage(message: String, data: FileData) =
-    createMessage(CreateMessage(content = message), data)
-
-/**
- * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
- *
- * @param data The file to attach.
- *
- * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
- */
-suspend fun ChannelClient.sendMessage(data: FileData) =
-    sendMessage("", data)
+suspend fun ChannelClient.sendFile(data: FileData, comment: String = "") =
+    createMessage(CreateMessage(content = comment), data)
 
 suspend fun ChannelClient.addMessageReaction(messageId: String, emojiId: String, emojiName: String) {
     addMessageReaction(messageId, Emoji(emojiId, emojiName))
