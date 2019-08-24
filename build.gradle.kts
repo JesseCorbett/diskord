@@ -115,7 +115,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.1")
                 implementation("io.github.microutils:kotlin-logging-common:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
+                implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.13")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
@@ -139,6 +139,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
                 implementation("io.github.microutils:kotlin-logging:1.7.6")
+                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
                 implementation("org.slf4j:slf4j-api:1.7.26")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
