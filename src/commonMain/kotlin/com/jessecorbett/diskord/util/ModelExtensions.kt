@@ -240,8 +240,7 @@ suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
  */
-@JvmOverloads
-suspend fun ChannelClient.sendMessage(message: String = "", data: FileData) =
+suspend fun ChannelClient.sendMessage(message: String, data: FileData) =
     createMessage(CreateMessage(content = message), data)
 
 /**
