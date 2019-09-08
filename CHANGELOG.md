@@ -1,6 +1,6 @@
 # Changelog
 
-## [X.X.X] - XXXX-XX-XX
+## [1.5.0] - XXXX-XX-XX
 
 *Note: Several classes and constants have been re-arranged in the* `com.jessecorbett.diskord.api.rest.client.internal` 
 *package to help facilitate better testing. Any code depending on these changes will break. It is highly recommended 
