@@ -7,7 +7,6 @@ plugins {
 
     id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
     id("kotlinx-serialization") version "1.3.50"
-    id("com.jfrog.bintray") version "1.8.4"
     id("org.jetbrains.dokka") version "0.9.18"
 }
 
@@ -174,24 +173,6 @@ kotlin {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-
-    publish = true
-
-    with (pkg) {
-        repo = "diskord"
-        name = "diskord"
-        setLicenses("Apache-2.0")
-        vcsUrl = "https://gitlab.com/jesselcorbett/diskord"
-        setPublications("kotlinMultiplatform", "metadata", "jvm")
-        with (version) {
-            name = diskordVersion
-        }
     }
 }
 
