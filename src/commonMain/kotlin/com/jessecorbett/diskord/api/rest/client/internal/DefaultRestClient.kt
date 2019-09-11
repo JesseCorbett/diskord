@@ -1,9 +1,12 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
-import com.jessecorbett.diskord.internal.configureHttpClient
 import com.jessecorbett.diskord.internal.httpClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.HttpClient
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitForm
@@ -14,7 +17,12 @@ import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import kotlinx.coroutines.io.readUTF8Line
 
-private val DEFAULT_CLIENT = HttpClient(httpClient(), configureHttpClient())
+private val DEFAULT_CLIENT = HttpClient(httpClient()) {
+    install(Logging) {
+        logger = Logger.DEFAULT
+        level = LogLevel.HEADERS
+    }
+}
 
 @DiskordInternals
 class DefaultRestClient(
@@ -96,11 +104,7 @@ class DefaultRestClient(
 
         while (true) {
             val line = content.readUTF8Line() ?: break
-            if (string == null) {
-                string = line
-            } else {
-                string += line
-            }
+            string = string?.plus(line) ?: line
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())

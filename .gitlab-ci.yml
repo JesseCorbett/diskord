@@ -32,14 +32,6 @@ publishDevelopmentVersion:
   only:
     - develop
 
-publishJCenterVersion:
-  stage: release
-  script:
-    - gradle bintrayUpload
-  only:
-    - master
-  when: manual
-
 publishMavenCentralVersion:
   stage: release
   script:

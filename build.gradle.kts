@@ -7,7 +7,6 @@ plugins {
 
     id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
     id("kotlinx-serialization") version "1.3.50"
-    id("com.jfrog.bintray") version "1.8.4"
     id("org.jetbrains.dokka") version "0.9.18"
 }
 
@@ -22,7 +21,6 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
-    jcenter()
     maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
 }
 
@@ -113,7 +111,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.11.1")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.12.1")
                 implementation("io.github.microutils:kotlin-logging-common:1.7.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.13")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -137,7 +135,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.1")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.1")
                 implementation("io.github.microutils:kotlin-logging:1.7.6")
                 implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
                 implementation("org.slf4j:slf4j-api:1.7.26")
@@ -145,7 +143,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
                 implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
-                implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
             }
         }
         val jvmTest by getting {
@@ -179,24 +176,6 @@ kotlin {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
-
-    publish = true
-
-    with (pkg) {
-        repo = "diskord"
-        name = "diskord"
-        setLicenses("Apache-2.0")
-        vcsUrl = "https://gitlab.com/jesselcorbett/diskord"
-        setPublications("kotlinMultiplatform", "metadata", "jvm")
-        with (version) {
-            name = diskordVersion
-        }
     }
 }
 

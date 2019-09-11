@@ -14,14 +14,13 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```groovy
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.4.3'
+    implementation 'com.jessecorbett:diskord:1.5.0'
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.4.3'
+    implementation 'com.jessecorbett:diskord-jvm:1.5.0'
 }
 ```
 
@@ -30,7 +29,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.4.3</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
