@@ -4,6 +4,8 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*
 import com.jessecorbett.diskord.internal.*
 import com.jessecorbett.diskord.util.DiskordInternals
+import io.ktor.client.request.forms.formData
+import io.ktor.http.content.PartData
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
@@ -155,6 +157,8 @@ class DefaultRateLimitedRestClient(
      * Make a POST request for this discord object.
      *
      * @param url The url of the request.
+     * @param body The data to send with the API request.
+     * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
      *
@@ -170,6 +174,38 @@ class DefaultRateLimitedRestClient(
     ): R {
         val response = doRequest(rateLimit) {
             client.postRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+        }
+
+        return Json.nonstrict.parse(deserializer, response.body!!)
+    }
+
+    /**
+     * Make a multipart POST request for this discord object.
+     *
+     * @param url The url of the request.
+     * @param payload The data to send with the API request.
+     * @param serializer The request serializer.
+     * @param deserializer The response deserializer.
+     * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param block the block to build the multipart data
+     *
+     * @return the API response.
+     * @throws DiscordException representing an API error.
+     */
+    override suspend fun <T, R> postMultipartRequest(
+        url: String,
+        payload: T,
+        serializer: SerializationStrategy<T>,
+        deserializer: DeserializationStrategy<R>,
+        rateLimit: RateLimitInfo,
+        block: () -> List<PartData>
+    ): R {
+        val response = doRequest(rateLimit) {
+            val parts = formData {
+                append("payload_json", Json.nonstrict.stringify(serializer, payload))
+            } + block()
+
+            client.postMultipartRequest(url, parts, commonHeaders)
         }
 
         return Json.nonstrict.parse(deserializer, response.body!!)

@@ -1,14 +1,13 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.model.*
-import com.jessecorbett.diskord.api.rest.CreateMessage
+import com.jessecorbett.diskord.api.rest.*
 import com.jessecorbett.diskord.api.rest.Embed
-import com.jessecorbett.diskord.api.rest.PatchGuildMember
-import com.jessecorbett.diskord.api.rest.PatchGuildMemberNickname
 import com.jessecorbett.diskord.api.rest.client.ChannelClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
+import kotlin.jvm.JvmOverloads
 
 /*
  * Primitive extensions
@@ -231,6 +230,18 @@ suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -
  */
 suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
     CombinedMessageEmbed().apply(block).let { sendMessage(it.text, it.embed()) }
+
+/**
+ * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
+ *
+ * @param data The file to attach.
+ * @param comment The comment to send with the file.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ */
+suspend fun ChannelClient.sendFile(data: FileData, comment: String = "") =
+    createMessage(CreateMessage(content = comment), data)
 
 suspend fun ChannelClient.addMessageReaction(messageId: String, emojiId: String, emojiName: String) {
     addMessageReaction(messageId, Emoji(emojiId, emojiName))
