@@ -17,8 +17,10 @@ repositories {
 }
 
 dependencies {
-    // Only if gradle >= 5.3
+    // Only if gradle >= 5.5
+    // Or gradle >= 5.3 with `enableFeaturePreview("GRADLE_METADATA")` added to settings.gradle
     implementation 'com.jessecorbett:diskord:1.5.0'
+
     // Valid for all gradle versions
     implementation 'com.jessecorbett:diskord-jvm:1.5.0'
 }
