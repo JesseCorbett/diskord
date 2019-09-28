@@ -21,6 +21,7 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
+    jcenter() // Not needed at compile time, but needed for dokka
     maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
 }
 
