@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.5.0] - XXXX-XX-XX
+## [1.4.2] - 2019-08-20
 
 *Note: Several classes and constants have been re-arranged in the* `com.jessecorbett.diskord.api.rest.client.internal` 
 *package to help facilitate better testing. Any code depending on these changes will break. It is highly recommended 
@@ -13,6 +13,7 @@ that this code will not be changed between releases, even between minor or patch
 ### Changed
 - REST clients have been refactored to better support testing.  This may break client code depending on Diskord internal code.
 - Updated Kotlin version to 1.3.41
+- Updated ActivityType enum
 
 ## [1.4.1] - 2019-05-30
 
