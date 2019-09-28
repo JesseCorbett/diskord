@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2019-09-28
+
+### Added
+- Added api to upload files
+
+### Changed
+- Updated dependencies
+- Using kotlin 1.3.50
+
 ## [1.4.2] - 2019-08-20
 
 *Note: Several classes and constants have been re-arranged in the* `com.jessecorbett.diskord.api.rest.client.internal` 

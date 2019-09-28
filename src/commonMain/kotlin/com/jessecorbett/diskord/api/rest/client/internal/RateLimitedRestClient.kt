@@ -1,6 +1,10 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
+import com.jessecorbett.diskord.api.exception.DiscordException
 import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
+import com.jessecorbett.diskord.api.rest.client.internal.rateLimitInfo
+import io.ktor.http.content.PartData
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
 
@@ -69,6 +73,8 @@ interface RateLimitedRestClient : RestClient {
      * Make a POST request for this discord object.
      *
      * @param url The url of the request.
+     * @param body The data to send with the API request.
+     * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
      *
@@ -81,6 +87,28 @@ interface RateLimitedRestClient : RestClient {
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo
+    ): R
+
+    /**
+     * Make a multipart POST request for this discord object.
+     *
+     * @param url The url of the request.
+     * @param payload The data to send with the API request.
+     * @param serializer The request serializer.
+     * @param deserializer The response deserializer.
+     * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param block the block to build the multipart data
+     *
+     * @return the API response.
+     * @throws DiscordException representing an API error.
+     */
+    suspend fun <T, R> postMultipartRequest(
+        url: String,
+        payload: T,
+        serializer: SerializationStrategy<T>,
+        deserializer: DeserializationStrategy<R>,
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        block: () -> List<PartData>
     ): R
 
     /**

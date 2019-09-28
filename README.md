@@ -2,7 +2,7 @@
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
-Built as a lean, opinionated client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use DSL.
+Built as a lean client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use SDK.
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
@@ -14,30 +14,23 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```groovy
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.4.1'
+    implementation 'com.jessecorbett:diskord:1.5.0'
+
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.4.1'
+    implementation 'com.jessecorbett:diskord-jvm:1.5.0'
 }
 ```
 
 ### Maven
 ```xml
-<repositories>
-    <repository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-    </repository>
-</repositories>
-
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
@@ -153,8 +146,8 @@ fun main() = runBlocking {
 * Can I contact you to ask a question/contribute to the project/report a bug/tell you this is all shit?
     * [Go for it!](https://discord.gg/UPTWsZ5)
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
-    * You can use our development versions by using the gitlab maven repository
-        * Repository URL https://gitlab.com/api/v4/projects/10363714/packages/maven
+    * You can use our development versions by using the snapshot repository
+        * Repository URL https://oss.sonatype.org/content/repositories/snapshots/
         * Artifact directory https://gitlab.com/jesselcorbett/diskord/-/packages
 
 ## Things to do
