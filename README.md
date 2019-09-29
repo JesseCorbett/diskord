@@ -1,4 +1,6 @@
-# Diskord [![Download](https://api.bintray.com/packages/jessecorbett/diskord/diskord/images/download.svg)](https://bintray.com/jessecorbett/diskord/diskord/_latestVersion) [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
+# Diskord
+[![Maven Central](https://img.shields.io/maven-central/v/com.jessecorbett/diskord.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.jessecorbett%22%20AND%20a:%22diskord%22)
+[![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A Kotlin client for Discord bots with a simple and concise DSL
 
@@ -14,6 +16,7 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```groovy
 repositories {
     mavenCentral()
+    maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
 }
 
 dependencies {
