@@ -4,7 +4,7 @@ import com.jessecorbett.diskord.dsl.*
 import com.jessecorbett.diskord.util.words
 
 suspend fun main() {
-    bot("NTQ3NTE1ODg4OTQxNzkzMjkx.D035bg.eb8o20zlDGS2dkvwSfMDex1qSCQ") {
+    bot("your-bot-token") {
         commands(".") { // "." is the default, but is provided here anyway for example purposes
             command("echo") {
                 this reply this.words.joinToString(" ")
