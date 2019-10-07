@@ -64,9 +64,6 @@ val dokkaJavadoc by tasks.registering(DokkaTask::class) {
 }
 
 val jvmJavadocJar by tasks.creating(Jar::class) {
-    // FIXME: Dokka --> Javadoc generation is currently broken for annotations, so generate an empty JAR.
-    //  See https://github.com/Kotlin/dokka/issues/464
-
     group = "build"
     // dependsOn(dokkaJavadoc)
     archiveBaseName.set("${project.name}-jvm")
