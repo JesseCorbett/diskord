@@ -45,6 +45,8 @@ Any function in the scope of the DSL will have access to a ClientStore `clientSt
 
 Additionally, extensions on the bot DSL, like the command DSL, can be done simply by writing extension functions which hook into the bot DSL on instantiation.
 
+You can find more examples [here.](https://gitlab.com/jesselcorbett/diskord/tree/master/examples)
+
 You can access the documentation [here.](https://jesselcorbett.gitlab.io/diskord/diskord/)
 
 ### Ping Pong Example
