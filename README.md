@@ -51,12 +51,14 @@ You can access the documentation [here.](https://jesselcorbett.gitlab.io/diskord
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() = runBlocking {
-    bot(BOT_TOKEN) {
-        commands {
-            command("ping") {
-                reply("pong")
-                delete()
+fun main() {
+    runBlocking {
+        bot(BOT_TOKEN) {
+            commands {
+                command("ping") {
+                    reply("pong")
+                    delete()
+                }
             }
         }
     }
@@ -67,12 +69,14 @@ fun main() = runBlocking {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() = runBlocking {
-    bot(BOT_TOKEN) {
-        commands {
-            command("echo") {
-                reply(words.drop(1).joinToString(" "))
-                delete()
+fun main() {
+    runBlocking {
+        bot(BOT_TOKEN) {
+            commands {
+                command("echo") {
+                    reply(words.drop(1).joinToString(" "))
+                    delete()
+                }
             }
         }
     }
@@ -83,15 +87,18 @@ fun main() = runBlocking {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() = runBlocking {
-    bot(BOT_TOKEN) {
-        commands {
-            command("embed") {
-                delete()
-                reply {
-                    text = "This is an embed"
-                    title = "Embed title"
-                    description = "You can declare all the things here"
+fun main() {
+    runBlocking {
+        bot(BOT_TOKEN) {
+            // Defaults to using command prefix `.` if unspecified
+            commands("!") {
+                command("embed") {
+                    delete()
+                    reply {
+                        text = "This is an embed"
+                        title = "Embed title"
+                        description = "You can declare all the things here"
+                    }
                 }
             }
         }
@@ -103,11 +110,13 @@ fun main() = runBlocking {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() = runBlocking {
-    bot(BOT_TOKEN) {
-        messageCreated {
-            if (it.content.contains("diskord")) {
-                it.react("💯")
+fun main() {
+    runBlocking {
+        bot(BOT_TOKEN) {
+            messageCreated {
+                if (it.content.contains("diskord")) {
+                    it.react("💯")
+                }
             }
         }
     }
@@ -118,24 +127,27 @@ fun main() = runBlocking {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() = runBlocking {
-    bot(BOT_TOKEN) {
-        messageCreated {
-            if (it.content.contains("diskord")) {
-                it.react("💯")
+fun main() {
+    runBlocking {
+        bot(BOT_TOKEN) {
+            messageCreated {
+                if (it.content.contains("diskord")) {
+                    it.react("💯")
+                }
             }
-        }
             
-        commands {
-            command("ping") {
-                reply("pong")
-                delete()
+            // Defaults to using command prefix `.`
+            commands {
+                command("ping") {
+                    reply("pong")
+                    delete()
+                }
+                    
+                command("echo") {
+                    reply(words.drop(1).joinToString(" "))
+                    delete()
+                }            
             }
-                
-            command("echo") {
-                reply(words.drop(1).joinToString(" "))
-                delete()
-            }            
         }
     }
 }
