@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.1] - 2019-10-07
+
+### Added
+- Very simple bot example
+- Very simple command DSL example
+
+### Changed
+- Simplified gradle setup, due to gradle features graduating
+- Updated dependencies
+
+### Fixed
+- Fixed webhook patching responses not parsing json correctly
+
 ## [1.5.0] - 2019-09-28
 
 ### Added
