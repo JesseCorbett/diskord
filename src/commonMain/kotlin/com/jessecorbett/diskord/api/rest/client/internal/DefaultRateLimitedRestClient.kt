@@ -338,7 +338,7 @@ class DefaultRateLimitedRestClient(
             client.patchRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
         }
 
-        return Json.parse(deserializer, response.body!!)
+        return Json.nonstrict.parse(deserializer, response.body!!)
     }
 
     /**

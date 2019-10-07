@@ -6,13 +6,14 @@ plugins {
     signing
 
     id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
-    id("kotlinx-serialization") version "1.3.50"
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50"
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 val diskordVersion: String by project
 val kotlinVersion: String by project
 val kotlinxCoroutinesVersion: String by project
+val kotlinSerializationVersion: String by project
 val ktorVersion: String by project
 val okhttpVersion: String by project
 
@@ -21,13 +22,40 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
-    jcenter() // Not needed at compile time, but needed for dokka
-    maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
+    jcenter() // Needed for dokka and kotlinx.serialization
 }
 
 val dokka by tasks.existing(DokkaTask::class) {
     outputFormat = "html"
     outputDirectory = "public"
+    
+    multiplatform {
+        val global by creating {
+            noStdlibLink = false
+            noJdkLink = false
+        }
+
+        val common by creating {
+            sourceLink {
+                path = "src/commonMain/kotlin"
+                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
+                lineSuffix = "#L"
+            }
+        }
+
+        val jvm by creating {
+            sourceLink {
+                path = "src/jvmMain/kotlin"
+                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
+                lineSuffix = "#L"
+            }
+        }
+    }
+
+    configuration {
+        noStdlibLink = false
+        noJdkLink = false
+    }
 }
 
 val dokkaJavadoc by tasks.registering(DokkaTask::class) {
@@ -36,9 +64,6 @@ val dokkaJavadoc by tasks.registering(DokkaTask::class) {
 }
 
 val jvmJavadocJar by tasks.creating(Jar::class) {
-    // FIXME: Dokka --> Javadoc generation is currently broken for annotations, so generate an empty JAR.
-    //  See https://github.com/Kotlin/dokka/issues/464
-
     group = "build"
     // dependsOn(dokkaJavadoc)
     archiveBaseName.set("${project.name}-jvm")
@@ -50,44 +75,6 @@ val metadataJavadocJar by tasks.creating(Jar::class) {
     group = "build"
     archiveBaseName.set("${project.name}-metadata")
     archiveClassifier.set("javadoc")
-}
-
-tasks.withType<DokkaTask> {
-    noStdlibLink = false
-    noJdkLink = false
-
-    kotlinTasks {
-        // dokka fails to retrieve sources from MPP-tasks so they must be set empty to avoid exception
-        listOf()
-    }
-    sourceRoot {
-        path = file("src/commonMain/kotlin").toString()
-        platforms = listOf("Common")
-    }
-    sourceRoot {
-        path = file("src/jvmMain/kotlin").toString()
-        platforms = listOf("JVM")
-    }
-    // sourceRoot {
-    //     path = file("src/jsMain/kotlin").toString()
-    //     platforms = listOf("JS")
-    // }
-
-    linkMapping {
-        dir = "src/commonMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
-        suffix = "#L"
-    }
-    linkMapping {
-        dir = "src/jvmMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
-        suffix = "#L"
-    }
-    // linkMapping {
-    //     dir = "src/jsMain/kotlin"
-    //     url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jsMain/kotlin"
-    //     suffix = "#L"
-    // }
 }
 
 kotlin {
@@ -112,9 +99,9 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.12.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerializationVersion")
                 implementation("io.github.microutils:kotlin-logging-common:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.13")
+                implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.15")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
@@ -124,7 +111,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("com.willowtreeapps.assertk:assertk:0.19")
+                implementation("com.willowtreeapps.assertk:assertk:0.20")
                 implementation("io.mockk:mockk-common:1.9.3")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
             }
@@ -136,9 +123,9 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerializationVersion")
                 implementation("io.github.microutils:kotlin-logging:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
+                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.15")
                 implementation("org.slf4j:slf4j-api:1.7.26")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
@@ -152,7 +139,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:0.19")
+                implementation("com.willowtreeapps.assertk:assertk-jvm:0.20")
                 implementation("io.mockk:mockk:1.9.3")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.slf4j:slf4j-simple:1.7.26")
