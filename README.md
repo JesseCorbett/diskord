@@ -10,10 +10,13 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 
 ## How do I import this?
 
+
+
 ### Gradle
 ```groovy
 repositories {
     mavenCentral()
+    jcenter() // Necessary for kotlinx.serialization, until it is published in maven central too
 }
 
 dependencies {
@@ -38,7 +41,7 @@ dependencies {
 
 Simply instantiate a bot using the bot DSL, such as in the examples below.
 
-Any function in the scope of the DSL will have access to a ClientStore to access clients for the bot user.
+Any function in the scope of the DSL will have access to a ClientStore `clientStore` to access clients for the bot user.
 
 Additionally, extensions on the bot DSL, like the command DSL, can be done simply by writing extension functions which hook into the bot DSL on instantiation.
 
@@ -48,14 +51,12 @@ You can access the documentation [here.](https://jesselcorbett.gitlab.io/diskord
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
-    runBlocking {
-        bot(BOT_TOKEN) {
-            commands {
-                command("ping") {
-                    reply("pong")
-                    delete()
-                }
+suspend fun main() {
+    bot(BOT_TOKEN) {
+        commands {
+            command("ping") {
+                reply("pong")
+                delete()
             }
         }
     }
@@ -66,14 +67,12 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
-    runBlocking {
-        bot(BOT_TOKEN) {
-            commands {
-                command("echo") {
-                    reply(words.drop(1).joinToString(" "))
-                    delete()
-                }
+suspend fun main() {
+    bot(BOT_TOKEN) {
+        commands {
+            command("echo") {
+                reply(words.drop(1).joinToString(" "))
+                delete()
             }
         }
     }
@@ -84,18 +83,16 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
-    runBlocking {
-        bot(BOT_TOKEN) {
-            // Defaults to using command prefix `.` if unspecified
-            commands("!") {
-                command("embed") {
-                    delete()
-                    reply {
-                        text = "This is an embed"
-                        title = "Embed title"
-                        description = "You can declare all the things here"
-                    }
+suspend fun main() {
+    bot(BOT_TOKEN) {
+        // Defaults to using command prefix `.` if unspecified
+        commands("!") {
+            command("embed") {
+                delete()
+                reply {
+                    text = "This is an embed"
+                    title = "Embed title"
+                    description = "You can declare all the things here"
                 }
             }
         }
@@ -107,13 +104,11 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
-    runBlocking {
-        bot(BOT_TOKEN) {
-            messageCreated {
-                if (it.content.contains("diskord")) {
-                    it.react("💯")
-                }
+suspend fun main() {
+    bot(BOT_TOKEN) {
+        messageCreated {
+            if (it.content.contains("diskord")) {
+                it.react("💯")
             }
         }
     }
@@ -124,27 +119,25 @@ fun main() {
 ```kotlin
 const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
 
-fun main() {
-    runBlocking {
-        bot(BOT_TOKEN) {
-            messageCreated {
-                if (it.content.contains("diskord")) {
-                    it.react("💯")
-                }
+suspend fun main() {
+    bot(BOT_TOKEN) {
+        messageCreated {
+            if (it.content.contains("diskord")) {
+                it.react("💯")
             }
-            
-            // Defaults to using command prefix `.`
-            commands {
-                command("ping") {
-                    reply("pong")
-                    delete()
-                }
-                    
-                command("echo") {
-                    reply(words.drop(1).joinToString(" "))
-                    delete()
-                }            
+        }
+        
+        // Defaults to using command prefix `.`
+        commands {
+            command("ping") {
+                reply("pong")
+                delete()
             }
+                
+            command("echo") {
+                reply(words.drop(1).joinToString(" "))
+                delete()
+            }            
         }
     }
 }
