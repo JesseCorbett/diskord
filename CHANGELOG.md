@@ -9,6 +9,7 @@
 ### Changed
 - Simplified gradle setup, due to gradle features graduating
 - Updated dependencies
+- Updated Dokka
 
 ### Fixed
 - Fixed webhook patching responses not parsing json correctly

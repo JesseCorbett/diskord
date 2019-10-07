@@ -7,7 +7,7 @@ plugins {
 
     id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50"
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.dokka") version "0.10.0"
 }
 
 val diskordVersion: String by project
@@ -22,13 +22,40 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
-    jcenter() // Not needed at compile time, but needed for dokka
-    maven(url = "https://kotlin.bintray.com/kotlinx") // kotlinx.serialization
+    jcenter() // Needed for dokka and kotlinx.serialization
 }
 
 val dokka by tasks.existing(DokkaTask::class) {
     outputFormat = "html"
     outputDirectory = "public"
+    
+    multiplatform {
+        val global by creating {
+            noStdlibLink = false
+            noJdkLink = false
+        }
+
+        val common by creating {
+            sourceLink {
+                path = "src/commonMain/kotlin"
+                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
+                lineSuffix = "#L"
+            }
+        }
+
+        val jvm by creating {
+            sourceLink {
+                path = "src/jvmMain/kotlin"
+                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
+                lineSuffix = "#L"
+            }
+        }
+    }
+
+    configuration {
+        noStdlibLink = false
+        noJdkLink = false
+    }
 }
 
 val dokkaJavadoc by tasks.registering(DokkaTask::class) {
@@ -51,44 +78,6 @@ val metadataJavadocJar by tasks.creating(Jar::class) {
     group = "build"
     archiveBaseName.set("${project.name}-metadata")
     archiveClassifier.set("javadoc")
-}
-
-tasks.withType<DokkaTask> {
-    noStdlibLink = false
-    noJdkLink = false
-
-    kotlinTasks {
-        // dokka fails to retrieve sources from MPP-tasks so they must be set empty to avoid exception
-        listOf()
-    }
-    sourceRoot {
-        path = file("src/commonMain/kotlin").toString()
-        platforms = listOf("Common")
-    }
-    sourceRoot {
-        path = file("src/jvmMain/kotlin").toString()
-        platforms = listOf("JVM")
-    }
-    // sourceRoot {
-    //     path = file("src/jsMain/kotlin").toString()
-    //     platforms = listOf("JS")
-    // }
-
-    linkMapping {
-        dir = "src/commonMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
-        suffix = "#L"
-    }
-    linkMapping {
-        dir = "src/jvmMain/kotlin"
-        url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
-        suffix = "#L"
-    }
-    // linkMapping {
-    //     dir = "src/jsMain/kotlin"
-    //     url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jsMain/kotlin"
-    //     suffix = "#L"
-    // }
 }
 
 kotlin {
