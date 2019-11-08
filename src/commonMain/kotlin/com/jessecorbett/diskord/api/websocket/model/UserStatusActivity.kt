@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.websocket.model
 
+import com.jessecorbett.diskord.api.model.Emoji
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.IntDescriptor
 
@@ -16,7 +17,8 @@ data class UserStatusActivity(
     @SerialName("assets") val assets: Assets? = null,
     @SerialName("secrets") val secrets: RichPresenceSecrets? = null,
     @SerialName("instance") val activityIsInstanced: Boolean? = null,
-    @SerialName("flags") val activityFlags: Int? = null
+    @SerialName("flags") val activityFlags: Int? = null,
+    @SerialName("emoji") val emoji: Emoji? = null
 )
 
 @Serializable

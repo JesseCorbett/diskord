@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.2] - XXXX-XX-XX
+
+### Added
+- Added emoji field to `UserStatusActivity` to support custom statuses
+
 ## [1.5.1] - 2019-10-07
 
 ### Added
