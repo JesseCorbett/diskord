@@ -83,7 +83,7 @@ suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, dat
                 data
             )
         )
-        DiscordEvent.GUILD_MEMBER_DELETE -> eventListener.onGuildMemberRemove(
+        DiscordEvent.GUILD_MEMBER_REMOVE -> eventListener.onGuildMemberRemove(
             Json.nonstrict.fromJson(
                 GuildMemberRemove.serializer(),
                 data
