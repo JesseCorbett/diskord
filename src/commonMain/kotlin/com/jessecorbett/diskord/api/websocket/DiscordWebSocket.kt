@@ -164,11 +164,16 @@ class DiscordWebSocket(
      */
     suspend fun start() {
         expectedOpen = true
+        var delayTime = 1
         while (expectedOpen) {
             try {
                 initializeConnection()
+                delayTime = 1
             } catch (e: Exception) {
                 logger.warn { "Connection threw exception with error: " + e.message }
+                logger.info { "Retrying connection after $delayTime seconds" }
+                delay(delayTime * 1000L)
+                if (delayTime < 30) delayTime++
             }
         }
     }
