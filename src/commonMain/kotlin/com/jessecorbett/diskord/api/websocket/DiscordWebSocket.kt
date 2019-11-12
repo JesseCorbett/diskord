@@ -164,7 +164,13 @@ class DiscordWebSocket(
      */
     suspend fun start() {
         expectedOpen = true
-        while (expectedOpen) initializeConnection()
+        while (expectedOpen) {
+            try {
+                initializeConnection()
+            } catch (e: Exception) {
+                logger.warn { "Connection threw exception with error: " + e.message }
+            }
+        }
     }
 
     /**
@@ -187,8 +193,11 @@ class DiscordWebSocket(
      */
     suspend fun restart() {
         logger.debug { "Restarting connection" }
-        close()
-        start()
+        try {
+            close()
+        } finally {
+            start()
+        }
         logger.info { "Restarted connection" }
     }
 
