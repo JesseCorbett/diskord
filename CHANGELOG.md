@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.2] - 2019-11-12
+
+### Added
+- Added emoji field to `UserStatusActivity` to support custom statuses
+
+### Changed
+- Added exponential backoff to websocket connections to avoid session limits when there are connection issues with the API
+
+### Fixed
+- Deserialization of Unicode emoji failing due to null id
+- Discord API issues causing Diskord to soft crash
+
 ## [1.5.1] - 2019-10-07
 
 ### Added

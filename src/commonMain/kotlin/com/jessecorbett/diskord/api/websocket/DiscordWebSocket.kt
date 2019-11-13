@@ -164,7 +164,18 @@ class DiscordWebSocket(
      */
     suspend fun start() {
         expectedOpen = true
-        while (expectedOpen) initializeConnection()
+        var delayTime = 1
+        while (expectedOpen) {
+            try {
+                initializeConnection()
+                delayTime = 1
+            } catch (e: Exception) {
+                logger.warn { "Connection threw exception with error: " + e.message }
+                logger.info { "Retrying connection after $delayTime seconds" }
+                delay(delayTime * 1000L)
+                if (delayTime < 32) delayTime *= 2
+            }
+        }
     }
 
     /**
@@ -187,8 +198,11 @@ class DiscordWebSocket(
      */
     suspend fun restart() {
         logger.debug { "Restarting connection" }
-        close()
-        start()
+        try {
+            close()
+        } finally {
+            start()
+        }
         logger.info { "Restarted connection" }
     }
 
