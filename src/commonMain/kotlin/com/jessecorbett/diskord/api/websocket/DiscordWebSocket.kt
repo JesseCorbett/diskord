@@ -173,7 +173,7 @@ class DiscordWebSocket(
                 logger.warn { "Connection threw exception with error: " + e.message }
                 logger.info { "Retrying connection after $delayTime seconds" }
                 delay(delayTime * 1000L)
-                if (delayTime < 30) delayTime++
+                if (delayTime < 32) delayTime *= 2
             }
         }
     }
