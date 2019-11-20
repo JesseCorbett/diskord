@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.internal.httpClient
+import com.jessecorbett.diskord.util.DEBUG_MODE
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.HttpClient
 import io.ktor.client.features.logging.DEFAULT
@@ -16,11 +17,27 @@ import io.ktor.http.ContentType
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import kotlinx.coroutines.io.readUTF8Line
+import mu.KotlinLogging
+
+private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
 private val DEFAULT_CLIENT = HttpClient(httpClient()) {
     install(Logging) {
-        logger = Logger.DEFAULT
-        level = LogLevel.HEADERS
+        logger = object : Logger {
+            private val delegate = Logger.DEFAULT
+            override fun log(message: String) {
+                delegate.log(if (!DEBUG_MODE && message.startsWith(BOT_AUTH_PREFIX)) {
+                    "$BOT_AUTH_PREFIX <token hidden>"
+                } else {
+                    message
+                })
+            }
+        }
+        level = if (DEBUG_MODE) {
+            LogLevel.ALL
+        } else {
+            LogLevel.HEADERS
+        }
     }
 }
 
