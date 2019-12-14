@@ -299,13 +299,13 @@ class DiscordWebSocket(
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, data, sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
     }
 
     private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
     }
 }
