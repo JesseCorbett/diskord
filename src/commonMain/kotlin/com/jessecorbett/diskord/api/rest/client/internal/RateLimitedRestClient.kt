@@ -2,8 +2,6 @@ package com.jessecorbett.diskord.api.rest.client.internal
 
 import com.jessecorbett.diskord.api.exception.DiscordException
 import com.jessecorbett.diskord.util.DiskordInternals
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitInfo
-import com.jessecorbett.diskord.api.rest.client.internal.rateLimitInfo
 import io.ktor.http.content.PartData
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
@@ -18,6 +16,7 @@ interface RateLimitedRestClient : RestClient {
      *
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <R> getRequest(
         url: String,
         deserializer: DeserializationStrategy<R>,
@@ -33,6 +32,7 @@ interface RateLimitedRestClient : RestClient {
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun postRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo)
 
     /**
@@ -42,15 +42,18 @@ interface RateLimitedRestClient : RestClient {
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T> postRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     )
 
     /**
@@ -63,6 +66,7 @@ interface RateLimitedRestClient : RestClient {
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <R> postRequest(
         url: String,
         deserializer: DeserializationStrategy<R>,
@@ -77,16 +81,19 @@ interface RateLimitedRestClient : RestClient {
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T, R> postRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     ): R
 
     /**
@@ -97,17 +104,20 @@ interface RateLimitedRestClient : RestClient {
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      * @param block the block to build the multipart data
      *
      * @return the API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T, R> postMultipartRequest(
         url: String,
         payload: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false,
         block: () -> List<PartData>
     ): R
 
@@ -120,6 +130,7 @@ interface RateLimitedRestClient : RestClient {
      * @return The API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun putRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo)
 
     /**
@@ -129,15 +140,18 @@ interface RateLimitedRestClient : RestClient {
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T> putRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     )
 
     /**
@@ -150,6 +164,7 @@ interface RateLimitedRestClient : RestClient {
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
+    @DiskordInternals
     suspend fun <R> putRequest(
         url: String,
         deserializer: DeserializationStrategy<R>,
@@ -160,18 +175,22 @@ interface RateLimitedRestClient : RestClient {
      * Make a PUT request for this discord object.
      *
      * @param url The url of the request.
+     * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
+    @DiskordInternals
     suspend fun <T, R> putRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     ): R
 
     /**
@@ -181,14 +200,17 @@ interface RateLimitedRestClient : RestClient {
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T> patchRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     )
 
     /**
@@ -199,16 +221,19 @@ interface RateLimitedRestClient : RestClient {
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException representing an API error.
      */
+    @DiskordInternals
     suspend fun <T, R> patchRequest(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo = rateLimitInfo
+        rateLimit: RateLimitInfo = rateLimitInfo,
+        omitNullProperties: Boolean = false
     ): R
 
     /**
@@ -219,6 +244,7 @@ interface RateLimitedRestClient : RestClient {
      *
      * @throws DiscordException Representing an API error.
      */
+    @DiskordInternals
     suspend fun deleteRequest(url: String, rateLimit: RateLimitInfo = rateLimitInfo)
 
     /**
@@ -231,6 +257,7 @@ interface RateLimitedRestClient : RestClient {
      * @return The API response.
      * @throws DiscordException Representing an API error.
      */
+    @DiskordInternals
     suspend fun <R> deleteRequest(
         url: String,
         deserializer: DeserializationStrategy<R>,

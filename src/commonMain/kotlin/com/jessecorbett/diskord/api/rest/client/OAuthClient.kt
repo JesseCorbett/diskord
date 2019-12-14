@@ -5,8 +5,8 @@ import com.jessecorbett.diskord.api.rest.client.internal.DISCORD_API_URL
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.Json
 
 
 private const val AUTH_CODE = "authorization_code"
@@ -44,7 +44,7 @@ class OAuthClient(
 
         val response = postForm("$baseUrl/oauth2/token", form)
 
-        return Json.nonstrict.parse(BearerToken.serializer(), response.body!!)
+        return defaultJson.parse(BearerToken.serializer(), response.body!!)
     }
 
     /**

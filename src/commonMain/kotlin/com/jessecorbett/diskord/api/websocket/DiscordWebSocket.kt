@@ -16,6 +16,7 @@ import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
+import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineConfig
@@ -137,7 +138,7 @@ class DiscordWebSocket(
                 when (message) {
                     is Frame.Text -> {
                         val text = message.readText()
-                        receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
+                        receiveMessage(defaultJson.parse(GatewayMessage.serializer(), text))
                     }
                     is Frame.Binary -> {
                         TODO("Add support for binary formatted data")
@@ -239,7 +240,7 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(defaultJson.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
@@ -282,7 +283,7 @@ class DiscordWebSocket(
         logger.debug { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = defaultJson.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         eventListenerScope.launch {
@@ -304,7 +305,7 @@ class DiscordWebSocket(
     private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
-        val message = GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
+        val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
         sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
     }
 }
