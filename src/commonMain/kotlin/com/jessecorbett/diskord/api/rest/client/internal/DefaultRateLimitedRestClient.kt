@@ -11,7 +11,6 @@ import io.ktor.http.content.PartData
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.UnstableDefault
 
 /**
  * The rate limit info for this discord object.
@@ -20,7 +19,6 @@ import kotlinx.serialization.UnstableDefault
 val rateLimitInfo = RateLimitInfo(1, 1, Long.MAX_VALUE)
 
 @DiskordInternals
-@UseExperimental(UnstableDefault::class)
 private fun captureFailure(code: Int, body: String?) = when (code) {
     400 -> DiscordBadRequestException(body)
     401 -> DiscordUnauthorizedException()
@@ -62,7 +60,6 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
 }
 
 @DiskordInternals
-@UseExperimental(UnstableDefault::class)
 class DefaultRateLimitedRestClient(
     token: String,
     userType: DiscordUserType,

@@ -32,7 +32,6 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -55,7 +54,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
-@UseExperimental(UnstableDefault::class, KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
+@UseExperimental(KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,
