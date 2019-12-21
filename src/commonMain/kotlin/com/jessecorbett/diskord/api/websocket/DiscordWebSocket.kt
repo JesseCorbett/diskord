@@ -99,40 +99,41 @@ class DiscordWebSocket(
         isOpen = true
 
         logger.trace { "Attempting a websocket connection" }
-        socketClient.wss(host = url, port = 443, request = {
-            logger.trace { "Building socket HttpRequest" }
-        }) {
-            logger.info { "Starting socket connection" }
+        try {
+            socketClient.wss(host = url, port = 443, request = {
+                logger.trace { "Building socket HttpRequest" }
+            }) {
+                logger.info { "Starting socket connection" }
 
-            sendWebsocketMessage = this::send
-            stop = { code, reason -> close(CloseReason(code.code, reason)) }
+                sendWebsocketMessage = this::send
+                stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
-            launch {
-                val closeReason = this@wss.closeReason.await()
-                if (closeReason == null) {
-                    logger.warn { "Closed with no close reason, probably a connection issue" }
-                } else {
-                    val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
-                    val message = if (closeReason.message.isEmpty()) {
-                        "Closed with code '$closeCode' with no reason provided"
+                launch {
+                    val closeReason = this@wss.closeReason.await()
+                    if (closeReason == null) {
+                        logger.warn { "Closed with no close reason, probably a connection issue" }
                     } else {
-                        "Closed with code '$closeCode' for reason '${closeReason.message}'"
+                        val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
+                        val message = if (closeReason.message.isEmpty()) {
+                            "Closed with code '$closeCode' with no reason provided"
+                        } else {
+                            "Closed with code '$closeCode' for reason '${closeReason.message}'"
+                        }
+                        logger.warn { message }
                     }
-                    logger.warn { message }
-                }
-            }
-
-            logger.info { "Starting incoming loop" }
-
-            while (!incoming.isClosedForReceive) {
-                val message = try {
-                    incoming.receive()
-                } catch (e: ClosedReceiveChannelException) {
-                    logger.warn { "Receive channel is closed" }
-                    break
                 }
 
-                logger.trace { "Incoming Message:\n${message.data.toHexDump()}" }
+                logger.info { "Starting incoming loop" }
+
+                while (!incoming.isClosedForReceive) {
+                    val message = try {
+                        incoming.receive()
+                    } catch (e: ClosedReceiveChannelException) {
+                        logger.warn { "Receive channel is closed" }
+                        break
+                    }
+
+                    logger.trace { "Incoming Message:\n${message.data.toHexDump()}" }
 
                 when (message) {
                     is Frame.Text -> {
@@ -153,10 +154,11 @@ class DiscordWebSocket(
             }
             logger.info { "Exited the incoming loop" }
 
+            }
+        } finally {
+            isOpen = false
+            logger.info { "Socket connection has closed" }
         }
-
-        isOpen = false
-        logger.info { "Socket connection has closed" }
     }
 
     /**
@@ -187,7 +189,10 @@ class DiscordWebSocket(
         heartbeatJob?.cancel()
         heartbeatJob = null
         stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
-        while (isOpen) {} // Block until the connection is confirmed closed, handling race conditions
+        // Block until the connection is confirmed closed, handling race conditions
+        while (isOpen) {
+            delay(100)
+        }
         logger.info { "Closed connection" }
     }
 
