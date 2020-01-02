@@ -22,6 +22,7 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 val dokka by tasks.existing(DokkaTask::class) {
