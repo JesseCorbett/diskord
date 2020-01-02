@@ -5,8 +5,7 @@ import com.jessecorbett.diskord.api.rest.client.internal.DISCORD_API_URL
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.Json
+import com.jessecorbett.diskord.util.defaultJson
 
 
 private const val AUTH_CODE = "authorization_code"
@@ -19,7 +18,7 @@ private const val REFRESH_TOKEN = "refresh_token"
  * @property clientSecret the OAuth secret.
  * @property redirectUri The uri to redirect to as part of the OAuth flow.
  */
-@UseExperimental(DiskordInternals::class, UnstableDefault::class)
+@UseExperimental(DiskordInternals::class)
 class OAuthClient(
     private val clientId: String,
     private val clientSecret: String,
@@ -44,7 +43,7 @@ class OAuthClient(
 
         val response = postForm("$baseUrl/oauth2/token", form)
 
-        return Json.nonstrict.parse(BearerToken.serializer(), response.body!!)
+        return defaultJson.parse(BearerToken.serializer(), response.body!!)
     }
 
     /**

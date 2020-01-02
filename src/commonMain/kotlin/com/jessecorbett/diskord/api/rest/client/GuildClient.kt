@@ -179,7 +179,7 @@ class GuildClient(
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun updateMember(userId: String, guildMember: PatchGuildMember) =
-        patchRequest("/guilds/$guildId/members/$userId", guildMember, PatchGuildMember.serializer())
+        patchRequest("/guilds/$guildId/members/$userId", guildMember, PatchGuildMember.serializer(), omitNullProperties = true)
 
     /**
      * Change a guild member's nickname.

@@ -16,6 +16,7 @@ import com.jessecorbett.diskord.api.websocket.model.OpCode
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
+import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineConfig
@@ -31,7 +32,6 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -54,7 +54,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
-@UseExperimental(UnstableDefault::class, KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
+@UseExperimental(KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,
@@ -135,24 +135,24 @@ class DiscordWebSocket(
 
                     logger.trace { "Incoming Message:\n${message.data.toHexDump()}" }
 
-                    when (message) {
-                        is Frame.Text -> {
-                            val text = message.readText()
-                            receiveMessage(Json.nonstrict.parse(GatewayMessage.serializer(), text))
-                        }
-                        is Frame.Binary -> {
-                            TODO("Add support for binary formatted data")
-                        }
-                        is Frame.Close -> {
-                            logger.info { "Closing with message: $message" }
-                        }
-                        is Frame.Ping, is Frame.Pong -> {
-                            // Not used
-                            logger.debug { message }
-                        }
+                when (message) {
+                    is Frame.Text -> {
+                        val text = message.readText()
+                        receiveMessage(defaultJson.parse(GatewayMessage.serializer(), text))
+                    }
+                    is Frame.Binary -> {
+                        TODO("Add support for binary formatted data")
+                    }
+                    is Frame.Close -> {
+                        logger.info { "Closing with message: $message" }
+                    }
+                    is Frame.Ping, is Frame.Pong -> {
+                        // Not used
+                        logger.debug { message }
                     }
                 }
-                logger.info { "Exited the incoming loop" }
+            }
+            logger.info { "Exited the incoming loop" }
 
             }
         } finally {
@@ -244,7 +244,7 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                initializeSession(Json.nonstrict.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(defaultJson.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
@@ -287,7 +287,7 @@ class DiscordWebSocket(
         logger.debug { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = Json.nonstrict.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = defaultJson.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         eventListenerScope.launch {
@@ -303,13 +303,13 @@ class DiscordWebSocket(
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, data, sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
     }
 
     private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
-        val message = GatewayMessage(opCode, Json.nonstrict.toJson(serializer, data), sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(Json.stringify(GatewayMessage.serializer(), message))
+        val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
+        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
     }
 }

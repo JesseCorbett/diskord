@@ -15,6 +15,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun getRequest(url: String, headers: Map<String, String>): Response
 
     /**
@@ -26,6 +27,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun postRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response
 
     /**
@@ -37,6 +39,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun postMultipartRequest(url: String, parts: List<PartData>, headers: Map<String, String>): Response
 
     /**
@@ -48,6 +51,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun putRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response
 
     /**
@@ -59,6 +63,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun patchRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response
 
     /**
@@ -69,6 +74,7 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun deleteRequest(url: String, headers: Map<String, String>): Response
 
     /**
@@ -79,5 +85,6 @@ interface RestClient {
      *
      * @return the HTTP response
      */
+    @DiskordInternals
     suspend fun postForm(url: String, form: Map<String, String>): Response
 }
