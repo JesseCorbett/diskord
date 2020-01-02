@@ -5,6 +5,8 @@
 ### Changed
 - Added @DiskordInternal annotation to internal APIs which should be avoided
 - Switched to a stable JSON configuration from kotlinx.serialization
+- Updated dependencies
+- Removed transitive dependency on jcenter
 
 ### Fixed
 - Updated audit events to match changes to the API
