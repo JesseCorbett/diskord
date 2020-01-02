@@ -2,6 +2,15 @@
 
 ## [1.5.3] - 20XX-XX-XX
 
+### Changed
+- Added @DiskordInternal annotation to internal APIs which should be avoided
+- Switched to a stable JSON configuration from kotlinx.serialization
+
+### Fixed
+- Updated audit events to match changes to the API
+- Soft locking on connection issues
+- An issue where updating GuildMembers would fail on serialization
+
 ## [1.5.2] - 2019-11-12
 
 ### Added
