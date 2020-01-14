@@ -4,13 +4,13 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.*
 import com.jessecorbett.diskord.internal.*
 import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.util.defaultJson
+import com.jessecorbett.diskord.util.relaxedJson
 import io.ktor.client.request.forms.formData
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.json.Json
 
 /**
  * The rate limit info for this discord object.
@@ -19,13 +19,12 @@ import kotlinx.serialization.json.Json
 val rateLimitInfo = RateLimitInfo(1, 1, Long.MAX_VALUE)
 
 @DiskordInternals
-@UseExperimental(UnstableDefault::class)
 private fun captureFailure(code: Int, body: String?) = when (code) {
     400 -> DiscordBadRequestException(body)
     401 -> DiscordUnauthorizedException()
     403 -> DiscordBadPermissionsException()
     404 -> DiscordNotFoundException()
-    429 -> Json.nonstrict.parse(RateLimitExceeded.serializer(), body!!).let {
+    429 -> defaultJson.parse(RateLimitExceeded.serializer(), body!!).let {
         DiscordRateLimitException(it.message, (it.retryAfter + epochMillisNow()) / 1000, it.isGlobal)
     }
     502 -> DiscordGatewayException()
@@ -61,7 +60,6 @@ private suspend fun doRequest(rateLimit: RateLimitInfo, request: suspend () -> R
 }
 
 @DiskordInternals
-@UseExperimental(UnstableDefault::class)
 class DefaultRateLimitedRestClient(
     token: String,
     userType: DiscordUserType,
@@ -91,7 +89,7 @@ class DefaultRateLimitedRestClient(
             client.getRequest(url, commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
@@ -116,6 +114,7 @@ class DefaultRateLimitedRestClient(
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return the API response.
      * @throws DiscordException representing an API error.
@@ -124,10 +123,11 @@ class DefaultRateLimitedRestClient(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ) {
         doRequest(rateLimit) {
-            client.postRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.postRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
     }
 
@@ -150,7 +150,7 @@ class DefaultRateLimitedRestClient(
             client.postRequest(url, null, commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
@@ -161,6 +161,7 @@ class DefaultRateLimitedRestClient(
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return the API response.
      * @throws DiscordException representing an API error.
@@ -170,13 +171,14 @@ class DefaultRateLimitedRestClient(
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ): R {
         val response = doRequest(rateLimit) {
-            client.postRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.postRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
@@ -187,6 +189,7 @@ class DefaultRateLimitedRestClient(
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit the rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      * @param block the block to build the multipart data
      *
      * @return the API response.
@@ -198,17 +201,18 @@ class DefaultRateLimitedRestClient(
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
         rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean,
         block: () -> List<PartData>
     ): R {
         val response = doRequest(rateLimit) {
             val parts = formData {
-                append("payload_json", Json.nonstrict.stringify(serializer, payload))
+                append("payload_json", json(omitNullProperties).stringify(serializer, payload))
             } + block()
 
             client.postMultipartRequest(url, parts, commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
@@ -233,6 +237,7 @@ class DefaultRateLimitedRestClient(
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException representing an API error.
@@ -241,10 +246,11 @@ class DefaultRateLimitedRestClient(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ) {
         doRequest(rateLimit) {
-            client.putRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.putRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
     }
 
@@ -267,15 +273,18 @@ class DefaultRateLimitedRestClient(
             client.putRequest(url, null, commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
      * Make a PUT request for this discord object.
      *
      * @param url The url of the request.
+     * @param body The data to send with the API request.
+     * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException Representing an API error.
@@ -285,13 +294,14 @@ class DefaultRateLimitedRestClient(
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ): R {
         val response = doRequest(rateLimit) {
-            client.putRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.putRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
     }
 
     /**
@@ -301,6 +311,7 @@ class DefaultRateLimitedRestClient(
      * @param body The data to send with the API request.
      * @param serializer The request serializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @throws DiscordException representing an API error.
      */
@@ -308,10 +319,11 @@ class DefaultRateLimitedRestClient(
         url: String,
         body: T,
         serializer: SerializationStrategy<T>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ) {
         doRequest(rateLimit) {
-            client.patchRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.patchRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
     }
 
@@ -323,6 +335,7 @@ class DefaultRateLimitedRestClient(
      * @param serializer The request serializer.
      * @param deserializer The response deserializer.
      * @param rateLimit The rate limit info used for waiting if rate limited.
+     * @param omitNullProperties skip serialization of null properties.
      *
      * @return The API response.
      * @throws DiscordException representing an API error.
@@ -332,13 +345,14 @@ class DefaultRateLimitedRestClient(
         body: T,
         serializer: SerializationStrategy<T>,
         deserializer: DeserializationStrategy<R>,
-        rateLimit: RateLimitInfo
+        rateLimit: RateLimitInfo,
+        omitNullProperties: Boolean
     ): R {
         val response = doRequest(rateLimit) {
-            client.patchRequest(url, Json.nonstrict.stringify(serializer, body), commonHeaders)
+            client.patchRequest(url, json(omitNullProperties).stringify(serializer, body), commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return json(omitNullProperties).parse(deserializer, response.body!!)
     }
 
     /**
@@ -374,6 +388,19 @@ class DefaultRateLimitedRestClient(
             client.deleteRequest(url, commonHeaders)
         }
 
-        return Json.nonstrict.parse(deserializer, response.body!!)
+        return defaultJson.parse(deserializer, response.body!!)
+    }
+
+    /**
+     * Get a JSON (de-)serializer which might omit properties which have null values.
+     *
+     * @param omitNullProperties `true` if the returned (de-)serializer should omit null properties
+     *
+     * @return the selected (de-)serializer
+     */
+    private fun json(omitNullProperties: Boolean) = if (omitNullProperties) {
+        relaxedJson
+    } else {
+        defaultJson
     }
 }

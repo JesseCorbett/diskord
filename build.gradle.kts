@@ -22,7 +22,7 @@ version = diskordVersion
 
 repositories {
     mavenCentral()
-    jcenter() // Needed for dokka and kotlinx.serialization
+    jcenter() // Needed for dokka
 }
 
 val dokka by tasks.existing(DokkaTask::class) {

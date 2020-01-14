@@ -78,6 +78,9 @@ enum class AuditLogActionType(val code: Int) {
     MEMBER_BAN_REMOVE(23),
     MEMBER_UPDATE(24),
     MEMBER_ROLE_UPDATE(25),
+    MEMBER_MOVE(26),
+    MEMBER_DISCONNECT(27),
+    BOT_ADD(28),
     ROLE_CREATE(30),
     ROLE_UPDATE(31),
     ROLE_DELETE(32),
@@ -90,7 +93,13 @@ enum class AuditLogActionType(val code: Int) {
     EMOJI_CREATE(60),
     EMOJI_UPDATE(61),
     EMOJI_DELETE(62),
-    MESSAGE_DELETE(72)
+    MESSAGE_DELETE(72),
+    MESSAGE_BULK_DELETE(73),
+    MESSAGE_PIN(74),
+    MESSAGE_UNPIN(75),
+    INTEGRATION_CREATE(80),
+    INTEGRATION_UPDATE(81),
+    INTEGRATION_DELETE(82)
 }
 
 object AuditLogActionTypeSerializer : KSerializer<AuditLogActionType> {
