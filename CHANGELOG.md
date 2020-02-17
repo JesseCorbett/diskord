@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.5.3] - 20XX-XX-XX
+## [X.X.X] - 20XX-XX-XX
+
+### Added
+- Added missing property in GuildCreated event
+
+## [1.5.3] - 2020-01-14
 
 ### Changed
 - Added @DiskordInternal annotation to internal APIs which should be avoided
