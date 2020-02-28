@@ -32,7 +32,6 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import mu.KotlinLogging
@@ -45,11 +44,11 @@ import kotlin.coroutines.CoroutineContext
  * @property eventListener The event listener to call for gateway events.
  * @property sessionId The id of the session, null if this is a new connection.
  * @property sequenceNumber The gateway sequence number, initially null if this is a new connection.
- * @property shardId The id of this shard of the bot, 0 if this is the DM shard or the only shard.
+ * @property shardId The id of this shard of the bot, if this is the only shard or DM shard it will be 0.
  * @property userType The type of API user, assumed to be a bot.
  * @property eventListenerContext The coroutine context to run [EventListener] events in.
  * @param heartbeatContext The coroutine context to process heartbeat events to the gateway in.
- * @param httpClient The http client to use to create the websocket connection.
+ * @param httpClient The http client to used to create the websocket connection.
  * @property gatewayUrl The url to connect to. Will be fetched it not provided.
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
