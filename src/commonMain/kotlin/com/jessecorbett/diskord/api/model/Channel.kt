@@ -43,8 +43,8 @@ object ChannelTypeSerializer : KSerializer<ChannelType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: ChannelType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: ChannelType) {
+        encoder.encodeInt(value.code)
     }
 }
 

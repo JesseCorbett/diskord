@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonConfiguration
 /**
  * [JsonConfiguration] that modifies [JsonConfiguration.Stable].
  */
-internal val jsonConfiguration = JsonConfiguration.Stable.copy(ignoreUnknownKeys = false, isLenient = true, useArrayPolymorphism = true)
+internal val jsonConfiguration = JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true, useArrayPolymorphism = true)
 
 /**
  * Default [Json] instance.

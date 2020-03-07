@@ -49,8 +49,8 @@ object MessageTypeSerializer : KSerializer<MessageType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: MessageType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: MessageType) {
+        encoder.encodeInt(value.code)
     }
 }
 
@@ -78,8 +78,8 @@ object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: MessageActivityType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: MessageActivityType) {
+        encoder.encodeInt(value.code)
     }
 }
 

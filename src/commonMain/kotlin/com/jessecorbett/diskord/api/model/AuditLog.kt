@@ -95,7 +95,7 @@ object AuditLogActionTypeSerializer : KSerializer<AuditLogActionType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: AuditLogActionType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: AuditLogActionType) {
+        encoder.encodeInt(value.code)
     }
 }

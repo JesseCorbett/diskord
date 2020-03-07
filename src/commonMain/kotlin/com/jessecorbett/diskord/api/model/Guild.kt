@@ -48,8 +48,8 @@ object VerificationLevelSerializer : KSerializer<VerificationLevel> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: VerificationLevel) {
-        encoder.encodeInt(obj.level)
+    override fun serialize(encoder: Encoder, value: VerificationLevel) {
+        encoder.encodeInt(value.level)
     }
 }
 
@@ -69,8 +69,8 @@ object NotificationsLevelSerializer : KSerializer<NotificationsLevel> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: NotificationsLevel) {
-        encoder.encodeInt(obj.level)
+    override fun serialize(encoder: Encoder, value: NotificationsLevel) {
+        encoder.encodeInt(value.level)
     }
 }
 
@@ -91,8 +91,8 @@ object ExplicitContentFilterLevelSerializer : KSerializer<ExplicitContentFilterL
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: ExplicitContentFilterLevel) {
-        encoder.encodeInt(obj.level)
+    override fun serialize(encoder: Encoder, value: ExplicitContentFilterLevel) {
+        encoder.encodeInt(value.level)
     }
 }
 
@@ -112,7 +112,7 @@ object MFALevelSerializer : KSerializer<MFALevel> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: MFALevel) {
-        encoder.encodeInt(obj.level)
+    override fun serialize(encoder: Encoder, value: MFALevel) {
+        encoder.encodeInt(value.level)
     }
 }

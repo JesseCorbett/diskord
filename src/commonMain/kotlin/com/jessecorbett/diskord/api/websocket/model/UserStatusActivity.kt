@@ -66,7 +66,7 @@ object ActivityTypeSerializer : KSerializer<ActivityType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: ActivityType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: ActivityType) {
+        encoder.encodeInt(value.code)
     }
 }

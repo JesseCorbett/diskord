@@ -95,7 +95,7 @@ object OpCodeSerializer : KSerializer<OpCode> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: OpCode) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: OpCode) {
+        encoder.encodeInt(value.code)
     }
 }

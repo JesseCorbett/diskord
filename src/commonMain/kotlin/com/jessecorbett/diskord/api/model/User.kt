@@ -36,8 +36,8 @@ object UserFlagsSerializer : KSerializer<UserFlags> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: UserFlags) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: UserFlags) {
+        encoder.encodeInt(value.code)
     }
 }
 
@@ -58,7 +58,7 @@ object PremiumTypeSerializer : KSerializer<PremiumType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: PremiumType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: PremiumType) {
+        encoder.encodeInt(value.code)
     }
 }
