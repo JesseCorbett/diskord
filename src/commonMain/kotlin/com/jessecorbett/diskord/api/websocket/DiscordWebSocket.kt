@@ -304,6 +304,6 @@ class DiscordWebSocket(
         val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
         val payload = defaultJson.stringify(GatewayMessage.serializer(), message)
         logger.debug { "Sending payload $payload" }
-        sendWebsocketMessage!!(payload)
+        sendWebsocketMessage!!.invoke(payload)
     }
 }
