@@ -112,7 +112,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation("com.willowtreeapps.assertk:assertk:0.20")
                 implementation("io.mockk:mockk-common:1.9.3")
-                implementation("io.ktor:ktor-client-mock:$ktorVersion")
             }
         }
 
@@ -137,7 +136,6 @@ kotlin {
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:0.20")
                 implementation("io.mockk:mockk:1.9.3")
-                implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.slf4j:slf4j-simple:1.7.26")
             }
         }
