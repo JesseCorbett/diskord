@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.api.websocket.model
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.IntDescriptor
 import kotlinx.serialization.json.JsonElement
 
 /**
@@ -22,8 +21,6 @@ data class GatewayMessage(
 
 /**
  * The discord gateway event.
- *
- * @property code the code represented.
  */
 @Serializable(with = OpCodeSerializer::class)
 enum class OpCode(val code: Int) {
@@ -89,7 +86,7 @@ enum class OpCode(val code: Int) {
 }
 
 object OpCodeSerializer : KSerializer<OpCode> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("OpCodeSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("OpCodeSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): OpCode {
         val target = decoder.decodeInt()

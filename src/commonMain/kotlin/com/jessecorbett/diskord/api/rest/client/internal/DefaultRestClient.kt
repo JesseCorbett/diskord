@@ -12,12 +12,12 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.forms.submitFormWithBinaryData
-import io.ktor.client.response.HttpResponse
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.HttpStatement
 import io.ktor.http.ContentType
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
-import kotlinx.coroutines.io.readUTF8Line
-import mu.KotlinLogging
+import io.ktor.utils.io.readUTF8Line
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
@@ -49,17 +49,19 @@ class DefaultRestClient(
     private val contentType = ContentType.parse("application/json")
 
     override suspend fun getRequest(url: String, headers: Map<String, String>): Response {
-        val result = client.get<HttpResponse>(baseUrl + url) { headers.forEach { header(it.key, it.value) } }
+        val result = client.get<HttpStatement>(baseUrl + url) {
+            headers.forEach { header(it.key, it.value) }
+        }.execute()
         return result.toResponse()
     }
 
     override suspend fun postRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.post<HttpResponse>(baseUrl + url) {
+        val result = client.post<HttpStatement>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
             }
-        }
+        }.execute()
         return result.toResponse()
     }
 
@@ -68,41 +70,41 @@ class DefaultRestClient(
         parts: List<PartData>,
         headers: Map<String, String>
     ): Response {
-        val result = client.submitFormWithBinaryData<HttpResponse>(baseUrl + url, parts) {
+        val result = client.submitFormWithBinaryData<HttpStatement>(baseUrl + url, parts) {
             headers.forEach { header(it.key, it.value) }
-        }
+        }.execute()
         return result.toResponse()
     }
 
     override suspend fun putRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.put<HttpResponse>(baseUrl + url) {
+        val result = client.put<HttpStatement>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
             }
-        }
+        }.execute()
         return result.toResponse()
     }
 
     override suspend fun patchRequest(url: String, jsonBody: String?, headers: Map<String, String>): Response {
-        val result = client.patch<HttpResponse>(baseUrl + url) {
+        val result = client.patch<HttpStatement>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
             if (jsonBody != null) {
                 body = TextContent(jsonBody, contentType)
             }
-        }
+        }.execute()
         return result.toResponse()
     }
 
     override suspend fun deleteRequest(url: String, headers: Map<String, String>): Response {
-        val result = client.delete<HttpResponse>(baseUrl + url) {
+        val result = client.delete<HttpStatement>(baseUrl + url) {
             headers.forEach { header(it.key, it.value) }
-        }
+        }.execute()
         return result.toResponse()
     }
 
     override suspend fun postForm(url: String, form: Map<String, String>): Response {
-        val result = client.submitForm<HttpResponse> {
+        val result = client.submitForm<HttpStatement> {
             url {
                 host = baseUrl
                 path(listOf(url))
@@ -112,7 +114,7 @@ class DefaultRestClient(
                     append(it.key, it.value)
                 }
             }
-        }
+        }.execute()
         return result.toResponse()
     }
 

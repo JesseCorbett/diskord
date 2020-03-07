@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.70"
     id("org.jetbrains.dokka") version "0.10.1"
 }
 
@@ -101,7 +101,6 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerializationVersion")
                 implementation("io.github.microutils:kotlin-logging-common:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.15")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
@@ -125,12 +124,9 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerializationVersion")
                 implementation("io.github.microutils:kotlin-logging:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.15")
                 implementation("org.slf4j:slf4j-api:1.7.26")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
-                implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
             }
         }
         val jvmTest by getting {
@@ -248,7 +244,6 @@ val signingPassword: String? by project
 signing {
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(signingKey, signingPassword)
+        publishing.publications.forEach { sign(it) }
     }
-
-    publishing.publications.forEach { sign(it) }
 }

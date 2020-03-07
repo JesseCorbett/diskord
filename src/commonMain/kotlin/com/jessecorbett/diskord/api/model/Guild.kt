@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.IntDescriptor
 
 @Serializable
 data class Guild(
@@ -40,7 +39,7 @@ enum class VerificationLevel(val level: Int) {
 }
 
 object VerificationLevelSerializer : KSerializer<VerificationLevel> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("VerificationLevelSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("VerificationLevelSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): VerificationLevel {
         val target = decoder.decodeInt()
@@ -61,7 +60,7 @@ enum class NotificationsLevel(val level: Int) {
 }
 
 object NotificationsLevelSerializer : KSerializer<NotificationsLevel> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("NotificationsLevelSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("NotificationsLevelSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): NotificationsLevel {
         val target = decoder.decodeInt()
@@ -83,7 +82,7 @@ enum class ExplicitContentFilterLevel(val level: Int) {
 }
 
 object ExplicitContentFilterLevelSerializer : KSerializer<ExplicitContentFilterLevel> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("ExplicitContentFilterLevelSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("ExplicitContentFilterLevelSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): ExplicitContentFilterLevel {
         val target = decoder.decodeInt()
@@ -104,7 +103,7 @@ enum class MFALevel(val level: Int) {
 }
 
 object MFALevelSerializer : KSerializer<MFALevel> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("MFALevelSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("MFALevelSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): MFALevel {
         val target = decoder.decodeInt()

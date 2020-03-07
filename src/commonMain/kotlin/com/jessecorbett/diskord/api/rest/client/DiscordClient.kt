@@ -12,7 +12,7 @@ import com.jessecorbett.diskord.api.rest.response.PartialGuild
 import com.jessecorbett.diskord.api.websocket.model.GatewayBotUrl
 import com.jessecorbett.diskord.api.websocket.model.GatewayUrl
 import com.jessecorbett.diskord.util.DiskordInternals
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.list
 
 /**
  * A REST client for a user and their discord-wide content.
@@ -20,7 +20,7 @@ import kotlinx.serialization.list
  * @param token The user's API token.
  * @param userType The user type, assumed to be a bot.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class DiscordClient(
     token: String,
     userType: DiscordUserType = DiscordUserType.BOT,

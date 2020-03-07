@@ -6,5 +6,5 @@ package com.jessecorbett.diskord.util
  * These APIs are not guaranteed to remain stable between any release and
  * should not be directly consumed. Use at your own risk.
  */
-@Experimental(Experimental.Level.ERROR)
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
 annotation class DiskordInternals
