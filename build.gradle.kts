@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.70"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.70"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.71"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.71"
     id("org.jetbrains.dokka") version "0.10.1"
 }
 

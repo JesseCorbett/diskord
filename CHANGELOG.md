@@ -13,6 +13,9 @@ object with a raw byte packet, then make sure to update the following packages:
 ### Added
 - Added missing property in GuildCreated event
 
+### Changed
+- Upgraded to Kotlin 1.3.71
+
 ## [1.5.3] - 2020-01-14
 
 ### Changed
