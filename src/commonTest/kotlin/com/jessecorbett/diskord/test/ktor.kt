@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.test
 import com.jessecorbett.diskord.api.rest.client.internal.DISCORD_API_URL
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.request.HttpRequestData
 import io.ktor.client.request.HttpResponseData
@@ -25,7 +26,7 @@ internal fun setupHttpClientMock(
     baseUrl: String = DISCORD_API_URL,
     relaxed: Boolean = false,
     defaultErrorCode: HttpStatusCode = HttpStatusCode.NotFound,
-    block: suspend (HttpRequestData) -> HttpResponseData
+    block: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData
 ) = setupHttpClientMock(url, baseUrl, {
     if (relaxed) {
         respondError(defaultErrorCode)
@@ -45,8 +46,8 @@ internal fun setupHttpClientMock(
 internal fun setupHttpClientMock(
     url: String,
     baseUrl: String = DISCORD_API_URL,
-    errorBlock: suspend (HttpRequestData) -> HttpResponseData,
-    block: suspend (HttpRequestData) -> HttpResponseData
+    errorBlock: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
+    block: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData
 ) = setupHttpClientMock { request ->
     when (request.url.fullUrl) {
         "$baseUrl$url" -> block(request)
@@ -60,7 +61,7 @@ internal fun setupHttpClientMock(
  * @param block the block to call when a request is processed
  */
 internal fun setupHttpClientMock(
-    block: suspend (HttpRequestData) -> HttpResponseData
+    block: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData
 ) = HttpClient(MockEngine) {
     engine {
         addHandler { request ->

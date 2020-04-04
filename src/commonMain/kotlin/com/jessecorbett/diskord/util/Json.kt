@@ -5,9 +5,9 @@ import kotlinx.serialization.json.JsonConfiguration
 
 
 /**
- * [JsonConfiguration] that merges [Json.nonstrict] with [JsonConfiguration.Stable].
+ * [JsonConfiguration] that modifies [JsonConfiguration.Stable].
  */
-internal val jsonConfiguration = JsonConfiguration.Stable.copy(strictMode = false, useArrayPolymorphism = true)
+internal val jsonConfiguration = JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true, useArrayPolymorphism = true)
 
 /**
  * Default [Json] instance.

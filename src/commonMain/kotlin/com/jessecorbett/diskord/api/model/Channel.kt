@@ -1,8 +1,6 @@
 package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.IntDescriptor
-import kotlinx.serialization.internal.StringDescriptor
 
 @Serializable
 data class Channel(
@@ -36,7 +34,7 @@ enum class ChannelType(val code: Int) {
 }
 
 object ChannelTypeSerializer : KSerializer<ChannelType> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("ChannelTypeSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("ChannelTypeSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): ChannelType {
         val target = decoder.decodeInt()
@@ -45,8 +43,8 @@ object ChannelTypeSerializer : KSerializer<ChannelType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: ChannelType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: ChannelType) {
+        encoder.encodeInt(value.code)
     }
 }
 
@@ -58,23 +56,8 @@ data class Overwrite(
     @SerialName("deny") val denied: Permissions
 )
 
-@Serializable(with = OverwriteTypeSerializer::class)
-enum class OverwriteType(val value: String) {
-    ROLE("role"),
-    MEMBER("member")
-}
-
-object OverwriteTypeSerializer : KSerializer<OverwriteType> {
-    override val descriptor: SerialDescriptor = StringDescriptor.withName("OverwriteTypeSerializer")
-
-    override fun deserialize(decoder: Decoder): OverwriteType {
-        val target = decoder.decodeString()
-        return OverwriteType.values().first {
-            it.value == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, obj: OverwriteType) {
-        encoder.encodeString(obj.value)
-    }
+@Serializable
+enum class OverwriteType {
+    @SerialName("role") ROLE,
+    @SerialName("member") MEMBER
 }

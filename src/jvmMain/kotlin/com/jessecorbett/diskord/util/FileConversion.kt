@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.rest.FileData
-import kotlinx.io.core.buildPacket
-import kotlinx.io.core.writeFully
+import io.ktor.utils.io.core.buildPacket
+import io.ktor.utils.io.core.writeFully
 import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Path

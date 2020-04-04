@@ -1,9 +1,20 @@
 # Changelog
 
-## [X.X.X] - 20XX-XX-XX
+## [1.6.0] - 2020-03-XX
+
+### Breaking Change
+Ktor has been updated to the 1.3.x release.  This update merges an external 
+dependency, which resulted in a package name change.  If you are using the FileData 
+object with a raw byte packet, then make sure to update the following packages: 
+
+    import kotlinx.io. -> import io.ktor.utils.io.
+    import kotlinx.coroutines.io. -> import io.ktor.utils.io.
 
 ### Added
 - Added missing property in GuildCreated event
+
+### Changed
+- Upgraded to Kotlin 1.3.71
 
 ## [1.5.3] - 2020-01-14
 

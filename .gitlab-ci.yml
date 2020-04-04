@@ -1,4 +1,4 @@
-image: gradle:5.4.1-alpine
+image: gradle:6.3.0-jdk8
 
 variables:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false

@@ -30,7 +30,6 @@ import io.ktor.client.features.websocket.wss
 import io.ktor.http.cio.websocket.*
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -53,7 +52,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
-@UseExperimental(KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
+@OptIn(KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,
@@ -100,11 +99,14 @@ class DiscordWebSocket(
         logger.trace { "Attempting a websocket connection" }
         try {
             socketClient.wss(host = url, port = 443, request = {
+                this.url.parameters["v"] = "6"
+                this.url.parameters["encoding"] = "json"
                 logger.trace { "Building socket HttpRequest" }
             }) {
                 logger.info { "Starting socket connection" }
 
                 sendWebsocketMessage = this::send
+
                 stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
                 launch {
@@ -123,35 +125,26 @@ class DiscordWebSocket(
                 }
 
                 logger.info { "Starting incoming loop" }
+                for (frame in incoming) {
+                    logger.trace { "Incoming Message:\n${frame.data.toHexDump()}" }
 
-                while (!incoming.isClosedForReceive) {
-                    val message = try {
-                        incoming.receive()
-                    } catch (e: ClosedReceiveChannelException) {
-                        logger.warn { "Receive channel is closed" }
-                        break
-                    }
-
-                    logger.trace { "Incoming Message:\n${message.data.toHexDump()}" }
-
-                when (message) {
-                    is Frame.Text -> {
-                        val text = message.readText()
-                        receiveMessage(defaultJson.parse(GatewayMessage.serializer(), text))
-                    }
-                    is Frame.Binary -> {
-                        TODO("Add support for binary formatted data")
-                    }
-                    is Frame.Close -> {
-                        logger.info { "Closing with message: $message" }
-                    }
-                    is Frame.Ping, is Frame.Pong -> {
-                        // Not used
-                        logger.debug { message }
+                    when (frame) {
+                        is Frame.Text -> {
+                            receiveMessage(defaultJson.parse(GatewayMessage.serializer(), frame.readText()))
+                        }
+                        is Frame.Binary -> {
+                            TODO("Add support for binary formatted data")
+                        }
+                        is Frame.Close -> {
+                            logger.info { "Close Frame sent with message: $frame" }
+                        }
+                        is Frame.Ping, is Frame.Pong -> {
+                            // Not used
+                            logger.debug { frame }
+                        }
                     }
                 }
-            }
-            logger.info { "Exited the incoming loop" }
+                logger.info { "Exited the incoming loop" }
 
             }
         } finally {
@@ -171,7 +164,7 @@ class DiscordWebSocket(
                 initializeConnection()
                 delayTime = 1
             } catch (e: Exception) {
-                logger.warn { "Connection threw exception with error: " + e.message }
+                logger.warn { "Connection threw exception with error: $e" }
                 logger.info { "Retrying connection after $delayTime seconds" }
                 delay(delayTime * 1000L)
                 if (delayTime < 32) delayTime *= 2
@@ -250,7 +243,7 @@ class DiscordWebSocket(
                 // Additional note, I've not observed Discord actually sending heartbeats
             }
             else -> {
-                throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode.name} (${gatewayMessage.opCode.code})")
+                throw DiscordCompatibilityException("Reached unreachable OpCode: ${gatewayMessage.opCode}")
             }
         }
     }
@@ -309,6 +302,8 @@ class DiscordWebSocket(
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
+        val payload = defaultJson.stringify(GatewayMessage.serializer(), message)
+        logger.debug { "Sending payload $payload" }
+        sendWebsocketMessage!!.invoke(payload)
     }
 }

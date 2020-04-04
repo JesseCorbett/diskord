@@ -12,7 +12,7 @@ import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.list
 
 /**
  * A REST client for a specific channel and it's content.
@@ -21,7 +21,7 @@ import kotlinx.serialization.list
  * @param channelId The id of the channel.
  * @param userType The user type, assumed to be a bot.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class ChannelClient(
     token: String,
     val channelId: String,

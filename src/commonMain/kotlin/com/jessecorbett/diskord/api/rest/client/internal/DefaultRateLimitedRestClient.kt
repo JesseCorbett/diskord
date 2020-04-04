@@ -11,6 +11,9 @@ import io.ktor.http.content.PartData
 import kotlinx.coroutines.delay
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 /**
  * The rate limit info for this discord object.
@@ -25,6 +28,7 @@ private fun captureFailure(code: Int, body: String?) = when (code) {
     403 -> DiscordBadPermissionsException()
     404 -> DiscordNotFoundException()
     429 -> defaultJson.parse(RateLimitExceeded.serializer(), body!!).let {
+        logger.info { "Encountered a rate limit exception" }
         DiscordRateLimitException(it.message, (it.retryAfter + epochMillisNow()) / 1000, it.isGlobal)
     }
     502 -> DiscordGatewayException()

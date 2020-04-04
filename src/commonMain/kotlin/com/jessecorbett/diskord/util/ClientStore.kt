@@ -38,7 +38,7 @@ class ClientStore(userToken: String) {
  * @param userToken the user token used by each [ChannelClient].
  * @constructor Creates an empty group of clients.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, { ChannelClient(userToken, it) })
 
 
@@ -50,7 +50,7 @@ class ChannelClients(userToken: String) : RestClients<ChannelClient>(userToken, 
  * @param userToken the user token used by each [GuildClient].
  * @constructor Creates an empty group of clients.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { GuildClient(userToken, it) })
 
 
@@ -62,7 +62,7 @@ class GuildClients(userToken: String) : RestClients<GuildClient>(userToken, { Gu
  * @param userToken the user token used by each [WebhookClient].
  * @constructor Creates an empty group of clients.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class WebhookClients(userToken: String) : RestClients<WebhookClient>(userToken, { WebhookClient(userToken, it) })
 
 /**
