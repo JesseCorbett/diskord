@@ -164,7 +164,7 @@ class DiscordWebSocket(
                 initializeConnection()
                 delayTime = 1
             } catch (e: Exception) {
-                logger.warn { "Connection threw exception with error: $e" }
+                logger.warn(e) { "Connection threw exception: " }
                 logger.info { "Retrying connection after $delayTime seconds" }
                 delay(delayTime * 1000L)
                 if (delayTime < 32) delayTime *= 2
