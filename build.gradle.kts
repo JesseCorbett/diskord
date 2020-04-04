@@ -5,9 +5,9 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.50"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.50"
-    id("org.jetbrains.dokka") version "0.10.0"
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.71"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.71"
+    id("org.jetbrains.dokka") version "0.10.1"
 }
 
 val diskordVersion: String by project
@@ -100,8 +100,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerializationVersion")
-                implementation("io.github.microutils:kotlin-logging-common:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io:0.1.15")
+                implementation("io.github.microutils:kotlin-logging-common:1.7.9")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
@@ -111,9 +110,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("com.willowtreeapps.assertk:assertk:0.20")
+                implementation("com.willowtreeapps.assertk:assertk:0.22")
                 implementation("io.mockk:mockk-common:1.9.3")
-                implementation("io.ktor:ktor-client-mock:$ktorVersion")
             }
         }
 
@@ -124,13 +122,10 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerializationVersion")
-                implementation("io.github.microutils:kotlin-logging:1.7.6")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.15")
-                implementation("org.slf4j:slf4j-api:1.7.26")
+                implementation("io.github.microutils:kotlin-logging:1.7.9")
+                implementation("org.slf4j:slf4j-api:1.7.30")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
-                implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
             }
         }
         val jvmTest by getting {
@@ -138,11 +133,10 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:0.20")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.6.1")
+                implementation("com.willowtreeapps.assertk:assertk-jvm:0.22")
                 implementation("io.mockk:mockk:1.9.3")
-                implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.slf4j:slf4j-simple:1.7.26")
+                implementation("org.slf4j:slf4j-simple:1.7.30")
             }
         }
 
@@ -248,7 +242,6 @@ val signingPassword: String? by project
 signing {
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(signingKey, signingPassword)
+        publishing.publications.forEach { sign(it) }
     }
-
-    publishing.publications.forEach { sign(it) }
 }

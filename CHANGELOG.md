@@ -1,6 +1,23 @@
 # Changelog
 
-## [1.5.3] - 20XX-XX-XX
+## [1.6.0] - 2020-04-04
+
+### Breaking Change
+Ktor has been updated to the 1.3.x release.  This update merges an external 
+dependency, which resulted in a package name change.  If you are using the FileData 
+object with a raw byte packet, then make sure to update the following packages: 
+
+    import kotlinx.io. -> import io.ktor.utils.io.
+    import kotlinx.coroutines.io. -> import io.ktor.utils.io.
+
+### Added
+- Added missing property in GuildCreated event payload
+- Added default value for nick property in GuildMemberUpdate event payload
+
+### Changed
+- Upgraded to Kotlin 1.3.71
+
+## [1.5.3] - 2020-01-14
 
 ### Changed
 - Added @DiskordInternal annotation to internal APIs which should be avoided

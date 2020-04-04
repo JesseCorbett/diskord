@@ -18,7 +18,7 @@ private const val REFRESH_TOKEN = "refresh_token"
  * @property clientSecret the OAuth secret.
  * @property redirectUri The uri to redirect to as part of the OAuth flow.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class OAuthClient(
     private val clientId: String,
     private val clientSecret: String,

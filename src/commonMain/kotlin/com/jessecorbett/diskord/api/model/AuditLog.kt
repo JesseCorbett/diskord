@@ -1,8 +1,6 @@
 package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.IntDescriptor
-import kotlinx.serialization.internal.StringDescriptor
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
@@ -42,25 +40,10 @@ data class OptionalEntryData(
     @SerialName("role_name") val overwriteRoleName: String
 )
 
-@Serializable(with = OverwrittenEntityTypeSerializer::class)
-enum class OverwrittenEntityType(val code: String) {
-    MEMBER("member"),
-    ROLE("role")
-}
-
-object OverwrittenEntityTypeSerializer : KSerializer<OverwrittenEntityType> {
-    override val descriptor: SerialDescriptor = StringDescriptor.withName("OverwrittenEntityTypeSerializer")
-
-    override fun deserialize(decoder: Decoder): OverwrittenEntityType {
-        val target = decoder.decodeString()
-        return OverwrittenEntityType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, obj: OverwrittenEntityType) {
-        encoder.encodeString(obj.code)
-    }
+@Serializable
+enum class OverwrittenEntityType {
+    @SerialName("member") MEMBER,
+    @SerialName("role") ROLE
 }
 
 @Serializable(with = AuditLogActionTypeSerializer::class)
@@ -103,7 +86,7 @@ enum class AuditLogActionType(val code: Int) {
 }
 
 object AuditLogActionTypeSerializer : KSerializer<AuditLogActionType> {
-    override val descriptor: SerialDescriptor = IntDescriptor.withName("AuditLogActionTypeSerializer")
+    override val descriptor: SerialDescriptor = PrimitiveDescriptor("AuditLogActionTypeSerializer", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder): AuditLogActionType {
         val target = decoder.decodeInt()
@@ -112,7 +95,7 @@ object AuditLogActionTypeSerializer : KSerializer<AuditLogActionType> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: AuditLogActionType) {
-        encoder.encodeInt(obj.code)
+    override fun serialize(encoder: Encoder, value: AuditLogActionType) {
+        encoder.encodeInt(value.code)
     }
 }

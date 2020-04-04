@@ -15,7 +15,7 @@ import com.jessecorbett.diskord.util.DiskordInternals
  * @param webhookId The id of the webhook.
  * @param userType The user type, assumed to be a bot.
  */
-@UseExperimental(DiskordInternals::class)
+@OptIn(DiskordInternals::class)
 class WebhookClient(
     token: String,
     val webhookId: String,

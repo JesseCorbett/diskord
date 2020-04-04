@@ -34,5 +34,6 @@ data class CreatedGuild(
     @SerialName("member_count") val memberCount: Int? = null,
     @SerialName("voice_states") val voiceStates: List<VoiceState>,
     @SerialName("members") val members: List<GuildMember>,
+    @SerialName("channels") val channels: List<Channel>,
     @SerialName("presences") val userPresences: List<BarePresenceUpdate>
 )
