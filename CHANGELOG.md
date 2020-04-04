@@ -11,7 +11,8 @@ object with a raw byte packet, then make sure to update the following packages:
     import kotlinx.coroutines.io. -> import io.ktor.utils.io.
 
 ### Added
-- Added missing property in GuildCreated event
+- Added missing property in GuildCreated event payload
+- Added default value for nick property in GuildMemberUpdate event payload
 
 ### Changed
 - Upgraded to Kotlin 1.3.71
