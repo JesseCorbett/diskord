@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.6.0] - 2020-03-XX
+## [1.6.0] - 2020-04-04
 
 ### Breaking Change
 Ktor has been updated to the 1.3.x release.  This update merges an external 
