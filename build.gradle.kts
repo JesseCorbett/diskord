@@ -100,7 +100,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerializationVersion")
-                implementation("io.github.microutils:kotlin-logging-common:1.7.6")
+                implementation("io.github.microutils:kotlin-logging-common:1.7.9")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
@@ -110,7 +110,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("com.willowtreeapps.assertk:assertk:0.20")
+                implementation("com.willowtreeapps.assertk:assertk:0.22")
                 implementation("io.mockk:mockk-common:1.9.3")
             }
         }
@@ -122,8 +122,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerializationVersion")
-                implementation("io.github.microutils:kotlin-logging:1.7.6")
-                implementation("org.slf4j:slf4j-api:1.7.26")
+                implementation("io.github.microutils:kotlin-logging:1.7.9")
+                implementation("org.slf4j:slf4j-api:1.7.30")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
             }
@@ -133,10 +133,10 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.5.1")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:0.20")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.6.1")
+                implementation("com.willowtreeapps.assertk:assertk-jvm:0.22")
                 implementation("io.mockk:mockk:1.9.3")
-                implementation("org.slf4j:slf4j-simple:1.7.26")
+                implementation("org.slf4j:slf4j-simple:1.7.30")
             }
         }
 
