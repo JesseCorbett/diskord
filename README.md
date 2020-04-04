@@ -16,15 +16,15 @@ Using Diskord? Send me a tweet about it! [@JesseLCorbett](https://twitter.com/Je
 ```groovy
 repositories {
     mavenCentral()
-    jcenter() // Necessary for kotlinx.serialization, until it is published in maven central too
+    jcenter()
 }
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.5.4'
+    implementation 'com.jessecorbett:diskord:1.6.0'
 
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.5.4'
+    implementation 'com.jessecorbett:diskord-jvm:1.6.0'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.5.4</version>
+    <version>1.6.0</version>
 </dependency>
 ```
 
