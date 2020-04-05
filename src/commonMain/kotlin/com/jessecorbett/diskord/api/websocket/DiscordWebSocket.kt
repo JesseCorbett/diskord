@@ -109,6 +109,30 @@ class DiscordWebSocket(
 
                 stop = { code, reason -> close(CloseReason(code.code, reason)) }
 
+                val incomingLoopJob = launch {
+                    logger.info { "Starting incoming loop" }
+                    for (frame in incoming) {
+                        logger.trace { "Incoming Message:\n${frame.data.toHexDump()}" }
+
+                        when (frame) {
+                            is Frame.Text -> {
+                                receiveMessage(defaultJson.parse(GatewayMessage.serializer(), frame.readText()))
+                            }
+                            is Frame.Binary -> {
+                                TODO("Add support for binary formatted data")
+                            }
+                            is Frame.Close -> {
+                                logger.info { "Close Frame sent with message: $frame" }
+                            }
+                            is Frame.Ping, is Frame.Pong -> {
+                                // Not used
+                                logger.debug { frame }
+                            }
+                        }
+                    }
+                    logger.info { "Exited the incoming loop" }
+                }
+
                 launch {
                     val closeReason = this@wss.closeReason.await()
                     if (closeReason == null) {
@@ -121,31 +145,11 @@ class DiscordWebSocket(
                             "Closed with code '$closeCode' for reason '${closeReason.message}'"
                         }
                         logger.warn { message }
+                        incomingLoopJob.cancel(message)
                     }
                 }
 
-                logger.info { "Starting incoming loop" }
-                for (frame in incoming) {
-                    logger.trace { "Incoming Message:\n${frame.data.toHexDump()}" }
-
-                    when (frame) {
-                        is Frame.Text -> {
-                            receiveMessage(defaultJson.parse(GatewayMessage.serializer(), frame.readText()))
-                        }
-                        is Frame.Binary -> {
-                            TODO("Add support for binary formatted data")
-                        }
-                        is Frame.Close -> {
-                            logger.info { "Close Frame sent with message: $frame" }
-                        }
-                        is Frame.Ping, is Frame.Pong -> {
-                            // Not used
-                            logger.debug { frame }
-                        }
-                    }
-                }
-                logger.info { "Exited the incoming loop" }
-
+                incomingLoopJob.join()
             }
         } finally {
             isOpen = false
@@ -180,7 +184,7 @@ class DiscordWebSocket(
         expectedOpen = false
         heartbeatJob?.cancel()
         heartbeatJob = null
-        stop(WebSocketCloseCode.NORMAL_CLOSURE, "Requested close")
+        stop(WebSocketCloseCode.NORMAL_CLOSURE, "This bot requested close")
         // Block until the connection is confirmed closed, handling race conditions
         while (isOpen) {
             delay(100)
