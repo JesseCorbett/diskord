@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.1] - 2020-04-05
+
+### Fixed
+Addressed an issue where ktor does not close the receiving channel of the websocket client when the connection closes
+
 ## [1.6.0] - 2020-04-04
 
 ### Breaking Change
