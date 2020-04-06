@@ -128,7 +128,8 @@ class DefaultRestClient(
                 val line = content.readUTF8Line() ?: break
                 string = string?.plus(line) ?: line
             } catch (e: Exception) {
-                logger.error(e) { "Encountered error reading response body" }
+                logger.warn(e) { "Encountered error reading response body" }
+                logger.warn { "End response body: $string" }
                 break
             }
         }
