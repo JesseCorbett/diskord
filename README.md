@@ -21,10 +21,10 @@ repositories {
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.6.0'
+    implementation 'com.jessecorbett:diskord:1.6.2'
 
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.6.0'
+    implementation 'com.jessecorbett:diskord-jvm:1.6.2'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.2</version>
 </dependency>
 ```
 

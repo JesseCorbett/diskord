@@ -17,6 +17,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import io.ktor.utils.io.readUTF8Line
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
@@ -121,8 +124,13 @@ class DefaultRestClient(
         var string: String? = null
 
         while (true) {
-            val line = content.readUTF8Line() ?: break
-            string = string?.plus(line) ?: line
+            try {
+                val line = content.readUTF8Line() ?: break
+                string = string?.plus(line) ?: line
+            } catch (e: Exception) {
+                logger.error(e) { "Encountered error reading response body" }
+                break
+            }
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())
