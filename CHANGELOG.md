@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.1] - 2020-04-XX
+
+### Fixed
+- An issue where unusually large API responses would cause a failure to read the body
+
 ## [1.6.0] - 2020-04-04
 
 ### Breaking Change
