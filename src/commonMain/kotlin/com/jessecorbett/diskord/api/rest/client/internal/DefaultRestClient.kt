@@ -16,10 +16,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
-import io.ktor.utils.io.readUTF8Line
-import mu.KotlinLogging
-
-private val logger = KotlinLogging.logger {}
+import io.ktor.util.toByteArray
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
@@ -120,18 +117,12 @@ class DefaultRestClient(
         return result.toResponse()
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private suspend fun HttpResponse.toResponse(): Response {
         var string: String? = null
 
-        while (true) {
-            try {
-                val line = content.readUTF8Line() ?: break
-                string = string?.plus(line) ?: line
-            } catch (e: Exception) {
-                logger.warn(e) { "Encountered error reading response body" }
-                logger.warn { "End response body: $string" }
-                break
-            }
+        if (!content.isClosedForRead) {
+            string = content.toByteArray().decodeToString()
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())
