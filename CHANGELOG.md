@@ -1,9 +1,9 @@
 # Changelog
 
-## [1.6.1] - 2020-04-XX
+## [1.6.1] - 2020-04-05
 
 ### Fixed
-- An issue where unusually large API responses would cause a failure to read the body
+Addressed an issue where ktor does not close the receiving channel of the websocket client when the connection closes
 
 ## [1.6.0] - 2020-04-04
 
