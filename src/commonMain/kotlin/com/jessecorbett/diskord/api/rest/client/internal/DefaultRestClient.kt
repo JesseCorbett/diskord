@@ -16,7 +16,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
-import io.ktor.utils.io.readUTF8Line
+import io.ktor.util.toByteArray
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
@@ -117,12 +117,12 @@ class DefaultRestClient(
         return result.toResponse()
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private suspend fun HttpResponse.toResponse(): Response {
         var string: String? = null
 
-        while (true) {
-            val line = content.readUTF8Line() ?: break
-            string = string?.plus(line) ?: line
+        if (!content.isClosedForRead) {
+            string = content.toByteArray().decodeToString()
         }
 
         return Response(status.value, string, headers.names().map { Pair(it, headers[it]) }.toMap())

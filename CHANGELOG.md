@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.2] - 2020-04-11
+
+### Fixed
+Fixed an issue where unusually large API response bodies broke deserialization
+
 ## [1.6.1] - 2020-04-05
 
 ### Fixed
