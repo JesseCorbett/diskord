@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.rest.client.internal
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.http.content.PartData
 
-internal const val DISCORD_API_URL = "https://discordapp.com/api"
+internal const val DISCORD_API_URL = "https://discord.com/api"
 
 @DiskordInternals
 interface RestClient {
