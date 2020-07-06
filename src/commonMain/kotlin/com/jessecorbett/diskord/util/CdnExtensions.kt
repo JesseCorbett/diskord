@@ -9,7 +9,7 @@ import com.jessecorbett.diskord.api.rest.response.PartialGuild
 /**
  * The host of the discord content delivery network.
  */
-const val discordCdn = "https://cdn.discordapp.com"
+const val discordCdn = "https://cdn.discord.com"
 
 private fun sizeFormat(size: Int?): String {
     if (size == null) {
