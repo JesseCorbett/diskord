@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0] - 2020-07-29
+
+### Added/Fixed
+Addressed an issue where the `GuildClient.updateMember` method did not allow disconnecting
+a guild member from voice channels.
+
+The solution is the addition of `GuildClient.disconnectMemberVoiceChannel` which under the hood performs the same API
+request but only disconnects members from voice.
+
+### Changed
+Updated kotlinx.coroutines to 1.3.8
+
 ## [1.6.2] - 2020-04-11
 
 ### Fixed
