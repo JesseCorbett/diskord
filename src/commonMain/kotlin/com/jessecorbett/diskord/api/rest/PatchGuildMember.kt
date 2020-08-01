@@ -11,3 +11,11 @@ data class PatchGuildMember(
     @SerialName("deaf") val deaf: Boolean? = null,
     @SerialName("channel_id") val channelId: String? = null
 )
+
+/**
+ * Conceptually the same data object as [PatchGuildMember], but [channelId] has different null behavior.
+ */
+@Serializable
+data class PatchGuildMemberMoveVoiceChannel(
+    @SerialName("channel_id") val channelId: String? = null
+)

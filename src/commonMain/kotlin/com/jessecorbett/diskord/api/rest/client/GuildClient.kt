@@ -56,8 +56,9 @@ class GuildClient(
      * @return The created emoji.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createEmoji(createEmoji: CreateEmoji) =
-        postRequest("/guilds/$guildId/emojis", createEmoji, CreateEmoji.serializer(), Emoji.serializer())
+    suspend fun createEmoji(createEmoji: CreateEmoji): Emoji {
+        return postRequest("/guilds/$guildId/emojis", createEmoji, CreateEmoji.serializer(), Emoji.serializer())
+    }
 
     /**
      * Update an emoji
@@ -68,8 +69,9 @@ class GuildClient(
      * @return The updated emoji.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji) =
-        patchRequest("/guilds/$guildId/emojis/$emojiId", emoji, PatchEmoji.serializer(), Emoji.serializer())
+    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji): Emoji {
+        return patchRequest("/guilds/$guildId/emojis/$emojiId", emoji, PatchEmoji.serializer(), Emoji.serializer())
+    }
 
     /**
      * Delete an emoji.
@@ -78,7 +80,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteEmoji(emojiId: String) = deleteRequest("/guilds/$guildId/emojis/$emojiId")
+    suspend fun deleteEmoji(emojiId: String) {
+        deleteRequest("/guilds/$guildId/emojis/$emojiId")
+    }
 
     /**
      * Get this guild.
@@ -96,8 +100,9 @@ class GuildClient(
      * @return The updated guild.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(guild: PatchGuild) =
-        patchRequest("/guilds/$guildId", guild, PatchGuild.serializer(), Guild.serializer())
+    suspend fun update(guild: PatchGuild): Guild {
+        return patchRequest("/guilds/$guildId", guild, PatchGuild.serializer(), Guild.serializer())
+    }
 
     /**
      * Delete this guild. Use with caution, cannot be undone.
@@ -122,8 +127,9 @@ class GuildClient(
      * @return The created channel.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createChannel(channel: CreateChannel) =
-        postRequest("/guilds/$guildId/channels", channel, CreateChannel.serializer(), Channel.serializer())
+    suspend fun createChannel(channel: CreateChannel): Channel {
+        return postRequest("/guilds/$guildId/channels", channel, CreateChannel.serializer(), Channel.serializer())
+    }
 
     /**
      * Modify the order of channels.
@@ -132,8 +138,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyChannelPositions(positions: List<GuildPosition>) =
+    suspend fun modifyChannelPositions(positions: List<GuildPosition>) {
         patchRequest("/guilds/$guildId/channels", positions, GuildPosition.serializer().list)
+    }
 
     /**
      * Get a member of this guild.
@@ -154,8 +161,9 @@ class GuildClient(
      * @return List of guild members.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getMembers(limit: Int = 1, afterMember: String = "0") =
-        getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember", GuildMember.serializer().list)
+    suspend fun getMembers(limit: Int = 1, afterMember: String = "0"): List<GuildMember> {
+        return getRequest("/guilds/$guildId/members?limit=$limit&after=$afterMember", GuildMember.serializer().list)
+    }
 
     /**
      * Add a member to this guild.
@@ -167,8 +175,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMember(userId: String, addGuildMember: AddGuildMember) =
+    suspend fun addMember(userId: String, addGuildMember: AddGuildMember) {
         putRequest("/guilds/$guildId/members/$userId", addGuildMember, AddGuildMember.serializer())
+    }
 
     /**
      * Update a guild member.
@@ -178,8 +187,29 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateMember(userId: String, guildMember: PatchGuildMember) =
-        patchRequest("/guilds/$guildId/members/$userId", guildMember, PatchGuildMember.serializer(), omitNullProperties = true)
+    suspend fun updateMember(userId: String, guildMember: PatchGuildMember) {
+        patchRequest(
+            "/guilds/$guildId/members/$userId",
+            guildMember,
+            PatchGuildMember.serializer(),
+            omitNullProperties = true
+        )
+    }
+
+    /**
+     * Disconnects a guild member from the voice channel they are currently connected to.
+     *
+     * @param userId The user to disconnect.
+     *
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
+     */
+    suspend fun disconnectMemberVoiceChannel(userId: String) {
+        patchRequest(
+            "/guilds/$guildId/members/$userId",
+            PatchGuildMemberMoveVoiceChannel(null),
+            PatchGuildMemberMoveVoiceChannel.serializer()
+        )
+    }
 
     /**
      * Change a guild member's nickname.
@@ -188,8 +218,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) =
+    suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) {
         patchRequest("/guilds/$guildId/members/@me/nick", guildMember, PatchGuildMemberNickname.serializer())
+    }
 
     /**
      * Add a role to a user.
@@ -199,8 +230,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun addMemberRole(userId: String, roleId: String) =
+    suspend fun addMemberRole(userId: String, roleId: String) {
         putRequest("/guilds/$guildId/members/$userId/roles/$roleId")
+    }
 
     /**
      * Remove a role from a user.
@@ -210,8 +242,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun removeMemberRole(userId: String, roleId: String) =
+    suspend fun removeMemberRole(userId: String, roleId: String) {
         deleteRequest("/guilds/$guildId/members/$userId/roles/$roleId")
+    }
 
     /**
      * Kick a user from the server.
@@ -267,8 +300,9 @@ class GuildClient(
      * @return The created role.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun createRole(guildRole: CreateGuildRole) =
-        postRequest("/guilds/$guildId/roles", guildRole, CreateGuildRole.serializer(), Role.serializer())
+    suspend fun createRole(guildRole: CreateGuildRole): Role {
+        return postRequest("/guilds/$guildId/roles", guildRole, CreateGuildRole.serializer(), Role.serializer())
+    }
 
     /**
      * Change role ordering.
@@ -277,8 +311,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun modifyRolePositions(positions: List<GuildPosition>) =
+    suspend fun modifyRolePositions(positions: List<GuildPosition>) {
         patchRequest("/guilds/$guildId/roles", positions, GuildPosition.serializer().list)
+    }
 
     /**
      * Update a role.
@@ -289,8 +324,9 @@ class GuildClient(
      * @return The updated role.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateRole(roleId: String, role: PatchRole) =
-        patchRequest("/guilds/$guildId/roles/$roleId", role, PatchRole.serializer(), Role.serializer())
+    suspend fun updateRole(roleId: String, role: PatchRole): Role {
+        return patchRequest("/guilds/$guildId/roles/$roleId", role, PatchRole.serializer(), Role.serializer())
+    }
 
     /**
      * Delete a role.
@@ -363,11 +399,13 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) = patchRequest(
-        "/guilds/$guildId/integrations/$guildIntegrationId",
-        guildIntegration,
-        PatchGuildIntegration.serializer()
-    )
+    suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
+        patchRequest(
+            "/guilds/$guildId/integrations/$guildIntegrationId",
+            guildIntegration,
+            PatchGuildIntegration.serializer()
+        )
+    }
 
     /**
      * Delete a guild integration.
@@ -376,8 +414,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun deleteIntegration(guildIntegrationId: String) =
+    suspend fun deleteIntegration(guildIntegrationId: String) {
         deleteRequest("/guilds/$guildId/integrations/$guildIntegrationId")
+    }
 
     /**
      * Sync an integration.
@@ -386,8 +425,9 @@ class GuildClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun syncIntegration(guildIntegrationId: String) =
+    suspend fun syncIntegration(guildIntegrationId: String) {
         postRequest("/guilds/$guildId/integrations/$guildIntegrationId/sync")
+    }
 
     /**
      * Get the guild embed.
@@ -405,8 +445,9 @@ class GuildClient(
      * @return The updated guild embed.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun updateEmbed(guildEmbed: GuildEmbed) =
-        patchRequest("/guilds/$guildId/embed", guildEmbed, GuildEmbed.serializer(), GuildEmbed.serializer())
+    suspend fun updateEmbed(guildEmbed: GuildEmbed): GuildEmbed {
+        return patchRequest("/guilds/$guildId/embed", guildEmbed, GuildEmbed.serializer(), GuildEmbed.serializer())
+    }
 
     /**
      * Get the guild's vanity url.
