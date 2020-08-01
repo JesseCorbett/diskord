@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.1] - 2020-07-31
+
+### Fixed
+Fixed an issue where the user agent reported the wrong version
+
 ## [1.7.0] - 2020-07-29
 
 ### Added/Fixed
