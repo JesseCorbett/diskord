@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.dsl
 import com.jessecorbett.diskord.api.model.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
+import com.jessecorbett.diskord.api.websocket.model.GatewayIntents
 import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
 import com.jessecorbett.diskord.util.EnhancedEventListener
 import io.ktor.util.KtorExperimentalAPI
@@ -29,8 +30,8 @@ annotation class DiskordDsl
  * @param shardCount The count of shards, if the bot is sharded.
  */
 @OptIn(KtorExperimentalAPI::class)
-class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventListener(token) {
-    private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount)
+class Bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents) : EnhancedEventListener(token) {
+    private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount, intents = intents)
 
     /*
      * Convenience methods for bot implementations
@@ -733,8 +734,8 @@ class Bot(token: String, shardId: Int = 0, shardCount: Int = 0) : EnhancedEventL
  * @return A [Bot] instance using the token and DSL hooks specified in the block.
  */
 @DiskordDsl
-suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, block: Bot.() -> Unit): Bot {
-    val bot = Bot(token, shardId, shardCount)
+suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents = GatewayIntents.NONE, block: Bot.() -> Unit): Bot {
+    val bot = Bot(token, shardId, shardCount, intents)
     bot.apply(block).start()
     return bot
 }
