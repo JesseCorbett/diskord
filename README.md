@@ -8,7 +8,7 @@ Built as a lean client using coroutines that gets the intricacies of rate limits
 
 Feel free to submit a PR or an Issue and I'll address it ASAP.
 
-Using Diskord? Send me a tweet about it [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by our [Discord server.](https://discord.gg/UPTWsZ5)
+Using Diskord? Send me a tweet about it [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by the [Discord server.](https://discord.gg/UPTWsZ5)
 
 ## How do I import this?
 
@@ -21,10 +21,10 @@ repositories {
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.7.2'
+    implementation 'com.jessecorbett:diskord:1.7.3'
 
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.7.2'
+    implementation 'com.jessecorbett:diskord-jvm:1.7.3'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.3</version>
 </dependency>
 ```
 
