@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.7.2] - 2020-08-09
+
+### Fixed
+Fixed the CDN domain after Discord decided not to migrate the CDN
+
 ## [1.7.1] - 2020-07-31
 
 ### Fixed
