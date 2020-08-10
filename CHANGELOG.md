@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.3] - 2020-08-09
+
+### Added/Fixed
+* Fixed an issue with `GuildClient.createBan` not sending the correct request
+* Added `CreateGuildBan` to hold `GuildClient.createBan` JSON payload
+
 ## [1.7.2] - 2020-08-09
 
 ### Fixed
