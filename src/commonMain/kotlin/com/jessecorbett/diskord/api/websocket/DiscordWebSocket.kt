@@ -47,6 +47,7 @@ import kotlin.coroutines.CoroutineContext
  * @param heartbeatContext The coroutine context to process heartbeat events to the gateway in.
  * @param httpClient The http client to used to create the websocket connection.
  * @property gatewayUrl The url to connect to. Will be fetched it not provided.
+ * @property intents the intents to send to the gateway
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
@@ -63,7 +64,7 @@ class DiscordWebSocket(
     heartbeatContext: CoroutineContext = Dispatchers.Default,
     httpClient: HttpClientEngineFactory<HttpClientEngineConfig> = websocketClient(),
     private var gatewayUrl: String? = null,
-    private val intents: GatewayIntents = GatewayIntents.NONE
+    private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED
 ) {
     private val logger = KotlinLogging.logger {}
     private val socketClient: HttpClient = HttpClient(httpClient).config {
