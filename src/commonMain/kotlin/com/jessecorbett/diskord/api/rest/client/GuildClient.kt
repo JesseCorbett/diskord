@@ -273,7 +273,20 @@ class GuildClient(
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
     suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) =
-        putRequest("/guilds/$guildId/bans/$userId?delete-message-days=$deleteMessageDays&reason=$reason")
+        createBan(userId, CreateGuildBan(deleteMessageDays, reason))
+
+    /**
+     * Ban a user.
+     *
+     * @param userId The user to ban.
+     * @param createGuildBan the guild ban
+     *
+     * @since 1.7.4
+     *
+     * @throws com.jessecorbett.diskord.api.exception.DiscordException
+     */
+    suspend fun createBan(userId: String, createGuildBan: CreateGuildBan) =
+        putRequest("/guilds/$guildId/bans/$userId", createGuildBan, CreateGuildBan.serializer())
 
     /**
      * Unban a user.
