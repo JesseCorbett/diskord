@@ -145,6 +145,21 @@ suspend fun main() {
 }
 ```
 
+### Intents Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+suspend fun main() {
+    bot(BOT_TOKEN, intents = GatewayIntents.ALL) {
+        userPresenceUpdated {
+            // Presence data is considered "privileged" and not enabled by default.
+            //
+            // See [https://discord.com/developers/docs/topics/gateway#gateway-intents] for more information.
+        }
+    }
+}
+```
+
 ## FAQ
 * Does this support voice chat?
     * No, voice chat is not supported at this time. If you need it I recommend checking out [JDA](https://github.com/DV8FromTheWorld/JDA) or [Discord4J](https://github.com/Discord4J/Discord4J)
