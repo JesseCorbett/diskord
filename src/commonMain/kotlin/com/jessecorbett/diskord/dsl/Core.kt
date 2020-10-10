@@ -28,9 +28,10 @@ annotation class DiskordDsl
  * @param token The bot token from the discord application management page https://discordapp.com/developers/applications/.
  * @param shardId The shard id, if this bot is sharded.
  * @param shardCount The count of shards, if the bot is sharded.
+ * @param intents the intents to send to the gateway
  */
 @OptIn(KtorExperimentalAPI::class)
-class Bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents) : EnhancedEventListener(token) {
+class Bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED) : EnhancedEventListener(token) {
     private val websocket = DiscordWebSocket(token, this, shardId = shardId, shardCount = shardCount, intents = intents)
 
     /*
@@ -734,7 +735,7 @@ class Bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: Gateway
  * @return A [Bot] instance using the token and DSL hooks specified in the block.
  */
 @DiskordDsl
-suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents = GatewayIntents.NONE, block: Bot.() -> Unit): Bot {
+suspend fun bot(token: String, shardId: Int = 0, shardCount: Int = 0, intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED, block: Bot.() -> Unit): Bot {
     val bot = Bot(token, shardId, shardCount, intents)
     bot.apply(block).start()
     return bot
