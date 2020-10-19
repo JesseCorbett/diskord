@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.8.0] - 2020-10-18
+
+### Added
+- Added support for gateway intents.
+
 ## [1.7.3] - 2020-08-09
 
 ### Added/Fixed
@@ -9,12 +14,12 @@
 ## [1.7.2] - 2020-08-09
 
 ### Fixed
-Fixed the CDN domain after Discord decided not to migrate the CDN
+- Fixed the CDN domain after Discord decided not to migrate the CDN
 
 ## [1.7.1] - 2020-07-31
 
 ### Fixed
-Fixed an issue where the user agent reported the wrong version
+- Fixed an issue where the user agent reported the wrong version
 
 ## [1.7.0] - 2020-07-29
 
@@ -26,7 +31,7 @@ The solution is the addition of `GuildClient.disconnectMemberVoiceChannel` which
 request but only disconnects members from voice.
 
 ### Changed
-Updated kotlinx.coroutines to 1.3.8
+- Updated kotlinx.coroutines to 1.3.8
 
 ## [1.6.2] - 2020-04-11
 

@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.websocket.commands
 
+import com.jessecorbett.diskord.api.websocket.model.GatewayIntents
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,7 +11,8 @@ data class IdentifyShard(
     @SerialName("compress") val canCompress: Boolean = false,
     @SerialName("large_threshold") val memberCountThreshold: Int = 50,
     @SerialName("presence") val presence: UpdateStatus? = null,
-    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties()
+    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties(),
+    @SerialName("intents") val intents: GatewayIntents? = null
 )
 
 @Serializable
@@ -19,7 +21,8 @@ data class Identify(
     @SerialName("compress") val canCompress: Boolean = false,
     @SerialName("large_threshold") val memberCountThreshold: Int = 50,
     @SerialName("presence") val presence: UpdateStatus? = null,
-    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties()
+    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties(),
+    @SerialName("intents") val intents: GatewayIntents? = null
 )
 
 @Serializable

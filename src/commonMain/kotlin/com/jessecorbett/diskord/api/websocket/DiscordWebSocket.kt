@@ -11,9 +11,7 @@ import com.jessecorbett.diskord.api.websocket.commands.UpdateStatus
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
 import com.jessecorbett.diskord.api.websocket.events.Hello
 import com.jessecorbett.diskord.api.websocket.events.Ready
-import com.jessecorbett.diskord.api.websocket.model.GatewayMessage
-import com.jessecorbett.diskord.api.websocket.model.OpCode
-import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
+import com.jessecorbett.diskord.api.websocket.model.*
 import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
 import com.jessecorbett.diskord.util.defaultJson
@@ -49,6 +47,7 @@ import kotlin.coroutines.CoroutineContext
  * @param heartbeatContext The coroutine context to process heartbeat events to the gateway in.
  * @param httpClient The http client to used to create the websocket connection.
  * @property gatewayUrl The url to connect to. Will be fetched it not provided.
+ * @property intents the intents to send to the gateway
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
@@ -64,7 +63,8 @@ class DiscordWebSocket(
     private val eventListenerContext: CoroutineContext = Dispatchers.Default,
     heartbeatContext: CoroutineContext = Dispatchers.Default,
     httpClient: HttpClientEngineFactory<HttpClientEngineConfig> = websocketClient(),
-    private var gatewayUrl: String? = null
+    private var gatewayUrl: String? = null,
+    private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED
 ) {
     private val logger = KotlinLogging.logger {}
     private val socketClient: HttpClient = HttpClient(httpClient).config {
@@ -257,9 +257,9 @@ class DiscordWebSocket(
             // Compiler doesn't understand 2 != null's so we have to assert they're non-null
             sendGatewayMessage(OpCode.RESUME, Resume(token, sessionId!!, sequenceNumber!!), Resume.serializer())
         } else if (shardCount > 0) { // IDENTIFY (sharded)
-            sendGatewayMessage(OpCode.IDENTIFY, IdentifyShard(token, listOf(shardId, shardCount)), IdentifyShard.serializer())
+            sendGatewayMessage(OpCode.IDENTIFY, IdentifyShard(token, listOf(shardId, shardCount), intents = intents), IdentifyShard.serializer())
         } else { // IDENTIFY (unsharded)
-            sendGatewayMessage(OpCode.IDENTIFY, Identify(token), Identify.serializer())
+            sendGatewayMessage(OpCode.IDENTIFY, Identify(token, intents = intents), Identify.serializer())
         }
 
         heartbeatJob?.cancel()
