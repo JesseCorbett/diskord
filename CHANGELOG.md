@@ -1,6 +1,6 @@
 # Changelog
 
-## [X.X.X] - XXXX-XX-XX
+## [1.8.0] - 2020-10-18
 
 ### Added
 - Added support for gateway intents.
