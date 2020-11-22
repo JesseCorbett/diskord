@@ -114,5 +114,17 @@ enum class WebSocketCloseCode(val code: Short) {
     /**
      * @suppress meanings documented in link.
      */
-    SHARDING_REQUIRED(4011)
+    SHARDING_REQUIRED(4011),
+    /**
+     * @suppress meanings documented in link.
+     */
+    INVALID_API_VERSION(4012),
+    /**
+     * @suppress meanings documented in link.
+     */
+    INVALID_INTENTS(4013),
+    /**
+     * @suppress meanings documented in link.
+     */
+    DISALLOWED_INTENTS(4014),
 }

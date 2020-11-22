@@ -21,10 +21,10 @@ repositories {
 
 dependencies {
     // Only if gradle >= 5.3
-    implementation 'com.jessecorbett:diskord:1.7.3'
+    implementation 'com.jessecorbett:diskord:1.8.0'
 
     // Valid for all gradle versions
-    implementation 'com.jessecorbett:diskord-jvm:1.7.3'
+    implementation 'com.jessecorbett:diskord-jvm:1.8.0'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
     <groupId>com.jessecorbett</groupId>
     <artifactId>diskord-jvm</artifactId>
-    <version>1.7.3</version>
+    <version>1.8.0</version>
 </dependency>
 ```
 
@@ -140,6 +140,21 @@ suspend fun main() {
                 reply(words.drop(1).joinToString(" "))
                 delete()
             }            
+        }
+    }
+}
+```
+
+### Intents Example
+```kotlin
+const val BOT_TOKEN = "A-Totally-Real-Discord-Bot-Token"
+
+suspend fun main() {
+    bot(BOT_TOKEN, intents = GatewayIntents.ALL) {
+        userPresenceUpdated {
+            // Presence data is considered "privileged" and not enabled by default.
+            //
+            // See [https://discord.com/developers/docs/topics/gateway#gateway-intents] for more information.
         }
     }
 }
