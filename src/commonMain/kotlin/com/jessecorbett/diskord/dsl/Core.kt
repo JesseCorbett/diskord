@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.dsl
 
 import com.jessecorbett.diskord.api.common.*
-import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
-import com.jessecorbett.diskord.api.websocket.events.*
-import com.jessecorbett.diskord.api.websocket.model.GatewayIntents
-import com.jessecorbett.diskord.api.websocket.model.UserStatusActivity
+import com.jessecorbett.diskord.api.gateway.DiscordWebSocket
+import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
+import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.util.EnhancedEventListener
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.serialization.json.JsonElement

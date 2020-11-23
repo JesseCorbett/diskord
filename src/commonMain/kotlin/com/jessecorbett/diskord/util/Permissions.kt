@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.exception.DiscordMissingDataException
+import com.jessecorbett.diskord.api.exceptions.DiscordMissingDataException
 import com.jessecorbett.diskord.api.common.*
 
 /**

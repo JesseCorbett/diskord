@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.rest.channel.FileData
+import com.jessecorbett.diskord.api.channel.FileData
 import io.ktor.utils.io.core.buildPacket
 import io.ktor.utils.io.core.writeFully
 

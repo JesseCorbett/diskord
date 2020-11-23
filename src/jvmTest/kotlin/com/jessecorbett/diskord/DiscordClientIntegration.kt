@@ -2,17 +2,17 @@ package com.jessecorbett.diskord
 
 import assertk.assertThat
 import assertk.assertions.*
-import com.jessecorbett.diskord.api.exception.DiscordBadPermissionsException
-import com.jessecorbett.diskord.api.exception.DiscordException
+import com.jessecorbett.diskord.api.exceptions.DiscordBadPermissionsException
+import com.jessecorbett.diskord.api.exceptions.DiscordException
 import com.jessecorbett.diskord.api.common.ExplicitContentFilterLevel
 import com.jessecorbett.diskord.api.common.NotificationsLevel
 import com.jessecorbett.diskord.api.common.VerificationLevel
-import com.jessecorbett.diskord.api.rest.global.CreateDM
-import com.jessecorbett.diskord.api.rest.global.CreateGroupDM
-import com.jessecorbett.diskord.api.rest.global.CreateGuild
-import com.jessecorbett.diskord.api.rest.global.ModifyUser
-import com.jessecorbett.diskord.api.rest.global.GlobalClient
-import com.jessecorbett.diskord.api.rest.guild.GuildClient
+import com.jessecorbett.diskord.api.global.CreateDM
+import com.jessecorbett.diskord.api.global.CreateGroupDM
+import com.jessecorbett.diskord.api.global.CreateGuild
+import com.jessecorbett.diskord.api.global.ModifyUser
+import com.jessecorbett.diskord.api.global.GlobalClient
+import com.jessecorbett.diskord.api.guild.GuildClient
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Ignore
 import kotlin.test.Test

@@ -1,13 +1,13 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
+import com.jessecorbett.diskord.api.exceptions.DiscordNotFoundException
 import com.jessecorbett.diskord.api.common.Channel
 import com.jessecorbett.diskord.api.common.Emoji
 import com.jessecorbett.diskord.api.common.Message
-import com.jessecorbett.diskord.api.rest.channel.Embed
-import com.jessecorbett.diskord.api.rest.channel.ChannelClient
-import com.jessecorbett.diskord.api.websocket.EventListener
-import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
+import com.jessecorbett.diskord.api.channel.Embed
+import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.api.gateway.EventListener
+import com.jessecorbett.diskord.api.gateway.events.MessageUpdate
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
 
@@ -34,7 +34,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @param text The message to send.
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend infix fun Message.reply(text: String) =
         clientStore.channels[channelId].sendMessage(text, null)
@@ -45,7 +45,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @param text The message to send.
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend infix fun Message.replyAndDelete(text: String): Message {
         this.delete()
@@ -59,7 +59,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @param embed The embed to include with the message.
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun Message.reply(text: String, embed: Embed? = null) =
         clientStore.channels[channelId].sendMessage(text, embed)
@@ -72,7 +72,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @see embed
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun Message.reply(text: String, embedDsl: Embed.() -> Unit) =
         clientStore.channels[channelId].sendMessage(text, embedDsl)
@@ -84,7 +84,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @see com.jessecorbett.diskord.dsl.message
      *
      * @return the created [Message].
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun Message.reply(block: CombinedMessageEmbed.() -> Unit) =
         clientStore.channels[channelId].sendMessage(block)
@@ -92,7 +92,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
     /**
      * Convenience function for deleting a message.
      *
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun Message.delete() = try {
         clientStore.channels[channelId].deleteMessage(id)
@@ -105,7 +105,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      *
      * @param emoji The text form of an emoji, such as a unicode emoji.
      *
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors
      */
     suspend fun Message.react(emoji: String) = clientStore.channels[channelId].addMessageReaction(id, emoji)
 
@@ -114,7 +114,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      *
      * @param emoji The custom emoji.
      *
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors
      */
     suspend fun Message.react(emoji: Emoji) = clientStore.channels[channelId].addMessageReaction(id, emoji)
 
@@ -125,7 +125,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @param embed The optional embed to include with the message.
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun MessageUpdate.reply(text: String, embed: Embed? = null) =
         clientStore.channels[channelId].sendMessage(text, embed)
@@ -138,7 +138,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @see embed
      *
      * @return the [Message] created
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun MessageUpdate.reply(text: String, embedDsl: Embed.() -> Unit) =
         clientStore.channels[channelId].sendMessage(text, embedDsl)
@@ -150,7 +150,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * @see com.jessecorbett.diskord.dsl.message
      *
      * @return the created [Message].
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun MessageUpdate.reply(block: CombinedMessageEmbed.() -> Unit) =
         clientStore.channels[channelId].sendMessage(block)
@@ -158,7 +158,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
     /**
      * Convenience property for deleting a message that was updated.
      *
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     suspend fun MessageUpdate.delete() = try {
         clientStore.channels[channelId].deleteMessage(id)
@@ -171,7 +171,7 @@ abstract class EnhancedEventListener(token: String) : EventListener() {
      * Convenience property for getting the full [Channel] from a [Message] instance.
      *
      * @returns the channel object for the channel the message was sent in.
-     * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
      */
     val Message.channel: ChannelClient
         get() = clientStore.channels[channelId]

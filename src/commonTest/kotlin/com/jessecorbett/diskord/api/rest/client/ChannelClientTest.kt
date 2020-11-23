@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.rest.client
 import assertk.assertThat
 import assertk.assertions.isSameAs
 import com.jessecorbett.diskord.api.common.Channel
-import com.jessecorbett.diskord.api.rest.channel.ChannelClient
+import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.test.waitForTest
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.mockk.*

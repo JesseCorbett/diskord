@@ -1,13 +1,13 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.common.*
-import com.jessecorbett.diskord.api.rest.channel.Embed
-import com.jessecorbett.diskord.api.rest.channel.ChannelClient
-import com.jessecorbett.diskord.api.rest.channel.CreateMessage
-import com.jessecorbett.diskord.api.rest.channel.FileData
-import com.jessecorbett.diskord.api.rest.guild.GuildClient
-import com.jessecorbett.diskord.api.rest.guild.PatchGuildMember
-import com.jessecorbett.diskord.api.rest.guild.PatchGuildMemberNickname
+import com.jessecorbett.diskord.api.channel.Embed
+import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.api.channel.CreateMessage
+import com.jessecorbett.diskord.api.channel.FileData
+import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.api.guild.PatchGuildMember
+import com.jessecorbett.diskord.api.guild.PatchGuildMemberNickname
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
 
@@ -203,7 +203,7 @@ val Emoji.tag: String
  * @param embed The embed to include with the message.
  *
  * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null) =
     createMessage(CreateMessage(content = message, embed = embed))
@@ -216,7 +216,7 @@ suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null
  * @see embed
  *
  * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -> Unit) =
     sendMessage(message, embed(embedDsl))
@@ -228,7 +228,7 @@ suspend fun ChannelClient.sendMessage(message: String = "", embedDsl: Embed.() -
  * @see com.jessecorbett.diskord.dsl.message
  *
  * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
     CombinedMessageEmbed().apply(block).let { sendMessage(it.text, it.embed()) }
@@ -240,7 +240,7 @@ suspend fun ChannelClient.sendMessage(block: CombinedMessageEmbed.() -> Unit) =
  * @param comment The comment to send with the file.
  *
  * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun ChannelClient.sendFile(data: FileData, comment: String = "") =
     createMessage(CreateMessage(content = comment), data)
@@ -255,7 +255,7 @@ suspend fun ChannelClient.addMessageReaction(messageId: String, emojiId: String,
  * @param nickname the new nickname.
  *
  * @return the created [Message].
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun GuildClient.changeNickname(nickname: String) = changeMemberNickname(PatchGuildMemberNickname(nickname))
 
@@ -265,7 +265,7 @@ suspend fun GuildClient.changeNickname(nickname: String) = changeMemberNickname(
  * @param userId the id of the user whose nickname to change.
  * @param nickname the new nickname.
  *
- * @throws com.jessecorbett.diskord.api.exception.DiscordException upon client errors.
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 suspend fun GuildClient.changeNickname(userId: String, nickname: String) =
     updateMember(userId, PatchGuildMember(nickname))

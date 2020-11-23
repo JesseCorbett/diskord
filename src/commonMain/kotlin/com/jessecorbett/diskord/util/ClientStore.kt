@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.rest.channel.ChannelClient
-import com.jessecorbett.diskord.api.rest.diskordinternal.RestClient
-import com.jessecorbett.diskord.api.rest.global.GlobalClient
-import com.jessecorbett.diskord.api.rest.guild.GuildClient
-import com.jessecorbett.diskord.api.rest.webhook.WebhookClient
+import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.internal.client.RestClient
+import com.jessecorbett.diskord.api.global.GlobalClient
+import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.api.webhook.WebhookClient
 
 /**
  * A container of [RestClients] for each of the 3 resource clients and the [GlobalClient].
