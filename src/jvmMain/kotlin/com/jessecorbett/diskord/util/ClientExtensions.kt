@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.model.Message
-import com.jessecorbett.diskord.api.rest.CreateMessage
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.rest.channel.CreateMessage
+import com.jessecorbett.diskord.api.rest.channel.ChannelClient
 import java.io.File
 import java.nio.file.Path
 

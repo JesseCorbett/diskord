@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.util
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.matchesPredicate
-import com.jessecorbett.diskord.api.model.*
+import com.jessecorbett.diskord.api.common.*
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

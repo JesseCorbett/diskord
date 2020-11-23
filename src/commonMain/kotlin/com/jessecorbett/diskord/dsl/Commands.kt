@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.dsl
 
-import com.jessecorbett.diskord.api.model.Message
+import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.util.isFromUser
 
 /**

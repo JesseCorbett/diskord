@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.exception.DiscordMissingDataException
-import com.jessecorbett.diskord.api.model.*
+import com.jessecorbett.diskord.api.common.*
 
 /**
  * Compute the permissions for the given user in the channel.  Takes into account the permission overwrites and whether or not

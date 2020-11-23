@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.model.Color
+import com.jessecorbett.diskord.api.common.Color
 
 /**
  * A collection of convenience methods and predefined colors for working with the color field in embeds.

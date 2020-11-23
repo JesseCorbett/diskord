@@ -2,10 +2,10 @@ package com.jessecorbett.diskord.api.websocket
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
-import com.jessecorbett.diskord.api.model.UserStatus
-import com.jessecorbett.diskord.api.rest.client.GlobalClient
-import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
-import com.jessecorbett.diskord.api.rest.client.internal.RestClient
+import com.jessecorbett.diskord.api.common.UserStatus
+import com.jessecorbett.diskord.api.rest.global.GlobalClient
+import com.jessecorbett.diskord.api.rest.diskordinternal.DefaultRestClient
+import com.jessecorbett.diskord.api.rest.diskordinternal.RestClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
 import com.jessecorbett.diskord.api.websocket.commands.IdentifyShard
 import com.jessecorbett.diskord.api.websocket.commands.Resume

@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.dsl
 
-import com.jessecorbett.diskord.api.model.*
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.websocket.DiscordWebSocket
 import com.jessecorbett.diskord.api.websocket.events.*
 import com.jessecorbett.diskord.api.websocket.model.GatewayIntents

@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.exception.DiscordBadRequestException
-import com.jessecorbett.diskord.api.model.Emoji
-import com.jessecorbett.diskord.api.model.Guild
-import com.jessecorbett.diskord.api.model.User
-import com.jessecorbett.diskord.api.rest.response.PartialGuild
+import com.jessecorbett.diskord.api.common.Emoji
+import com.jessecorbett.diskord.api.common.Guild
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.rest.global.PartialGuild
 
 /**
  * The host of the discord content delivery network.

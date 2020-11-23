@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.dsl
 
-import com.jessecorbett.diskord.api.model.Color
-import com.jessecorbett.diskord.api.rest.*
+import com.jessecorbett.diskord.api.common.Color
+import com.jessecorbett.diskord.api.rest.channel.*
 
 /**
  * DSL command to create a message embed.

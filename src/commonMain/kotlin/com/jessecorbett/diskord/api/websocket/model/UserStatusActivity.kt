@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.api.websocket.model
 
-import com.jessecorbett.diskord.api.model.Emoji
+import com.jessecorbett.diskord.api.common.Emoji
 import kotlinx.serialization.*
 
 @Serializable

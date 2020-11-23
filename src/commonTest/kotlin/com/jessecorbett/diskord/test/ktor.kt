@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.test
 
-import com.jessecorbett.diskord.api.rest.client.internal.DISCORD_API_URL
+import com.jessecorbett.diskord.api.rest.diskordinternal.DISCORD_API_URL
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope

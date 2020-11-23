@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.api.exception
 
-import com.jessecorbett.diskord.api.model.Channel
+import com.jessecorbett.diskord.api.common.Channel
 
 /**
  * Thrown when a model is missing data that is required to perform an operation.

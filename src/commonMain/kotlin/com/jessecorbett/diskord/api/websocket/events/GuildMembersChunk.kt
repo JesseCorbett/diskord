@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.api.websocket.events
 
-import com.jessecorbett.diskord.api.model.GuildMember
+import com.jessecorbett.diskord.api.common.GuildMember
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

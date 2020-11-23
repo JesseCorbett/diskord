@@ -1,11 +1,11 @@
 package com.jessecorbett.diskord.api.websocket.events
 
-import com.jessecorbett.diskord.api.model.User
+import com.jessecorbett.diskord.api.common.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * [com.jessecorbett.diskord.api.model.GuildMember] plus guild_id
+ * [com.jessecorbett.diskord.api.common.GuildMember] plus guild_id
  */
 @Serializable
 data class GuildMemberAdd(

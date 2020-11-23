@@ -1,13 +1,15 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.model.*
-import com.jessecorbett.diskord.api.rest.*
-import com.jessecorbett.diskord.api.rest.Embed
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
-import com.jessecorbett.diskord.api.rest.client.GuildClient
+import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.rest.channel.Embed
+import com.jessecorbett.diskord.api.rest.channel.ChannelClient
+import com.jessecorbett.diskord.api.rest.channel.CreateMessage
+import com.jessecorbett.diskord.api.rest.channel.FileData
+import com.jessecorbett.diskord.api.rest.guild.GuildClient
+import com.jessecorbett.diskord.api.rest.guild.PatchGuildMember
+import com.jessecorbett.diskord.api.rest.guild.PatchGuildMemberNickname
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
 import com.jessecorbett.diskord.dsl.embed
-import kotlin.jvm.JvmOverloads
 
 /*
  * Primitive extensions

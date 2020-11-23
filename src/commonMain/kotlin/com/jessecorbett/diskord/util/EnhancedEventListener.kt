@@ -1,11 +1,11 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.exception.DiscordNotFoundException
-import com.jessecorbett.diskord.api.model.Channel
-import com.jessecorbett.diskord.api.model.Emoji
-import com.jessecorbett.diskord.api.model.Message
-import com.jessecorbett.diskord.api.rest.Embed
-import com.jessecorbett.diskord.api.rest.client.ChannelClient
+import com.jessecorbett.diskord.api.common.Channel
+import com.jessecorbett.diskord.api.common.Emoji
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.rest.channel.Embed
+import com.jessecorbett.diskord.api.rest.channel.ChannelClient
 import com.jessecorbett.diskord.api.websocket.EventListener
 import com.jessecorbett.diskord.api.websocket.events.MessageUpdate
 import com.jessecorbett.diskord.dsl.CombinedMessageEmbed
