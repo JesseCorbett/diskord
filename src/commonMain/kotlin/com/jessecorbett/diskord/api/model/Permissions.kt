@@ -1,6 +1,11 @@
 package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 enum class Permission(val mask: Int) {
     /**
@@ -237,7 +242,7 @@ data class Permissions(val value: Int) {
 }
 
 object PermissionsSerializer : KSerializer<Permissions> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("Permissions", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder) = Permissions(decoder.decodeInt())
 

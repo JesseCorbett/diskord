@@ -1,13 +1,12 @@
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.72"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.72"
-    id("org.jetbrains.dokka") version "0.10.1"
+    id("org.jetbrains.kotlin.multiplatform") version "1.4.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.10"
+    id("org.jetbrains.dokka") version "1.4.10.2"
 }
 
 val diskordVersion: String by project
@@ -25,68 +24,20 @@ repositories {
     jcenter() // Needed for dokka
 }
 
-val dokka by tasks.existing(DokkaTask::class) {
-    outputFormat = "html"
-    outputDirectory = "public"
-
-    multiplatform {
-        val global by creating {
-            noStdlibLink = false
-            noJdkLink = false
-        }
-
-        val common by creating {
-            sourceLink {
-                path = "src/commonMain/kotlin"
-                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/commonMain/kotlin"
-                lineSuffix = "#L"
-            }
-        }
-
-        val jvm by creating {
-            sourceLink {
-                path = "src/jvmMain/kotlin"
-                url = "https://gitlab.com/jesselcorbett/diskord/tree/master/src/jvmMain/kotlin"
-                lineSuffix = "#L"
-            }
-        }
-    }
-
-    configuration {
-        noStdlibLink = false
-        noJdkLink = false
-    }
-}
-
-val dokkaJavadoc by tasks.registering(DokkaTask::class) {
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/javadoc"
-}
-
-val jvmJavadocJar by tasks.creating(Jar::class) {
-    group = "build"
-    // dependsOn(dokkaJavadoc)
-    archiveBaseName.set("${project.name}-jvm")
-    archiveClassifier.set("javadoc")
-    // from("$buildDir/javadoc")
-}
-
-val metadataJavadocJar by tasks.creating(Jar::class) {
-    group = "build"
-    archiveBaseName.set("${project.name}-metadata")
-    archiveClassifier.set("javadoc")
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("public"))
 }
 
 kotlin {
     jvm {
         mavenPublication {
-            artifact(jvmJavadocJar)
+//            artifact(jvmJavadocJar)
         }
     }
 
     metadata {
         mavenPublication {
-            artifact(metadataJavadocJar)
+//            artifact(metadataJavadocJar)
         }
     }
 
@@ -97,11 +48,13 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
 
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
                 implementation("io.github.microutils:kotlin-logging-common:1.7.9")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
         }
@@ -119,9 +72,6 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
 
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerializationVersion")
                 implementation("io.github.microutils:kotlin-logging:1.7.9")
                 implementation("org.slf4j:slf4j-api:1.7.30")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -142,7 +92,6 @@ kotlin {
 
         // val jsMain by getting {
         //     dependencies {
-        //         implementation("org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion")
         //         implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.10.0")
         //         implementation("io.github.microutils:kotlin-logging-js:1.6.25")
         //     }

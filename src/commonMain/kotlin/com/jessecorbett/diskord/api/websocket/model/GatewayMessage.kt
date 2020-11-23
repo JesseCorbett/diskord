@@ -22,80 +22,65 @@ data class GatewayMessage(
 /**
  * The discord gateway event.
  */
-@Serializable(with = OpCodeSerializer::class)
-enum class OpCode(val code: Int) {
+@Serializable
+enum class OpCode {
     /**
      * A discord event has been sent to the client.
      */
-    DISPATCH(0),
+    @SerialName("0") DISPATCH,
 
     /**
      * Connection heartbeat, requesting a [OpCode.HEARTBEAT_ACK].
      */
-    HEARTBEAT(1),
+    @SerialName("1") HEARTBEAT,
 
     /**
      * Called after [OpCode.HELLO] is received if this is a new session.
      */
-    IDENTIFY(2),
+    @SerialName("2") IDENTIFY,
 
     /**
      * Received when a user presence or status update has occurred.
      */
-    STATUS_UPDATE(3),
+    @SerialName("3") STATUS_UPDATE,
 
     /**
      * Received when a user join/leaves/moves voice servers.
      */
-    VOICE_STATE_UPDATE(4),
+    @SerialName("4") VOICE_STATE_UPDATE,
 
     /**
      * Ping received for a voice server.
      */
-    VOICE_SERVER_PING(5),
+    @SerialName("5") VOICE_SERVER_PING,
 
     /**
      * Called after [OpCode.HELLO] is received if this is an existing session.
      */
-    RESUME(6),
+    @SerialName("6") RESUME,
 
     /**
      * The server has requested the client reconnect.
      */
-    RECONNECT(7),
+    @SerialName("7") RECONNECT,
 
     /**
      * Sent to the server to request guild members chunks be sent.
      */
-    REQUEST_GUILD_MEMBERS(8),
+    @SerialName("8") REQUEST_GUILD_MEMBERS,
 
     /**
      * The gateway session is invalid and should be reestablished.
      */
-    INVALID_SESSION(9),
+    @SerialName("9") INVALID_SESSION,
 
     /**
      * The gateway has acknowledged the connection and the client needs to identify itself.
      */
-    HELLO(10),
+    @SerialName("10")  HELLO,
 
     /**
      * Acknowledgement of a [OpCode.HEARTBEAT].
      */
-    HEARTBEAT_ACK(11)
-}
-
-object OpCodeSerializer : KSerializer<OpCode> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("OpCodeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): OpCode {
-        val target = decoder.decodeInt()
-        return OpCode.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: OpCode) {
-        encoder.encodeInt(value.code)
-    }
+    @SerialName("11") HEARTBEAT_ACK
 }

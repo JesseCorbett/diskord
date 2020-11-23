@@ -1,27 +1,23 @@
 package com.jessecorbett.diskord.api.rest.client
 
-import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.model.Webhook
 import com.jessecorbett.diskord.api.rest.PatchWebhook
 import com.jessecorbett.diskord.api.rest.WebhookSubmission
-import com.jessecorbett.diskord.api.rest.client.internal.DefaultRateLimitedRestClient
-import com.jessecorbett.diskord.api.rest.client.internal.RateLimitedRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
+import io.ktor.client.call.*
 
 /**
- * A REST client for a specific webhook.
+ * A REST client for a specific webhook
  *
- * @param token The user's API token.
- * @param webhookId The id of the webhook.
- * @param userType The user type, assumed to be a bot.
+ * @param webhookId The id of the webhook
+ * @param client The REST client implementation
  */
 @OptIn(DiskordInternals::class)
 class WebhookClient(
-    token: String,
     val webhookId: String,
-    userType: DiscordUserType = DiscordUserType.BOT,
-    client: RateLimitedRestClient = DefaultRateLimitedRestClient(token, userType)
-) : RateLimitedRestClient by client {
+    client: RestClient
+) : RestClient by client {
 
     /**
      * Get this webhook.
@@ -29,7 +25,7 @@ class WebhookClient(
      * @return This webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhook() = getRequest("/webhooks/$webhookId", Webhook.serializer())
+    suspend fun getWebhook(): Webhook = GET("/webhooks/$webhookId").receive()
 
     /**
      * Get this webhook using the secure token.
@@ -41,8 +37,7 @@ class WebhookClient(
      * @return This webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun getWebhook(webhookToken: String) =
-        getRequest("/webhooks/$webhookId/$webhookToken", Webhook.serializer())
+    suspend fun getWebhook(webhookToken: String): Webhook = GET("/webhooks/$webhookId", "/$webhookToken").receive()
 
     /**
      * Update this webhook.
@@ -52,8 +47,7 @@ class WebhookClient(
      * @return The updated webhook.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook) =
-        patchRequest("/webhooks/$webhookId", webhook, PatchWebhook.serializer(), Webhook.serializer())
+    suspend fun update(webhook: PatchWebhook): Webhook = PATCH("/webhooks/$webhookId") { body = webhook }.receive()
 
     /**
      * Update this webhook using the secure token.
@@ -65,15 +59,16 @@ class WebhookClient(
      * @return The updated webhook, minus the user.
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun update(webhook: PatchWebhook, webhookToken: String) =
-        patchRequest("/webhooks/$webhookId/$webhookToken", webhook, PatchWebhook.serializer(), Webhook.serializer())
+    suspend fun update(webhook: PatchWebhook, webhookToken: String): Webhook {
+        return PATCH("/webhooks/$webhookId", "/$webhookToken") { body = webhook }.receive()
+    }
 
     /**
      * Delete this webhook.
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun delete() = deleteRequest("/webhooks/$webhookId")
+    suspend fun delete(): Unit = DELETE("/webhooks/$webhookId").receive()
 
     /**
      * Delete this webhook using the secure token.
@@ -82,7 +77,7 @@ class WebhookClient(
      *
      * @throws com.jessecorbett.diskord.api.exception.DiscordException
      */
-    suspend fun delete(webhookToken: String) = deleteRequest("/webhooks/$webhookId/$webhookToken")
+    suspend fun delete(webhookToken: String): Unit = DELETE("/webhooks/$webhookId", "/$webhookToken").receive()
 
 
     /**
@@ -98,9 +93,5 @@ class WebhookClient(
         webhookToken: String,
         webhookSubmission: WebhookSubmission,
         waitForValidation: Boolean = false
-    ) = postRequest(
-        "/webhooks/$webhookId/$webhookToken?wait=$waitForValidation",
-        webhookSubmission,
-        WebhookSubmission.serializer()
-    )
+    ): WebhookSubmission =  POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") { body = webhookSubmission }.receive()
 }

@@ -1,20 +1,20 @@
 package com.jessecorbett.diskord.util
 
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 
 
 /**
- * [JsonConfiguration] that modifies [JsonConfiguration.Stable].
+ * Our base [Json] configuration.
  */
-internal val jsonConfiguration = JsonConfiguration.Stable.copy(ignoreUnknownKeys = true, isLenient = true, useArrayPolymorphism = true)
-
-/**
- * Default [Json] instance.
- */
-internal val defaultJson = Json(jsonConfiguration)
+internal val defaultJson = Json {
+    ignoreUnknownKeys = true
+    isLenient = true
+    useArrayPolymorphism = true
+}
 
 /**
  * Relaxed [Json] instance that omits null values from (de-)serialized objects.
  */
-internal val relaxedJson = Json(jsonConfiguration.copy(encodeDefaults = false))
+internal val omitNullsJson = Json(defaultJson) {
+    encodeDefaults = false
+}

@@ -4,6 +4,8 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.model.UserStatus
 import com.jessecorbett.diskord.api.rest.client.DiscordClient
+import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
+import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
 import com.jessecorbett.diskord.api.websocket.commands.IdentifyShard
 import com.jessecorbett.diskord.api.websocket.commands.Resume
@@ -14,6 +16,7 @@ import com.jessecorbett.diskord.api.websocket.events.Ready
 import com.jessecorbett.diskord.api.websocket.model.*
 import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
+import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.HttpClient
@@ -51,7 +54,7 @@ import kotlin.coroutines.CoroutineContext
  *
  * @constructor Provisions and connects a websocket connection for the user to discord.
  */
-@OptIn(KtorExperimentalAPI::class, ExperimentalCoroutinesApi::class)
+@OptIn(KtorExperimentalAPI::class, DiskordInternals::class)
 class DiscordWebSocket(
     private val token: String,
     private val eventListener: EventListener,
@@ -64,7 +67,8 @@ class DiscordWebSocket(
     heartbeatContext: CoroutineContext = Dispatchers.Default,
     httpClient: HttpClientEngineFactory<HttpClientEngineConfig> = websocketClient(),
     private var gatewayUrl: String? = null,
-    private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED
+    private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
+    private val restClient: RestClient = DefaultRestClient(userType, token, "", "")
 ) {
     private val logger = KotlinLogging.logger {}
     private val socketClient: HttpClient = HttpClient(httpClient).config {
@@ -88,7 +92,7 @@ class DiscordWebSocket(
     private var isOpen = false
 
     private suspend fun initializeConnection() {
-        val url = gatewayUrl ?: DiscordClient(token, userType).getBotGateway().let {
+        val url = gatewayUrl ?: DiscordClient(restClient).getBotGateway().let {
             logger.debug { it }
             it.url.removePrefix("wss://")
         }
@@ -116,7 +120,7 @@ class DiscordWebSocket(
 
                         when (frame) {
                             is Frame.Text -> {
-                                receiveMessage(defaultJson.parse(GatewayMessage.serializer(), frame.readText()))
+                                receiveMessage(defaultJson.decodeFromString(GatewayMessage.serializer(), frame.readText()))
                             }
                             is Frame.Binary -> {
                                 TODO("Add support for binary formatted data")
@@ -240,7 +244,7 @@ class DiscordWebSocket(
                 restart()
             }
             OpCode.HELLO -> {
-                initializeSession(defaultJson.fromJson(Hello.serializer(), gatewayMessage.dataPayload!!))
+                initializeSession(defaultJson.decodeFromJsonElement(Hello.serializer(), gatewayMessage.dataPayload!!))
             }
             OpCode.HEARTBEAT_ACK -> {
                 // TODO: We should handle errors to do with a lack of heartbeat ack, possibly restart.
@@ -283,7 +287,7 @@ class DiscordWebSocket(
         logger.debug { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
-            sessionId = defaultJson.fromJson(Ready.serializer(), gatewayMessage.dataPayload).sessionId
+            sessionId = defaultJson.decodeFromJsonElement(Ready.serializer(), gatewayMessage.dataPayload).sessionId
         }
 
         eventListenerScope.launch {
@@ -299,14 +303,14 @@ class DiscordWebSocket(
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
         val message = GatewayMessage(opCode, data, sequenceNumber, eventName)
-        sendWebsocketMessage!!.invoke(defaultJson.stringify(GatewayMessage.serializer(), message))
+        sendWebsocketMessage!!.invoke(defaultJson.encodeToString(GatewayMessage.serializer(), message))
     }
 
     private suspend fun <T> sendGatewayMessage(opCode: OpCode, data: T, serializer: SerializationStrategy<T>, event: DiscordEvent? = null) {
         logger.debug { "Sending OpCode: $opCode" }
         val eventName = event?.name ?: ""
-        val message = GatewayMessage(opCode, defaultJson.toJson(serializer, data), sequenceNumber, eventName)
-        val payload = defaultJson.stringify(GatewayMessage.serializer(), message)
+        val message = GatewayMessage(opCode, defaultJson.encodeToJsonElement(serializer, data), sequenceNumber, eventName)
+        val payload = defaultJson.encodeToString(GatewayMessage.serializer(), message)
         logger.debug { "Sending payload $payload" }
         sendWebsocketMessage!!.invoke(payload)
     }

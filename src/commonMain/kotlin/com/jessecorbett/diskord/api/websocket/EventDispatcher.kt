@@ -15,170 +15,170 @@ import kotlinx.serialization.json.JsonElement
 suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonElement) {
     eventListener.onEvent(event, data)
     when (event) {
-        DiscordEvent.READY -> eventListener.onReady(defaultJson.fromJson(Ready.serializer(), data))
-        DiscordEvent.RESUMED -> eventListener.onResumed(defaultJson.fromJson(Resumed.serializer(), data))
+        DiscordEvent.READY -> eventListener.onReady(defaultJson.decodeFromJsonElement(Ready.serializer(), data))
+        DiscordEvent.RESUMED -> eventListener.onResumed(defaultJson.decodeFromJsonElement(Resumed.serializer(), data))
         DiscordEvent.CHANNEL_CREATE -> eventListener.onChannelCreate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 Channel.serializer(),
                 data
             )
         )
         DiscordEvent.CHANNEL_UPDATE -> eventListener.onChannelUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 Channel.serializer(),
                 data
             )
         )
         DiscordEvent.CHANNEL_DELETE -> eventListener.onChannelDelete(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 Channel.serializer(),
                 data
             )
         )
         DiscordEvent.CHANNEL_PINS_UPDATE -> eventListener.onChannelPinsUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 ChannelPinUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_CREATE -> eventListener.onGuildCreate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 CreatedGuild.serializer(),
                 data
             )
         )
-        DiscordEvent.GUILD_UPDATE -> eventListener.onGuildUpdate(defaultJson.fromJson(Guild.serializer(), data))
-        DiscordEvent.GUILD_DELETE -> eventListener.onGuildDelete(defaultJson.fromJson(Guild.serializer(), data))
-        DiscordEvent.GUILD_BAN_ADD -> eventListener.onGuildBanAdd(defaultJson.fromJson(GuildBan.serializer(), data))
+        DiscordEvent.GUILD_UPDATE -> eventListener.onGuildUpdate(defaultJson.decodeFromJsonElement(Guild.serializer(), data))
+        DiscordEvent.GUILD_DELETE -> eventListener.onGuildDelete(defaultJson.decodeFromJsonElement(Guild.serializer(), data))
+        DiscordEvent.GUILD_BAN_ADD -> eventListener.onGuildBanAdd(defaultJson.decodeFromJsonElement(GuildBan.serializer(), data))
         DiscordEvent.GUILD_BAN_REMOVE -> eventListener.onGuildBanRemove(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildBan.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_EMOJIS_UPDATE -> eventListener.onGuildEmojiUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildEmojiUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_INTEGRATIONS_UPDATE -> eventListener.onGuildIntegrationsUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildIntegrationUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_MEMBER_ADD -> eventListener.onGuildMemberAdd(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildMemberAdd.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_MEMBER_UPDATE -> eventListener.onGuildMemberUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildMemberUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_MEMBER_REMOVE -> eventListener.onGuildMemberRemove(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildMemberRemove.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_MEMBERS_CHUNK -> eventListener.onGuildMemberChunk(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildMembersChunk.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_ROLE_CREATE -> eventListener.onGuildRoleCreate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildRoleCreate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_ROLE_UPDATE -> eventListener.onGuildRoleUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildRoleUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.GUILD_ROLE_DELETE -> eventListener.onGuildRoleDelete(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 GuildRoleDelete.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_CREATE -> eventListener.onMessageCreate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 Message.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_UPDATE -> eventListener.onMessageUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 MessageUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_DELETE -> eventListener.onMessageDelete(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 MessageDelete.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_DELETE_BULK -> eventListener.onMessageBulkDelete(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 BulkMessageDelete.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_REACTION_ADD -> eventListener.onMessageReactionAdd(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 MessageReaction.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_REACTION_REMOVE -> eventListener.onMessageReactionRemove(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 MessageReaction.serializer(),
                 data
             )
         )
         DiscordEvent.MESSAGE_REACTION_REMOVE_ALL -> eventListener.onMessageReactionRemoveAll(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 MessageReactionRemoveAll.serializer(),
                 data
             )
         )
         DiscordEvent.PRESENCE_UPDATE -> eventListener.onPresenceUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 PresenceUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.TYPING_START -> eventListener.onTypingStart(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 TypingStart.serializer(),
                 data
             )
         )
-        DiscordEvent.USER_UPDATE -> eventListener.onUserUpdate(defaultJson.fromJson(User.serializer(), data))
+        DiscordEvent.USER_UPDATE -> eventListener.onUserUpdate(defaultJson.decodeFromJsonElement(User.serializer(), data))
         DiscordEvent.VOICE_STATE_UPDATE -> eventListener.onVoiceStateUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 VoiceState.serializer(),
                 data
             )
         )
         DiscordEvent.VOICE_SERVER_UPDATE -> eventListener.onVoiceServerUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 VoiceServerUpdate.serializer(),
                 data
             )
         )
         DiscordEvent.WEBHOOKS_UPDATE -> eventListener.onWebhooksUpdate(
-            defaultJson.fromJson(
+            defaultJson.decodeFromJsonElement(
                 WebhookUpdate.serializer(),
                 data
             )

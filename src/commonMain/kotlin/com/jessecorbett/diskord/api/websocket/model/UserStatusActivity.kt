@@ -47,26 +47,11 @@ data class RichPresenceSecrets(
     @SerialName("match") val joinInstance: String? = null
 )
 
-@Serializable(with = ActivityTypeSerializer::class)
-enum class ActivityType(val code: Int) {
-    GAME(0),
-    STREAMING(1),
-    LISTENING(2),
-    UNKNOWN(3),
-    CUSTOM_STATUS(4)
-}
-
-object ActivityTypeSerializer : KSerializer<ActivityType> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("ActivityTypeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): ActivityType {
-        val target = decoder.decodeInt()
-        return ActivityType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: ActivityType) {
-        encoder.encodeInt(value.code)
-    }
+@Serializable
+enum class ActivityType {
+    @SerialName("0") GAME,
+    @SerialName("1") STREAMING,
+    @SerialName("2") LISTENING,
+    @SerialName("3") UNKNOWN,
+    @SerialName("4") CUSTOM_STATUS
 }

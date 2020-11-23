@@ -2,6 +2,11 @@ package com.jessecorbett.diskord.api.websocket.model
 
 import com.jessecorbett.diskord.api.websocket.events.DiscordEvent
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * An enum defining all currently supported gateway intents.
@@ -223,7 +228,7 @@ data class GatewayIntents(val value: Int) {
 }
 
 object GatewayIntentsSerializer : KSerializer<GatewayIntents> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("GatewayIntents", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("GatewayIntents", PrimitiveKind.INT)
 
     override fun deserialize(decoder: Decoder) = GatewayIntents(decoder.decodeInt())
 

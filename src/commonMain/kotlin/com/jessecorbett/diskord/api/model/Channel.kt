@@ -24,28 +24,13 @@ data class Channel(
     @SerialName("last_pin_timestamp") var lastPinTime: String? = null
 )
 
-@Serializable(with = ChannelTypeSerializer::class)
-enum class ChannelType(val code: Int) {
-    GUILD_TEXT(0),
-    DM(1),
-    GUILD_VOICE(2),
-    GROUP_DM(3),
-    GUILD_CATEGORY(4)
-}
-
-object ChannelTypeSerializer : KSerializer<ChannelType> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("ChannelTypeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): ChannelType {
-        val target = decoder.decodeInt()
-        return ChannelType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: ChannelType) {
-        encoder.encodeInt(value.code)
-    }
+@Serializable
+enum class ChannelType {
+    @SerialName("0") GUILD_TEXT,
+    @SerialName("1") DM,
+    @SerialName("2") GUILD_VOICE,
+    @SerialName("3") GROUP_DM,
+    @SerialName("4") GUILD_CATEGORY
 }
 
 @Serializable

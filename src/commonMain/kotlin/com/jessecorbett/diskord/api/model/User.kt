@@ -1,6 +1,11 @@
 package com.jessecorbett.diskord.api.model
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class User(
@@ -17,48 +22,18 @@ data class User(
 //    @SerialName("premium_type") val premiumType: PremiumType? = null
 )
 
-@Serializable(with = UserFlagsSerializer::class)
+@Serializable
 enum class UserFlags(val code: Int) {
-    NONE(0),
-    HYPESQUAD_EVENTS(1 shl 2),
-    HOUSE_BRAVERY(1 shl 6),
-    HOUSE_BRILLIANCE(1 shl 7),
-    HOUSE_BALANCE(1 shl 8)
+    @SerialName("0") NONE(0),
+    @SerialName("4") HYPESQUAD_EVENTS(4),
+    @SerialName("64") HOUSE_BRAVERY(64),
+    @SerialName("128") HOUSE_BRILLIANCE(128),
+    @SerialName("256") HOUSE_BALANCE(256)
 }
 
-object UserFlagsSerializer : KSerializer<UserFlags> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("UserFlagsSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): UserFlags {
-        val target = decoder.decodeInt()
-        return UserFlags.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: UserFlags) {
-        encoder.encodeInt(value.code)
-    }
-}
-
-@Serializable(with = PremiumTypeSerializer::class)
+@Serializable
 enum class PremiumType(val code: Int) {
-    NONE(0),
-    NITRO_CLASSIC(1),
-    NITRO(2)
-}
-
-object PremiumTypeSerializer : KSerializer<PremiumType> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("PremiumTypeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): PremiumType {
-        val target = decoder.decodeInt()
-        return PremiumType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: PremiumType) {
-        encoder.encodeInt(value.code)
-    }
+    @SerialName("0") NONE(0),
+    @SerialName("1") NITRO_CLASSIC(1),
+    @SerialName("2") NITRO(2)
 }

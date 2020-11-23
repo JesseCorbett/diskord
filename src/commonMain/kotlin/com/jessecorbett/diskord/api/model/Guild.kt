@@ -29,90 +29,30 @@ data class Guild(
     @SerialName("system_channel_id") val systemMessageChannelId: String?
 )
 
-@Serializable(with = VerificationLevelSerializer::class)
-enum class VerificationLevel(val level: Int) {
-    NONE(0),
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3),
-    VERY_HIGH(4)
+@Serializable
+enum class VerificationLevel {
+    @SerialName("0") NONE,
+    @SerialName("1") LOW,
+    @SerialName("2") MEDIUM,
+    @SerialName("3") HIGH,
+    @SerialName("4") VERY_HIGH
 }
 
-object VerificationLevelSerializer : KSerializer<VerificationLevel> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("VerificationLevelSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): VerificationLevel {
-        val target = decoder.decodeInt()
-        return VerificationLevel.values().first {
-            it.level == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: VerificationLevel) {
-        encoder.encodeInt(value.level)
-    }
+@Serializable
+enum class NotificationsLevel {
+    @SerialName("0") ALL_MESSAGES,
+    @SerialName("1") ONLY_MENTIONS
 }
 
-@Serializable(with = NotificationsLevelSerializer::class)
-enum class NotificationsLevel(val level: Int) {
-    ALL_MESSAGES(0),
-    ONLY_MENTIONS(1)
+@Serializable
+enum class ExplicitContentFilterLevel {
+    @SerialName("0") DISABLED,
+    @SerialName("1") MEMBERS_WITHOUT_ROLES,
+    @SerialName("2") ALL_MEMBERS
 }
 
-object NotificationsLevelSerializer : KSerializer<NotificationsLevel> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("NotificationsLevelSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): NotificationsLevel {
-        val target = decoder.decodeInt()
-        return NotificationsLevel.values().first {
-            it.level == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: NotificationsLevel) {
-        encoder.encodeInt(value.level)
-    }
-}
-
-@Serializable(with = ExplicitContentFilterLevelSerializer::class)
-enum class ExplicitContentFilterLevel(val level: Int) {
-    DISABLED(0),
-    MEMBERS_WITHOUT_ROLES(1),
-    ALL_MEMBERS(2)
-}
-
-object ExplicitContentFilterLevelSerializer : KSerializer<ExplicitContentFilterLevel> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("ExplicitContentFilterLevelSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): ExplicitContentFilterLevel {
-        val target = decoder.decodeInt()
-        return ExplicitContentFilterLevel.values().first {
-            it.level == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: ExplicitContentFilterLevel) {
-        encoder.encodeInt(value.level)
-    }
-}
-
-@Serializable(with = MFALevelSerializer::class)
-enum class MFALevel(val level: Int) {
-    NONE(0),
-    ELEVATED(1)
-}
-
-object MFALevelSerializer : KSerializer<MFALevel> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("MFALevelSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): MFALevel {
-        val target = decoder.decodeInt()
-        return MFALevel.values().first {
-            it.level == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: MFALevel) {
-        encoder.encodeInt(value.level)
-    }
+@Serializable
+enum class MFALevel {
+    @SerialName("0") NONE,
+    @SerialName("1") ELEVATED
 }

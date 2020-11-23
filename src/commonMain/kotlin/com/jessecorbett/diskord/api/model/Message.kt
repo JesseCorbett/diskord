@@ -27,31 +27,16 @@ data class Message(
     @SerialName("application") val application: MessageApplication? = null
 )
 
-@Serializable(with = MessageTypeSerializer::class)
-enum class MessageType(val code: Int) {
-    DEFAULT(0),
-    RECIPIENT_ADD(1),
-    RECIPIENT_REMOVE(2),
-    CALL(3),
-    CHANNEL_NAME_CHANGE(4),
-    CHANNEL_ICON_CHANGE(5),
-    CHANNEL_PINNED_MESSAGE(6),
-    GUILD_MEMBER_JOIN(7)
-}
-
-object MessageTypeSerializer : KSerializer<MessageType> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("MessageTypeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): MessageType {
-        val target = decoder.decodeInt()
-        return MessageType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: MessageType) {
-        encoder.encodeInt(value.code)
-    }
+@Serializable
+enum class MessageType {
+    @SerialName("0") DEFAULT,
+    @SerialName("1") RECIPIENT_ADD,
+    @SerialName("2") RECIPIENT_REMOVE,
+    @SerialName("3") CALL,
+    @SerialName("4") CHANNEL_NAME_CHANGE,
+    @SerialName("5") CHANNEL_ICON_CHANGE,
+    @SerialName("6") CHANNEL_PINNED_MESSAGE,
+    @SerialName("7") GUILD_MEMBER_JOIN
 }
 
 @Serializable
@@ -60,27 +45,12 @@ data class MessageActivity(
     @SerialName("party_id") val partyId: String
 )
 
-@Serializable(with = MessageActivityTypeSerializer::class)
-enum class MessageActivityType(val code: Int) {
-    JOIN(0),
-    SPECTATE(1),
-    LISTEN(2),
-    JOIN_REQUEST(3)
-}
-
-object MessageActivityTypeSerializer : KSerializer<MessageActivityType> {
-    override val descriptor: SerialDescriptor = PrimitiveDescriptor("MessageActivityTypeSerializer", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): MessageActivityType {
-        val target = decoder.decodeInt()
-        return MessageActivityType.values().first {
-            it.code == target
-        }
-    }
-
-    override fun serialize(encoder: Encoder, value: MessageActivityType) {
-        encoder.encodeInt(value.code)
-    }
+@Serializable
+enum class MessageActivityType {
+    @SerialName("0") JOIN,
+    @SerialName("1") SPECTATE,
+    @SerialName("2") LISTEN,
+    @SerialName("3") JOIN_REQUEST
 }
 
 @Serializable
