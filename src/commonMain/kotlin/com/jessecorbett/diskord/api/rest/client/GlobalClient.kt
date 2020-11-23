@@ -17,7 +17,7 @@ import io.ktor.client.call.*
  * @param client The REST client implementation
  */
 @OptIn(DiskordInternals::class)
-class DiscordClient(client: RestClient) : RestClient by client {
+class GlobalClient(client: RestClient) : RestClient by client {
 
     /**
      * Get the gateway url from the API.

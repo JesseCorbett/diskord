@@ -4,7 +4,7 @@ import com.jessecorbett.diskord.api.rest.client.*
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 
 /**
- * A container of [RestClients] for each of the 3 resource clients and the [DiscordClient].
+ * A container of [RestClients] for each of the 3 resource clients and the [GlobalClient].
  *
  * @param userToken the user token used by each client.
  */
@@ -12,7 +12,7 @@ class ClientStore(userToken: String) {
     /**
      * Managed discord client instance.
      */
-    val discord = DiscordClient(userToken)
+    val discord = GlobalClient(userToken)
 
     /**
      * Managed channel clients instance.

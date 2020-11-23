@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.websocket
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exception.DiscordCompatibilityException
 import com.jessecorbett.diskord.api.model.UserStatus
-import com.jessecorbett.diskord.api.rest.client.DiscordClient
+import com.jessecorbett.diskord.api.rest.client.GlobalClient
 import com.jessecorbett.diskord.api.rest.client.internal.DefaultRestClient
 import com.jessecorbett.diskord.api.rest.client.internal.RestClient
 import com.jessecorbett.diskord.api.websocket.commands.Identify
@@ -92,7 +92,7 @@ class DiscordWebSocket(
     private var isOpen = false
 
     private suspend fun initializeConnection() {
-        val url = gatewayUrl ?: DiscordClient(restClient).getBotGateway().let {
+        val url = gatewayUrl ?: GlobalClient(restClient).getBotGateway().let {
             logger.debug { it }
             it.url.removePrefix("wss://")
         }

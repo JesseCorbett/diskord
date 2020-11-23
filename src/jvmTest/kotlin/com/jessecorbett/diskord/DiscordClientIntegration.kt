@@ -11,7 +11,7 @@ import com.jessecorbett.diskord.api.rest.CreateDM
 import com.jessecorbett.diskord.api.rest.CreateGroupDM
 import com.jessecorbett.diskord.api.rest.CreateGuild
 import com.jessecorbett.diskord.api.rest.ModifyUser
-import com.jessecorbett.diskord.api.rest.client.DiscordClient
+import com.jessecorbett.diskord.api.rest.client.GlobalClient
 import com.jessecorbett.diskord.api.rest.client.GuildClient
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Ignore
@@ -19,7 +19,7 @@ import kotlin.test.Test
 
 class DiscordClientIntegration {
     private val tokensUser = "346444615831781376"
-    private val discordClient = DiscordClient(BOT_TEST_TOKEN)
+    private val discordClient = GlobalClient(BOT_TEST_TOKEN)
     private val userForDM = "321775636798504962"
 
     @Test
