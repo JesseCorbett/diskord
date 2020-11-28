@@ -30,7 +30,9 @@ enum class ChannelType {
     @SerialName("1") DM,
     @SerialName("2") GUILD_VOICE,
     @SerialName("3") GROUP_DM,
-    @SerialName("4") GUILD_CATEGORY
+    @SerialName("4") GUILD_CATEGORY,
+    @SerialName("5") GUILD_NEWS,
+    @SerialName("6") GUILD_STORE
 }
 
 @Serializable
@@ -43,6 +45,6 @@ data class Overwrite(
 
 @Serializable
 enum class OverwriteType {
-    @SerialName("role") ROLE,
-    @SerialName("member") MEMBER
+    @SerialName("0") ROLE,
+    @SerialName("1") MEMBER
 }

@@ -36,7 +36,15 @@ enum class MessageType {
     @SerialName("4") CHANNEL_NAME_CHANGE,
     @SerialName("5") CHANNEL_ICON_CHANGE,
     @SerialName("6") CHANNEL_PINNED_MESSAGE,
-    @SerialName("7") GUILD_MEMBER_JOIN
+    @SerialName("7") GUILD_MEMBER_JOIN,
+    @SerialName("8") USER_PREMIUM_GUILD_SUBSCRIPTION,
+    @SerialName("9") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1,
+    @SerialName("10") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2,
+    @SerialName("11") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3,
+    @SerialName("12") CHANNEL_FOLLOW_ADD,
+    @SerialName("14") GUILD_DISCOVERY_DISQUALIFIED,
+    @SerialName("15") GUILD_DISCOVERY_REQUALIFIED,
+    @SerialName("19") REPLY
 }
 
 @Serializable
@@ -47,10 +55,10 @@ data class MessageActivity(
 
 @Serializable
 enum class MessageActivityType {
-    @SerialName("0") JOIN,
-    @SerialName("1") SPECTATE,
-    @SerialName("2") LISTEN,
-    @SerialName("3") JOIN_REQUEST
+    @SerialName("1") JOIN,
+    @SerialName("2") SPECTATE,
+    @SerialName("3") LISTEN,
+    @SerialName("5") JOIN_REQUEST
 }
 
 @Serializable
