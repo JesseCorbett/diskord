@@ -102,7 +102,7 @@ enum class GatewayIntent(val mask: Int, val privileged: Boolean = false) {
      * *Note: This intent is privileged and may require verification with Discord
      * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
      */
-    GUILD_MESSAGES(0x00000200, true),
+    GUILD_MESSAGES(0x00000200),
 
     /**
      * Subscribe to the following events:
