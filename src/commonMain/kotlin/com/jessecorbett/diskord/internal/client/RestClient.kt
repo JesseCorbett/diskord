@@ -14,7 +14,6 @@ import mu.KotlinLogging
 import kotlin.time.ExperimentalTime
 import kotlin.time.seconds
 
-
 private const val DISCORD_API_URL = "https://discord.com/api"
 
 private val logger = KotlinLogging.logger {}
@@ -69,8 +68,7 @@ interface RestClient {
 }
 
 @DiskordInternals
-internal class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String, botVersion: String) :
-    RestClient {
+class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String, botVersion: String) : RestClient {
     private val authorizationHeader = userType.type + " " + token
     private val userAgentHeader = "DiscordBot: ($botUrl, $botVersion)"
 

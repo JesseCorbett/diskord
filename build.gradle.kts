@@ -76,6 +76,7 @@ kotlin {
                 implementation("org.slf4j:slf4j-api:1.7.30")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
+                implementation("ch.qos.logback:logback-classic:1.1.7")
             }
         }
         val jvmTest by getting {

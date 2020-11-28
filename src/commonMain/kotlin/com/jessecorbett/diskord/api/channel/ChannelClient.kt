@@ -4,7 +4,7 @@ import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
-import com.jessecorbett.diskord.util.omitNullsJson
+import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
 import io.ktor.client.request.forms.formData
 import io.ktor.http.*
@@ -132,7 +132,7 @@ class ChannelClient(val channelId: String, client: RestClient) : RestClient by c
         return POST("/channels/$channelId/messages") {
             contentType(ContentType.MultiPart.FormData)
             body = formData {
-                append("payload_json", omitNullsJson.encodeToString(message))
+                append("payload_json", defaultJson.encodeToString(message)) // TODO: Check if this should be omitNulls?
                 append("file", attachment.packet, Headers.build {
                     append(
                         HttpHeaders.ContentDisposition,

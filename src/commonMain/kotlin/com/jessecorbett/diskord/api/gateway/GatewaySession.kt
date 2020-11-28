@@ -2,10 +2,7 @@ package com.jessecorbett.diskord.api.gateway
 
 import com.jessecorbett.diskord.api.common.UserStatus
 import com.jessecorbett.diskord.api.exceptions.DiscordCompatibilityException
-import com.jessecorbett.diskord.api.gateway.commands.Identify
-import com.jessecorbett.diskord.api.gateway.commands.IdentifyShard
-import com.jessecorbett.diskord.api.gateway.commands.Resume
-import com.jessecorbett.diskord.api.gateway.commands.UpdateStatus
+import com.jessecorbett.diskord.api.gateway.commands.*
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
@@ -24,13 +21,13 @@ import mu.KotlinLogging
 
 @OptIn(DiskordInternals::class)
 class GatewaySession(
-    private val eventListener: EventListener,
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,
-    private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
+    private val intents: GatewayIntents,
     private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
-    private val shardNumber: Int = 0
+    private val shardNumber: Int = 0,
+    private val eventListener: EventListener
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -59,6 +56,7 @@ class GatewaySession(
     }
 
     suspend fun send(gatewayMessage: GatewayMessage) {
+        logger.info { "Sending OpCode " + gatewayMessage.opCode }
         socketManager.send(gatewayMessage)
     }
 
@@ -70,18 +68,32 @@ class GatewaySession(
      * @param idleTime How long the user has been idle, in milliseconds.
      * @param activity The activity, if any, that the user is performing.
      */
-    suspend fun setStatus(status: UserStatus, isAfk: Boolean = false, idleTime: Int? = null, activity: UserStatusActivity? = null) {
-        socketManager.send(GatewayMessage(OpCode.STATUS_UPDATE, defaultJson.encodeToJsonElement(UpdateStatus(idleTime, activity, status, isAfk))))
+    suspend fun setStatus(
+        status: UserStatus,
+        isAfk: Boolean = false,
+        idleTime: Int? = null,
+        activity: UserStatusActivity? = null
+    ) {
+        socketManager.send(
+            GatewayMessage(
+                OpCode.STATUS_UPDATE,
+                defaultJson.encodeToJsonElement(UpdateStatus(idleTime, activity, status, isAfk)),
+                null,
+                null
+            )
+        )
     }
 
     private suspend fun receiveGatewayMessage(gatewayMessage: GatewayMessage) = coroutineScope {
-        logger.trace { "Received OpCode ${gatewayMessage.opCode}" }
+        logger.info { "Received OpCode ${gatewayMessage.opCode}" }
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
                 receiveDispatch(gatewayMessage)
             }
-            OpCode.HEARTBEAT -> { send(GatewayMessage(OpCode.HEARTBEAT_ACK, null)) }
+            OpCode.HEARTBEAT -> {
+                send(GatewayMessage(OpCode.HEARTBEAT_ACK, null, null, null))
+            }
             OpCode.RECONNECT -> {
                 logger.info { "Server requested a reconnect" }
                 restartConnection()
@@ -107,20 +119,36 @@ class GatewaySession(
     private var heartbeatJob: Job? = null
     private suspend fun initializeSession(hello: Hello) = coroutineScope {
         if (sessionId != null && sequenceNumber != null) { // RESUME
-            send(GatewayMessage(OpCode.RESUME, defaultJson.encodeToJsonElement(Resume(token, sessionId!!, sequenceNumber!!))))
+            send(
+                GatewayMessage(
+                    OpCode.RESUME,
+                    defaultJson.encodeToJsonElement(Resume(token, sessionId!!, sequenceNumber!!)),
+                    null,
+                    null
+                )
+            )
         } else if (shardCount != 0) { // IDENTIFY (sharded)
-            val identify = IdentifyShard(token, listOf(shardNumber, shardCount), intents = intents)
-            send(GatewayMessage(OpCode.IDENTIFY, defaultJson.encodeToJsonElement(identify)))
+            val identify = IdentifyShard(
+                token,
+                listOf(shardNumber, shardCount),
+                intents = intents,
+                properties = IdentifyProperties.Default
+            )
+            send(GatewayMessage(OpCode.IDENTIFY, defaultJson.encodeToJsonElement(identify), null, null))
         } else { // IDENTIFY (unsharded)
-            val identify = Identify(token, intents = intents)
-            send(GatewayMessage(OpCode.IDENTIFY, defaultJson.encodeToJsonElement(identify)))
+            val identify = Identify(
+                token,
+                intents = intents,
+                properties = IdentifyProperties.Default
+            )
+            send(GatewayMessage(OpCode.IDENTIFY, defaultJson.encodeToJsonElement(identify), null, null))
         }
 
         heartbeatJob?.cancel()
-        heartbeatJob = launch {
+        heartbeatJob = eventListenerScope.launch {
             while (this.isActive) {
                 if (sequenceNumber != null) {
-                    send(GatewayMessage(OpCode.HEARTBEAT, JsonPrimitive(sequenceNumber)))
+                    send(GatewayMessage(OpCode.HEARTBEAT, JsonPrimitive(sequenceNumber), null, null))
                     delay(hello.heartbeatInterval)
                 }
             }
@@ -130,10 +158,10 @@ class GatewaySession(
     private suspend fun receiveDispatch(gatewayMessage: GatewayMessage) {
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
             ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
-        val json = gatewayMessage.dataPayload
+        gatewayMessage.dataPayload
             ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
-        logger.debug { "Received Dispatch $discordEvent" }
+        logger.info { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
             sessionId = defaultJson.decodeFromJsonElement<Ready>(gatewayMessage.dataPayload).sessionId

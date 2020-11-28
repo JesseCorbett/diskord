@@ -232,9 +232,5 @@ object GatewayIntentsSerializer : KSerializer<GatewayIntents> {
 
     override fun deserialize(decoder: Decoder) = GatewayIntents(decoder.decodeInt())
 
-    override fun serialize(encoder: Encoder, value: GatewayIntents) = if (value.value > 0) {
-        encoder.encodeInt(value.value)
-    } else {
-        encoder.encodeNull()
-    }
+    override fun serialize(encoder: Encoder, value: GatewayIntents) = encoder.encodeInt(value.value)
 }

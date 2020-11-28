@@ -11,7 +11,7 @@ data class IdentifyShard(
     @SerialName("compress") val canCompress: Boolean = false,
     @SerialName("large_threshold") val memberCountThreshold: Int = 50,
     @SerialName("presence") val presence: UpdateStatus? = null,
-    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties(),
+    @SerialName("properties") val properties: IdentifyProperties,
     @SerialName("intents") val intents: GatewayIntents? = null
 )
 
@@ -21,13 +21,17 @@ data class Identify(
     @SerialName("compress") val canCompress: Boolean = false,
     @SerialName("large_threshold") val memberCountThreshold: Int = 50,
     @SerialName("presence") val presence: UpdateStatus? = null,
-    @SerialName("properties") val properties: IdentifyProperties = IdentifyProperties(),
+    @SerialName("properties") val properties: IdentifyProperties,
     @SerialName("intents") val intents: GatewayIntents? = null
 )
 
 @Serializable
 data class IdentifyProperties(
-    @SerialName("\$os") val os: String = "linux", // TODO: Make multiplatform
-    @SerialName("\$browser") val browser: String = "diskord",
-    @SerialName("\$device") val device: String = "diskord"
-)
+    @SerialName("\$os") val os: String,
+    @SerialName("\$browser") val browser: String,
+    @SerialName("\$device") val device: String
+) {
+    companion object {
+        val Default = IdentifyProperties("JVM", "diskord", "diskord")
+    }
+}

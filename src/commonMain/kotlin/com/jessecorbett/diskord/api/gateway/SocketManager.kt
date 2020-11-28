@@ -16,10 +16,15 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import mu.KotlinLogging
 
-internal class SocketManager(private val url: String, private val emitMessage: suspend (GatewayMessage) -> Unit) {
+internal class SocketManager(url: String, private val emitMessage: suspend (GatewayMessage) -> Unit) {
     private val logger = KotlinLogging.logger {}
 
     private var socketClient: HttpClient = buildWSClient()
+    private var url = if (url.startsWith("wss://")) {
+        url.drop(6)
+    } else {
+        url
+    }
 
     private var session: WebSocketSession? = null
     private val outgoingMessages: Channel<GatewayMessage> = Channel()
@@ -106,7 +111,6 @@ internal class SocketManager(private val url: String, private val emitMessage: s
 
     @OptIn(KtorExperimentalAPI::class)
     private fun buildWSClient(): HttpClient {
-        socketClient.close()
         return HttpClient(websocketClient()).config {
             install(WebSockets)
             if (DEBUG_MODE) {

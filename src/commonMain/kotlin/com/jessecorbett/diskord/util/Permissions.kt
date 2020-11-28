@@ -2,6 +2,8 @@ package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.exceptions.DiscordMissingDataException
 import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.internal.client.RestClient
 
 /**
  * Compute the permissions for the given user in the channel.  Takes into account the permission overwrites and whether or not
@@ -9,13 +11,13 @@ import com.jessecorbett.diskord.api.common.*
  *
  * @param user the user whose permissions should be computed
  * @param channel the channel to compute the permissions for
- * @param clients the clients to use for lookup
+ * @param restClient the client to use for lookup
  *
  * @throws DiscordMissingDataException if the provided channel has a null guildId
  */
-suspend fun computePermissions(user: User, channel: Channel, clients: ClientStore): Permissions {
+suspend fun computePermissions(user: User, channel: Channel, restClient: RestClient): Permissions {
     val guildId = channel.guildId ?: throw DiscordMissingDataException("Specified channel does not have an associated guild ID.")
-    val client = clients.guilds[guildId]
+    val client = GuildClient(guildId, restClient)
 
     return computePermissions(client.getMember(user.id), channel, client.get())
 }

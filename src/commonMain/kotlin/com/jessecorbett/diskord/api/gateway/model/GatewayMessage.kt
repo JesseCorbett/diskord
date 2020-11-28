@@ -1,6 +1,11 @@
 package com.jessecorbett.diskord.api.gateway.model
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
 
 /**
@@ -15,72 +20,85 @@ import kotlinx.serialization.json.JsonElement
 data class GatewayMessage(
     @SerialName("op") val opCode: OpCode,
     @SerialName("d") val dataPayload: JsonElement?,
-    @SerialName("s") val sequenceNumber: Int? = null,
-    @SerialName("t") val event: String? = null // Not using DiscordEvent because there are undocumented events
+    @SerialName("s") val sequenceNumber: Int?,
+    @SerialName("t") val event: String? // Not using DiscordEvent because there are undocumented events
 )
 
 /**
  * The discord gateway event.
  */
-@Serializable
-enum class OpCode {
+@Serializable(with = OpCodeSerializer::class)
+enum class OpCode(val code: Int) {
     /**
      * A discord event has been sent to the client.
      */
-    @SerialName("0") DISPATCH,
+    DISPATCH(0),
 
     /**
      * Connection heartbeat, requesting a [OpCode.HEARTBEAT_ACK].
      */
-    @SerialName("1") HEARTBEAT,
+    HEARTBEAT(1),
 
     /**
      * Called after [OpCode.HELLO] is received if this is a new session.
      */
-    @SerialName("2") IDENTIFY,
+    IDENTIFY(2),
 
     /**
      * Received when a user presence or status update has occurred.
      */
-    @SerialName("3") STATUS_UPDATE,
+    STATUS_UPDATE(3),
 
     /**
      * Received when a user join/leaves/moves voice servers.
      */
-    @SerialName("4") VOICE_STATE_UPDATE,
+    VOICE_STATE_UPDATE(4),
 
     /**
      * Ping received for a voice server.
      */
-    @SerialName("5") VOICE_SERVER_PING,
+    VOICE_SERVER_PING(5),
 
     /**
      * Called after [OpCode.HELLO] is received if this is an existing session.
      */
-    @SerialName("6") RESUME,
+    RESUME(6),
 
     /**
      * The server has requested the client reconnect.
      */
-    @SerialName("7") RECONNECT,
+    RECONNECT(7),
 
     /**
      * Sent to the server to request guild members chunks be sent.
      */
-    @SerialName("8") REQUEST_GUILD_MEMBERS,
+    REQUEST_GUILD_MEMBERS(8),
 
     /**
      * The gateway session is invalid and should be reestablished.
      */
-    @SerialName("9") INVALID_SESSION,
+    INVALID_SESSION(9),
 
     /**
      * The gateway has acknowledged the connection and the client needs to identify itself.
      */
-    @SerialName("10")  HELLO,
+    HELLO(10),
 
     /**
      * Acknowledgement of a [OpCode.HEARTBEAT].
      */
-    @SerialName("11") HEARTBEAT_ACK
+    HEARTBEAT_ACK(11)
 }
+
+object OpCodeSerializer : KSerializer<OpCode> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("OpCode", PrimitiveKind.INT)
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun serialize(encoder: Encoder, value: OpCode) = encoder.encodeInt(value.code)
+
+    override fun deserialize(decoder: Decoder): OpCode {
+        val code = decoder.decodeInt()
+        return OpCode.values().first { it.code == code }
+    }
+}
+
