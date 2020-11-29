@@ -29,7 +29,7 @@ internal fun buildClient(omitNulls: Boolean = false) = HttpClient(httpClient()) 
         level = if (DEBUG_MODE) {
             LogLevel.ALL
         } else {
-            LogLevel.HEADERS
+            LogLevel.INFO
         }
     }
     install(JsonFeature) {
