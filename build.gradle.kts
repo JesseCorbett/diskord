@@ -4,8 +4,8 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.4.10"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.10"
+    id("org.jetbrains.kotlin.multiplatform") version "1.4.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.20"
     id("org.jetbrains.dokka") version "1.4.10.2"
 }
 
@@ -35,13 +35,17 @@ kotlin {
         }
     }
 
+    js(IR) {
+        nodejs()
+        browser()
+        binaries.executable()
+    }
+
     metadata {
         mavenPublication {
 //            artifact(metadataJavadocJar)
         }
     }
-
-    // js {}
 
     sourceSets {
         commonMain {
@@ -51,7 +55,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("io.github.microutils:kotlin-logging-common:1.7.9")
+                implementation("io.github.microutils:kotlin-logging:2.0.3")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
@@ -72,7 +76,6 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
 
             dependencies {
-                implementation("io.github.microutils:kotlin-logging:1.7.9")
                 implementation("org.slf4j:slf4j-api:1.7.30")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
@@ -91,17 +94,19 @@ kotlin {
             }
         }
 
-        // val jsMain by getting {
-        //     dependencies {
-        //         implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.10.0")
-        //         implementation("io.github.microutils:kotlin-logging-js:1.6.25")
-        //     }
-        // }
-        // val jsTest by getting {
-        //     dependencies {
-        //         implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
-        //     }
-        // }
+         val jsMain by getting {
+             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+
+             dependencies {
+                 implementation("io.github.microutils:kotlin-logging-js:1.7.9")
+                 implementation("io.ktor:ktor-client-js:$ktorVersion")
+             }
+         }
+         val jsTest by getting {
+             dependencies {
+                 implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
+             }
+         }
     }
 }
 

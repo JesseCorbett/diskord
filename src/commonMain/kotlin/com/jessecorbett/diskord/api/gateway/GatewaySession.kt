@@ -147,9 +147,9 @@ class GatewaySession(
         heartbeatJob?.cancel()
         heartbeatJob = eventListenerScope.launch {
             while (this.isActive) {
+                delay(hello.heartbeatInterval)
                 if (sequenceNumber != null) {
                     send(GatewayMessage(OpCode.HEARTBEAT, JsonPrimitive(sequenceNumber), null, null))
-                    delay(hello.heartbeatInterval)
                 }
             }
         }
