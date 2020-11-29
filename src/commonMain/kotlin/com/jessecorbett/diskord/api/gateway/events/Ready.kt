@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Ready(
+public data class Ready(
     @SerialName("v") val gatewayProtocolVersion: Int,
     @SerialName("user") val user: User,
     @SerialName("private_channels") val directMessageChannels: List<Channel>, // Always empty right now, see createDM API call

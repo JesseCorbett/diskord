@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Invite(
+public data class Invite(
     @SerialName("code") val code: String,
     @SerialName("guild") val guild: Guild? = null,
     @SerialName("channel") val channel: Channel,
@@ -14,7 +14,7 @@ data class Invite(
 )
 
 @Serializable
-data class InviteMetadata(
+public data class InviteMetadata(
     @SerialName("inviter") val invitedBy: User,
     @SerialName("uses") val useCount: Int,
     @SerialName("max_uses") val maxUses: Int,

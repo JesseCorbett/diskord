@@ -10,8 +10,11 @@ import kotlinx.serialization.Serializable
  * @property retryAt When the rate limit resets in epoch seconds.
  * @property isGlobalRateLimit if the rate limit is API specific or global.
  */
-class DiscordRateLimitException(override val message: String, val retryAt: Long, val isGlobalRateLimit: Boolean) :
-    DiscordException()
+public class DiscordRateLimitException(
+    override val message: String,
+    public val retryAt: Long,
+    public val isGlobalRateLimit: Boolean
+) : DiscordException()
 
 /**
  * Over the wire representation of a [DiscordRateLimitException].
@@ -21,7 +24,7 @@ class DiscordRateLimitException(override val message: String, val retryAt: Long,
  * @property isGlobal if the rate limit is API specific or global.
  */
 @Serializable
-data class RateLimitExceeded(
+public data class RateLimitExceeded(
     @SerialName("message") val message: String,
     @SerialName("retry_after") val retryAfter: Long,
     @SerialName("global") val isGlobal: Boolean

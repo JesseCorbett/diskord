@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PatchGuild(
+public data class PatchGuild(
     @SerialName("name") val name: String? = null,
     @SerialName("region") val voiceRegionId: String? = null,
     @SerialName("verification_level") val verificationLevel: VerificationLevel? = null,

@@ -5,4 +5,4 @@ package com.jessecorbett.diskord.api.exceptions
  *
  * Should be resolved by simply retrying.
  */
-class DiscordGatewayException : DiscordException()
+public class DiscordGatewayException : DiscordException()

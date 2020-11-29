@@ -4,4 +4,4 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildIntegrationUpdate(@SerialName("guild_id") val guildId: String)
+public data class GuildIntegrationUpdate(@SerialName("guild_id") val guildId: String)

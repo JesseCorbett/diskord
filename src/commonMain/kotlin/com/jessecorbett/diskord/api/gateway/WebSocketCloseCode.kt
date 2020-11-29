@@ -5,7 +5,7 @@ package com.jessecorbett.diskord.api.gateway
  *
  * @property code the close code represented.
  */
-enum class WebSocketCloseCode(val code: Short) {
+public enum class WebSocketCloseCode(public val code: Short) {
     /*
      * Standard Socket Codes
      * https://tools.ietf.org/html/rfc6455#section-7.4

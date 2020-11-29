@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Embed(
+public data class Embed(
     @SerialName("title") val title: String? = null,
     @SerialName("description") val description: String? = null,
     @SerialName("url") val url: String? = null,
@@ -21,7 +21,7 @@ data class Embed(
 )
 
 @Serializable
-data class EmbedImage(
+public data class EmbedImage(
     @SerialName("url") val url: String? = null,
     @SerialName("proxy_url") val proxyUrl: String? = null,
     @SerialName("height") val imageHeight: Int = 0,
@@ -29,20 +29,20 @@ data class EmbedImage(
 )
 
 @Serializable
-data class EmbedVideo(
+public data class EmbedVideo(
     @SerialName("url") val url: String? = null,
     @SerialName("height") val videoHeight: Int = 0,
     @SerialName("width") val videoWidth: Int = 0
 )
 
 @Serializable
-data class EmbedProvider(
+public data class EmbedProvider(
     @SerialName("name") val name: String? = null,
     @SerialName("url") val url: String? = null
 )
 
 @Serializable
-data class EmbedAuthor(
+public data class EmbedAuthor(
     @SerialName("name") val name: String,
     @SerialName("url") val authorUrl: String? = null,
     @SerialName("icon_url") val authorImageUrl: String? = null,
@@ -50,14 +50,14 @@ data class EmbedAuthor(
 )
 
 @Serializable
-data class EmbedFooter(
+public data class EmbedFooter(
     @SerialName("text") val text: String,
     @SerialName("icon_url") val iconUrl: String? = null,
     @SerialName("proxy_icon_url") val iconProxyUrl: String? = null
 )
 
 @Serializable
-data class EmbedField(
+public data class EmbedField(
     @SerialName("name") val name: String,
     @SerialName("value") val value: String,
     @SerialName("inline") val inline: Boolean? = null

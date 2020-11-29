@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateGuild(
+public data class CreateGuild(
     @SerialName("name") val name: String,
     @SerialName("region") val voiceRegionId: String,
     @SerialName("icon") val base64IconData: String,

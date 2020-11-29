@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Role(
+public data class Role(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("color") val color: Color,

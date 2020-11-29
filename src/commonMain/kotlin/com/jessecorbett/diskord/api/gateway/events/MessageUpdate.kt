@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MessageUpdate(
+public data class MessageUpdate(
     @SerialName("id") val id: String,
     @SerialName("channel_id") val channelId: String,
     @SerialName("author") val author: User? = null,

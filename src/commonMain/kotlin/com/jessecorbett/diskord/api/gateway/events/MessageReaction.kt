@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MessageReaction(
+public data class MessageReaction(
     @SerialName("user_id") val userId: String,
     @SerialName("channel_id") val channelId: String,
     @SerialName("message_id") val messageId: String,

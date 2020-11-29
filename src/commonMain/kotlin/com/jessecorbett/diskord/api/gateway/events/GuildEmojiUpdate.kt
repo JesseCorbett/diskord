@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildEmojiUpdate(
+public data class GuildEmojiUpdate(
     @SerialName("guild_id") val guildId: String,
     @SerialName("emojis") val emojis: List<Emoji>
 )

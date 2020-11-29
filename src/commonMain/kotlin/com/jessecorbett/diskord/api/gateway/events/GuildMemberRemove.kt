@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildMemberRemove(
+public data class GuildMemberRemove(
     @SerialName("guild_id") val guildId: String,
     @SerialName("user") val user: User
 )

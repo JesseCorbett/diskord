@@ -4,7 +4,7 @@ import com.jessecorbett.diskord.api.common.Emoji
 import kotlinx.serialization.*
 
 @Serializable
-data class UserStatusActivity(
+public data class UserStatusActivity(
     @SerialName("name") val name: String,
     @SerialName("type") val type: ActivityType,
     @SerialName("url") val streamUrl: String? = null,
@@ -21,19 +21,19 @@ data class UserStatusActivity(
 )
 
 @Serializable
-data class Timestamps(
+public data class Timestamps(
     @SerialName("start") val start: String? = null,
     @SerialName("end") val end: String? = null
 )
 
 @Serializable
-data class ActivityParty(
+public data class ActivityParty(
     @SerialName("id") val id: String? = null,
     @SerialName("size") val size: List<Int>? = null
 )
 
 @Serializable
-data class Assets(
+public data class Assets(
     @SerialName("large_image") val largeImage: String? = null,
     @SerialName("large_text") val largeImageText: String? = null,
     @SerialName("small_image") val smallImage: String? = null,
@@ -41,14 +41,14 @@ data class Assets(
 )
 
 @Serializable
-data class RichPresenceSecrets(
+public data class RichPresenceSecrets(
     @SerialName("join") val joinParty: String? = null,
     @SerialName("spectate") val spectate: String? = null,
     @SerialName("match") val joinInstance: String? = null
 )
 
 @Serializable
-enum class ActivityType {
+public enum class ActivityType {
     @SerialName("0") GAME,
     @SerialName("1") STREAMING,
     @SerialName("2") LISTENING,

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WebhookSubmission(
+public data class WebhookSubmission(
     @SerialName("content") val content: String?,
     @SerialName("username") val overrideUsername: String? = null,
     @SerialName("avatar_url") val overrideAvatarUrl: String? = null,

@@ -7,7 +7,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-enum class Permission(val mask: Int) {
+public enum class Permission(internal val mask: Int) {
     /**
      * Allows creation of instant invites.
      *
@@ -198,8 +198,8 @@ enum class Permission(val mask: Int) {
 }
 
 @Serializable(with = PermissionsSerializer::class)
-data class Permissions(val value: Int) {
-    operator fun contains(permission: Permission): Boolean {
+public data class Permissions(val value: Int) {
+    public operator fun contains(permission: Permission): Boolean {
         if (Permission.ADMINISTRATOR in value) {
             return true
         }
@@ -207,44 +207,45 @@ data class Permissions(val value: Int) {
         return permission in value
     }
 
-    operator fun contains(permissions: Permissions): Boolean {
+    public operator fun contains(permissions: Permissions): Boolean {
         return value and permissions.value == permissions.value
     }
 
-    operator fun plus(permissions: Int) = Permissions(value or permissions)
+    public operator fun plus(permissions: Int): Permissions = Permissions(value or permissions)
 
-    operator fun plus(permissions: Permissions) = plus(permissions.value)
+    public operator fun plus(permissions: Permissions): Permissions = plus(permissions.value)
 
-    operator fun plus(permissions: Collection<Permission>) = permissions.forEach { plus(it.mask) }
+    public operator fun plus(permissions: Collection<Permission>): Unit = permissions.forEach { plus(it.mask) }
 
-    operator fun plus(permission: Permission) = plus(permission.mask)
+    public operator fun plus(permission: Permission): Permissions = plus(permission.mask)
 
-    operator fun minus(permissions: Int) = Permissions(value and permissions.inv())
+    public operator fun minus(permissions: Int): Permissions = Permissions(value and permissions.inv())
 
-    operator fun minus(permissions: Permissions) = minus(permissions.value)
+    public operator fun minus(permissions: Permissions): Permissions = minus(permissions.value)
 
-    operator fun minus(permissions: Collection<Permission>) = permissions.forEach { minus(it.mask) }
+    public operator fun minus(permissions: Collection<Permission>): Unit = permissions.forEach { minus(it.mask) }
 
-    operator fun minus(permission: Permission) = minus(permission.mask)
+    public operator fun minus(permission: Permission): Permissions = minus(permission.mask)
 
-    override fun toString() = "Permissions($value) --> ${Permission.values().filter { it in value }.joinToString()}"
+    override fun toString(): String = "Permissions($value) --> ${Permission.values().filter { it in value }.joinToString()}"
 
-    companion object {
-        val ALL = of(*Permission.values())
+    public companion object {
+        public val ALL: Permissions = of(*Permission.values())
 
-        val NONE = Permissions(0)
+        public val NONE: Permissions = Permissions(0)
 
-        fun of(vararg permissions: Permission) =
-            Permissions(permissions.map { permission -> permission.mask }.reduce { left, right -> left or right })
+        public fun of(vararg permissions: Permission): Permissions {
+            return Permissions(permissions.map { permission -> permission.mask }.reduce { left, right -> left or right })
+        }
 
         private operator fun Int.contains(permission: Permission) = this and permission.mask == permission.mask
     }
 }
 
-object PermissionsSerializer : KSerializer<Permissions> {
+public object PermissionsSerializer : KSerializer<Permissions> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.INT)
 
-    override fun deserialize(decoder: Decoder) = Permissions(decoder.decodeInt())
+    override fun deserialize(decoder: Decoder): Permissions = Permissions(decoder.decodeInt())
 
-    override fun serialize(encoder: Encoder, value: Permissions) = encoder.encodeInt(value.value)
+    override fun serialize(encoder: Encoder, value: Permissions): Unit = encoder.encodeInt(value.value)
 }

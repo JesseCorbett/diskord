@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Ban(
+public data class Ban(
     @SerialName("reason") val reason: String? = null,
     @SerialName("user") val user: User
 )

@@ -11,7 +11,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
-class AutoGateway @OptIn(DiskordInternals::class) constructor(
+/**
+ * A utility class for automatically creating and managing sharded gateway sessions
+ */
+public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     private val eventScope: CoroutineScope,
@@ -23,7 +26,10 @@ class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val globalClient = GlobalClient(restClient)
     private var sessions: List<GatewaySession> = emptyList()
 
-    suspend fun start(): AutoGateway {
+    /**
+     * Starts the gateway sessions if they aren't already running
+     */
+    public suspend fun start(): AutoGateway {
         if (sessions.isNotEmpty()) {
             logger.warn { "Attempted to start an AutoGateway that had already started" }
             return this
@@ -40,13 +46,19 @@ class AutoGateway @OptIn(DiskordInternals::class) constructor(
         return this
     }
 
-    suspend fun block() {
+    /**
+     * Blocks the current process in case your program is only the bot
+     */
+    public suspend fun block() {
         while (sessions.any { it.running }) {
-            delay(100)
+            delay(100) // If we could find a way to make Gateway a session or similar this would be better I think
         }
     }
 
-    suspend fun stop() {
+    /**
+     * Closes all the gateway sessions
+     */
+    public suspend fun stop() {
         if (sessions.isEmpty()) {
             logger.warn { "Attempted to stop an AutoGateway that was not running" }
             return

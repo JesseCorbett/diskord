@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdateStatus(
+public data class UpdateStatus(
     @SerialName("since") val idleSince: Int? = null,
     @SerialName("game") val activity: UserStatusActivity? = null,
     @SerialName("status") val status: UserStatus = UserStatus.ONLINE,

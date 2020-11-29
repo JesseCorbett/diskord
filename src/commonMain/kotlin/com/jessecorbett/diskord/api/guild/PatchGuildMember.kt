@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PatchGuildMember(
+public data class PatchGuildMember(
     @SerialName("nick") val nickname: String? = null,
     @SerialName("roles") val roleIds: List<String>? = null,
     @SerialName("mute") val mute: Boolean? = null,
@@ -16,6 +16,6 @@ data class PatchGuildMember(
  * Conceptually the same data object as [PatchGuildMember], but [channelId] has different null behavior.
  */
 @Serializable
-data class PatchGuildMemberMoveVoiceChannel(
+public data class PatchGuildMemberMoveVoiceChannel(
     @SerialName("channel_id") val channelId: String? = null
 )

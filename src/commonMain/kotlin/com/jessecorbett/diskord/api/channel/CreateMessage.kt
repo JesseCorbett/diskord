@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateMessage(
+public data class CreateMessage(
     @SerialName("content") val content: String,
     @SerialName("nonce") val nonce: String? = null,
     @SerialName("tts") val tts: Boolean = false,
@@ -16,7 +16,7 @@ data class CreateMessage(
 )
 
 @Serializable
-data class Embed(
+public data class Embed(
     @SerialName("title") var title: String? = null,
     @SerialName("description") var description: String? = null,
     @SerialName("url") var url: String? = null,
@@ -33,7 +33,7 @@ data class Embed(
 )
 
 @Serializable
-data class EmbedImage(
+public data class EmbedImage(
     @SerialName("url") val url: String,
     @SerialName("proxy_url") var proxyUrl: String? = null,
     @SerialName("height") var imageHeight: Int = 0,
@@ -41,20 +41,20 @@ data class EmbedImage(
 )
 
 @Serializable
-data class EmbedVideo(
+public data class EmbedVideo(
     @SerialName("url") val url: String,
     @SerialName("height") var videoHeight: Int = 0,
     @SerialName("width") var videoWidth: Int = 0
 )
 
 @Serializable
-data class EmbedProvider(
+public data class EmbedProvider(
     @SerialName("name") val name: String,
     @SerialName("url") val url: String?
 )
 
 @Serializable
-data class EmbedAuthor(
+public data class EmbedAuthor(
     @SerialName("name") val name: String,
     @SerialName("url") var authorUrl: String? = null,
     @SerialName("icon_url") var authorImageUrl: String? = null,
@@ -62,17 +62,17 @@ data class EmbedAuthor(
 )
 
 @Serializable
-data class EmbedFooter(
+public data class EmbedFooter(
     @SerialName("text") val text: String,
     @SerialName("icon_url") var iconUrl: String? = null,
     @SerialName("proxy_icon_url") var iconProxyUrl: String? = null
 )
 
 @Serializable
-data class EmbedField(
+public data class EmbedField(
     @SerialName("name") val name: String,
     @SerialName("value") val value: String,
     @SerialName("inline") val inline: Boolean
 )
 
-data class FileData(val packet: ByteReadPacket, val filename: String)
+public data class FileData(val packet: ByteReadPacket, val filename: String)

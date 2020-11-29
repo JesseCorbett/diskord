@@ -13,7 +13,7 @@ import io.ktor.utils.io.core.writeFully
  *
  * @return the [FileData] representing this file
  */
-fun ByteArray.toFileData(filename: String, offset: Int = 0, length: Int = size - offset): FileData {
+public fun ByteArray.toFileData(filename: String, offset: Int = 0, length: Int = size - offset): FileData {
     val packet = buildPacket {
         writeFully(this@toFileData, offset, length)
     }

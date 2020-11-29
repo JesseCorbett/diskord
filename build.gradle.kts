@@ -29,6 +29,8 @@ tasks.dokkaHtml.configure {
 }
 
 kotlin {
+    explicitApiWarning()
+
     jvm {
         mavenPublication {
 //            artifact(jvmJavadocJar)
@@ -50,6 +52,7 @@ kotlin {
     sourceSets {
         commonMain {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
@@ -74,6 +77,7 @@ kotlin {
 
         val jvmMain by getting {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
             dependencies {
                 implementation("org.slf4j:slf4j-api:1.7.30")
@@ -94,19 +98,19 @@ kotlin {
             }
         }
 
-         val jsMain by getting {
-             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+        val jsMain by getting {
+            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
+            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
-             dependencies {
-                 implementation("io.github.microutils:kotlin-logging-js:1.7.9")
-                 implementation("io.ktor:ktor-client-js:$ktorVersion")
-             }
-         }
-         val jsTest by getting {
-             dependencies {
-                 implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
-             }
-         }
+            dependencies {
+                implementation("io.ktor:ktor-client-js:$ktorVersion")
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
+            }
+        }
     }
 }
 

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PartialGuild(
+public data class PartialGuild(
     @SerialName("owner") val userIsOwner: Boolean,
     @SerialName("permissions") val permissions: Permissions,
     @SerialName("icon") val iconHash: String?,

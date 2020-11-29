@@ -11,7 +11,7 @@ import io.ktor.client.call.*
  * @param client The REST client implementation
  */
 @OptIn(DiskordInternals::class)
-class GlobalClient(client: RestClient) : RestClient by client {
+public class GlobalClient(client: RestClient) : RestClient by client {
 
     /**
      * Get the gateway url from the API.
@@ -19,7 +19,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The gateway url.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getApiGateway(): GatewayUrl = GET("/gateway").receive()
+    public suspend fun getApiGateway(): GatewayUrl = GET("/gateway").receive()
 
     /**
      * Get the bot specific gateway information from the API.
@@ -27,7 +27,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The gateway url with bot specific data.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getBotGateway(): GatewayBotUrl = GET("/gateway/bot").receive()
+    public suspend fun getBotGateway(): GatewayBotUrl = GET("/gateway/bot").receive()
 
     /**
      * Create a guild.
@@ -37,7 +37,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The created guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createGuild(guild: CreateGuild): Guild = POST("/guilds") { body = guild }.receive()
+    public suspend fun createGuild(guild: CreateGuild): Guild = POST("/guilds") { body = guild }.receive()
 
     /**
      * Get an invite.
@@ -47,7 +47,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The invite.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getInvite(inviteCode: String): Invite = GET("/invites", "/$inviteCode").receive()
+    public suspend fun getInvite(inviteCode: String): Invite = GET("/invites", "/$inviteCode").receive()
 
     /**
      * Delete an invite.
@@ -56,7 +56,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun deleteInvite(inviteCode: String): Unit = DELETE("/invites", "/$inviteCode").receive()
+    public suspend fun deleteInvite(inviteCode: String): Unit = DELETE("/invites", "/$inviteCode").receive()
 
     /**
      * Get a user.
@@ -66,7 +66,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The requested user.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getUser(userId: String = "@me"): User = GET("/users", "/$userId").receive()
+    public suspend fun getUser(userId: String = "@me"): User = GET("/users", "/$userId").receive()
 
     /**
      * Modify the current user.
@@ -76,7 +76,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The updated user.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun modifyUser(user: ModifyUser): User = PATCH("/users", "/@me") { body = user }.receive()
+    public suspend fun modifyUser(user: ModifyUser): User = PATCH("/users", "/@me") { body = user }.receive()
 
     /**
      * Get a list of guilds that the current user is in.
@@ -88,7 +88,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return A list of partial guilds matching the query.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<PartialGuild> {
+    public suspend fun getGuilds(limit: Int = 100, before: String? = null, after: String? = null): List<PartialGuild> {
         var path = "?limit=$limit"
         if (before != null) {
             path += "&before=$before"
@@ -106,7 +106,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     @Deprecated("Currently Discord does not return anything from this endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
-    suspend fun getDMs(): List<Channel> = GET("/users/@me/channels").receive()
+    public suspend fun getDMs(): List<Channel> = GET("/users/@me/channels").receive()
 
     /**
      * Open a DM channel between the current user and another.
@@ -118,7 +118,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The DM channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createDM(createDM: CreateDM): Channel = POST("/users/@me/channels") { body = createDM }.receive()
+    public suspend fun createDM(createDM: CreateDM): Channel = POST("/users/@me/channels") { body = createDM }.receive()
 
     /**
      * Open a group DM channel between the current user and others.
@@ -130,7 +130,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The group DM channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createGroupDM(groupDM: CreateGroupDM): Channel = POST("/users/@me/channels") { body = groupDM }.receive()
+    public suspend fun createGroupDM(groupDM: CreateGroupDM): Channel = POST("/users/@me/channels") { body = groupDM }.receive()
 
     /**
      * Get all connections to a given user.
@@ -140,7 +140,7 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The user's connections.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getUserConnections(): List<UserConnection> = GET("/users/@me/channels").receive()
+    public suspend fun getUserConnections(): List<UserConnection> = GET("/users/@me/channels").receive()
 
     /**
      * Get the voice regions available for creating a guild.
@@ -148,5 +148,5 @@ class GlobalClient(client: RestClient) : RestClient by client {
      * @return The list of voice regions.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/voice/regions").receive()
+    public suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/voice/regions").receive()
 }

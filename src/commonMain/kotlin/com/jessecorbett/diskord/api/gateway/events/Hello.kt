@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Hello(
+public data class Hello(
     @SerialName("heartbeat_interval") val heartbeatInterval: Long,
     @SerialName("_trace") val trace: List<String>
 )

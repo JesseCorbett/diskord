@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PatchEmoji(
+public data class PatchEmoji(
     @SerialName("name") val name: String,
     @SerialName("roles") val roles: List<String>
 )

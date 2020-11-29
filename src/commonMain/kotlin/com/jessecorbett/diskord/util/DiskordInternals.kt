@@ -7,4 +7,4 @@ package com.jessecorbett.diskord.util
  * should not be directly consumed. Use at your own risk.
  */
 @RequiresOptIn(level = RequiresOptIn.Level.ERROR)
-annotation class DiskordInternals
+public annotation class DiskordInternals

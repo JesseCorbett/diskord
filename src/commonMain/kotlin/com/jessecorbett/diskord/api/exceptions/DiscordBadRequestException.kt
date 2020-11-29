@@ -5,4 +5,4 @@ package com.jessecorbett.diskord.api.exceptions
  *
  * @property message The error returned by the API.
  */
-class DiscordBadRequestException(override val message: String?) : DiscordException()
+public class DiscordBadRequestException(override val message: String?) : DiscordException()

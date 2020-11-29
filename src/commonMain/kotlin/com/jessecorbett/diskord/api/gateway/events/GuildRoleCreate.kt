@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildRoleCreate(
+public data class GuildRoleCreate(
     @SerialName("guild_id") val guildId: String,
     @SerialName("role") val role: Role
 )

@@ -11,7 +11,7 @@ import kotlinx.serialization.encoding.Encoder
 /**
  * An enum defining all currently supported gateway intents.
  */
-enum class GatewayIntent(val mask: Int, val privileged: Boolean = false) {
+public enum class GatewayIntent(public val mask: Int, internal val privileged: Boolean = false) {
     /**
      * Subscribe to the following events:
      *
@@ -168,69 +168,71 @@ enum class GatewayIntent(val mask: Int, val privileged: Boolean = false) {
  * *Note: All operations on [GatewayIntents] instances will create a new [GatewayIntents] instance.*
  */
 @Serializable(with = GatewayIntentsSerializer::class)
-data class GatewayIntents(val value: Int) {
-    operator fun contains(intent: GatewayIntent): Boolean {
+public data class GatewayIntents(val value: Int) {
+    public operator fun contains(intent: GatewayIntent): Boolean {
         return intent in value
     }
 
-    operator fun contains(permissions: GatewayIntents): Boolean {
+    public operator fun contains(permissions: GatewayIntents): Boolean {
         return value and permissions.value == permissions.value
     }
 
-    operator fun plus(intents: Int) = GatewayIntents(value or intents)
+    public operator fun plus(intents: Int): GatewayIntents = GatewayIntents(value or intents)
 
-    operator fun plus(intents: GatewayIntents) = plus(intents.value)
+    public operator fun plus(intents: GatewayIntents): GatewayIntents = plus(intents.value)
 
-    operator fun plus(intents: Collection<GatewayIntent>) = intents.forEach { plus(it.mask) }
+    public operator fun plus(intents: Collection<GatewayIntent>): Unit = intents.forEach { plus(it.mask) }
 
-    operator fun plus(intent: GatewayIntent) = plus(intent.mask)
+    public operator fun plus(intent: GatewayIntent): GatewayIntents = plus(intent.mask)
 
-    operator fun minus(intents: Int) = GatewayIntents(value and intents.inv())
+    public operator fun minus(intents: Int): GatewayIntents = GatewayIntents(value and intents.inv())
 
-    operator fun minus(intents: GatewayIntents) = minus(intents.value)
+    public operator fun minus(intents: GatewayIntents): GatewayIntents = minus(intents.value)
 
-    operator fun minus(intents: Collection<GatewayIntent>) = intents.forEach { minus(it.mask) }
+    public operator fun minus(intents: Collection<GatewayIntent>): Unit = intents.forEach { minus(it.mask) }
 
-    operator fun minus(intent: GatewayIntent) = minus(intent.mask)
+    public operator fun minus(intent: GatewayIntent): GatewayIntents = minus(intent.mask)
 
-    override fun toString() = "GatewayIntents($value) --> ${GatewayIntent.values().filter { it in value }.joinToString()}"
+    override fun toString(): String = "GatewayIntents($value) --> ${GatewayIntent.values().filter { it in value }.joinToString()}"
 
-    companion object {
+    public companion object {
         /**
          * A [GatewayIntents] object specifying all intents including privileged intents.
          */
-        val ALL = of(*GatewayIntent.values())
+        public val ALL: GatewayIntents = of(*GatewayIntent.values())
 
         /**
          * A [GatewayIntents] object specifying all intents excluding privileged intents.
          */
-        val NON_PRIVILEGED = of(GatewayIntent.values().filterNot { it.privileged })
+        public val NON_PRIVILEGED: GatewayIntents = of(GatewayIntent.values().filterNot { it.privileged })
 
         /**
          * A [GatewayIntents] object specifying no intents.
          */
-        val NONE = GatewayIntents(0)
+        public val NONE: GatewayIntents = GatewayIntents(0)
 
         /**
          * Create a [GatewayIntents] object including all intents specified in the provided collection.
          */
-        fun of(intents: Collection<GatewayIntent>) =
-            GatewayIntents(intents.map { intent -> intent.mask }.reduce { left, right -> left or right })
+        public fun of(intents: Collection<GatewayIntent>): GatewayIntents {
+            return GatewayIntents(intents.map { intent -> intent.mask }.reduce { left, right -> left or right })
+        }
 
         /**
          * Create a [GatewayIntents] object including all intents specified.
          */
-        fun of(vararg intents: GatewayIntent) =
-            GatewayIntents(intents.map { intent -> intent.mask }.reduce { left, right -> left or right })
+        public fun of(vararg intents: GatewayIntent): GatewayIntents {
+            return GatewayIntents(intents.map { intent -> intent.mask }.reduce { left, right -> left or right })
+        }
 
         private operator fun Int.contains(intent: GatewayIntent) = this and intent.mask == intent.mask
     }
 }
 
-object GatewayIntentsSerializer : KSerializer<GatewayIntents> {
+public object GatewayIntentsSerializer : KSerializer<GatewayIntents> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("GatewayIntents", PrimitiveKind.INT)
 
-    override fun deserialize(decoder: Decoder) = GatewayIntents(decoder.decodeInt())
+    override fun deserialize(decoder: Decoder): GatewayIntents = GatewayIntents(decoder.decodeInt())
 
-    override fun serialize(encoder: Encoder, value: GatewayIntents) = encoder.encodeInt(value.value)
+    override fun serialize(encoder: Encoder, value: GatewayIntents): Unit = encoder.encodeInt(value.value)
 }

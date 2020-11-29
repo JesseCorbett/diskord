@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.common
 import kotlinx.serialization.*
 
 @Serializable
-data class Channel(
+public data class Channel(
     @SerialName("id") val id: String,
     @SerialName("type") val type: ChannelType,
     @SerialName("guild_id") val guildId: String? = null,
@@ -25,7 +25,7 @@ data class Channel(
 )
 
 @Serializable
-enum class ChannelType {
+public enum class ChannelType {
     @SerialName("0") GUILD_TEXT,
     @SerialName("1") DM,
     @SerialName("2") GUILD_VOICE,
@@ -36,7 +36,7 @@ enum class ChannelType {
 }
 
 @Serializable
-data class Overwrite(
+public data class Overwrite(
     @SerialName("id") val id: String,
     @SerialName("type") val type: OverwriteType,
     @SerialName("allow") val allowed: Permissions,
@@ -44,7 +44,7 @@ data class Overwrite(
 )
 
 @Serializable
-enum class OverwriteType {
+public enum class OverwriteType {
     @SerialName("0") ROLE,
     @SerialName("1") MEMBER
 }

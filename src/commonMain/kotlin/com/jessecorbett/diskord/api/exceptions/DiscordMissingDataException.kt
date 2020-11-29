@@ -7,4 +7,4 @@ import com.jessecorbett.diskord.api.common.Channel
  *
  * (e.g. - [Channel] is missing property [Channel.guildId])
  */
-class DiscordMissingDataException(override val message: String? = null) : DiscordException()
+public class DiscordMissingDataException(override val message: String? = null) : DiscordException()

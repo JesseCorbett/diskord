@@ -15,7 +15,7 @@ import com.jessecorbett.diskord.internal.client.RestClient
  *
  * @throws DiscordMissingDataException if the provided channel has a null guildId
  */
-suspend fun computePermissions(user: User, channel: Channel, restClient: RestClient): Permissions {
+public suspend fun computePermissions(user: User, channel: Channel, restClient: RestClient): Permissions {
     val guildId = channel.guildId ?: throw DiscordMissingDataException("Specified channel does not have an associated guild ID.")
     val client = GuildClient(guildId, restClient)
 
@@ -31,8 +31,9 @@ suspend fun computePermissions(user: User, channel: Channel, restClient: RestCli
  * @param channel the channel to compute the permissions for
  * @param guild the guild which owns the channel
  */
-fun computePermissions(member: GuildMember, channel: Channel, guild: Guild) =
-    computeOverwrites(computeBasePermissions(member, guild), member, channel, guild)
+public fun computePermissions(member: GuildMember, channel: Channel, guild: Guild): Permissions {
+    return computeOverwrites(computeBasePermissions(member, guild), member, channel, guild)
+}
 
 /**
  * Compute the base permissions for the given guild member in the guild.  If

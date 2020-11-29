@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PatchRole(
+public data class PatchRole(
     @SerialName("name") val name: String,
     @SerialName("permissions") val permissions: Permissions,
     @SerialName("color") val color: Color,

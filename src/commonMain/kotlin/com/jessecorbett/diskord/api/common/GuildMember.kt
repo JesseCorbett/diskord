@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildMember(
+public data class GuildMember(
     @SerialName("user") val user: User? = null,
     @SerialName("nick") val nickname: String? = null,
     @SerialName("roles") val roleIds: List<String>,

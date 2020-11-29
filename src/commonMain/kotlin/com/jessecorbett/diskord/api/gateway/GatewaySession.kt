@@ -20,7 +20,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 import mu.KotlinLogging
 
 @OptIn(DiskordInternals::class)
-class GatewaySession(
+public class GatewaySession(
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,
     private val intents: GatewayIntents,
@@ -35,27 +35,27 @@ class GatewaySession(
     private var sessionId: String? = null
     private var sequenceNumber: Int? = null
 
-    val running: Boolean
+    public val running: Boolean
         get() = socketManager.running
 
-    val alive: Boolean
+    public val alive: Boolean
         get() = socketManager.alive
 
-    suspend fun startSession(sessionId: String? = null, sequenceNumber: Int? = null) {
+    public suspend fun startSession(sessionId: String? = null, sequenceNumber: Int? = null) {
         this.sessionId = sessionId
         this.sequenceNumber = sequenceNumber
         socketManager.open()
     }
 
-    suspend fun closeSession() {
+    public suspend fun closeSession() {
         socketManager.close()
     }
 
-    suspend fun restartConnection() {
+    public suspend fun restartConnection() {
         socketManager.restartConnection()
     }
 
-    suspend fun send(gatewayMessage: GatewayMessage) {
+    public suspend fun send(gatewayMessage: GatewayMessage) {
         logger.info { "Sending OpCode " + gatewayMessage.opCode }
         socketManager.send(gatewayMessage)
     }
@@ -68,7 +68,7 @@ class GatewaySession(
      * @param idleTime How long the user has been idle, in milliseconds.
      * @param activity The activity, if any, that the user is performing.
      */
-    suspend fun setStatus(
+    public suspend fun setStatus(
         status: UserStatus,
         isAfk: Boolean = false,
         idleTime: Int? = null,

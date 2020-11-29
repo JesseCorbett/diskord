@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Webhook(
+public data class Webhook(
     @SerialName("id") val id: String,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("channel_id") val channelId: String,

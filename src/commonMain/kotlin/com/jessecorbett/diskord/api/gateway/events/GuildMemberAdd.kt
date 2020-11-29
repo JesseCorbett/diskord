@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * [com.jessecorbett.diskord.api.common.GuildMember] plus guild_id
  */
 @Serializable
-data class GuildMemberAdd(
+public data class GuildMemberAdd(
     @SerialName("user") val user: User? = null,
     @SerialName("nick") val nickname: String? = null,
     @SerialName("roles") val roleIds: List<String>,

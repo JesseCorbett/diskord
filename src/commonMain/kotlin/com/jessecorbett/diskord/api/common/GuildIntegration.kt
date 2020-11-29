@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuildIntegration(
+public data class GuildIntegration(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("type") val type: String,
@@ -19,7 +19,7 @@ data class GuildIntegration(
 )
 
 @Serializable
-data class IntegrationAccount(
+public data class IntegrationAccount(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String
 )

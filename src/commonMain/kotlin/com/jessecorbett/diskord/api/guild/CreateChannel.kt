@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateChannel(
+public data class CreateChannel(
     @SerialName("name") val name: String,
     @SerialName("type") val type: ChannelType,
     @SerialName("bitrate") val bitrate: Int? = null,

@@ -12,7 +12,7 @@ import kotlinx.serialization.json.JsonElement
  * @param event The discord event being mapped.
  * @param data The event data to be deserialized.
  */
-suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonElement) {
+public suspend fun dispatchEvent(eventListener: EventListener, event: DiscordEvent, data: JsonElement) {
     eventListener.onEvent(event, data)
     when (event) {
         DiscordEvent.READY -> eventListener.onReady(defaultJson.decodeFromJsonElement(Ready.serializer(), data))

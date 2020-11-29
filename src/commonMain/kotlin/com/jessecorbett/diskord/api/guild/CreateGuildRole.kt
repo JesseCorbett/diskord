@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateGuildRole(
+public data class CreateGuildRole(
     @SerialName("name") val name: String,
     @SerialName("permissions") val permissions: Permissions,
     @SerialName("color") val color: Color = Colors.BLACK,

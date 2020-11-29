@@ -18,32 +18,25 @@ private const val DISCORD_API_URL = "https://discord.com/api"
 
 private val logger = KotlinLogging.logger {}
 
-data class RateLimitInfo(val limit: Int, val remaining: Int, val reset: Long)
+private data class RateLimitInfo(val limit: Int, val remaining: Int, val reset: Long)
 
 @OptIn(ExperimentalTime::class)
 private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
+    // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
     val resetsAt = rateLimitInfo.reset - epochSecondNow()
     delay(resetsAt.seconds)
 }
 
-interface RestClient {
-    suspend fun GET(
+public interface RestClient {
+    public suspend fun GET(
         majorPath: String,
         minorPath: String = "",
         rateKey: String = majorPath,
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
-    suspend fun POST(
-        majorPath: String,
-        minorPath: String = "",
-        rateKey: String = majorPath,
-        omitNulls: Boolean = false,
-        block: HttpRequestBuilder.() -> Unit = {}
-    ): HttpResponse
-
-    suspend fun PUT(
+    public suspend fun POST(
         majorPath: String,
         minorPath: String = "",
         rateKey: String = majorPath,
@@ -51,7 +44,7 @@ interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
-    suspend fun PATCH(
+    public suspend fun PUT(
         majorPath: String,
         minorPath: String = "",
         rateKey: String = majorPath,
@@ -59,7 +52,15 @@ interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
-    suspend fun DELETE(
+    public suspend fun PATCH(
+        majorPath: String,
+        minorPath: String = "",
+        rateKey: String = majorPath,
+        omitNulls: Boolean = false,
+        block: HttpRequestBuilder.() -> Unit = {}
+    ): HttpResponse
+
+    public suspend fun DELETE(
         majorPath: String,
         minorPath: String = "",
         rateKey: String = majorPath,
@@ -68,7 +69,7 @@ interface RestClient {
 }
 
 @DiskordInternals
-class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String, botVersion: String) : RestClient {
+public class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String, botVersion: String) : RestClient {
     private val authorizationHeader = userType.type + " " + token
     private val userAgentHeader = "DiscordBot: ($botUrl, $botVersion)"
 
@@ -79,7 +80,10 @@ class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String
     private var globalRateLimit = RateLimitInfo(1, 1, Long.MAX_VALUE)
     private val rateLimitBuckets: MutableMap<String, RateLimitInfo> = mutableMapOf()
 
-    fun close() {
+    /**
+     * Closes the backing client instances
+     */
+    public fun close() {
         defaultClient.close()
         omitNullsClient.close()
     }
@@ -158,7 +162,7 @@ class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String
         minorPath: String,
         rateKey: String,
         block: HttpRequestBuilder.() -> Unit
-    ) = request(majorPath, minorPath, rateKey, HttpMethod.Get, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Get, false, block)
 
     override suspend fun POST(
         majorPath: String,
@@ -166,7 +170,7 @@ class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ) = request(majorPath, minorPath, rateKey, HttpMethod.Post, omitNulls, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Post, omitNulls, block)
 
     override suspend fun PUT(
         majorPath: String,
@@ -174,7 +178,7 @@ class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ) = request(majorPath, minorPath, rateKey, HttpMethod.Put, omitNulls, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Put, omitNulls, block)
 
     override suspend fun PATCH(
         majorPath: String,
@@ -182,14 +186,14 @@ class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ) = request(majorPath, minorPath, rateKey, HttpMethod.Patch, omitNulls, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Patch, omitNulls, block)
 
     override suspend fun DELETE(
         majorPath: String,
         minorPath: String,
         rateKey: String,
         block: HttpRequestBuilder.() -> Unit
-    ) = request(majorPath, minorPath, rateKey, HttpMethod.Delete, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Delete, false, block)
 }
 
 @DiskordInternals

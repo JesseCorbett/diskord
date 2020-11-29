@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PresenceUpdate(
+public data class PresenceUpdate(
     @SerialName("user") val user: BareUser,
     @SerialName("roles") val roleIds: List<String>,
     @SerialName("game") val activity: UserStatusActivity?,

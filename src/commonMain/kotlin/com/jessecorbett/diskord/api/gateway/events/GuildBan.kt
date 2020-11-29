@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GuildBan(
-    @SerialName("guild_id") val guildId: String,
-    @SerialName("user") val user: User
+public class GuildBan(
+    @SerialName("guild_id") public val guildId: String,
+    @SerialName("user") public val user: User
 )

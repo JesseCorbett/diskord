@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.common
 import kotlinx.serialization.*
 
 @Serializable
-data class User(
+public data class User(
     @SerialName("id") val id: String,
     @SerialName("username") val username: String,
     @SerialName("discriminator") val discriminator: Long,
@@ -18,7 +18,7 @@ data class User(
 )
 
 @Serializable
-enum class UserFlags(val code: Int) {
+public enum class UserFlags(public val code: Int) {
     @SerialName("0") NONE(0),
     @SerialName("4") HYPESQUAD_EVENTS(4),
     @SerialName("64") HOUSE_BRAVERY(64),
@@ -27,7 +27,7 @@ enum class UserFlags(val code: Int) {
 }
 
 @Serializable
-enum class PremiumType(val code: Int) {
+public enum class PremiumType(public val code: Int) {
     @SerialName("0") NONE(0),
     @SerialName("1") NITRO_CLASSIC(1),
     @SerialName("2") NITRO(2)

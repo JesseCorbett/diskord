@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdateVoiceState(
+public data class UpdateVoiceState(
     @SerialName("guild_id") val snowflakeId: String,
     @SerialName("channel_id") val channelId: String,
     @SerialName("limit") val maxResults: Int = 0,

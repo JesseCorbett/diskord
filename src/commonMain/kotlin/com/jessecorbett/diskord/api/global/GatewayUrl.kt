@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  * @property url The url to connect to the gateway with.
  */
 @Serializable
-data class GatewayUrl(val url: String)
+public data class GatewayUrl(val url: String)
 
 /**
  * Response from the API to get the gateway url for bots.
@@ -19,7 +19,7 @@ data class GatewayUrl(val url: String)
  * @property sessionStartLimit Information on the limits on starting sessions for this bot.
  */
 @Serializable
-data class GatewayBotUrl(
+public data class GatewayBotUrl(
     val url: String,
     val shards: Int, @SerialName("session_start_limit") val sessionStartLimit: SessionStartLimit
 )
@@ -32,7 +32,7 @@ data class GatewayBotUrl(
  * @property sessionLimitResetsIn How long until the sessions remaining resets.
  */
 @Serializable
-data class SessionStartLimit(
+public data class SessionStartLimit(
     @SerialName("total") val totalSessions: Int,
     @SerialName("remaining") val remainingSessions: Int,
     @SerialName("reset_after") val sessionLimitResetsIn: Int // Passed as int millis

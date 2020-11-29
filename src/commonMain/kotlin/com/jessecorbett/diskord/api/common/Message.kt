@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.common
 import kotlinx.serialization.*
 
 @Serializable
-data class Message(
+public data class Message(
     @SerialName("id") val id: String,
     @SerialName("channel_id") val channelId: String,
     @SerialName("guild_id") val guildId: String? = null,
@@ -28,7 +28,7 @@ data class Message(
 )
 
 @Serializable
-enum class MessageType {
+public enum class MessageType {
     @SerialName("0") DEFAULT,
     @SerialName("1") RECIPIENT_ADD,
     @SerialName("2") RECIPIENT_REMOVE,
@@ -48,13 +48,13 @@ enum class MessageType {
 }
 
 @Serializable
-data class MessageActivity(
+public data class MessageActivity(
     @SerialName("type") val type: MessageActivityType,
     @SerialName("party_id") val partyId: String
 )
 
 @Serializable
-enum class MessageActivityType {
+public enum class MessageActivityType {
     @SerialName("1") JOIN,
     @SerialName("2") SPECTATE,
     @SerialName("3") LISTEN,
@@ -62,7 +62,7 @@ enum class MessageActivityType {
 }
 
 @Serializable
-data class MessageApplication(
+public data class MessageApplication(
     @SerialName("id") val id: String,
     @SerialName("cover_image") val coverImage: String,
     @SerialName("description") val description: String,

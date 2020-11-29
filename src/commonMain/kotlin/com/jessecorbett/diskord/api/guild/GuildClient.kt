@@ -19,7 +19,7 @@ import io.ktor.client.call.*
  * @param client The REST client implementation
  */
 @OptIn(DiskordInternals::class)
-class GuildClient(val guildId: String, client: RestClient) : RestClient by client {
+public class GuildClient(public val guildId: String, client: RestClient) : RestClient by client {
 
     /**
      * Get this guild's emoji.
@@ -27,7 +27,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return A list of the guild's custom emoji
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getEmoji(): List<Emoji> = GET("/guilds/$guildId/emojis").receive()
+    public suspend fun getEmoji(): List<Emoji> = GET("/guilds/$guildId/emojis").receive()
 
     /**
      * Get a custom emoji.
@@ -37,7 +37,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The custom emoji.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getEmoji(emojiId: String): Emoji = GET("/guilds/$guildId/emojis", "/$emojiId").receive()
+    public suspend fun getEmoji(emojiId: String): Emoji = GET("/guilds/$guildId/emojis", "/$emojiId").receive()
 
     /**
      * Create a custom emoji.
@@ -47,7 +47,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The created emoji.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createEmoji(createEmoji: CreateEmoji): Emoji {
+    public suspend fun createEmoji(createEmoji: CreateEmoji): Emoji {
         return POST("/guilds/$guildId", "/emojis") { body = createEmoji }.receive()
     }
 
@@ -60,7 +60,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The updated emoji.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji): Emoji {
+    public suspend fun updateEmoji(emojiId: String, emoji: PatchEmoji): Emoji {
         return PATCH("/guilds/$guildId/emojis", "/$emojiId") { body = emoji }.receive()
     }
 
@@ -71,7 +71,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun deleteEmoji(emojiId: String): Unit = DELETE("/guilds/$guildId/emojis", "/$emojiId").receive()
+    public suspend fun deleteEmoji(emojiId: String): Unit = DELETE("/guilds/$guildId/emojis", "/$emojiId").receive()
 
     /**
      * Get this guild.
@@ -79,7 +79,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return This guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun get(): Guild = GET("/guilds/$guildId").receive()
+    public suspend fun get(): Guild = GET("/guilds/$guildId").receive()
 
     /**
      * Update this guild.
@@ -89,7 +89,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The updated guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun update(guild: PatchGuild): Guild {
+    public suspend fun update(guild: PatchGuild): Guild {
         return PATCH("/guilds/$guildId") { body = guild }.receive()
     }
 
@@ -98,7 +98,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun delete(): Unit = DELETE("/guilds/$guildId").receive()
+    public suspend fun delete(): Unit = DELETE("/guilds/$guildId").receive()
 
     /**
      * Get this guild's channels.
@@ -106,7 +106,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The guild's channels.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getChannels(): List<Channel> = GET("/guilds/$guildId/channels").receive()
+    public suspend fun getChannels(): List<Channel> = GET("/guilds/$guildId/channels").receive()
 
     /**
      * Create a channel.
@@ -116,7 +116,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The created channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createChannel(channel: CreateChannel): Channel {
+    public suspend fun createChannel(channel: CreateChannel): Channel {
         return POST("/guilds/$guildId/channels") { body = channel }.receive()
     }
 
@@ -127,7 +127,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun modifyChannelPositions(positions: List<GuildPosition>) {
+    public suspend fun modifyChannelPositions(positions: List<GuildPosition>) {
         PATCH("/guilds/$guildId/channels") { body = positions }.receive<Unit>()
     }
 
@@ -139,7 +139,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The guild member.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getMember(userId: String): GuildMember {
+    public suspend fun getMember(userId: String): GuildMember {
         return GET("/guilds/$guildId/members", "/$userId").receive()
     }
 
@@ -152,7 +152,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return List of guild members.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getMembers(limit: Int = 1, afterMember: String = "0"): List<GuildMember> {
+    public suspend fun getMembers(limit: Int = 1, afterMember: String = "0"): List<GuildMember> {
         return GET("/guilds/$guildId/members", "?limit=$limit&after=$afterMember").receive()
     }
 
@@ -166,7 +166,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun addMember(userId: String, addGuildMember: AddGuildMember) {
+    public suspend fun addMember(userId: String, addGuildMember: AddGuildMember) {
         PUT("/guilds/$guildId/members", "/$userId") { body = addGuildMember }.receive<Unit>()
     }
 
@@ -178,7 +178,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun updateMember(userId: String, guildMember: PatchGuildMember) {
+    public suspend fun updateMember(userId: String, guildMember: PatchGuildMember) {
         PATCH("/guilds/$guildId/members", "/$userId", omitNulls = true) { body = guildMember }.receive<Unit>()
     }
 
@@ -189,7 +189,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun disconnectMemberVoiceChannel(userId: String) {
+    public suspend fun disconnectMemberVoiceChannel(userId: String) {
         PATCH("/guilds/$guildId/members", "/$userId") {
             body = PatchGuildMemberMoveVoiceChannel(null)
         }.receive<Unit>()
@@ -202,7 +202,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) {
+    public suspend fun changeMemberNickname(guildMember: PatchGuildMemberNickname) {
         PATCH("/guilds/$guildId/members/@me/nick") { body = guildMember }.receive<Unit>()
     }
 
@@ -214,7 +214,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun addMemberRole(userId: String, roleId: String) {
+    public suspend fun addMemberRole(userId: String, roleId: String) {
         PUT("/guilds/$guildId/members", "/$userId/roles/$roleId").receive<Unit>()
     }
 
@@ -226,7 +226,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun removeMemberRole(userId: String, roleId: String) {
+    public suspend fun removeMemberRole(userId: String, roleId: String) {
         DELETE("/guilds/$guildId/members", "/$userId/roles/$roleId").receive<Unit>()
     }
 
@@ -237,7 +237,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun removeMember(userId: String) {
+    public suspend fun removeMember(userId: String) {
         DELETE("/guilds/$guildId/members", "/$userId").receive<Unit>()
     }
 
@@ -247,7 +247,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The list of bans.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getBans(): List<Ban> = GET("/guilds/$guildId/bans").receive()
+    public suspend fun getBans(): List<Ban> = GET("/guilds/$guildId/bans").receive()
 
     /**
      * Ban a user.
@@ -258,8 +258,9 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) =
+    public suspend fun createBan(userId: String, deleteMessageDays: Int, reason: String) {
         createBan(userId, CreateGuildBan(deleteMessageDays, reason))
+    }
 
     /**
      * Ban a user.
@@ -271,7 +272,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createBan(userId: String, createGuildBan: CreateGuildBan) {
+    public suspend fun createBan(userId: String, createGuildBan: CreateGuildBan) {
         PUT("/guilds/$guildId/bans", "/$userId") { body = createGuildBan }.receive<Unit>()
     }
 
@@ -282,7 +283,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun removeBan(userId: String) {
+    public suspend fun removeBan(userId: String) {
         DELETE("/guilds/$guildId/bans", "/$userId").receive<Unit>()
     }
 
@@ -292,7 +293,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The list of all roles.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getRoles(): List<Role> = GET("/guilds/$guildId/roles").receive()
+    public suspend fun getRoles(): List<Role> = GET("/guilds/$guildId/roles").receive()
 
     /**
      * Create a role.
@@ -302,7 +303,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The created role.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createRole(guildRole: CreateGuildRole): Role {
+    public suspend fun createRole(guildRole: CreateGuildRole): Role {
         return POST("/guilds/$guildId/roles") { body = guildRole }.receive()
     }
 
@@ -313,7 +314,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun modifyRolePositions(positions: List<GuildPosition>) {
+    public suspend fun modifyRolePositions(positions: List<GuildPosition>) {
         PATCH("/guilds/$guildId/roles") { body = positions }.receive<Unit>()
     }
 
@@ -326,7 +327,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The updated role.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun updateRole(roleId: String, role: PatchRole): Role {
+    public suspend fun updateRole(roleId: String, role: PatchRole): Role {
         return PATCH("/guilds/$guildId/roles", "/$roleId") { body = role }.receive()
     }
 
@@ -337,7 +338,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun deleteRole(roleId: String) {
+    public suspend fun deleteRole(roleId: String) {
         DELETE("/guilds/$guildId/roles", "/$roleId").receive<Unit>()
     }
 
@@ -349,7 +350,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The potential results.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getPrunePotential(days: Int = 1): Pruned {
+    public suspend fun getPrunePotential(days: Int = 1): Pruned {
         return GET("/guilds/$guildId/prune", "?days=$days").receive()
     }
 
@@ -361,7 +362,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The pruning results.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun prune(days: Int = 1): Pruned = POST("/guilds/$guildId/prune", "?days=$days").receive()
+    public suspend fun prune(days: Int = 1): Pruned = POST("/guilds/$guildId/prune", "?days=$days").receive()
 
     /**
      * Get the guild's voice regions.
@@ -369,7 +370,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The voice regions.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/guilds/$guildId/regions").receive()
+    public suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/guilds/$guildId/regions").receive()
 
     /**
      * Get the guild invites.
@@ -377,7 +378,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return All guild invites.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getInvites(): List<Invite> = GET("/guilds/$guildId/invites").receive()
+    public suspend fun getInvites(): List<Invite> = GET("/guilds/$guildId/invites").receive()
 
     /**
      * Get the list of integrations for the guild.
@@ -385,7 +386,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The list fo guild integrations.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getIntegrations(): List<GuildIntegration> = GET("/guilds/$guildId/integrations").receive()
+    public suspend fun getIntegrations(): List<GuildIntegration> = GET("/guilds/$guildId/integrations").receive()
 
     /**
      * Create a guild integration.
@@ -394,7 +395,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun createIntegration(guildIntegration: CreateGuildIntegration) {
+    public suspend fun createIntegration(guildIntegration: CreateGuildIntegration) {
         POST("/guilds/$guildId/integrations") { body = guildIntegration }.receive<Unit>()
     }
 
@@ -406,7 +407,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
+    public suspend fun updateIntegration(guildIntegrationId: String, guildIntegration: PatchGuildIntegration) {
         PATCH("/guilds/$guildId/integrations", "/$guildIntegrationId") { body = guildIntegration }.receive<Unit>()
     }
 
@@ -417,7 +418,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun deleteIntegration(guildIntegrationId: String) {
+    public suspend fun deleteIntegration(guildIntegrationId: String) {
         DELETE("/guilds/$guildId/integrations", "/$guildIntegrationId").receive<Unit>()
     }
 
@@ -428,7 +429,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun syncIntegration(guildIntegrationId: String) {
+    public suspend fun syncIntegration(guildIntegrationId: String) {
         POST("/guilds/$guildId/integrations", "/$guildIntegrationId/sync").receive<Unit>()
     }
 
@@ -438,7 +439,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The guild embed.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getEmbed(): GuildEmbed = GET("/guilds/$guildId/embed").receive()
+    public suspend fun getEmbed(): GuildEmbed = GET("/guilds/$guildId/embed").receive()
 
     /**
      * Update the guild embed.
@@ -448,7 +449,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The updated guild embed.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun updateEmbed(guildEmbed: GuildEmbed): GuildEmbed {
+    public suspend fun updateEmbed(guildEmbed: GuildEmbed): GuildEmbed {
         return PATCH("/guilds/$guildId/embed") { body = guildEmbed }.receive()
     }
 
@@ -458,7 +459,7 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The vanity url in [Invite] form.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getVanityUrl(): Invite = GET("/guilds/$guildId/vanity-url").receive()
+    public suspend fun getVanityUrl(): Invite = GET("/guilds/$guildId/vanity-url").receive()
 
     /**
      * Get the guild's webhooks.
@@ -466,14 +467,14 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return All the guild's webhooks.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getWebhooks(): List<Webhook> = GET("/guilds/$guildId/webhooks").receive()
+    public suspend fun getWebhooks(): List<Webhook> = GET("/guilds/$guildId/webhooks").receive()
 
     /**
      * Leave the server.
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun leave() {
+    public suspend fun leave() {
         DELETE("/users/@me/guilds", "/$guildId").receive<Unit>()
     }
 
@@ -483,5 +484,5 @@ class GuildClient(val guildId: String, client: RestClient) : RestClient by clien
      * @return The audit log.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    suspend fun getAuditLog(): AuditLog = GET("/guilds/$guildId/audit-logs").receive()
+    public suspend fun getAuditLog(): AuditLog = GET("/guilds/$guildId/audit-logs").receive()
 }

@@ -5,4 +5,4 @@ package com.jessecorbett.diskord.api.exceptions
  *
  * @property message The specific compatibility issue.
  */
-class DiscordCompatibilityException(override val message: String) : DiscordException()
+public class DiscordCompatibilityException(override val message: String) : DiscordException()

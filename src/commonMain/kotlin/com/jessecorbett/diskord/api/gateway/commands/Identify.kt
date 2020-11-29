@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IdentifyShard(
+public data class IdentifyShard(
     @SerialName("token") val token: String,
     @SerialName("shard") val shard: List<Int>,
     @SerialName("compress") val canCompress: Boolean = false,
@@ -16,7 +16,7 @@ data class IdentifyShard(
 )
 
 @Serializable
-data class Identify(
+public data class Identify(
     @SerialName("token") val token: String,
     @SerialName("compress") val canCompress: Boolean = false,
     @SerialName("large_threshold") val memberCountThreshold: Int = 50,
@@ -26,12 +26,12 @@ data class Identify(
 )
 
 @Serializable
-data class IdentifyProperties(
+public data class IdentifyProperties(
     @SerialName("\$os") val os: String,
     @SerialName("\$browser") val browser: String,
     @SerialName("\$device") val device: String
 ) {
-    companion object {
-        val Default = IdentifyProperties("JVM", "diskord", "diskord")
+    public companion object {
+        public val Default: IdentifyProperties = IdentifyProperties("JVM", "diskord", "diskord")
     }
 }

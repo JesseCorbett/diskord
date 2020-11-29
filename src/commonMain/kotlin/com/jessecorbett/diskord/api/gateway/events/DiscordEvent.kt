@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.api.gateway.events
 
-enum class DiscordEvent {
+public enum class DiscordEvent {
     READY,
     RESUMED,
     CHANNEL_CREATE,

@@ -5,7 +5,7 @@ package com.jessecorbett.diskord.api
  *
  * @property type The auth token type label.
  */
-enum class DiscordUserType(val type: String) {
+public enum class DiscordUserType(public val type: String) {
     /**
      * Bots
      */
@@ -18,5 +18,5 @@ enum class DiscordUserType(val type: String) {
     /**
      * Over the wire we want to send the type string, not enum name.
      */
-    override fun toString() = type
+    override fun toString(): String = type
 }

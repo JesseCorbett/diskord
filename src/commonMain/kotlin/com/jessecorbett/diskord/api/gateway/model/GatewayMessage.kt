@@ -17,7 +17,7 @@ import kotlinx.serialization.json.JsonElement
  * @property event the event name, only for [OpCode.DISPATCH].
  */
 @Serializable
-data class GatewayMessage(
+public data class GatewayMessage(
     @SerialName("op") val opCode: OpCode,
     @SerialName("d") val dataPayload: JsonElement?,
     @SerialName("s") val sequenceNumber: Int?,
@@ -28,7 +28,7 @@ data class GatewayMessage(
  * The discord gateway event.
  */
 @Serializable(with = OpCodeSerializer::class)
-enum class OpCode(val code: Int) {
+public enum class OpCode(public val code: Int) {
     /**
      * A discord event has been sent to the client.
      */
@@ -90,11 +90,11 @@ enum class OpCode(val code: Int) {
     HEARTBEAT_ACK(11)
 }
 
-object OpCodeSerializer : KSerializer<OpCode> {
+public object OpCodeSerializer : KSerializer<OpCode> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("OpCode", PrimitiveKind.INT)
 
     @OptIn(ExperimentalSerializationApi::class)
-    override fun serialize(encoder: Encoder, value: OpCode) = encoder.encodeInt(value.code)
+    override fun serialize(encoder: Encoder, value: OpCode): Unit = encoder.encodeInt(value.code)
 
     override fun deserialize(decoder: Decoder): OpCode {
         val code = decoder.decodeInt()

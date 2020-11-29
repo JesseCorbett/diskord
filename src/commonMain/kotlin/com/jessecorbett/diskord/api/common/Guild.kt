@@ -3,7 +3,7 @@ package com.jessecorbett.diskord.api.common
 import kotlinx.serialization.*
 
 @Serializable
-data class Guild(
+public data class Guild(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("icon") val iconHash: String?,
@@ -30,7 +30,7 @@ data class Guild(
 )
 
 @Serializable
-enum class VerificationLevel {
+public enum class VerificationLevel {
     @SerialName("0") NONE,
     @SerialName("1") LOW,
     @SerialName("2") MEDIUM,
@@ -39,20 +39,20 @@ enum class VerificationLevel {
 }
 
 @Serializable
-enum class NotificationsLevel {
+public enum class NotificationsLevel {
     @SerialName("0") ALL_MESSAGES,
     @SerialName("1") ONLY_MENTIONS
 }
 
 @Serializable
-enum class ExplicitContentFilterLevel {
+public enum class ExplicitContentFilterLevel {
     @SerialName("0") DISABLED,
     @SerialName("1") MEMBERS_WITHOUT_ROLES,
     @SerialName("2") ALL_MEMBERS
 }
 
 @Serializable
-enum class MFALevel {
+public enum class MFALevel {
     @SerialName("0") NONE,
     @SerialName("1") ELEVATED
 }

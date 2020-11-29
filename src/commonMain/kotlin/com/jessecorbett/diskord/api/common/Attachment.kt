@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Attachment(
+public data class Attachment(
     @SerialName("id") val id: String,
     @SerialName("filename") val fileName: String,
     @SerialName("size") val sizeInBytes: Int,
