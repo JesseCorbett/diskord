@@ -14,21 +14,25 @@ import java.util.*
  *
  * @return a [ByteArray] version of the file.
  */
-fun File.toByteArray() = ByteArray(this.length().toInt()).also { FileInputStream(this).read(it) }
+public fun File.toByteArray(): ByteArray {
+    return ByteArray(this.length().toInt()).also { FileInputStream(this).read(it) }
+}
 
 /**
  * Converts a [File] to a base64 encoded [String].
  *
  * @return a base64 encoded version of the file.
  */
-fun File.toBase64() = Base64.getEncoder().encodeToString(this.toByteArray())!!
+public fun File.toBase64(): String {
+    return Base64.getEncoder().encodeToString(this.toByteArray())!!
+}
 
 /**
  * Converts a [File] to a [FileData] object.
  *
  * @return the [FileData] representing this file
  */
-fun File.toFileData(): FileData {
+public fun File.toFileData(): FileData {
     val packet = buildPacket {
         forEachBlock { buffer, bytesRead ->
             writeFully(buffer, length = bytesRead)
@@ -43,4 +47,6 @@ fun File.toFileData(): FileData {
  *
  * @return the [FileData] representing this file
  */
-fun Path.toFileData() = toFile().toFileData()
+public fun Path.toFileData(): FileData {
+    return toFile().toFileData()
+}

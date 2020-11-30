@@ -15,8 +15,9 @@ import java.nio.file.Path
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendFile(file: File, comment: String = "") =
-    sendFile(file.toFileData(), comment)
+public suspend fun ChannelClient.sendFile(file: File, comment: String = ""): Message {
+    return sendFile(file.toFileData(), comment)
+}
 
 /**
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
@@ -27,5 +28,6 @@ suspend fun ChannelClient.sendFile(file: File, comment: String = "") =
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
-suspend fun ChannelClient.sendFile(path: Path, comment: String = "") =
-    sendFile(path.toFileData(), comment)
+public suspend fun ChannelClient.sendFile(path: Path, comment: String = ""): Message {
+    return sendFile(path.toFileData(), comment)
+}
