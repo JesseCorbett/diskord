@@ -118,13 +118,11 @@ tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
                 // Unix based directory relative path to the root of the project (where you execute gradle respectively).
                 localDirectory.set(file("src"))
 
-                // URL showing where the source code can be accessed through the web browser
                 remoteUrl.set(
                     URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/tree/master/src/"
+                        "https://gitlab.com/jesselcorbett/diskord/-/tree/master/diskord-core/src"
                     )
                 )
-                // Suffix which is used to append the line number to the URL. Use #L for GitHub
                 remoteLineSuffix.set("#L")
             }
         }
