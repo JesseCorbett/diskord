@@ -1,3 +1,4 @@
 rootProject.name = "diskord"
 
-enableFeaturePreview("GRADLE_METADATA")
+include(":diskord-core")
+include(":diskord-bot")
