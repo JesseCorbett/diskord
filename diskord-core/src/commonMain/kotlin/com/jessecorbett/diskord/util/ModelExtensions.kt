@@ -161,7 +161,7 @@ public val Role.mention: String
  *
  * @return the channel in chat mention format.
  */
-public val Channel.mention: String
+public val GuildText.mention: String
     get() = "#$name"
 
 

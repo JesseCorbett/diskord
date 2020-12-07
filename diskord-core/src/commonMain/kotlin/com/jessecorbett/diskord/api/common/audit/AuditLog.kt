@@ -1,49 +1,30 @@
-package com.jessecorbett.diskord.api.common
+package com.jessecorbett.diskord.api.common.audit
 
+import com.jessecorbett.diskord.api.common.IntegrationAccount
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.common.Webhook
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JsonElement
 
 @Serializable
 public data class AuditLog(
     @SerialName("webhooks") val webhooks: List<Webhook>,
     @SerialName("users") val users: List<User>,
-    @SerialName("audit_log_entries") val entries: List<AuditLogEntry>
+    @SerialName("audit_log_entries") val entries: List<AuditLogEntry>,
+    @SerialName("integrations") val integrations: List<PartialGuildIntegration>
 )
 
 @Serializable
-public data class AuditLogEntry(
+public data class PartialGuildIntegration(
     @SerialName("id") val id: String,
-    @SerialName("target_id") val targetId: String?,
-    @SerialName("changes") val changes: List<AuditLogChange> = emptyList(),
-    @SerialName("user_id") val userId: String,
-    @SerialName("action_type") val actionType: Int,
-    @SerialName("options") val optionalData: OptionalEntryData? = null,
-    @SerialName("reason") val reason: String? = null
-)
-
-// TODO: Make super dynamic and all https://discordapp.com/developers/docs/resources/audit-log#audit-log-change-object
-@Serializable
-public data class AuditLogChange(
-    @SerialName("new_value") val newValue: JsonElement? = null,
-    @SerialName("old_value") val oldValue: JsonElement? = null,
-    @SerialName("key") val key: String
-)
-
-@Serializable
-public data class OptionalEntryData(
-    @SerialName("delete_member_days") val pruneKickedAfterDays: String?,
-    @SerialName("members_removed") val pruneMembersPrunedCount: String?,
-    @SerialName("channel_id") val deleteChannelId: String?,
-    @SerialName("count") val deleteMessageCount: String?,
-    @SerialName("id") val overwriteEntityId: String?,
-    @SerialName("type") val overwriteEntityType: OverwrittenEntityType?,
-    @SerialName("role_name") val overwriteRoleName: String?
+    @SerialName("name") val name: String,
+    @SerialName("type") val type: String,
+    @SerialName("account") val account: IntegrationAccount
 )
 
 @Serializable
 public enum class OverwrittenEntityType {
-    @SerialName("member") MEMBER,
-    @SerialName("role") ROLE
+    @SerialName("1") MEMBER,
+    @SerialName("0") ROLE
 }
 
 @Serializable

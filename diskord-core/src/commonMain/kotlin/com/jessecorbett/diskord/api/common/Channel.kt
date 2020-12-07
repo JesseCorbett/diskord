@@ -3,26 +3,130 @@ package com.jessecorbett.diskord.api.common
 import kotlinx.serialization.*
 
 @Serializable
-public data class Channel(
-    @SerialName("id") val id: String,
-    @SerialName("type") val type: ChannelType,
-    @SerialName("guild_id") val guildId: String? = null,
-    @SerialName("position") var position: Int? = null,
-    @SerialName("permission_overwrites") var permissionOverwrites: List<Overwrite> = emptyList(),
-    @SerialName("name") var name: String? = null,
-    @SerialName("topic") var topic: String? = null,
-    @SerialName("nsfw") var nsfw: Boolean? = null,
-    @SerialName("last_message_id") var lastMessageId: String? = null,
-    @SerialName("bitrate") var voiceBitrate: Int? = null,
-    @SerialName("user_limit") var voiceUserLimit: Int? = null,
-    @SerialName("rate_limit_per_user") var rateLimitPerUser: Int? = null,
-    @SerialName("recipients") var dmRecipients: List<User>? = null,
-    @SerialName("icon") var iconHash: String? = null,
-    @SerialName("owner_id") var dmOwnerId: String? = null,
-    @SerialName("application_id") var applicationId: String? = null,
-    @SerialName("parent_id") var parentId: String? = null,
-    @SerialName("last_pin_timestamp") var lastPinTime: String? = null
-)
+public sealed class Channel {
+    public abstract val id: String
+}
+
+public interface NamedChannel {
+    public val name: String
+}
+
+public interface TextChannel {
+    public val lastMessageId: String?
+    public val lastPinTime: String?
+}
+
+public interface GuildChannel : NamedChannel {
+    public val guildId: String
+    public val position: Int
+    public val permissionOverwrites: List<Overwrite>
+}
+
+public interface GuildText : GuildChannel, TextChannel {
+    public val topic: String?
+    public val nsfw: Boolean
+    public val rateLimitPerUser: Int
+    public val parentId: String?
+}
+
+public interface DM : TextChannel {
+    public val recipients: List<User>
+    public val ownerId: String
+}
+
+@Serializable
+@SerialName("0")
+public data class GuildTextChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("guild_id") override val guildId: String,
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+    @SerialName("topic") override val topic: String? = null,
+    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
+    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+) : Channel(), GuildText
+
+@Serializable
+@SerialName("1")
+public data class DMChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("recipients") override val recipients: List<User>,
+    @SerialName("owner_id") override val ownerId: String,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+) : Channel(), DM
+
+@Serializable
+@SerialName("2")
+public data class GuildVoiceChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("guild_id") override val guildId: String,
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+    @SerialName("bitrate") val bitrate: Int,
+    @SerialName("user_limit") val userLimit: Int,
+    @SerialName("parent_id") val parentId: String?
+) : Channel(), GuildChannel
+
+@Serializable
+@SerialName("3")
+public data class GroupDMChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("recipients") override val recipients: List<User>,
+    @SerialName("icon") val iconHash: String?,
+    @SerialName("owner_id") override val ownerId: String,
+    @SerialName("application_id") val applicationId: String?,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+) : Channel(), NamedChannel, DM
+
+@Serializable
+@SerialName("4")
+public data class GuildCategory(
+    @SerialName("id") override val id: String,
+    @SerialName("guild_id") override val guildId: String,
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+) : Channel(), GuildChannel
+
+@Serializable
+@SerialName("5")
+public data class GuildNewsChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("guild_id") override val guildId: String,
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+    @SerialName("topic") override val topic: String? = null,
+    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
+    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+) : Channel(), GuildText
+
+@Serializable
+@SerialName("6")
+public data class GuildStoreChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("guild_id") override val guildId: String,
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+    @SerialName("topic") override val topic: String? = null,
+    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
+    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+) : Channel(), GuildText
 
 @Serializable
 public enum class ChannelType {
@@ -45,6 +149,6 @@ public data class Overwrite(
 
 @Serializable
 public enum class OverwriteType {
-    @SerialName("0") ROLE,
-    @SerialName("1") MEMBER
+    @SerialName("role") ROLE,
+    @SerialName("member") MEMBER
 }

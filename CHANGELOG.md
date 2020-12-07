@@ -19,6 +19,7 @@ a complete rewrite with a mostly new API, new artifacts, and new usage
 - New interface with the gateway
 - REST clients are now backed by a shared `RestClient` which manages
 rate limits across requests more intelligently
+- Updated audit logging to automatically translate JSON into concrete classes
 
 ### Removed
 - Old experimental DSL

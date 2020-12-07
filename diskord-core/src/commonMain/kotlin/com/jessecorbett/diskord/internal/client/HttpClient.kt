@@ -2,17 +2,15 @@ package com.jessecorbett.diskord.internal.client
 
 import com.jessecorbett.diskord.internal.httpClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
-import com.jessecorbett.diskord.util.defaultJson
-import com.jessecorbett.diskord.util.omitNullsJson
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.features.logging.*
-
+import kotlinx.serialization.json.Json
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
-internal fun buildClient(omitNulls: Boolean = false) = HttpClient(httpClient()) {
+internal fun buildClient(json: Json) = HttpClient(httpClient()) {
     install(Logging) {
         logger = object : Logger {
             private val delegate = Logger.DEFAULT
@@ -33,11 +31,7 @@ internal fun buildClient(omitNulls: Boolean = false) = HttpClient(httpClient()) 
         }
     }
     install(JsonFeature) {
-        serializer = if (omitNulls) {
-            KotlinxSerializer(omitNullsJson)
-        } else {
-            KotlinxSerializer(defaultJson)
-        }
+        serializer = KotlinxSerializer(json)
     }
 
     expectSuccess = false

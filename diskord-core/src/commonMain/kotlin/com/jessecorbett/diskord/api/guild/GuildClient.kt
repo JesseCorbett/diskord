@@ -1,9 +1,13 @@
 package com.jessecorbett.diskord.api.guild
 
 import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.common.audit.AuditLog
+import com.jessecorbett.diskord.api.common.audit.AuditLogActionType
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
+import kotlinx.serialization.encodeToString
 
 /*
  * Note: Emoji don't follow standard rate limit behavior, and the API responses may not accurately reflect rate limits.
@@ -484,5 +488,23 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return The audit log.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getAuditLog(): AuditLog = GET("/guilds/$guildId/audit-logs").receive()
+    public suspend fun getAuditLog(
+        userId: String? = null,
+        actionType: AuditLogActionType? = null,
+        before: String? = null,
+        limit: Int = 50
+    ): AuditLog {
+        var query = "?limit=$limit"
+        if (userId != null) {
+            query += "&user_id=$userId"
+        }
+        if (actionType != null) {
+            query += "&action_type=${defaultJson.encodeToString(actionType)}"
+        }
+        if (before != null) {
+            query += "&before=$before"
+        }
+
+        return GET("/guilds/$guildId/audit-logs$query", auditLogs = true).receive()
+    }
 }
