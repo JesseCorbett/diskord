@@ -28,21 +28,174 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun get(): Channel = GET("/channels/$channelId").receive()
 
     /**
-     * Update this channel.
+     * Update this channel's name.
      *
-     * @param channel The new channel.
+     * Not available for 1:1 DMs.
+     *
+     * @param name The new channel name.
      *
      * @return The updated channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun update(channel: Channel): Channel = PUT("/channels/$channelId") { body = channel }.receive()
+    public suspend fun updateName(name: String): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelName(name)
+        }.receive()
+    }
 
     /**
-     * Delete this channel. Use with caution, cannot be undone except for DMs.
+     * Update this channel's type.
+     *
+     * Can only be performed to change [GuildTextChannel] to [GuildNewsChannel] and vice versa.
+     *
+     * @param type The new channel type.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateType(type: ChannelType): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelType(type)
+        }.receive()
+    }
+
+    /**
+     * Update this channel's position.
+     *
+     * Can only be performed on [GuildChannel].
+     *
+     * @param position The new channel position.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updatePosition(position: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelPosition(position)
+        }.receive()
+    }
+
+    /**
+     * Update this channel's topic.
+     *
+     * Can only be performed on [GuildTextChannel].
+     *
+     * @param topic The new channel topic.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateTopic(topic: String?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelTopic(topic)
+        }.receive()
+    }
+
+    /**
+     * Update if this channel is NSFW.
+     *
+     * Can only be performed on [GuildChannel].
+     *
+     * @param isNSFW Whether the channel is NSFW.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateNSFW(isNSFW: Boolean): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelNSFW(isNSFW)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's per-user rate limit.
+     *
+     * Can only be performed on [GuildTextChannel].
+     *
+     * @param rateLimit Amount of seconds a user has to wait before sending another message.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateUserRateLimit(rateLimit: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelUserRateLimit(rateLimit)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's bitrate.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param bitrate The bitrate, 8000 to 96000 (128000 for VIP servers).
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateBitrate(bitrate: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelBitrate(bitrate)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's user limit.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param userLimit The max number of users allowed in the channel. 0 for unlimited.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateUserLimit(userLimit: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelUserLimit(userLimit)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's permissions.
+     *
+     * Can only be performed on [GuildChannel].
+     *
+     * @param permissionsOverwrites The new permissions for the channel.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updatePermissions(permissionsOverwrites: List<Overwrite>): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelOverwrites(permissionsOverwrites)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's parent.
+     *
+     * Can only be performed on [GuildChannel].
+     *
+     * @param parentId The ID of the new parent [GuildCategory].
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateParentChannel(parentId: String?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchChannelParent(parentId)
+        }.receive()
+    }
+
+    /**
+     * Delete this channel, or closes it if it is a [DM].
+     *
+     * Use with caution, cannot be undone except for DMs.
+     * Deleting a [GuildCategory] does not delete the children.
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun delete(): Unit = DELETE("/channels/$channelId").receive<Unit>()
+    public suspend fun delete(): Unit = DELETE("/channels/$channelId").receive()
 
     /**
      * Get messages from this channel.
@@ -141,6 +294,18 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
                 })
             }
         }.receive()
+    }
+
+    /**
+     * Crosspost a message in a [GuildNewsChannel] to following channels.
+     *
+     * @param messageId The message to crosspost.
+     *
+     * @return The crossposted message.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun crosspostMessage(messageId: String): Message {
+        return POST("/channels/$channelId/messages/$messageId/crosspost").receive()
     }
 
     /**
@@ -252,6 +417,34 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     }
 
     /**
+     * Delete all reactions from a message for a specific emoji.
+     *
+     * @param messageId The message to remove reactions from.
+     * @param textEmoji The text of the emoji to remove.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun deleteAllMessageReactions(messageId: String, textEmoji: String) {
+        DELETE(
+            "/channels/$channelId/messages/$messageId/reactions",
+            "/${urlEncode(textEmoji)}",
+            rateKey = "/channels/$channelId/messages/messageId/reactions"
+        ).receive<Unit>()
+    }
+
+    /**
+     * Delete all reactions from a message for a specific emoji.
+     *
+     * @param messageId The message to remove reactions from.
+     * @param emoji The custom emoji to remove.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun deleteAllMessageReactions(messageId: String, emoji: Emoji) {
+        deleteAllMessageReactions(messageId, emoji.stringified)
+    }
+
+    /**
      * Edit a message in this channel.
      *
      * @param messageId The message to edit.
@@ -278,6 +471,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     /**
      * Bulk delete messages in this channel.
      *
+     * Will not delete messages older than 2 weeks.
+     *
      * @param bulkMessageDelete The messages to delete.
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
@@ -300,6 +495,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     /**
      * Get the invites for this channel.
      *
+     * Only for [GuildChannel]
+     *
      * @return The list of invites for this channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
@@ -319,6 +516,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
 
     /**
      * Delete a permissions set for this channel.
+     *
+     * Only usable for [GuildChannel].
      *
      * @param overwriteId The permissions set to delete.
      *
@@ -347,6 +546,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
 
     /**
      * Pin a message in this channel.
+     *
+     * Max 50 pinned messages per channel.
      *
      * @param messageId The message to pin.
      *

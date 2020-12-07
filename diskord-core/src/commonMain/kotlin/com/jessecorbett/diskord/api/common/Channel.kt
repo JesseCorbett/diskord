@@ -19,12 +19,12 @@ public interface TextChannel {
 public interface GuildChannel : NamedChannel {
     public val guildId: String
     public val position: Int
+    public val nsfw: Boolean
     public val permissionOverwrites: List<Overwrite>
 }
 
 public interface GuildText : GuildChannel, TextChannel {
     public val topic: String?
-    public val nsfw: Boolean
     public val rateLimitPerUser: Int
     public val parentId: String?
 }
@@ -70,7 +70,8 @@ public data class GuildVoiceChannel(
     @SerialName("name") override val name: String,
     @SerialName("bitrate") val bitrate: Int,
     @SerialName("user_limit") val userLimit: Int,
-    @SerialName("parent_id") val parentId: String?
+    @SerialName("parent_id") val parentId: String?,
+    @SerialName("nsfw") override val nsfw: Boolean
 ) : Channel(), GuildChannel
 
 @Serializable
@@ -94,6 +95,7 @@ public data class GuildCategory(
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
+    @SerialName("nsfw") override val nsfw: Boolean
 ) : Channel(), GuildChannel
 
 @Serializable
@@ -120,13 +122,9 @@ public data class GuildStoreChannel(
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
-    @SerialName("topic") override val topic: String? = null,
     @SerialName("nsfw") override val nsfw: Boolean,
-    @SerialName("last_message_id") override val lastMessageId: String?,
-    @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
-    @SerialName("parent_id") override val parentId: String?,
-    @SerialName("last_pin_timestamp") override val lastPinTime: String?
-) : Channel(), GuildText
+    @SerialName("parent_id") val parentId: String?,
+) : Channel(), GuildChannel
 
 @Serializable
 public enum class ChannelType {

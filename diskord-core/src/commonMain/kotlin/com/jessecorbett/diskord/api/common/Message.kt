@@ -24,7 +24,10 @@ public data class Message(
     @SerialName("webhook_id") val webhookId: String? = null,
     @SerialName("type") val type: MessageType,
     @SerialName("activity") val activity: MessageActivity? = null,
-    @SerialName("application") val application: MessageApplication? = null
+    @SerialName("application") val application: MessageApplication? = null,
+    @SerialName("message_reference") val reference: MessageReference? = null,
+    @SerialName("flags") val flags: Int? = null,
+    @SerialName("stickers") val stickers: List<MessageSticker> = emptyList()
 )
 
 @Serializable
@@ -50,7 +53,7 @@ public enum class MessageType {
 @Serializable
 public data class MessageActivity(
     @SerialName("type") val type: MessageActivityType,
-    @SerialName("party_id") val partyId: String
+    @SerialName("party_id") val partyId: String? = null
 )
 
 @Serializable
@@ -64,8 +67,34 @@ public enum class MessageActivityType {
 @Serializable
 public data class MessageApplication(
     @SerialName("id") val id: String,
-    @SerialName("cover_image") val coverImage: String,
+    @SerialName("cover_image") val coverImage: String? = null,
     @SerialName("description") val description: String,
-    @SerialName("icon") val icon: String,
+    @SerialName("icon") val icon: String?,
     @SerialName("name") val name: String
 )
+
+@Serializable
+public data class MessageReference(
+    @SerialName("message_id") val messageId: String? = null,
+    @SerialName("channel_id") val channelId: String? = null,
+    @SerialName("guild_id") val guildId: String? = null
+)
+
+@Serializable
+public data class MessageSticker(
+    @SerialName("id") val id: String,
+    @SerialName("pack_id") val packId: String,
+    @SerialName("name") val name: String,
+    @SerialName("description") val description: String,
+    @SerialName("tags") val tags: String? = null,
+    @SerialName("asset") val hash: String,
+    @SerialName("preview_asset") val previewHash: String?,
+    @SerialName("format_type") val formatType: StickerFormat
+)
+
+@Serializable
+public enum class StickerFormat {
+    @SerialName("1") PNG,
+    @SerialName("2") APNG,
+    @SerialName("3") LOTTIE
+}
