@@ -29,8 +29,11 @@ enum class GatewayIntent(val mask: Int, val privileged: Boolean = false) {
      * - [DiscordEvent.GUILD_MEMBER_ADD]
      * - [DiscordEvent.GUILD_MEMBER_UPDATE]
      * - [DiscordEvent.GUILD_MEMBER_REMOVE]
+     *
+     * Note: This intent is privileged and may require verification with Discord
+     * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
      */
-    GUILD_MEMBERS(0x00000002),
+    GUILD_MEMBERS(0x00000002, true),
 
     /**
      * Subscribe to the following events:
@@ -93,11 +96,8 @@ enum class GatewayIntent(val mask: Int, val privileged: Boolean = false) {
      * - [DiscordEvent.MESSAGE_UPDATE]
      * - [DiscordEvent.MESSAGE_DELETE]
      * - [DiscordEvent.MESSAGE_DELETE_BULK]
-     *
-     * *Note: This intent is privileged and may require verification with Discord
-     * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
      */
-    GUILD_MESSAGES(0x00000200, true),
+    GUILD_MESSAGES(0x00000200),
 
     /**
      * Subscribe to the following events:
