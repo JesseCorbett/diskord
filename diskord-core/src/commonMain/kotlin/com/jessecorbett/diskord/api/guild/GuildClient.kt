@@ -75,7 +75,9 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteEmoji(emojiId: String): Unit = DELETE("/guilds/$guildId/emojis", "/$emojiId").receive()
+    public suspend fun deleteEmoji(emojiId: String) {
+        DELETE("/guilds/$guildId/emojis", "/$emojiId").receive<Unit>()
+    }
 
     /**
      * Get this guild.

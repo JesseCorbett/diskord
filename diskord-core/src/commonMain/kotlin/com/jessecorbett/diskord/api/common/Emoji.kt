@@ -6,17 +6,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class Emoji(
     @SerialName("id") val id: String? = null,
-    @SerialName("name") val name: String,
+    @SerialName("name") val name: String? = null,
     @SerialName("roles") val whitelistedRoles: List<String>? = null,
     @SerialName("user") val creator: User? = null,
     @SerialName("require_colons") val requiresWrappingColons: Boolean? = null,
     @SerialName("managed") val isManaged: Boolean? = null,
-    @SerialName("animated") val isAnimated: Boolean = false
+    @SerialName("animated") val isAnimated: Boolean = false,
+    @SerialName("available") val isAvailable: Boolean = false
 )
 
 public val Emoji.stringified: String
     get() = if (id == null) {
-        name
+        name ?: "null"
     } else {
         "$name:$id"
     }
