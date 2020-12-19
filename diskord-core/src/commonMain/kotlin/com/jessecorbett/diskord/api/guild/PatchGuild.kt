@@ -18,5 +18,9 @@ public data class PatchGuild(
     @SerialName("icon") val base64IconData: String? = null,
     @SerialName("owner_id") val ownerId: String? = null,
     @SerialName("splash") val base64SplashData: String? = null,
-    @SerialName("system_channel_id") val systemChannelId: String? = null
+    @SerialName("banner") val base64BannerData: String? = null,
+    @SerialName("system_channel_id") val systemChannelId: String? = null,
+    @SerialName("rules_channel_id") val rulesChannelId: String? = null,
+    @SerialName("public_updates_channel_id") val publicUpdatesChannelId: String? = null,
+    @SerialName("preferred_locale") val preferredLocale: String? = null
 )

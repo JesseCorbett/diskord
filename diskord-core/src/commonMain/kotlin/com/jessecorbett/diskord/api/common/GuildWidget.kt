@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class GuildEmbed(
+public data class GuildWidget(
     @SerialName("enabled") val enabled: Boolean,
     @SerialName("channel_id") val channelId: String
 )

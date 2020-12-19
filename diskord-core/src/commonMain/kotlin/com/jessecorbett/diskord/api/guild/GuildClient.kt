@@ -85,7 +85,20 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return This guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun get(): Guild = GET("/guilds/$guildId").receive()
+    public suspend fun get(withCounts: Boolean = false): Guild {
+        return GET("/guilds/$guildId", "?with_counts=$withCounts").receive()
+    }
+
+    /**
+     * Get this guild preview.
+     *
+     * @return This guild preview.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getPreview(): GuildPreview {
+        return GET("/guilds/$guildId/preview").receive()
+    }
+
 
     /**
      * Update this guild.
@@ -256,6 +269,14 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
     public suspend fun getBans(): List<Ban> = GET("/guilds/$guildId/bans").receive()
 
     /**
+     * Get a user's ban.
+     *
+     * @return The ban for a specific user.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getBan(userId: String): Ban = GET("/guilds/$guildId/bans", "/$userId").receive()
+
+    /**
      * Ban a user.
      *
      * @param userId The user to ban.
@@ -356,19 +377,38 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return The potential results.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getPrunePotential(days: Int = 1): Pruned {
-        return GET("/guilds/$guildId/prune", "?days=$days").receive()
+    public suspend fun getPrunePotential(days: Int = 1, roles: List<String>? = null): Pruned {
+        val roleString = roles?.joinToString(",", "&") ?: ""
+        return GET("/guilds/$guildId/prune", "?days=$days$roleString").receive()
+    }
+
+    /**
+     * Prune messages with result.
+     * Not recommended for large guilds.
+     *
+     * @param days How many days to prune.
+     * @param includeRoles The roles to also prune.
+     *
+     * @return The pruning results.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun prune(days: Int = 1, includeRoles: List<String>? = null): Pruned {
+        val roleString = includeRoles?.joinToString(",", "&") ?: ""
+        return POST("/guilds/$guildId/prune", "?days=$days$roleString").receive()
     }
 
     /**
      * Prune messages.
      *
      * @param days How many days to prune.
+     * @param includeRoles The roles to also prune.
      *
-     * @return The pruning results.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun prune(days: Int = 1): Pruned = POST("/guilds/$guildId/prune", "?days=$days").receive()
+    public suspend fun pruneWithResult(days: Int = 1, includeRoles: List<String>? = null) {
+        val roleString = includeRoles?.joinToString(",", "&") ?: ""
+        POST("/guilds/$guildId/prune", "?days=$days$roleString&compute_prune_count=true").receive<Unit>()
+    }
 
     /**
      * Get the guild's voice regions.
@@ -392,7 +432,9 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return The list fo guild integrations.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getIntegrations(): List<GuildIntegration> = GET("/guilds/$guildId/integrations").receive()
+    public suspend fun getIntegrations(): List<GuildIntegration> {
+        return GET("/guilds/$guildId/integrations").receive()
+    }
 
     /**
      * Create a guild integration.
@@ -440,23 +482,23 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
     }
 
     /**
-     * Get the guild embed.
+     * Get the guild widget.
      *
-     * @return The guild embed.
+     * @return The guild widget.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getEmbed(): GuildEmbed = GET("/guilds/$guildId/embed").receive()
+    public suspend fun getWidget(): GuildWidget = GET("/guilds/$guildId/widget").receive()
 
     /**
-     * Update the guild embed.
+     * Update the guild widget.
      *
-     * @param guildEmbed The updates to make.
+     * @param guildWidget The updates to make.
      *
-     * @return The updated guild embed.
+     * @return The updated guild widget.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun updateEmbed(guildEmbed: GuildEmbed): GuildEmbed {
-        return PATCH("/guilds/$guildId/embed") { body = guildEmbed }.receive()
+    public suspend fun updateWidget(guildWidget: GuildWidget): GuildWidget {
+        return PATCH("/guilds/$guildId/widget") { body = guildWidget }.receive()
     }
 
     /**

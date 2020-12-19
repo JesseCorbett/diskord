@@ -29,6 +29,7 @@ public enum class UserFlags(public val code: Int) {
 @Serializable
 public enum class PremiumType(public val code: Int) {
     @SerialName("0") NONE(0),
-    @SerialName("1") NITRO_CLASSIC(1),
-    @SerialName("2") NITRO(2)
+    @SerialName("1") TIER_1(1),
+    @SerialName("2") TIER_2(2),
+    @SerialName("2") TIER_3(2)
 }
