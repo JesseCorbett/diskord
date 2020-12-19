@@ -18,7 +18,7 @@ import com.jessecorbett.diskord.internal.client.RestClient
 public suspend fun computePermissions(user: User, channel: GuildChannel, restClient: RestClient): Permissions {
     val client = GuildClient(channel.guildId, restClient)
 
-    return computePermissions(client.getMember(user.id), channel, client.get())
+    return computePermissions(client.getMember(user.id), channel, client.getGuild())
 }
 
 /**

@@ -25,7 +25,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @return This channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun get(): Channel = GET("/channels/$channelId").receive()
+    public suspend fun getChannel(): Channel = GET("/channels/$channelId").receive()
 
     /**
      * Update this channel's name.
@@ -195,7 +195,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun delete(): Unit = DELETE("/channels/$channelId").receive()
+    public suspend fun deleteChannel(): Unit = DELETE("/channels/$channelId").receive()
 
     /**
      * Get messages from this channel.

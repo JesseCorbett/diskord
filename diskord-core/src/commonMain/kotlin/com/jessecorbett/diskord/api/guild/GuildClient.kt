@@ -85,7 +85,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return This guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun get(withCounts: Boolean = false): Guild {
+    public suspend fun getGuild(withCounts: Boolean = false): Guild {
         return GET("/guilds/$guildId", "?with_counts=$withCounts").receive()
     }
 
@@ -108,7 +108,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return The updated guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun update(guild: PatchGuild): Guild {
+    public suspend fun updateChannel(guild: PatchGuild): Guild {
         return PATCH("/guilds/$guildId") { body = guild }.receive()
     }
 
@@ -117,7 +117,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun delete(): Unit = DELETE("/guilds/$guildId").receive()
+    public suspend fun deleteChannel(): Unit = DELETE("/guilds/$guildId").receive()
 
     /**
      * Get this guild's channels.

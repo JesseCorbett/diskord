@@ -34,7 +34,7 @@ class ChannelClientTest {
 
         val client = ChannelClient(token, channelId, client = restClient)
 
-        assertThat(waitForTest { client.get() }).isSameAs(channel)
+        assertThat(waitForTest { client.getChannel() }).isSameAs(channel)
     }
 
     @Test
@@ -68,7 +68,7 @@ class ChannelClientTest {
         } just Runs
 
         val client = ChannelClient(token, channelId, client = restClient)
-        waitForTest { client.delete() }
+        waitForTest { client.deleteChannel() }
 
         coVerify {
             restClient.deleteRequest("/channels/$channelId", ofType<RateLimitInfo>())

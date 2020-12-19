@@ -134,7 +134,7 @@ class WebhookClientIntegration {
             webhookClient.execute(webhook.token, WebhookSubmission(content, name))
 
             val channelClient = ChannelClient(BOT_TEST_TOKEN, webhookChannel)
-            val message = channelClient.getMessage(channelClient.get().lastMessageId!!)
+            val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
 
             assertThat(content).isEqualTo(message.content)
             assertThat(name).isEqualTo(message.author.username)
