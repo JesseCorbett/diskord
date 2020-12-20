@@ -12,7 +12,8 @@ public data class CreateMessage(
     @SerialName("tts") val tts: Boolean = false,
     @SerialName("file") val fileContent: List<Byte>? = null, // Not currently fully supported https://discordapp.com/developers/docs/resources/channel#create-message
     @SerialName("embed") val embed: Embed? = null,
-    @SerialName("payload_json") val fileUploadEmbed: String? = null
+    @SerialName("payload_json") val fileUploadEmbed: String? = null,
+    @SerialName("allowed_mentions") val allowedMentions: AllowedMentions = AllowedMentions.ALL
 )
 
 @Serializable
@@ -76,3 +77,33 @@ public data class EmbedField(
 )
 
 public data class FileData(val packet: ByteReadPacket, val filename: String)
+
+@Serializable
+public data class AllowedMentions(
+    @SerialName("parse") val allowedMentionTypes: List<MentionTypes> = emptyList(),
+    @SerialName("roles") val allowedMentionRoles: List<String> = emptyList(),
+    @SerialName("users") val allowedMentionUsers: List<String> = emptyList(),
+    @SerialName("replied_user") val mentionRepliedUsers: Boolean = false
+) {
+    public companion object {
+        public val ALL: AllowedMentions = AllowedMentions(MentionTypes.values().toList())
+        public val ONLY_USERS: AllowedMentions = AllowedMentions(listOf(MentionTypes.users))
+        public val ONLY_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles))
+        public val USERS_AND_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles, MentionTypes.users))
+        public val NONE: AllowedMentions = AllowedMentions(emptyList())
+
+        public fun forUsers(vararg userIds: String): AllowedMentions {
+            return AllowedMentions(allowedMentionUsers = userIds.toList())
+        }
+
+        public fun forRoles(vararg roleIds: String): AllowedMentions {
+            return AllowedMentions(allowedMentionRoles = roleIds.toList())
+        }
+    }
+}
+
+public enum class MentionTypes {
+    roles,
+    users,
+    everyone
+}

@@ -35,7 +35,7 @@ class WebhookClientIntegration {
     @AfterTest
     fun clean() {
         runBlocking {
-            webhookClient.delete()
+            webhookClient.deleteWebhook()
         }
     }
 
@@ -91,7 +91,7 @@ class WebhookClientIntegration {
             val client = WebhookClient(BOT_TEST_TOKEN, webhookId)
 
             client.getWebhook()
-            client.delete()
+            client.deleteWebhook()
 
             var deleted = false
             try {
@@ -112,7 +112,7 @@ class WebhookClientIntegration {
             val client = WebhookClient(BOT_TEST_TOKEN, ourWebhook.id)
 
             client.getWebhook()
-            client.delete(ourWebhook.token)
+            client.deleteWebhook(ourWebhook.token)
 
             var deleted = false
             try {
