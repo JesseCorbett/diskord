@@ -33,7 +33,7 @@ public data class Guild(
     @SerialName("vanity_url_code") val vanityCodeUrl: String?,
     @SerialName("description") val description: String?,
     @SerialName("banner") val bannerHash: String?,
-    @SerialName("premium_tier") val premiumType: PremiumType,
+    @SerialName("premium_tier") val premiumType: GuildPremiumType,
     @SerialName("premium_subscription_count") val guildBoostCount: Int? = null,
     @SerialName("preferred_locale") val preferredLocale: String,
     @SerialName("public_updates_channel_id") val publicUpdatesChannelId: String?,
@@ -78,6 +78,14 @@ public enum class GuildFeatures {
     ANIMATED_ICON,
     BANNER,
     WELCOME_SCREEN_ENABLED
+}
+
+@Serializable
+public enum class GuildPremiumType(public val code: Int) {
+    @SerialName("0") NONE(0),
+    @SerialName("1") TIER_1(1),
+    @SerialName("2") TIER_2(2),
+    @SerialName("2") TIER_3(3)
 }
 
 @Serializable

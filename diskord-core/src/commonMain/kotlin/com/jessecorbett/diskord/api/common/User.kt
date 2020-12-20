@@ -6,15 +6,17 @@ import kotlinx.serialization.*
 public data class User(
     @SerialName("id") val id: String,
     @SerialName("username") val username: String,
-    @SerialName("discriminator") val discriminator: Long,
+    @SerialName("discriminator") val discriminator: String,
     @SerialName("avatar") val avatarHash: String?,
-    @SerialName("bot") val isBot: Boolean = false,
+    @SerialName("bot") val isBot: Boolean? = null,
+    @SerialName("system") val isSystem: Boolean? = null,
     @SerialName("mfa_enabled") val twoFactorAuthEnabled: Boolean? = null,
     @SerialName("locale") val locale: String? = null,
     @SerialName("verified") val isVerified: Boolean? = null,
-    @SerialName("email") val email: String? = null
-//    @SerialName("flags") val flags: Int = 0, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
-//    @SerialName("premium_type") val premiumType: PremiumType? = null
+    @SerialName("email") val email: String? = null,
+    @SerialName("flags") val flags: Int = 0, // TODO: https://discordapp.com/developers/docs/resources/user#user-object-user-flags
+    @SerialName("premium_type") val premiumType: PremiumType? = null,
+    @SerialName("public_flags") val publicFlags: Int? = null // TODO: parse bitwise flags
 )
 
 @Serializable
@@ -29,7 +31,6 @@ public enum class UserFlags(public val code: Int) {
 @Serializable
 public enum class PremiumType(public val code: Int) {
     @SerialName("0") NONE(0),
-    @SerialName("1") TIER_1(1),
-    @SerialName("2") TIER_2(2),
-    @SerialName("2") TIER_3(2)
+    @SerialName("1") NITRO_CLASSIC(1),
+    @SerialName("2") NITRO(2)
 }

@@ -76,7 +76,9 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The updated user.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun modifyUser(user: ModifyUser): User = PATCH("/users", "/@me") { body = user }.receive()
+    public suspend fun modifyUser(user: ModifyUser): User {
+        return PATCH("/users", "/@me") { body = user }.receive()
+    }
 
     /**
      * Get a list of guilds that the current user is in.
@@ -105,32 +107,25 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return List of DM channels for the current user.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    @Deprecated("Currently Discord does not return anything from this endpoint. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
+    @Deprecated("This endpoint no longer works for bots. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
     public suspend fun getDMs(): List<Channel> = GET("/users/@me/channels").receive()
 
     /**
      * Open a DM channel between the current user and another.
      *
-     * Does not actually create a channel if existing DMs already exist between these two users.
+     * Does not create a brand new [Channel] if existing DMs already exist between these two users.
+     *
+     * Should be used primarily in response to a user action, abuse of this API can lead to a bot being blocked
+     * from creating new DMs.
      *
      * @param createDM The user to create a DM with.
      *
      * @return The DM channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun createDM(createDM: CreateDM): Channel = POST("/users/@me/channels") { body = createDM }.receive()
-
-    /**
-     * Open a group DM channel between the current user and others.
-     *
-     * Requires access tokens instead of the normal DM requirement of a userId and sufficient permissions.
-     *
-     * @param groupDM The group DM definition.
-     *
-     * @return The group DM channel.
-     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
-     */
-    public suspend fun createGroupDM(groupDM: CreateGroupDM): Channel = POST("/users/@me/channels") { body = groupDM }.receive()
+    public suspend fun createDM(createDM: CreateDM): Channel {
+        return POST("/users/@me/channels") { body = createDM }.receive()
+    }
 
     /**
      * Get all connections to a given user.

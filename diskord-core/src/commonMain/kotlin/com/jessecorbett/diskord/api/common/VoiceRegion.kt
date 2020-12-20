@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 public data class VoiceRegion(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
-    @SerialName("vip") val vip: Boolean,
-    @SerialName("optimal") val optimal: Boolean,
+    @SerialName("vip") val vipOnly: Boolean,
+    @SerialName("optimal") val optimalForCurrentUser: Boolean,
     @SerialName("deprecated") val deprecated: Boolean,
     @SerialName("custom") val customRegion: Boolean
 )
