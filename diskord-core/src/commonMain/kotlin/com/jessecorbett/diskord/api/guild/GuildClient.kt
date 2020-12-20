@@ -551,4 +551,62 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
 
         return GET("/guilds/$guildId/audit-logs$query", auditLogs = true).receive()
     }
+
+    /**
+     * Get the templates for this guild
+     *
+     * @return The list of guild templates
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getTemplates(): List<Template> {
+        return GET("/guilds/$guildId/templates").receive()
+    }
+
+    /**
+     * Create a template based on the current state of the guild
+     *
+     * @param createTemplate The parameters to create the template with
+     *
+     * @return The created template
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun createTemplate(createTemplate: CreateTemplate): Template {
+        return POST("/guilds/$guildId/templates") { body = createTemplate }.receive()
+    }
+
+    /**
+     * Synchronize a template with the current state of the guild
+     *
+     * @param templateCode The code for the template to synchronize
+     *
+     * @return The updated template
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun syncTemplate(templateCode: String): Template {
+        return PUT("/guilds/$guildId/templates", "/$templateCode").receive()
+    }
+
+    /**
+     * Updates a template
+     *
+     * @param templateCode The code for the template to synchronize
+     * @param updateTemplate The updated info for the template
+     *
+     * @return The updated template
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateTemplate(templateCode: String, updateTemplate: UpdateTemplate): Template {
+        return PATCH("/guilds/$guildId/templates", "/$templateCode") { body = updateTemplate }.receive()
+    }
+
+    /**
+     * Deletes a template
+     *
+     * @param templateCode The code for the template to delete
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun deleteTemplate(templateCode: String) {
+        DELETE("/guilds/$guildId/templates", "/$templateCode").receive<Unit>()
+    }
 }
