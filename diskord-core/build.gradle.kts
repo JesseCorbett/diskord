@@ -6,7 +6,7 @@ plugins {
     signing
 
     id("org.jetbrains.kotlin.multiplatform")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.21"
     id("org.jetbrains.dokka")
 }
 

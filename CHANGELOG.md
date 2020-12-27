@@ -4,7 +4,7 @@
 
 ### !! This is a major breaking change !!
 It is recommended to read through the documentation as this is essentially
-a complete rewrite with a mostly new API, new artifacts, and new usage
+a complete rewrite with a new API, new artifacts, and new usage
 
 ### Added
 - Added multiple API endpoints which were missing
