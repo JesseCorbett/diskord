@@ -4,6 +4,8 @@ import com.jessecorbett.diskord.DiskordDsl
 import com.jessecorbett.diskord.api.common.Channel
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.internal.client.RestClient
+import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -24,7 +26,7 @@ public typealias EventFilter = suspend EventDispatcher<Boolean>.() -> Unit
 /**
  * Dispatcher which distributes events to function hooks
  */
-public interface EventDispatcher<T> {
+public interface EventDispatcher<T> : DispatcherContext {
     /**
      * Called when a gateway acknowledges the connection as ready.
      *
@@ -58,7 +60,12 @@ public interface EventDispatcher<T> {
     public suspend fun onMessageCreate(handler: suspend (Message) -> T)
 }
 
+/**
+ * Internal implementation of [EventDispatcher]
+ */
+@DiskordInternals
 internal class EventDispatcherImpl<T>(
+    override val client: RestClient,
     private val dispatcherScope: CoroutineScope,
     private val event: DiscordEvent,
     private val data: JsonElement

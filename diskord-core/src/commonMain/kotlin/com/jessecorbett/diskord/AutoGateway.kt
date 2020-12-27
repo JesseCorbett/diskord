@@ -19,7 +19,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     private val eventScope: CoroutineScope,
-    restClient: RestClient,
+    private val restClient: RestClient,
     private val eventHandler: EventHandler,
     private val filters: EventFilter
 ) {
@@ -70,7 +70,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     }
 
     private suspend fun createSession(url: GatewayBotUrl, shards: Int, shard: Int): GatewaySession {
-        return GatewaySession(token, url, intents, eventScope, shards, shard, eventHandler, filters).also {
+        return GatewaySession(token, url, restClient, intents, eventScope, shards, shard, eventHandler, filters).also {
             it.startSession()
         }
     }

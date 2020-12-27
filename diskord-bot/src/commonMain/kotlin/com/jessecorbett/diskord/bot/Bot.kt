@@ -7,7 +7,6 @@ import com.jessecorbett.diskord.api.gateway.EventFilter
 import com.jessecorbett.diskord.api.gateway.EventHandler
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.internal.client.DefaultRestClient
-import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 /**
  * Base class for building a bot
  */
-public class BotBase internal constructor(private val client: RestClient) {
+public class BotBase internal constructor() {
     internal var filterFunction: EventFilter = {}
     internal var eventsFunction: EventHandler = {}
 
@@ -40,7 +39,7 @@ public class BotBase internal constructor(private val client: RestClient) {
 public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
     val client = DefaultRestClient(DiscordUserType.BOT, token)
 
-    val base = BotBase(client).apply { builder() }
+    val base = BotBase().apply { builder() }
     val gateway = AutoGateway(
         token = token,
         intents = GatewayIntents.NON_PRIVILEGED,

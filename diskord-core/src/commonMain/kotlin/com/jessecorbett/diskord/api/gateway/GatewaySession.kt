@@ -11,6 +11,7 @@ import com.jessecorbett.diskord.api.gateway.model.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.model.OpCode
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
+import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.coroutines.*
@@ -23,6 +24,7 @@ import mu.KotlinLogging
 public class GatewaySession(
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,
+    private val client: RestClient,
     private val intents: GatewayIntents,
     private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
@@ -173,14 +175,14 @@ public class GatewaySession(
         // Begin userspace event pipeline
 
         // Do filtering
-        EventDispatcherImpl<Boolean>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
+        EventDispatcherImpl<Boolean>(client, eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
             filters()
             join()
             if (results.any { !it }) return // If any filter returns false, then cancel pipeline
         }
 
         // Do event dispatches
-        EventDispatcherImpl<Unit>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
+        EventDispatcherImpl<Unit>(client, eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
             eventHandler()
             join() /*
                 This may not be necessary, inflicts blocking on the event scope, but ensures all events
