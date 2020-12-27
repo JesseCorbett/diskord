@@ -8,6 +8,7 @@ import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
 import com.jessecorbett.diskord.internal.client.RestClient
+import com.jessecorbett.diskord.util.sendMessage
 
 /**
  * Collection of utilities for dispatched events, such as access to clients
@@ -63,5 +64,19 @@ public interface DispatcherContext {
      */
     public suspend fun Message.guild(withCounts: Boolean = false): Guild? {
         return guild?.getGuild(withCounts)
+    }
+
+    /**
+     * Deletes the message
+     */
+    public suspend fun Message.delete() {
+        channel.deleteMessage(id)
+    }
+
+    /**
+     * Sends a message in the same channel without using the discord reply feature
+     */
+    public suspend fun Message.softReply(message: String): Message {
+        return channel.sendMessage(message)
     }
 }
