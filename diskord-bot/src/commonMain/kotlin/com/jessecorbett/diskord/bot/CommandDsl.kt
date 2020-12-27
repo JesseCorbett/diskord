@@ -21,10 +21,10 @@ public class CommandBuilder(private val prefix: String, private val dispatcher: 
      * Creates a command listener on [DiscordEvent.MESSAGE_CREATE] events
      */
     @DiskordDsl
-    public suspend fun command(key: String, block: suspend Message.() -> Unit) {
+    public suspend fun command(key: String, block: suspend EventDispatcher<Unit>.(Message) -> Unit) {
         dispatcher.onMessageCreate { message ->
             if (message.content.startsWith("$prefix$key ")) {
-                message.block()
+                dispatcher.block(message)
             }
         }
     }
