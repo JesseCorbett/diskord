@@ -27,7 +27,8 @@ public class GatewaySession(
     private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
     private val shardNumber: Int = 0,
-    private val eventListener: EventListener
+    private val eventHandler: EventHandler,
+    private val filters: EventFilter = {}
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -35,11 +36,8 @@ public class GatewaySession(
     private var sessionId: String? = null
     private var sequenceNumber: Int? = null
 
-    public val running: Boolean
-        get() = socketManager.running
-
-    public val alive: Boolean
-        get() = socketManager.alive
+    public val running: Boolean by socketManager::running
+    public val alive: Boolean by socketManager::alive
 
     public suspend fun startSession(sessionId: String? = null, sequenceNumber: Int? = null) {
         this.sessionId = sessionId
@@ -89,7 +87,7 @@ public class GatewaySession(
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
-                receiveDispatch(gatewayMessage)
+                doGatewayEventPipeline(gatewayMessage)
             }
             OpCode.HEARTBEAT -> {
                 send(GatewayMessage(OpCode.HEARTBEAT_ACK, null, null, null))
@@ -155,24 +153,39 @@ public class GatewaySession(
         }
     }
 
-    private suspend fun receiveDispatch(gatewayMessage: GatewayMessage) {
+    /**
+     * The event pipeline
+     */
+    private suspend fun doGatewayEventPipeline(gatewayMessage: GatewayMessage) {
+        // Begin event pipeline within internal space by processing event
         val discordEvent = DiscordEvent.values().find { it.name == gatewayMessage.event }
             ?: return // Ignore unknown events, since we receive non-bot events because I guess it's hard for discord to not send bots non-bot events
         gatewayMessage.dataPayload
             ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
+        // Once event has been processed into usable data, begin pipeline operations
         logger.info { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
             sessionId = defaultJson.decodeFromJsonElement<Ready>(gatewayMessage.dataPayload).sessionId
         }
 
-        eventListenerScope.launch {
-            try {
-                dispatchEvent(eventListener, discordEvent, gatewayMessage.dataPayload)
-            } catch (e: Throwable) {
-                logger.warn(e) { "Dispatched event caused exception $e" }
-            }
+        // Begin userspace event pipeline
+
+        // Do filtering
+        EventDispatcherImpl<Boolean>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
+            filters()
+            join()
+            if (results.any { !it }) return // If any filter returns false, then cancel pipeline
+        }
+
+        // Do event dispatches
+        EventDispatcherImpl<Unit>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
+            eventHandler()
+            join() /*
+                This may not be necessary, inflicts blocking on the event scope, but ensures all events
+                are processed in order of arrival. Perhaps turn it into a High Perf vs Strong Order flag
+            */
         }
     }
 }

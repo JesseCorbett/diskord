@@ -35,6 +35,10 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
+
         commonMain {
             dependencies {
                 api(project(":diskord-core"))

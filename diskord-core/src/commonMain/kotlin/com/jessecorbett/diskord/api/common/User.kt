@@ -6,7 +6,7 @@ import kotlinx.serialization.*
 public data class User(
     @SerialName("id") val id: String,
     @SerialName("username") val username: String,
-    @SerialName("discriminator") val discriminator: String,
+    @SerialName("discriminator") val discriminator: Long,
     @SerialName("avatar") val avatarHash: String?,
     @SerialName("bot") val isBot: Boolean? = null,
     @SerialName("system") val isSystem: Boolean? = null,

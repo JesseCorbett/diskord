@@ -1,251 +1,109 @@
 package com.jessecorbett.diskord.api.gateway
 
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.DiskordDsl
+import com.jessecorbett.diskord.api.common.Channel
+import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.util.defaultJson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
+import mu.KotlinLogging
 
 /**
- * The base listener that [GatewaySession] uses to dispatch events to the library consumer.
+ * Function for setting up event listeners
  */
-public abstract class EventListener {
+public typealias EventHandler = suspend EventDispatcher<Unit>.() -> Unit
+
+/**
+ * Function for setting up event filters
+ */
+public typealias EventFilter = suspend EventDispatcher<Boolean>.() -> Unit
+
+/**
+ * Dispatcher which distributes events to function hooks
+ */
+public interface EventDispatcher<T> {
+    /**
+     * Called when a gateway acknowledges the connection as ready.
+     *
+     * @param handler Bootstrapping information about the current user.
+     */
+    @DiskordDsl
+    public suspend fun onReady(handler: suspend (Ready) -> T)
 
     /**
-     * Fired on any event.
+     * Called when a gateway acknowledges the connection has resumed.
      *
-     * @param event The event type.
-     * @param data The json data associated with the event.
+     * @param handler Resume trace info (not generally useful).
      */
-    public open suspend fun onEvent(event: DiscordEvent, data: JsonElement) {}
+    @DiskordDsl
+    public suspend fun onResume(handler: suspend (Resumed) -> T)
 
     /**
-     * Fired when the gateway acknowledges the connection as ready.
+     * Called when a channel is created, the current user gets access to a channel, or the current user receives a DM.
      *
-     * @param ready Some bootstrapping information about the current user.
+     * @param handler The created/received channel.
      */
-    public open suspend fun onReady(ready: Ready) {}
+    @DiskordDsl
+    public suspend fun onChannelCreate(handler: suspend (Channel) -> T)
 
     /**
-     * Fired when the gateway acknowledges the connection has resumed.
+     * Called when a message has been created.
      *
-     * @param resumed Resume trace info (not generally useful).
+     * @param handler The created message.
      */
-    public open suspend fun onResumed(resumed: Resumed) {}
+    @DiskordDsl
+    public suspend fun onMessageCreate(handler: suspend (Message) -> T)
+}
 
-    /**
-     * Fired when a channel is created, the current user gets access to a channel, or the current user receives a DM.
-     *
-     * @param channel The created/received channel.
-     */
-    public open suspend fun onChannelCreate(channel: Channel) {}
+internal class EventDispatcherImpl<T>(
+    private val dispatcherScope: CoroutineScope,
+    private val event: DiscordEvent,
+    private val data: JsonElement
+) : EventDispatcher<T> {
+    private val logger = KotlinLogging.logger {}
+    private val jobs: MutableList<Job> = mutableListOf()
+    internal val results: MutableList<T> = mutableListOf()
 
-    /**
-     * Fired when the a channel is updated.
-     *
-     * @param channel The updated channel.
-     */
-    public open suspend fun onChannelUpdate(channel: Channel) {}
+    override suspend fun onReady(handler: suspend (Ready) -> T) {
+        forEvent(DiscordEvent.READY) {
+            results.add(handler(defaultJson.decodeFromJsonElement(Ready.serializer(), data)))
+        }
+    }
 
-    /**
-     * Fired when a channel is deleted.
-     *
-     * @param channel The deleted channel.
-     */
-    public open suspend fun onChannelDelete(channel: Channel) {}
+    override suspend fun onResume(handler: suspend (Resumed) -> T) {
+        forEvent(DiscordEvent.RESUMED) {
+            results.add(handler(defaultJson.decodeFromJsonElement(Resumed.serializer(), data)))
+        }
+    }
 
-    /**
-     * Fired when the pins in a channel are updated.
-     *
-     * @param channelPinUpdate The updated pin information.
-     */
-    public open suspend fun onChannelPinsUpdate(channelPinUpdate: ChannelPinUpdate) {}
+    override suspend fun onChannelCreate(handler: suspend (Channel) -> T) {
+        forEvent(DiscordEvent.CHANNEL_CREATE) {
+            results.add(handler(defaultJson.decodeFromJsonElement(Channel.serializer(), data)))
+        }
+    }
 
-    /**
-     * Fired when a guild is created, the current user is added to a guild, the guild became available, or just after [onReady] to lazy load guilds the user is in.
-     *
-     * @param guild The guild created, joined, or lazy loaded.
-     */
-    public open suspend fun onGuildCreate(guild: CreatedGuild) {}
+    override suspend fun onMessageCreate(handler: suspend (Message) -> T) {
+        forEvent(DiscordEvent.MESSAGE_CREATE) {
+            results.add(handler(defaultJson.decodeFromJsonElement(Message.serializer(), data)))
+        }
+    }
 
-    /**
-     * Fired when a guild is updated.
-     *
-     * @param guild The updated guild.
-     */
-    public open suspend fun onGuildUpdate(guild: Guild) {}
+    internal suspend fun join() {
+        jobs.forEach { it.join() }
+    }
 
-    /**
-     * Fired when a guild is deleted, made unavailable, or the user left or was removed from the guild.
-     *
-     * @param guild The deleted channel.
-     */
-    public open suspend fun onGuildDelete(guild: Guild) {}
-
-
-    /**
-     * Fired when a user was banned from a guild.
-     *
-     * @param ban The ban created.
-     */
-    public open suspend fun onGuildBanAdd(ban: GuildBan) {}
-
-    /**
-     * Fired when a user was unbanned from a guild.
-     *
-     * @param ban The ban removed.
-     */
-    public open suspend fun onGuildBanRemove(ban: GuildBan) {}
-
-    /**
-     * Fired when a guild has changed their set of custom emoji.
-     *
-     * @param emojiUpdate The updated emoji set.
-     */
-    public open suspend fun onGuildEmojiUpdate(emojiUpdate: GuildEmojiUpdate) {}
-
-    /**
-     * Fired when a guild has updated their integrations.
-     *
-     * @param integrationUpdate The updated guild.
-     */
-    public open suspend fun onGuildIntegrationsUpdate(integrationUpdate: GuildIntegrationUpdate) {}
-
-    /**
-     * Fired when a user joins a guild.
-     *
-     * @param guildMember The new guild member.
-     */
-    public open suspend fun onGuildMemberAdd(guildMember: GuildMemberAdd) {}
-
-    /**
-     * Fired when a guild member is updated, such as changing nickname.
-     *
-     * @param guildMemberUpdate The updates to the guild member.
-     */
-    public open suspend fun onGuildMemberUpdate(guildMemberUpdate: GuildMemberUpdate) {}
-
-    /**
-     * Fired when a user leaves a guild.
-     *
-     * @param guildMemberRemove The user that left the guild.
-     */
-    public open suspend fun onGuildMemberRemove(guildMemberRemove: GuildMemberRemove) {}
-
-    /**
-     * Fired when the gateway lazy loads chunks of guild members.
-     *
-     * @param guildMembers Some or all of the guild members being lazy loaded.
-     */
-    public open suspend fun onGuildMemberChunk(guildMembers: GuildMembersChunk) {}
-
-    /**
-     * Fired when a role has been created.
-     *
-     * @param guildRoleCreate The created role.
-     */
-    public open suspend fun onGuildRoleCreate(guildRoleCreate: GuildRoleCreate) {}
-
-    /**
-     * Fired when a role has been updated.
-     *
-     * @param guildRoleUpdate The updated role.
-     */
-    public open suspend fun onGuildRoleUpdate(guildRoleUpdate: GuildRoleUpdate) {}
-
-    /**
-     * Fired when a role has been deleted.
-     *
-     * @param guildRoleDelete The deleted role.
-     */
-    public open suspend fun onGuildRoleDelete(guildRoleDelete: GuildRoleDelete) {}
-
-    /**
-     * Fired when a message has been created.
-     *
-     * @param message The created message.
-     */
-    public open suspend fun onMessageCreate(message: Message) {}
-
-    /**
-     * Fired when a message has been updated.
-     *
-     * @param message The updated message.
-     */
-    public open suspend fun onMessageUpdate(message: MessageUpdate) {}
-
-    /**
-     * Fired when a message has been deleted.
-     *
-     * @param message The deleted message.
-     */
-    public open suspend fun onMessageDelete(message: MessageDelete) {}
-
-    /**
-     * Fired when there has been a bulk message delete.
-     *
-     * @param message The created message.
-     */
-    public open suspend fun onMessageBulkDelete(message: BulkMessageDelete) {}
-
-    /**
-     * Fired when a reaction was added to a message.
-     *
-     * @param reactionAdd The reaction added.
-     */
-    public open suspend fun onMessageReactionAdd(reactionAdd: MessageReaction) {}
-
-    /**
-     * Fired when a reaction was remove from a message.
-     *
-     * @param reactionRemove The reaction removed.
-     */
-    public open suspend fun onMessageReactionRemove(reactionRemove: MessageReaction) {}
-
-    /**
-     * Fired when all reactions are removed from a message.
-     *
-     * @param messageReactionRemoveAll message the reactions were removed from.
-     */
-    public open suspend fun onMessageReactionRemoveAll(messageReactionRemoveAll: MessageReactionRemoveAll) {}
-
-    /**
-     * Fired when a user's presence has updated.
-     *
-     * @param presenceUpdate The updated presence.
-     */
-    public open suspend fun onPresenceUpdate(presenceUpdate: PresenceUpdate) {}
-
-    /**
-     * Fired when a user has started typing.
-     *
-     * @param typingStart The information about the user typing.
-     */
-    public open suspend fun onTypingStart(typingStart: TypingStart) {}
-
-    /**
-     * Fired when a user has been updated.
-     *
-     * @param user The updated User.
-     */
-    public open suspend fun onUserUpdate(user: User) {}
-
-    /**
-     * Fired when a user's voice state has updated.
-     *
-     * @param voiceState The updated voice state.
-     */
-    public open suspend fun onVoiceStateUpdate(voiceState: VoiceState) {}
-
-    /**
-     * Fired when a guild's voice server has updated.
-     *
-     * @param voiceServerUpdate The updated voice server information.
-     */
-    public open suspend fun onVoiceServerUpdate(voiceServerUpdate: VoiceServerUpdate) {}
-
-    /**
-     * Fired when a webhook is updated.
-     *
-     * @param webhookUpdate The channel with the updated webhook.
-     */
-    public open suspend fun onWebhooksUpdate(webhookUpdate: WebhookUpdate) {}
+    private suspend fun forEvent(discordEvent: DiscordEvent, block: suspend () -> Unit) {
+        if (event == discordEvent) {
+            jobs += dispatcherScope.launch {
+                try {
+                    block()
+                } catch (e: Throwable) {
+                    logger.warn(e) { "Dispatched event $event caused exception $e" }
+                }
+            }
+        }
+    }
 }

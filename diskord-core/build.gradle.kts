@@ -47,7 +47,7 @@ kotlin {
 
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
                 implementation("io.github.microutils:kotlin-logging:2.0.3")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")

@@ -2,6 +2,8 @@ package com.jessecorbett.diskord.internal.client
 
 import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exceptions.*
+import com.jessecorbett.diskord.internal.defaultUserAgentUrl
+import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.epochMillisNow
 import com.jessecorbett.diskord.internal.epochSecondNow
 import com.jessecorbett.diskord.util.DiskordInternals
@@ -72,7 +74,12 @@ public interface RestClient {
 }
 
 @DiskordInternals
-public class DefaultRestClient(userType: DiscordUserType, token: String, botUrl: String, botVersion: String) : RestClient {
+public class DefaultRestClient(
+    userType: DiscordUserType,
+    token: String,
+    botUrl: String = defaultUserAgentUrl,
+    botVersion: String = defaultUserAgentVersion
+) : RestClient {
     private val authorizationHeader = userType.type + " " + token
     private val userAgentHeader = "DiscordBot: ($botUrl, $botVersion)"
 
@@ -216,5 +223,5 @@ private fun throwFailure(code: Int, body: String?): Nothing = throw when (code) 
     }
     502 -> DiscordGatewayException()
     in 500..599 -> DiscordInternalServerException()
-    else -> DiscordException()
+    else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
 }

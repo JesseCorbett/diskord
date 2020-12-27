@@ -80,13 +80,13 @@ public fun String.withMultiLineCode(language: String): String = "```$language $t
  * Shortcut to check if a message is from a user.
  */
 public val Message.isFromUser: Boolean
-    get() = !author.isBot
+    get() = !(author.isBot ?: true)
 
 /**
  * Shortcut to check if a message is from a bot.
  */
 public val Message.isFromBot: Boolean
-    get() = author.isBot && this.webhookId == null
+    get() = (author.isBot ?: false) && this.webhookId == null
 
 /**
  * Shortcut to check if a message is from a webhook.
@@ -187,7 +187,7 @@ public val Emoji.isCustom: Boolean
  * @return the emoji in chat format.
  */
 public val Emoji.tag: String
-    get() = if (isUnicode) name else "<${if (isAnimated) "a" else ""}:$name:$id>"
+    get() = if (isUnicode) name!! else "<${if (isAnimated) "a" else ""}:$name:$id>"
 
 
 /*
