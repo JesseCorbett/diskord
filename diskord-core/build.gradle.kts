@@ -6,15 +6,19 @@ plugins {
     signing
 
     id("org.jetbrains.kotlin.multiplatform")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.4.21"
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("org.jetbrains.dokka")
 }
 
-val kotlinVersion: String by rootProject
-val kotlinxCoroutinesVersion: String by rootProject
-val kotlinSerializationVersion: String by rootProject
-val ktorVersion: String by rootProject
-val okhttpVersion: String by rootProject
+val kotlinVersion: String by project
+val kotlinxCoroutinesVersion: String by project
+val kotlinSerializationVersion: String by project
+val ktorVersion: String by project
+val okhttpVersion: String by project
+val kotlinLoggingVersion: String by project
+val slf4jVersion: String by project
+val assertkVersion: String by project
+val mockkVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -28,11 +32,11 @@ kotlin {
         }
     }
 
-    js(IR) {
+    /*js(IR) {
         nodejs()
         browser()
         binaries.executable()
-    }
+    }*/
 
     metadata {
         mavenPublication {
@@ -49,7 +53,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("io.github.microutils:kotlin-logging:2.0.3")
+                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
@@ -61,8 +65,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("com.willowtreeapps.assertk:assertk:0.22")
-                implementation("io.mockk:mockk-common:1.9.3")
+                implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
+                implementation("io.mockk:mockk-common:$mockkVersion")
             }
         }
 
@@ -71,10 +75,10 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
             dependencies {
-                implementation("org.slf4j:slf4j-api:1.7.30")
+                implementation("org.slf4j:slf4j-api:$slf4jVersion")
+                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
-                implementation("ch.qos.logback:logback-classic:1.1.7")
             }
         }
         val jvmTest by getting {
@@ -82,14 +86,13 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.6.1")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:0.22")
-                implementation("io.mockk:mockk:1.9.3")
-                implementation("org.slf4j:slf4j-simple:1.7.30")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+                implementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
+                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
 
-        val jsMain by getting {
+        /*val jsMain by getting {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
             languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
@@ -101,7 +104,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
             }
-        }
+        }*/
     }
 }
 

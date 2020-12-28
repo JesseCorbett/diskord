@@ -34,6 +34,9 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * - [DiscordEvent.GUILD_MEMBER_ADD]
      * - [DiscordEvent.GUILD_MEMBER_UPDATE]
      * - [DiscordEvent.GUILD_MEMBER_REMOVE]
+     *
+     * *Note: This intent is privileged and may require verification with Discord
+     * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
      */
     GUILD_MEMBERS(0x00000002, true),
 
@@ -98,9 +101,6 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * - [DiscordEvent.MESSAGE_UPDATE]
      * - [DiscordEvent.MESSAGE_DELETE]
      * - [DiscordEvent.MESSAGE_DELETE_BULK]
-     *
-     * *Note: This intent is privileged and may require verification with Discord
-     * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
      */
     GUILD_MESSAGES(0x00000200),
 
@@ -152,6 +152,8 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
 /**
  * An immutable collection of [GatewayIntent] values stored as a bitmask integer.  This is intended for use when
  * creating a Diskord [Bot] instance to signal to the Discord API requested intents.
+ *
+ * FIXME: Update this example with updated DSL (or remove it completely)
  *
  * Example:
  * ```kotlin

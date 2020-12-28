@@ -8,7 +8,10 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-val kotlinVersion: String by rootProject
+val kotlinVersion: String by project
+val slf4jVersion: String by project
+val assertkVersion: String by project
+val mockkVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -22,11 +25,11 @@ kotlin {
         }
     }
 
-    js(IR) {
+    /*js(IR) {
         nodejs()
         browser()
         binaries.executable()
-    }
+    }*/
 
     metadata {
         mavenPublication {
@@ -48,8 +51,8 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
-                implementation("com.willowtreeapps.assertk:assertk:0.22")
-                implementation("io.mockk:mockk-common:1.9.3")
+                implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
+                implementation("io.mockk:mockk-common:$mockkVersion")
             }
         }
 
@@ -58,14 +61,14 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
             dependencies {
-                implementation("org.slf4j:slf4j-api:1.7.30")
-                implementation("ch.qos.logback:logback-classic:1.1.7")
+                implementation("org.slf4j:slf4j-api:$slf4jVersion")
+                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
             }
         }
 
-        val jsMain by getting {
+        /*val jsMain by getting {
 
-        }
+        }*/
     }
 }
 

@@ -38,6 +38,27 @@ dependencies {
 }
 ```
 
+Note: The `diskord-core` and `diskord-bot` artifacts bundle `org.slf4j:slf4j-simple` to provide basic logging to STDOUT with no
+configuration. This can be excluded using the standard exclusion syntax:
+
+```kotlin
+// Kotlin build.gradle.kts
+configurations {
+  implementation {
+    exclude("org.slf4j", "slf4j-simple")
+  }
+}
+```
+
+```groovy
+// Groovy build.gradle
+configurations {
+  implementation {
+    exclude 'org.slf4j', 'slf4j-simple'
+  }
+}
+```
+
 ## How do I use this?
 
 [Diskord Core Documentation](https://jesselcorbett.gitlab.io/diskord-core/diskord-core/index.html)
