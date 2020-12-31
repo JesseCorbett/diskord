@@ -29,8 +29,7 @@ public class GatewaySession(
     private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
     private val shardNumber: Int = 0,
-    private val eventHandler: EventHandler,
-    private val filters: EventFilter = {}
+    private val eventHandler: EventHandler
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -172,19 +171,11 @@ public class GatewaySession(
             sessionId = defaultJson.decodeFromJsonElement<Ready>(gatewayMessage.dataPayload).sessionId
         }
 
-        // Begin userspace event pipeline
+        // Begin userspace event dispatching
 
-        // Do filtering
-        EventDispatcherImpl<Boolean>(client, eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
-            filters()
-            join()
-            if (results.any { !it }) return // If any filter returns false, then cancel pipeline
-        }
-
-        // Do event dispatches
-        EventDispatcherImpl<Unit>(client, eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
+        EventDispatcherImpl<Unit>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
             eventHandler()
-            join() /*
+            await() /*
                 This may not be necessary, inflicts blocking on the event scope, but ensures all events
                 are processed in order of arrival. Perhaps turn it into a High Perf vs Strong Order flag
             */

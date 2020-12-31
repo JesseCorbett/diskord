@@ -1,8 +1,6 @@
-package com.jessecorbett.diskord.api.gateway
+package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.api.channel.ChannelClient
-import com.jessecorbett.diskord.api.common.Channel
-import com.jessecorbett.diskord.api.common.Guild
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.invite.InviteClient
@@ -13,7 +11,7 @@ import com.jessecorbett.diskord.util.sendMessage
 /**
  * Collection of utilities for dispatched events, such as access to clients
  */
-public interface DispatcherContext {
+public interface BotContext {
     public val client: RestClient
 
     // Global functions

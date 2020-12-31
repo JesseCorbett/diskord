@@ -23,8 +23,8 @@ public class CommandBuilder(private val prefix: String, private val dispatcher: 
     @DiskordDsl
     public suspend fun command(key: String, block: suspend EventDispatcher<Unit>.(Message) -> Unit) {
         dispatcher.onMessageCreate { message ->
-            if (message.content.startsWith("$prefix$key ")) {
-                dispatcher.block(message)
+            if (message.content.startsWith("${this@CommandBuilder.prefix}$key ")) {
+                this@CommandBuilder.dispatcher.block(message)
             }
         }
     }

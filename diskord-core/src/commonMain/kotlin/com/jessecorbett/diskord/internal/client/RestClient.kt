@@ -71,6 +71,21 @@ public interface RestClient {
         rateKey: String = majorPath,
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
+
+    public companion object {
+
+        /**
+         * Returns an instance of [RestClient] with default configuration values
+         *
+         * @param token The API token
+         *
+         * @return A new instance of [RestClient]
+         */
+        @OptIn(DiskordInternals::class)
+        public fun default(token: String): RestClient {
+            return DefaultRestClient(DiscordUserType.BOT, token)
+        }
+    }
 }
 
 @DiskordInternals

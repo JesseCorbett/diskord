@@ -82,7 +82,7 @@ publishing {
     publications.withType<MavenPublication> {
         pom {
             name.set("diskord-bot")
-            description.set("A Kotlin wrapper around the Discord API")
+            description.set("A set of utilities for building bots using the diskord-core library")
             url.set("https://gitlab.com/jesselcorbett/diskord")
 
             licenses {

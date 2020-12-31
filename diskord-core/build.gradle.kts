@@ -32,11 +32,11 @@ kotlin {
         }
     }
 
-    /*js(IR) {
+    js(IR) {
         nodejs()
         browser()
         binaries.executable()
-    }*/
+    }
 
     metadata {
         mavenPublication {
@@ -92,7 +92,7 @@ kotlin {
             }
         }
 
-        /*val jsMain by getting {
+        val jsMain by getting {
             languageSettings.useExperimentalAnnotation("kotlin.Experimental")
             languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
 
@@ -104,7 +104,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
             }
-        }*/
+        }
     }
 }
 

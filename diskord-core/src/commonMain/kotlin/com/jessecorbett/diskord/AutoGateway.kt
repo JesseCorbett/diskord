@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord
 
-import com.jessecorbett.diskord.api.gateway.EventFilter
 import com.jessecorbett.diskord.api.gateway.EventHandler
 import com.jessecorbett.diskord.api.gateway.GatewaySession
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
@@ -20,8 +19,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     private val eventScope: CoroutineScope,
     private val restClient: RestClient,
-    private val eventHandler: EventHandler,
-    private val filters: EventFilter
+    private val eventHandler: EventHandler
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -70,7 +68,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     }
 
     private suspend fun createSession(url: GatewayBotUrl, shards: Int, shard: Int): GatewaySession {
-        return GatewaySession(token, url, restClient, intents, eventScope, shards, shard, eventHandler, filters).also {
+        return GatewaySession(token, url, restClient, intents, eventScope, shards, shard, eventHandler).also {
             it.startSession()
         }
     }

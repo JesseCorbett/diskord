@@ -2,31 +2,35 @@ package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.AutoGateway
 import com.jessecorbett.diskord.DiskordDsl
-import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.gateway.EventFilter
+import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.EventHandler
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
-import com.jessecorbett.diskord.internal.client.DefaultRestClient
-import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-/**
- * Base class for building a bot
- */
+public typealias EventFilter = suspend EventDispatcher<Boolean>.() -> Unit
+
 @DiskordDsl
-public class BotBase internal constructor() {
-    internal var filterFunction: List<EventFilter> = listOf()
-    internal var eventsFunction: List<EventHandler> = listOf()
+public fun buildFilter(builder: EventFilter): EventFilter {
+    return builder
+}
 
-    @DiskordDsl
-    public fun filter(filter: EventFilter) {
-        filterFunction = filterFunction + filter
+@DiskordDsl
+public suspend fun EventDispatcher<Unit>.filter(filter: EventFilter, handler: EventHandler) {
+    val filterDispatcher = this.forType<Boolean>()
+    filterDispatcher.filter()
+    val results = filterDispatcher.await()
+    if (results.all { it }) {
+        this.handler()
     }
+}
 
+public class BotBase(override val client: RestClient) : BotContext {
+    internal val handlers: MutableList<EventHandler> = mutableListOf()
     @DiskordDsl
-    public fun events(events: EventHandler) {
-        eventsFunction = eventsFunction + events
+    public fun events(handler: EventHandler) {
+        handlers += handler
     }
 }
 
@@ -36,24 +40,15 @@ public class BotBase internal constructor() {
  * @param token Discord bot API token
  * @param builder Function to build the bot
  */
-@OptIn(DiskordInternals::class)
 public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
-    val client = DefaultRestClient(DiscordUserType.BOT, token)
+    val client = RestClient.default(token)
 
-    val base = BotBase().apply { builder() }
+    val base = BotBase(client)
+    base.builder()
 
-    // Translate the list of EventFilters into one big EventFilter
-    val filters: EventFilter = {
-        for (filter in base.filterFunction) {
-            filter()
-        }
-    }
-
-    // Translate the list of EventHandlers into one big EventHandler
-    val eventHandler: EventHandler = {
-        for (handler in base.eventsFunction) {
-            handler()
-        }
+    // Take all invocations of BotBase.events and turn them into one function for AutoGateway
+    val globalEventHandler: EventHandler = {
+        base.handlers.forEach { it() }
     }
 
     val gateway = AutoGateway(
@@ -61,8 +56,7 @@ public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
         intents = GatewayIntents.NON_PRIVILEGED,
         eventScope = CoroutineScope(Dispatchers.Default),
         restClient = client,
-        eventHandler = eventHandler,
-        filters = filters
+        eventHandler = globalEventHandler
     )
 
     gateway.start()
