@@ -47,24 +47,10 @@ public interface DispatcherContext {
         get() = channel(channelId)
 
     /**
-     * Get the [Channel] related to the given message
-     */
-    public suspend fun Message.channel(): Channel {
-        return channel.getChannel()
-    }
-
-    /**
      * Create an instance of a guild client for the [Message.channelId] or null if there is no guild
      */
     public val Message.guild: GuildClient?
         get() = guildId?.let { guild(it) }
-
-    /**
-     * Get the [Guild] related to the given message or null if there is no guild
-     */
-    public suspend fun Message.guild(withCounts: Boolean = false): Guild? {
-        return guild?.getGuild(withCounts)
-    }
 
     /**
      * Deletes the message
