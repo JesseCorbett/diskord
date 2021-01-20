@@ -12,7 +12,9 @@ import com.jessecorbett.diskord.api.channel.CreateWebhook
 import com.jessecorbett.diskord.api.webhook.PatchWebhook
 import com.jessecorbett.diskord.api.webhook.WebhookSubmission
 import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.api.common.GuildTextChannel
 import com.jessecorbett.diskord.api.webhook.WebhookClient
+import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.runBlocking
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -21,14 +23,15 @@ import kotlin.test.Test
 class WebhookClientIntegration {
     private val webhookChannel = "424046633253339136"
 
+    private val restClient = RestClient.default(BOT_TEST_TOKEN)
     private lateinit var webhook: Webhook
     private lateinit var webhookClient: WebhookClient
 
     @BeforeTest
     fun setup() {
         runBlocking {
-            webhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
-            webhookClient = WebhookClient(BOT_TEST_TOKEN, webhook.id)
+            webhook = ChannelClient(webhookChannel, restClient).createWebhook(CreateWebhook(randomString()))
+            webhookClient = WebhookClient(webhook.id, RestClient.default(BOT_TEST_TOKEN))
         }
     }
 
@@ -49,7 +52,7 @@ class WebhookClientIntegration {
     @Test
     fun getWebhookWithToken() {
         runBlocking {
-            webhookClient.getWebhook(webhook.token)
+            webhookClient.getWebhook(webhook.token!!)
         }
     }
 
@@ -73,11 +76,11 @@ class WebhookClientIntegration {
         val originalName = webhook.defaultName
 
         runBlocking {
-            webhookClient.update(PatchWebhook(randomString()), webhook.token)
+            webhookClient.update(PatchWebhook(randomString()), webhook.token!!)
             val newName = webhookClient.getWebhook().defaultName
             assertThat(originalName).isNotEqualTo(newName)
 
-            webhookClient.update(PatchWebhook(originalName), webhook.token)
+            webhookClient.update(PatchWebhook(originalName), webhook.token!!)
             val revertedName = webhookClient.getWebhook().defaultName
             assertThat(originalName).isEqualTo(revertedName)
         }
@@ -87,8 +90,8 @@ class WebhookClientIntegration {
     fun deleteWebhookTest() {
         runBlocking {
             val webhookId =
-                ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString())).id
-            val client = WebhookClient(BOT_TEST_TOKEN, webhookId)
+                ChannelClient(webhookChannel, restClient).createWebhook(CreateWebhook(randomString())).id
+            val client = WebhookClient(webhookId, restClient)
 
             client.getWebhook()
             client.deleteWebhook()
@@ -108,11 +111,11 @@ class WebhookClientIntegration {
     @Test
     fun deleteWebhookWithTokenTest() {
         runBlocking {
-            val ourWebhook = ChannelClient(BOT_TEST_TOKEN, webhookChannel).createWebhook(CreateWebhook(randomString()))
-            val client = WebhookClient(BOT_TEST_TOKEN, ourWebhook.id)
+            val ourWebhook = ChannelClient(webhookChannel, restClient).createWebhook(CreateWebhook(randomString()))
+            val client = WebhookClient(ourWebhook.id, restClient)
 
             client.getWebhook()
-            client.deleteWebhook(ourWebhook.token)
+            client.deleteWebhook(ourWebhook.token!!)
 
             var deleted = false
             try {
@@ -131,10 +134,10 @@ class WebhookClientIntegration {
         runBlocking {
             val content = randomString()
             val name = randomString()
-            webhookClient.execute(webhook.token, WebhookSubmission(content, name))
+            webhookClient.execute(webhook.token!!, WebhookSubmission(content, name))
 
-            val channelClient = ChannelClient(BOT_TEST_TOKEN, webhookChannel)
-            val message = channelClient.getMessage(channelClient.getChannel().lastMessageId!!)
+            val channelClient = ChannelClient(webhookChannel, restClient)
+            val message = channelClient.getMessage((channelClient.getChannel() as GuildTextChannel).lastMessageId!!)
 
             assertThat(content).isEqualTo(message.content)
             assertThat(name).isEqualTo(message.author.username)

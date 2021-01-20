@@ -93,7 +93,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @return The created message
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = false): WebhookSubmission {
+    public suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = true): WebhookSubmission {
         return POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") { body = webhookSubmission }.receive()
     }
 

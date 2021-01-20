@@ -8,18 +8,18 @@ import com.jessecorbett.diskord.api.common.ExplicitContentFilterLevel
 import com.jessecorbett.diskord.api.common.NotificationsLevel
 import com.jessecorbett.diskord.api.common.VerificationLevel
 import com.jessecorbett.diskord.api.global.CreateDM
-import com.jessecorbett.diskord.api.global.CreateGroupDM
 import com.jessecorbett.diskord.api.global.CreateGuild
 import com.jessecorbett.diskord.api.global.ModifyUser
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Ignore
 import kotlin.test.Test
 
 class DiscordClientIntegration {
     private val tokensUser = "346444615831781376"
-    private val discordClient = GlobalClient(BOT_TEST_TOKEN)
+    private val discordClient = GlobalClient(RestClient.default(BOT_TEST_TOKEN))
     private val userForDM = "321775636798504962"
 
     @Test
@@ -45,7 +45,7 @@ class DiscordClientIntegration {
 
         val guild = runBlocking { discordClient.createGuild(createGuild) }
 
-        val guildClient = GuildClient(BOT_TEST_TOKEN, guild.id)
+        val guildClient = GuildClient(guild.id, RestClient.default(BOT_TEST_TOKEN))
         runBlocking {
             guildClient.getGuild()
             guildClient.deleteChannel()
@@ -89,7 +89,7 @@ class DiscordClientIntegration {
         runBlocking {
             val user = discordClient.getUser(tokensUser)
             assertThat(tokensUser).isEqualTo(user.id)
-            assertThat(user.isBot).isTrue()
+            assertThat(user.isBot).isEqualTo(true)
         }
     }
 
@@ -127,12 +127,6 @@ class DiscordClientIntegration {
     @Test
     fun createDMTest() {
         runBlocking { discordClient.createDM(CreateDM(userForDM)) }
-    }
-
-    @Ignore
-    @Test
-    fun createGroupDMTest() {
-        runBlocking { discordClient.createGroupDM(CreateGroupDM(emptyList())) }
     }
 
     @Ignore

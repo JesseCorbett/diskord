@@ -31,7 +31,7 @@ public interface GuildText : GuildChannel, TextChannel {
 
 public interface DM : TextChannel {
     public val recipients: List<User>
-    public val ownerId: String
+    public val ownerId: String?
 }
 
 @Serializable
@@ -47,7 +47,7 @@ public data class GuildTextChannel(
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
     @SerialName("parent_id") override val parentId: String?,
-    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+    @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), GuildText
 
 @Serializable
@@ -56,8 +56,8 @@ public data class DMChannel(
     @SerialName("id") override val id: String,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("recipients") override val recipients: List<User>,
-    @SerialName("owner_id") override val ownerId: String,
-    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+    @SerialName("owner_id") override val ownerId: String? = null,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), DM
 
 @Serializable
@@ -84,7 +84,7 @@ public data class GroupDMChannel(
     @SerialName("icon") val iconHash: String?,
     @SerialName("owner_id") override val ownerId: String,
     @SerialName("application_id") val applicationId: String?,
-    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+    @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), NamedChannel, DM
 
 @Serializable
@@ -111,7 +111,7 @@ public data class GuildNewsChannel(
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int,
     @SerialName("parent_id") override val parentId: String?,
-    @SerialName("last_pin_timestamp") override val lastPinTime: String?
+    @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), GuildText
 
 @Serializable

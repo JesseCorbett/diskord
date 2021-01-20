@@ -44,12 +44,12 @@ public class DiscordBadPermissionsException : DiscordException()
  * Thrown when a client calls an endpoint too many times.
  *
  * @property message The error returned by the API.
- * @property retryAt When the rate limit resets in epoch seconds.
+ * @property retryAfterSeconds When the rate limit resets in seconds.
  * @property isGlobalRateLimit if the rate limit is API specific or global.
  */
 public class DiscordRateLimitException(
     override val message: String,
-    public val retryAt: Long,
+    public val retryAfterSeconds: Long,
     public val isGlobalRateLimit: Boolean
 ) : DiscordException()
 

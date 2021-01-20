@@ -4,7 +4,6 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exceptions.*
 import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
-import com.jessecorbett.diskord.internal.epochMillisNow
 import com.jessecorbett.diskord.internal.epochSecondNow
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.auditLogEntryJson
@@ -157,7 +156,8 @@ public class DefaultRestClient(
             try {
                 throwFailure(response.status.value, response.readText())
             } catch (rateLimitException: DiscordRateLimitException) {
-                // We already address rate limit updates above, so just immediately queue a retry
+                // We already address rate limit updates above, so just immediately queue a retry after waiting
+                delay(rateLimitException.retryAfterSeconds * 1000)
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
             }
         }
@@ -233,8 +233,9 @@ private fun throwFailure(code: Int, body: String?): Nothing = throw when (code) 
     403 -> DiscordBadPermissionsException()
     404 -> DiscordNotFoundException()
     429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
+        println(it)
         logger.info { "Encountered a rate limit exception" }
-        DiscordRateLimitException(it.message, (it.retryAfter + epochMillisNow()) / 1000, it.isGlobal)
+        DiscordRateLimitException(it.message, it.retryAfter, it.isGlobal)
     }
     502 -> DiscordGatewayException()
     in 500..599 -> DiscordInternalServerException()
