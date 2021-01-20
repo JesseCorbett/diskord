@@ -11,7 +11,6 @@ import com.jessecorbett.diskord.api.gateway.model.GatewayMessage
 import com.jessecorbett.diskord.api.gateway.model.OpCode
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
-import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.coroutines.*
@@ -24,7 +23,6 @@ import mu.KotlinLogging
 public class GatewaySession(
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,
-    private val client: RestClient,
     private val intents: GatewayIntents,
     private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
