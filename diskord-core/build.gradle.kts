@@ -23,12 +23,20 @@ val mockkVersion: String by project
 group = rootProject.group
 version = rootProject.version
 
+val javadocJar by tasks.creating(Jar::class) {
+    group = "build"
+    dependsOn(tasks.dokkaHtml)
+    archiveBaseName.set("${project.name}-jvm")
+    archiveClassifier.set("javadoc")
+    from("$buildDir/dokka/html")
+}
+
 kotlin {
     explicitApiWarning()
 
     jvm {
         mavenPublication {
-//            artifact(jvmJavadocJar)
+            artifact(javadocJar)
         }
     }
 
@@ -36,11 +44,15 @@ kotlin {
         nodejs()
         browser()
         binaries.executable()
+
+        mavenPublication {
+            artifact(javadocJar)
+        }
     }
 
     metadata {
         mavenPublication {
-//            artifact(metadataJavadocJar)
+            artifact(javadocJar)
         }
     }
 
