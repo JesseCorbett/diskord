@@ -110,7 +110,6 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
         }
     }
 
-    @OptIn(KtorExperimentalAPI::class, ExperimentalWebSocketExtensionApi::class)
     private fun buildWSClient(): HttpClient {
         return HttpClient(websocketClient()).config {
             install(WebSockets)
