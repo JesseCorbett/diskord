@@ -31,6 +31,36 @@ val javadocJar by tasks.creating(Jar::class) {
     from("$buildDir/dokka/html")
 }
 
+tasks {
+    dokkaHtmlPartial {
+        dokkaSourceSets {
+            configureEach {
+                sourceLink {
+                    // Unix based directory relative path to the root of the project (where you execute gradle respectively).
+                    localDirectory.set(file("src/commonMain/kotlin"))
+                    // URL showing where the source code can be accessed through the web browser
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-core/src/commonMain/kotlin/"))
+                    // Suffix which is used to append the line number to the URL. Use #L for GitHub
+                    remoteLineSuffix.set("#L")
+                }
+                sourceLink {
+                    localDirectory.set(file("src/jsMain/kotlin"))
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/jsMain/kotlin/"))
+                    remoteLineSuffix.set("#L")
+                }
+                sourceLink {
+                    localDirectory.set(file("src/jvmMain/kotlin"))
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/jvmMain/kotlin/"))
+                    remoteLineSuffix.set("#L")
+                }
+            }
+        }
+    }
+}
+
 kotlin {
     explicitApiWarning()
 

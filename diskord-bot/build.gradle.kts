@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URL
 
 plugins {
     `maven-publish`
@@ -22,6 +23,21 @@ val javadocJar by tasks.creating(Jar::class) {
     archiveBaseName.set("${project.name}-jvm")
     archiveClassifier.set("javadoc")
     from("$buildDir/dokka/html")
+}
+
+tasks {
+    dokkaHtmlPartial {
+        dokkaSourceSets {
+            configureEach {
+                sourceLink {
+                    localDirectory.set(file("src/commonMain/kotlin"))
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/commonMain/kotlin/"))
+                    remoteLineSuffix.set("#L")
+                }
+            }
+        }
+    }
 }
 
 kotlin {
