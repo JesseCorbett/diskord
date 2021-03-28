@@ -80,7 +80,7 @@ public fun String.withMultiLineCode(language: String): String = "```$language $t
  * Shortcut to check if a message is from a user.
  */
 public val Message.isFromUser: Boolean
-    get() = !(author.isBot ?: true)
+    get() = !(author.isBot ?: false) && webhookId == null
 
 /**
  * Shortcut to check if a message is from a bot.
