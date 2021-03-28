@@ -12,6 +12,7 @@ val kotlinVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
 val mockkVersion: String by project
+val kotlinLoggingVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -72,6 +73,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":diskord-core"))
+                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
             }
         }
         commonTest {

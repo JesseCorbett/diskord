@@ -8,6 +8,8 @@ import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import mu.KLogger
+import mu.KotlinLogging
 
 public typealias EventFilter = suspend EventDispatcher<Boolean>.() -> Unit
 
@@ -27,7 +29,12 @@ public suspend fun EventDispatcher<Unit>.filter(filter: EventFilter, handler: Ev
 }
 
 public class BotBase(override val client: RestClient) : BotContext {
-    internal val handlers: MutableList<EventHandler> = mutableListOf()
+    public val logger: KLogger = KotlinLogging.logger {}
+
+    internal val handlers: MutableList<EventHandler> = mutableListOf({
+        onReady { logger.info { "Bot has started and is ready for events" } }
+        onResume { logger.info { "Bot has resumed a previous websocket session" } }
+    })
     @DiskordDsl
     public fun events(handler: EventHandler) {
         handlers += handler
