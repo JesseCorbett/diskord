@@ -25,6 +25,8 @@ public class CommandBuilder(private val prefix: String, private val dispatcher: 
         dispatcher.onMessageCreate { message ->
             if (message.content.startsWith("${this@CommandBuilder.prefix}$key ")) {
                 this@CommandBuilder.dispatcher.block(message)
+            } else if (message.content == "${this@CommandBuilder.prefix}$key") {
+                this@CommandBuilder.dispatcher.block(message)
             }
         }
     }
