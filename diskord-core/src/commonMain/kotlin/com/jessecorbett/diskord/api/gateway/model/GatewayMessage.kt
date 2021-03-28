@@ -1,6 +1,8 @@
 package com.jessecorbett.diskord.api.gateway.model
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -93,7 +95,6 @@ public enum class OpCode(public val code: Int) {
 public object OpCodeSerializer : KSerializer<OpCode> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("OpCode", PrimitiveKind.INT)
 
-    @OptIn(ExperimentalSerializationApi::class)
     override fun serialize(encoder: Encoder, value: OpCode): Unit = encoder.encodeInt(value.code)
 
     override fun deserialize(decoder: Decoder): OpCode {

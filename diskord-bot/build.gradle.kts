@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
 
 plugins {
@@ -85,9 +84,6 @@ kotlin {
         }
 
         val jvmMain by getting {
-            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
-            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
-
             dependencies {
                 implementation("org.slf4j:slf4j-api:$slf4jVersion")
                 implementation("org.slf4j:slf4j-simple:$slf4jVersion")
@@ -97,12 +93,6 @@ kotlin {
         val jsMain by getting {
 
         }
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
 
@@ -116,7 +106,7 @@ publishing {
             licenses {
                 license {
                     name.set("The Apache Software License, Version 2.0")
-                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     distribution.set("repo")
                 }
             }
@@ -136,7 +126,6 @@ publishing {
             }
         }
     }
-
 
     repositories {
         maven {

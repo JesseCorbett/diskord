@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.api.gateway
 import com.jessecorbett.diskord.api.gateway.model.GatewayMessage
 import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
+import com.jessecorbett.diskord.util.StripBlankSWSEHeader
 import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.*
 import io.ktor.client.features.logging.*
@@ -109,10 +110,11 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
         }
     }
 
-    @OptIn(KtorExperimentalAPI::class)
     private fun buildWSClient(): HttpClient {
         return HttpClient(websocketClient()).config {
             install(WebSockets)
+            install(StripBlankSWSEHeader)
+
             if (DEBUG_MODE) {
                 install(Logging) {
                     logger = Logger.DEFAULT

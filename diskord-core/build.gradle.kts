@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
 
 plugins {
@@ -87,10 +86,11 @@ kotlin {
     }
 
     sourceSets {
-        commonMain {
-            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
-            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
 
+        commonMain {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
@@ -113,9 +113,6 @@ kotlin {
         }
 
         val jvmMain by getting {
-            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
-            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
-
             dependencies {
                 implementation("org.slf4j:slf4j-api:$slf4jVersion")
                 implementation("org.slf4j:slf4j-simple:$slf4jVersion")
@@ -128,16 +125,13 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
                 implementation("io.mockk:mockk:$mockkVersion")
             }
         }
 
         val jsMain by getting {
-            languageSettings.useExperimentalAnnotation("kotlin.Experimental")
-            languageSettings.useExperimentalAnnotation("kotlin.js.ExperimentalJsExport")
-
             dependencies {
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
@@ -147,12 +141,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
             }
         }
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
 
@@ -185,7 +173,7 @@ publishing {
             licenses {
                 license {
                     name.set("The Apache Software License, Version 2.0")
-                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     distribution.set("repo")
                 }
             }
@@ -205,7 +193,6 @@ publishing {
             }
         }
     }
-
 
     repositories {
         maven {
