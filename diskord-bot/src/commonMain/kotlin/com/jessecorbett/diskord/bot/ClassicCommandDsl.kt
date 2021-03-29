@@ -6,10 +6,10 @@ import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 
 /**
- * Installs the command DSL and provides a scope for defining commands
+ * Installs the classic command DSL and provides a scope for defining commands
  */
 @DiskordDsl
-public fun BotBase.commands(commandPrefix: String = ".", commands: suspend CommandBuilder.() -> Unit) {
+public fun BotBase.classicCommands(commandPrefix: String = ".", commands: suspend CommandBuilder.() -> Unit) {
     events {
         CommandBuilder(commandPrefix, this).commands()
     }

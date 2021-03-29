@@ -20,6 +20,8 @@ a complete rewrite with a new API, new artifacts, and new usage
 - REST clients are now backed by a shared `RestClient` which manages
 rate limits across requests more intelligently
 - Updated audit logging to automatically translate JSON into concrete classes
+- The Command DSL is now the Classic Command DSL, as we develop a new Command DSL using the slash command API
+- The Classic Command DSL now passes messages as `it` instead of `this`
 
 ### Removed
 - Old experimental DSL
