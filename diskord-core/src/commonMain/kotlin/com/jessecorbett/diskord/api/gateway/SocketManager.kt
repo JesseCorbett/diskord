@@ -5,6 +5,7 @@ import com.jessecorbett.diskord.internal.websocketClient
 import com.jessecorbett.diskord.util.DEBUG_MODE
 import com.jessecorbett.diskord.util.StripBlankSWSEHeader
 import com.jessecorbett.diskord.util.defaultJson
+import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
@@ -76,6 +77,8 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                 }
 
                 for (frame in incoming) {
+                    logger.trace { "Incoming Message:\nInfo:\n\tframe = $frame\nData:\n${frame.data.toHexDump()}" }
+
                     when (frame) {
                         is Frame.Text -> emitMessage(defaultJson.decodeFromString(GatewayMessage.serializer(), frame.readText()))
                         is Frame.Binary -> TODO("Add support for binary formatted data")
