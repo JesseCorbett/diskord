@@ -1,8 +1,10 @@
 package com.jessecorbett.diskord.api.gateway.events
 
 public enum class DiscordEvent {
+    HELLO,
     READY,
     RESUMED,
+    RECONNECT,
     CHANNEL_CREATE,
     CHANNEL_UPDATE,
     CHANNEL_DELETE,

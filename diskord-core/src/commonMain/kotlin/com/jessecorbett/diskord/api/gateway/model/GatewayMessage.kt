@@ -57,11 +57,6 @@ public enum class OpCode(public val code: Int) {
     VOICE_STATE_UPDATE(4),
 
     /**
-     * Ping received for a voice server.
-     */
-    VOICE_SERVER_PING(5),
-
-    /**
      * Called after [OpCode.HELLO] is received if this is an existing session.
      */
     RESUME(6),
