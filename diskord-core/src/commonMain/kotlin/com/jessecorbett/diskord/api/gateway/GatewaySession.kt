@@ -82,7 +82,7 @@ public class GatewaySession(
     }
 
     private suspend fun receiveGatewayMessage(gatewayMessage: GatewayMessage) = coroutineScope {
-        logger.info { "Received OpCode ${gatewayMessage.opCode}" }
+        logger.debug { "Received OpCode ${gatewayMessage.opCode}" }
         when (gatewayMessage.opCode) {
             OpCode.DISPATCH -> {
                 sequenceNumber = gatewayMessage.sequenceNumber
@@ -163,7 +163,7 @@ public class GatewaySession(
             ?: throw DiscordCompatibilityException("Encountered DiscordEvent ${gatewayMessage.event} without event data")
 
         // Once event has been processed into usable data, begin pipeline operations
-        logger.info { "Received Dispatch $discordEvent" }
+        logger.debug { "Received Dispatch $discordEvent" }
 
         if (discordEvent == DiscordEvent.READY) {
             sessionId = defaultJson.decodeFromJsonElement<Ready>(gatewayMessage.dataPayload).sessionId
