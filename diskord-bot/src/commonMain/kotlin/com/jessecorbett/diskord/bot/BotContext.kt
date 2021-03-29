@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
@@ -15,6 +16,13 @@ public interface BotContext {
     public val client: RestClient
 
     // Global functions
+
+    /**
+     * Create an instance of the global client
+     *
+     * TODO: Should this be a property accessor instead?
+     */
+    public fun global(): GlobalClient = GlobalClient(client)
 
     /**
      * Create an instance of a guild client
