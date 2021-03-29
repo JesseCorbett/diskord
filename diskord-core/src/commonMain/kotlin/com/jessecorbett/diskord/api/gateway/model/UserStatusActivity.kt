@@ -8,22 +8,23 @@ public data class UserStatusActivity(
     @SerialName("name") val name: String,
     @SerialName("type") val type: ActivityType,
     @SerialName("url") val streamUrl: String? = null,
+    @SerialName("created_at") val createdAt: String,
     @SerialName("timestamps") val timestamps: Timestamps? = null,
     @SerialName("application_id") val applicationId: String? = null,
     @SerialName("details") val details: String? = null,
     @SerialName("state") val partyStatus: String? = null,
+    @SerialName("emoji") val emoji: Emoji? = null,
     @SerialName("party") val party: ActivityParty? = null,
     @SerialName("assets") val assets: Assets? = null,
     @SerialName("secrets") val secrets: RichPresenceSecrets? = null,
     @SerialName("instance") val activityIsInstanced: Boolean? = null,
-    @SerialName("flags") val activityFlags: Int? = null,
-    @SerialName("emoji") val emoji: Emoji? = null
+    @SerialName("flags") val activityFlags: Int? = null
 )
 
 @Serializable
 public data class Timestamps(
-    @SerialName("start") val start: String? = null,
-    @SerialName("end") val end: String? = null
+    @SerialName("start") val startEpochMilli: Long? = null,
+    @SerialName("end") val endEpochMilli: Long? = null
 )
 
 @Serializable
@@ -52,6 +53,6 @@ public enum class ActivityType {
     @SerialName("0") GAME,
     @SerialName("1") STREAMING,
     @SerialName("2") LISTENING,
-    @SerialName("3") UNKNOWN,
-    @SerialName("4") CUSTOM_STATUS
+    @SerialName("4") CUSTOM_STATUS,
+    @SerialName("5") COMPETING
 }
