@@ -55,6 +55,20 @@ public enum class Permission(internal val mask: Int) {
     VIEW_AUDIT_LOG(0x00000080),
 
     /**
+     * Allows for using priority speaker in a voice channel.
+     *
+     * Channel Type(s): Voice
+     */
+    PRIORITY_SPEAKER(0x00000100),
+
+    /**
+     * Allows the user to go live.
+     *
+     * Channel Type(s): Voice
+     */
+    STREAM(0x00000200),
+
+    /**
      * Allows guild members to view a channel, which includes reading messages in text channels.
      *
      * Channel Type(s): Text, Voice
@@ -119,6 +133,11 @@ public enum class Permission(internal val mask: Int) {
     USE_EXTERNAL_EMOJIS(0x00040000),
 
     /**
+     * Allows for viewing guild insights.
+     */
+    VIEW_GUILD_INSIGHTS(0x00040000),
+
+    /**
      * Allows for joining of a voice channel.
      *
      * Channel Type(s): Voice
@@ -159,13 +178,6 @@ public enum class Permission(internal val mask: Int) {
      * Channel Type(s): Voice
      */
     USE_VAD(0x02000000),
-
-    /**
-     * Allows for using priority speaker in a voice channel.
-     *
-     * Channel Type(s): Voice
-     */
-    PRIORITY_SPEAKER(0x00000100),
 
     /**
      * Allows for modification of own nickname.
