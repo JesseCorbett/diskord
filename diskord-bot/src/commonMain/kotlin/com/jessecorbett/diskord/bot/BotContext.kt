@@ -60,7 +60,7 @@ public interface BotContext {
     /**
      * Sends a message in the same channel without using the discord reply feature
      */
-    public suspend fun Message.softReply(message: String): Message {
+    public suspend fun Message.respond(message: String): Message {
         return channel.sendMessage(message)
     }
 }

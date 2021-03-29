@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] - 2020-12-XX
+## [2.0.0] - 2021-03-XX
 
 ### !! This is a major breaking change !!
 It is recommended to read through the documentation as this is essentially
