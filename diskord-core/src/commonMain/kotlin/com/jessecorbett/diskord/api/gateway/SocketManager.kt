@@ -77,7 +77,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                 }
 
                 for (frame in incoming) {
-                    logger.trace { "Incoming Message:\nInfo:\n\tframe = $frame\nData:\n${frame.data.toHexDump()}" }
+                    logger.trace { "Incoming Message:\nInfo:\n\tframe = $frame\nData:\n${frame.data.toHexDump(rowPrefix = "\t")}" }
 
                     when (frame) {
                         is Frame.Text -> emitMessage(defaultJson.decodeFromString(GatewayMessage.serializer(), frame.readText()))

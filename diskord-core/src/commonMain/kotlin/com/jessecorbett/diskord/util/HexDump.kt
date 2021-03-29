@@ -4,6 +4,7 @@ private const val HEX_DUMP_OFFSET = 0L
 private const val HEX_DUMP_INDEX = 0
 private const val HEX_DUMP_ROW_WIDTH = 24
 private const val HEX_DUMP_SEPARATOR = " | "
+private const val HEX_DUMP_ROW_PREFIX = ""
 
 /**
  * Converts a byte array into a formatted hex dump.
@@ -12,11 +13,12 @@ internal fun ByteArray.toHexDump(
     offset: Long = HEX_DUMP_OFFSET,
     index: Int = HEX_DUMP_INDEX,
     rowWidth: Int = HEX_DUMP_ROW_WIDTH,
-    separator: String = HEX_DUMP_SEPARATOR
+    separator: String = HEX_DUMP_SEPARATOR,
+    rowPrefix: String = HEX_DUMP_ROW_PREFIX
 ): String {
     val output = StringBuilder()
 
-    hexDump(output, offset, index, rowWidth, separator)
+    hexDump(output, offset, index, rowWidth, separator, rowPrefix)
 
     return output.toString()
 }
@@ -46,7 +48,8 @@ internal fun ByteArray.hexDump(
     offset: Long = HEX_DUMP_OFFSET,
     index: Int = HEX_DUMP_INDEX,
     rowWidth: Int = HEX_DUMP_ROW_WIDTH,
-    separator: String = HEX_DUMP_SEPARATOR
+    separator: String = HEX_DUMP_SEPARATOR,
+    rowPrefix: String = HEX_DUMP_ROW_PREFIX
 ) {
     require(index in 0 until size) { "illegal index: $index into array of length $size" }
 
@@ -54,7 +57,8 @@ internal fun ByteArray.hexDump(
     for (i in index until size step rowWidth) {
         val rowSize = minOf(size - i, rowWidth)
 
-        output.append(rowOffset.toHexString())
+        output.append(rowPrefix)
+            .append(rowOffset.toHexString())
             .append(separator)
 
         for (j in 0 until rowWidth) {
