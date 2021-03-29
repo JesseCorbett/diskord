@@ -3,8 +3,6 @@ package com.jessecorbett.diskord.api.common
 import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
-import com.jessecorbett.diskord.api.common.Permission
-import com.jessecorbett.diskord.api.common.Permissions
 import kotlin.test.Test
 
 class PermissionsTest {
