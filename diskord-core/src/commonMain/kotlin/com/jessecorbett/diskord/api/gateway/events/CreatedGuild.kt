@@ -49,5 +49,6 @@ public data class CreatedGuild(
     @SerialName("public_updates_channel_id") val publicUpdatesChannelId: String?,
     @SerialName("max_video_channel_users") val maxVideoChannelUsers: Int? = null,
     @SerialName("approximate_member_count") val approximateMemberCount: Int? = null,
-    @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null
+    @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null,
+    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null
 )
