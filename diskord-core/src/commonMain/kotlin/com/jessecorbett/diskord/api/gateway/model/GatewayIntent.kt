@@ -151,7 +151,7 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
 
 /**
  * An immutable collection of [GatewayIntent] values stored as a bitmask integer.  This is intended for use when
- * creating a Diskord [Bot] instance to signal to the Discord API requested intents.
+ * creating a Diskord bot instance to signal to the Discord API requested intents.
  *
  * FIXME: Update this example with updated DSL (or remove it completely)
  *

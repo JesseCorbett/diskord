@@ -7,5 +7,9 @@ import kotlinx.serialization.Serializable
 public data class RequestGuildMembers(
     @SerialName("guild_id") val snowflakeId: String,
     @SerialName("query") val namePrefix: String = "",
-    @SerialName("limit") val maxResults: Int = 0
+    @SerialName("limit") val maxResults: Int = 0,
+    @SerialName("presences") val includePresences: Boolean = false,
+    @SerialName("nonce") val nonce: String? = null
 )
+
+// TODO: Include option for user_ids?

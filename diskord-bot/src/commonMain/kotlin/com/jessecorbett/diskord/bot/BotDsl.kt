@@ -53,6 +53,10 @@ public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
     val base = BotBase(client)
     base.builder()
 
+    val intents = GatewayIntentsComputer().apply {
+        base.handlers.forEach { it() }
+    }.intents.map { GatewayIntents(it.mask) }.reduceOrNull { a, b -> a + b } ?: GatewayIntents.NON_PRIVILEGED
+
     // Take all invocations of BotBase.events and turn them into one function for AutoGateway
     val globalEventHandler: EventHandler = {
         base.handlers.forEach { it() }
@@ -60,7 +64,7 @@ public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
 
     val gateway = AutoGateway(
         token = token,
-        intents = GatewayIntents.NON_PRIVILEGED,
+        intents = intents,
         eventScope = CoroutineScope(Dispatchers.Default),
         restClient = client,
         eventHandler = globalEventHandler
