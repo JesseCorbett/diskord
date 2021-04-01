@@ -109,7 +109,6 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
             }
             session?.cancel()
             session = null
-            this.cancel()
         }
     }
 
