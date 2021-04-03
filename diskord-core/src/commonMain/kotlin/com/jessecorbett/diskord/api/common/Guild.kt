@@ -26,7 +26,7 @@ public data class Guild(
     @SerialName("mfa_level") val mfaLevel: MFALevel,
     @SerialName("application_id") val owningApplicationId: String?,
     @SerialName("system_channel_id") val systemMessageChannelId: String?,
-    @SerialName("system_channel_flags") val systemChannelFlags: Int, // TODO: Make bitwise flags,
+    @SerialName("system_channel_flags") val systemChannelFlags: SystemChannelFlags,
     @SerialName("rules_channel_id") val rulesChannelId: String?,
     @SerialName("max_presences") val maxPresences: Int? = null,
     @SerialName("max_members") val maxMembers: Int? = null,
