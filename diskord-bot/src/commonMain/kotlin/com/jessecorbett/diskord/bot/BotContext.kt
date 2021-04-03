@@ -8,6 +8,7 @@ import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.sendMessage
+import com.jessecorbett.diskord.util.sendReply
 
 /**
  * Collection of utilities for dispatched events, such as access to clients
@@ -67,8 +68,19 @@ public interface BotContext {
 
     /**
      * Sends a message in the same channel without using the discord reply feature
+     *
+     * @see reply
      */
     public suspend fun Message.respond(message: String): Message {
         return channel.sendMessage(message)
+    }
+
+    /**
+     * Sends a message in the same channel using the discord reply feature
+     *
+     * @see respond
+     */
+    public suspend fun Message.reply(message: String): Message {
+        return channel.sendReply(this, message)
     }
 }
