@@ -100,7 +100,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                         }
                         logger.info { message }
                     }
-                    this@coroutineScope.cancel()
+                    this.cancel()
                 }
             }
         } finally {
