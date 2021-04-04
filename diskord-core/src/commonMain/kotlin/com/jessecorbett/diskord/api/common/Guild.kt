@@ -39,7 +39,8 @@ public data class Guild(
     @SerialName("public_updates_channel_id") val publicUpdatesChannelId: String?,
     @SerialName("max_video_channel_users") val maxVideoChannelUsers: Int? = null,
     @SerialName("approximate_member_count") val approximateMemberCount: Int? = null,
-    @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null
+    @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null,
+    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null
 )
 
 @Serializable
@@ -95,3 +96,17 @@ public enum class MFALevel {
     @SerialName("0") NONE,
     @SerialName("1") ELEVATED
 }
+
+@Serializable
+public data class WelcomeScreen(
+    @SerialName("description") val description: String?,
+    @SerialName("welcome_channels") val welcomeChannels: List<WelcomeScreenChannel>
+)
+
+@Serializable
+public data class WelcomeScreenChannel(
+    @SerialName("channel_id") val channelId: String,
+    @SerialName("description") val description: String,
+    @SerialName("emoji_id") val emojiId: String?,
+    @SerialName("emoji_name") val emojiName: String?
+)
