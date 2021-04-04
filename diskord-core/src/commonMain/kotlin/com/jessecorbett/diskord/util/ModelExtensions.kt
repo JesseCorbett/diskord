@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.common.*
-import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.api.channel.CreateMessage
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.channel.FileData
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.guild.PatchGuildMember
 import com.jessecorbett.diskord.api.guild.PatchGuildMemberNickname
@@ -205,6 +205,20 @@ public val Emoji.tag: String
  */
 public suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null): Message {
     return createMessage(CreateMessage(content = message, embed = embed))
+}
+
+/**
+ * Calls [ChannelClient.createMessage] to reply to a specific text message without needing to create a [CreateMessage] object first.
+ *
+ * @param message The message to reply to.
+ * @param reply The text reply message to send.
+ * @param embed The embed to include with the message.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
+public suspend fun ChannelClient.sendReply(message: Message, reply: String = "", embed: Embed? = null): Message {
+    return createMessage(CreateMessage(content = reply, embed = embed, messageReference = MessageReference(messageId = message.id)))
 }
 
 /**

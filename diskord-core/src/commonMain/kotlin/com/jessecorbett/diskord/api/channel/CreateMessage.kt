@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.channel
 
 import com.jessecorbett.diskord.api.common.Color
+import com.jessecorbett.diskord.api.common.MessageReference
 import io.ktor.utils.io.core.ByteReadPacket
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,7 +14,8 @@ public data class CreateMessage(
     @SerialName("file") val fileContent: List<Byte>? = null, // Not currently fully supported https://discordapp.com/developers/docs/resources/channel#create-message
     @SerialName("embed") val embed: Embed? = null,
     @SerialName("payload_json") val fileUploadEmbed: String? = null,
-    @SerialName("allowed_mentions") val allowedMentions: AllowedMentions = AllowedMentions.ALL
+    @SerialName("allowed_mentions") val allowedMentions: AllowedMentions = AllowedMentions.ALL,
+    @SerialName("message_reference") val messageReference: MessageReference? = null,
 )
 
 @Serializable
