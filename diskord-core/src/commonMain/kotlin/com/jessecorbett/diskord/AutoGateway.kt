@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord
 
 import com.jessecorbett.diskord.api.common.UserStatus
-import com.jessecorbett.diskord.api.gateway.EventHandler
+import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.GatewaySession
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
@@ -9,7 +9,6 @@ import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 
@@ -19,9 +18,8 @@ import mu.KotlinLogging
 public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
-    private val eventScope: CoroutineScope,
     restClient: RestClient,
-    private val eventHandler: EventHandler
+    private val eventDispatcher: EventDispatcher<Unit>
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -82,7 +80,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     }
 
     private suspend fun createSession(url: GatewayBotUrl, shards: Int, shard: Int): GatewaySession {
-        return GatewaySession(token, url, intents, eventScope, shards, shard, eventHandler).also {
+        return GatewaySession(token, url, intents, shards, shard, eventDispatcher).also {
             it.startSession()
         }
     }

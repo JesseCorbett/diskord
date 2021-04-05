@@ -6,16 +6,10 @@ import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.JsonElement
 import mu.KotlinLogging
 
-/**
- * Function for setting up event listeners
- */
-public typealias EventHandler = suspend EventDispatcher<Unit>.() -> Unit
 
 /**
  * No-op object to enforce DSL syntax and prevent undesireable nesting of on* calls
@@ -333,255 +327,259 @@ public interface EventDispatcher<T> {
     /**
      * Awaits all spawned jobs and returns any results
      */
-    public suspend fun await(): List<T>
+    public suspend fun handleEvent(event: DiscordEvent, json: JsonElement): List<T>
+
+    public companion object {
+        @OptIn(DiskordInternals::class)
+        public fun build(coroutineScope: CoroutineScope): EventDispatcher<Unit> = EventDispatcherImpl(coroutineScope)
+    }
 }
 
 /**
  * Internal implementation of [EventDispatcher]
  */
 @DiskordInternals
-internal class EventDispatcherImpl<T>(
-    private val dispatcherScope: CoroutineScope,
-    private val event: DiscordEvent,
-    private val data: JsonElement
-) : EventDispatcher<T> {
+internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScope) : EventDispatcher<T> {
     private val logger = KotlinLogging.logger {}
-    private val jobs: MutableList<Job> = mutableListOf()
-    private val results: MutableList<T> = mutableListOf()
+    private val listeners: MutableList<(DiscordEvent, JsonElement) -> Deferred<T>?> = mutableListOf()
 
     override suspend fun onReady(handler: suspend DispatchBase.(Ready) -> T) {
-        forEvent(DiscordEvent.READY) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Ready.serializer(), data)))
+        listeners += forEvent(DiscordEvent.READY) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Ready.serializer(), it))
         }
     }
 
     override suspend fun onResume(handler: suspend DispatchBase.(Resumed) -> T) {
-        forEvent(DiscordEvent.RESUMED) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Resumed.serializer(), data)))
+        listeners += forEvent(DiscordEvent.RESUMED) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Resumed.serializer(), it))
         }
     }
 
     override suspend fun onChannelCreate(handler: suspend DispatchBase.(Channel) -> T) {
-        forEvent(DiscordEvent.CHANNEL_CREATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), data)))
+        listeners += forEvent(DiscordEvent.CHANNEL_CREATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
     override suspend fun onChannelUpdate(handler: suspend DispatchBase.(Channel) -> T) {
-        forEvent(DiscordEvent.CHANNEL_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), data)))
+        listeners += forEvent(DiscordEvent.CHANNEL_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
     override suspend fun onChannelDelete(handler: suspend DispatchBase.(Channel) -> T) {
-        forEvent(DiscordEvent.CHANNEL_DELETE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), data)))
+        listeners += forEvent(DiscordEvent.CHANNEL_DELETE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
     override suspend fun onChannelPinsUpdate(handler: suspend DispatchBase.(ChannelPinUpdate) -> T) {
-        forEvent(DiscordEvent.CHANNEL_PINS_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(ChannelPinUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.CHANNEL_PINS_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(ChannelPinUpdate.serializer(), it))
         }
     }
 
     override suspend fun onGuildCreate(handler: suspend DispatchBase.(Guild) -> T) {
-        forEvent(DiscordEvent.GUILD_CREATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_CREATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
         }
     }
 
     override suspend fun onGuildUpdate(handler: suspend DispatchBase.(Guild) -> T) {
-        forEvent(DiscordEvent.GUILD_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
         }
     }
 
     override suspend fun onGuildDelete(handler: suspend DispatchBase.(UnavailableGuild) -> T) {
-        forEvent(DiscordEvent.GUILD_DELETE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(UnavailableGuild.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_DELETE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(UnavailableGuild.serializer(), it))
         }
     }
 
     override suspend fun onGuildBanAdd(handler: suspend DispatchBase.(GuildBan) -> T) {
-        forEvent(DiscordEvent.GUILD_BAN_ADD) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_BAN_ADD) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
         }
     }
 
     override suspend fun onGuildBanRemove(handler: suspend DispatchBase.(GuildBan) -> T) {
-        forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
         }
     }
 
     override suspend fun onGuildEmojiUpdate(handler: suspend DispatchBase.(GuildEmojiUpdate) -> T) {
-        forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildEmojiUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildEmojiUpdate.serializer(), it))
         }
     }
 
     override suspend fun onGuildIntegrationsUpdate(handler: suspend DispatchBase.(GuildIntegrationUpdate) -> T) {
-        forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildIntegrationUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildIntegrationUpdate.serializer(), it))
         }
     }
 
     override suspend fun onGuildMemberAdd(handler: suspend DispatchBase.(GuildMemberAdd) -> T) {
-        forEvent(DiscordEvent.GUILD_MEMBER_ADD) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberAdd.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_MEMBER_ADD) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberAdd.serializer(), it))
         }
     }
 
     override suspend fun onGuildMemberUpdate(handler: suspend DispatchBase.(GuildMemberUpdate) -> T) {
-        forEvent(DiscordEvent.GUILD_MEMBER_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_MEMBER_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberUpdate.serializer(), it))
         }
     }
 
     override suspend fun onGuildMemberRemove(handler: suspend DispatchBase.(GuildMemberRemove) -> T) {
-        forEvent(DiscordEvent.GUILD_MEMBER_REMOVE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberRemove.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_MEMBER_REMOVE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberRemove.serializer(), it))
         }
     }
 
     override suspend fun onGuildMembersChunk(handler: suspend DispatchBase.(GuildMembersChunk) -> T) {
-        forEvent(DiscordEvent.GUILD_MEMBERS_CHUNK) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMembersChunk.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_MEMBERS_CHUNK) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMembersChunk.serializer(), it))
         }
     }
 
     override suspend fun onGuildRoleCreate(handler: suspend DispatchBase.(GuildRoleCreate) -> T) {
-        forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleCreate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleCreate.serializer(), it))
         }
     }
 
     override suspend fun onGuildRoleUpdate(handler: suspend DispatchBase.(GuildRoleUpdate) -> T) {
-        forEvent(DiscordEvent.GUILD_ROLE_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_ROLE_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleUpdate.serializer(), it))
         }
     }
 
     override suspend fun onGuildRoleDelete(handler: suspend DispatchBase.(GuildRoleDelete) -> T) {
-        forEvent(DiscordEvent.GUILD_ROLE_DELETE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleDelete.serializer(), data)))
+        listeners += forEvent(DiscordEvent.GUILD_ROLE_DELETE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleDelete.serializer(), it))
         }
     }
 
     override suspend fun onGuildInviteCreate(handler: suspend DispatchBase.(GuildInviteCreate) -> T) {
-        forEvent(DiscordEvent.INVITE_CREATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteCreate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.INVITE_CREATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteCreate.serializer(), it))
         }
     }
 
     override suspend fun onGuildInviteDelete(handler: suspend DispatchBase.(GuildInviteDelete) -> T) {
-        forEvent(DiscordEvent.INVITE_DELETE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteDelete.serializer(), data)))
+        listeners += forEvent(DiscordEvent.INVITE_DELETE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteDelete.serializer(), it))
         }
     }
 
     override suspend fun onMessageCreate(handler: suspend DispatchBase.(Message) -> T) {
-        forEvent(DiscordEvent.MESSAGE_CREATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_CREATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
         }
     }
 
     override suspend fun onMessageUpdate(handler: suspend DispatchBase.(Message) -> T) {
-        forEvent(DiscordEvent.MESSAGE_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
         }
     }
 
     override suspend fun onMessageDelete(handler: suspend DispatchBase.(MessageDelete) -> T) {
-        forEvent(DiscordEvent.MESSAGE_DELETE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageDelete.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_DELETE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageDelete.serializer(), it))
         }
     }
 
     override suspend fun onMessageDeleteBulk(handler: suspend DispatchBase.(BulkMessageDelete) -> T) {
-        forEvent(DiscordEvent.MESSAGE_DELETE_BULK) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(BulkMessageDelete.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_DELETE_BULK) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(BulkMessageDelete.serializer(), it))
         }
     }
 
     override suspend fun onMessageReactionAdd(handler: suspend DispatchBase.(MessageReactionAdd) -> T) {
-        forEvent(DiscordEvent.MESSAGE_REACTION_ADD) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionAdd.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_REACTION_ADD) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionAdd.serializer(), it))
         }
     }
 
     override suspend fun onMessageReactionRemove(handler: suspend DispatchBase.(MessageReactionRemove) -> T) {
-        forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemove.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemove.serializer(), it))
         }
     }
 
     override suspend fun onMessageReactionRemoveAll(handler: suspend DispatchBase.(MessageReactionRemoveAll) -> T) {
-        forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_ALL) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveAll.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_ALL) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveAll.serializer(), it))
         }
     }
 
     override suspend fun onMessageReactionRemoveEmoji(handler: suspend DispatchBase.(MessageReactionRemoveEmoji) -> T) {
-        forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_EMOJI) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveEmoji.serializer(), data)))
+        listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_EMOJI) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveEmoji.serializer(), it))
         }
     }
 
     override suspend fun onPresenceUpdate(handler: suspend DispatchBase.(PresenceUpdate) -> T) {
-        forEvent(DiscordEvent.PRESENCE_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(PresenceUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.PRESENCE_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(PresenceUpdate.serializer(), it))
         }
     }
 
     override suspend fun onTypingStart(handler: suspend DispatchBase.(TypingStart) -> T) {
-        forEvent(DiscordEvent.TYPING_START) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(TypingStart.serializer(), data)))
+        listeners += forEvent(DiscordEvent.TYPING_START) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(TypingStart.serializer(), it))
         }
     }
 
     override suspend fun onUserUpdate(handler: suspend DispatchBase.(User) -> T) {
-        forEvent(DiscordEvent.USER_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(User.serializer(), data)))
+        listeners += forEvent(DiscordEvent.USER_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(User.serializer(), it))
         }
     }
 
     override suspend fun onVoiceStateUpdate(handler: suspend DispatchBase.(VoiceState) -> T) {
-        forEvent(DiscordEvent.VOICE_STATE_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceState.serializer(), data)))
+        listeners += forEvent(DiscordEvent.VOICE_STATE_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceState.serializer(), it))
         }
     }
 
     override suspend fun onVoiceServerUpdate(handler: suspend DispatchBase.(VoiceServerUpdate) -> T) {
-        forEvent(DiscordEvent.VOICE_SERVER_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceServerUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.VOICE_SERVER_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceServerUpdate.serializer(), it))
         }
     }
 
     override suspend fun onWebhookUpdate(handler: suspend DispatchBase.(WebhookUpdate) -> T) {
-        forEvent(DiscordEvent.WEBHOOKS_UPDATE) {
-            results.add(DispatchBase.handler(defaultJson.decodeFromJsonElement(WebhookUpdate.serializer(), data)))
+        listeners += forEvent(DiscordEvent.WEBHOOKS_UPDATE) {
+            DispatchBase.handler(defaultJson.decodeFromJsonElement(WebhookUpdate.serializer(), it))
         }
     }
 
     override fun <C> forType(): EventDispatcher<C> {
-        return EventDispatcherImpl(dispatcherScope, event, data)
+        return EventDispatcherImpl(dispatcherScope)
     }
 
-    override suspend fun await(): List<T> {
-        jobs.forEach { it.join() }
-        return results
+    override suspend fun handleEvent(event: DiscordEvent, json: JsonElement): List<T> {
+        return listeners.mapNotNull { it(event, json) }.map { it.await() }
     }
 
-    private suspend fun forEvent(discordEvent: DiscordEvent, block: suspend () -> Unit) {
-        if (event == discordEvent) {
-            jobs += dispatcherScope.launch {
-                try {
-                    block()
-                } catch (e: Throwable) {
-                    logger.warn(e) { "Dispatched event $event caused exception $e" }
+    private suspend fun forEvent(discordEvent: DiscordEvent, block: suspend (JsonElement) -> T): (DiscordEvent, JsonElement) -> Deferred<T>? {
+        return { event, json->
+            if (event == discordEvent) {
+                dispatcherScope.async {
+                    try {
+                        block(json)
+                    } catch (e: Throwable) {
+                        logger.warn(e) { "Dispatched event $event caused exception $e" }
+                        throw e
+                    }
                 }
+            } else {
+                null
             }
         }
     }

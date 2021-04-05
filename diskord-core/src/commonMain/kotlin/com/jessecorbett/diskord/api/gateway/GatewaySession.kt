@@ -24,13 +24,13 @@ public class GatewaySession(
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,
     private val intents: GatewayIntents,
-    private val eventListenerScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val shardCount: Int = 0,
     private val shardNumber: Int = 0,
-    private val eventHandler: EventHandler
+    private val eventDispatcher: EventDispatcher<Unit>
 ) {
     private val logger = KotlinLogging.logger {}
 
+    private val heartbeatScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
     private val socketManager = SocketManager(gatewayBotUrl.url, ::receiveGatewayMessage)
     private var sessionId: String? = null
     private var sequenceNumber: Int? = null
@@ -142,7 +142,7 @@ public class GatewaySession(
         }
 
         heartbeatJob?.cancel()
-        heartbeatJob = eventListenerScope.launch {
+        heartbeatJob = heartbeatScope.launch {
             while (this.isActive) {
                 delay(hello.heartbeatInterval)
                 if (sequenceNumber != null) {
@@ -170,13 +170,6 @@ public class GatewaySession(
         }
 
         // Begin userspace event dispatching
-
-        EventDispatcherImpl<Unit>(eventListenerScope, discordEvent, gatewayMessage.dataPayload).apply {
-            eventHandler()
-            await() /*
-                This may not be necessary, inflicts blocking on the event scope, but ensures all events
-                are processed in order of arrival. Perhaps turn it into a High Perf vs Strong Order flag
-            */
-        }
+        eventDispatcher.handleEvent(discordEvent, gatewayMessage.dataPayload)
     }
 }

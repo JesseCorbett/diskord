@@ -5,6 +5,7 @@ import com.jessecorbett.diskord.api.gateway.DispatchBase
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
+import kotlinx.serialization.json.JsonElement
 
 internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     val intents: MutableList<GatewayIntent> = mutableListOf()
@@ -158,5 +159,5 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
         throw NotImplementedError("forType intentionally not implemented for this class")
     }
 
-    override suspend fun await(): List<Unit> = emptyList()
+    override suspend fun handleEvent(event: DiscordEvent, json: JsonElement): List<Unit> = emptyList()
 }

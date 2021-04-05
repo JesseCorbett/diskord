@@ -3,7 +3,6 @@ package com.jessecorbett.diskord.bot
 import com.jessecorbett.diskord.AutoGateway
 import com.jessecorbett.diskord.DiskordDsl
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
-import com.jessecorbett.diskord.api.gateway.EventHandler
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
@@ -11,26 +10,21 @@ import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
 
-public typealias EventFilter = suspend EventDispatcher<Boolean>.() -> Unit
 
-@DiskordDsl
-public fun buildFilter(builder: EventFilter): EventFilter {
-    return builder
-}
-
-@DiskordDsl
-public suspend fun EventDispatcher<Unit>.filter(filter: EventFilter, handler: EventHandler) {
-    val filterDispatcher = this.forType<Boolean>()
-    filterDispatcher.filter()
-    val results = filterDispatcher.await()
-    if (results.all { it }) {
-        this.handler()
-    }
-}
+/**
+ * Function for setting up event listeners
+ */
+public typealias EventHandler = suspend EventDispatcher<Unit>.() -> Unit
 
 public class BotBase(override val client: RestClient) : BotContext {
     public val logger: KLogger = KotlinLogging.logger {}
 
+    /**
+     * Handlers are functions called on top of an event dispatcher
+     *
+     * We use this intermediary step so that we can invoke the handlers once to compute which event
+     * hooks are called to determine the appropriate intents and then we invoke them again on the Real dispatcher
+     */
     internal val handlers: MutableList<EventHandler> = mutableListOf({
         onReady { logger.info { "Bot has started and is ready for events" } }
         onResume { logger.info { "Bot has resumed a previous websocket session" } }
@@ -57,17 +51,15 @@ public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
         base.handlers.forEach { it() }
     }.intents.map { GatewayIntents(it.mask) }.reduceOrNull { a, b -> a + b } ?: GatewayIntents.NON_PRIVILEGED
 
-    // Take all invocations of BotBase.events and turn them into one function for AutoGateway
-    val globalEventHandler: EventHandler = {
+    val eventHandler = EventDispatcher.build(CoroutineScope(Dispatchers.Default)).apply {
         base.handlers.forEach { it() }
     }
 
     val gateway = AutoGateway(
         token = token,
         intents = intents,
-        eventScope = CoroutineScope(Dispatchers.Default),
         restClient = client,
-        eventHandler = globalEventHandler
+        eventDispatcher = eventHandler
     )
 
     gateway.start()
