@@ -1,8 +1,10 @@
 package com.jessecorbett.diskord
 
+import com.jessecorbett.diskord.api.common.UserStatus
 import com.jessecorbett.diskord.api.gateway.EventHandler
 import com.jessecorbett.diskord.api.gateway.GatewaySession
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
+import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
@@ -65,6 +67,18 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
         }
         sessions.forEach { it.closeSession() }
         sessions = emptyList()
+    }
+
+    /**
+     * Sets a status message on all gateway sessions
+     */
+    public suspend fun setStatus(
+        status: UserStatus,
+        isAfk: Boolean = false,
+        idleTime: Int? = null,
+        activity: UserStatusActivity? = null
+    ) {
+        sessions.forEach { it.setStatus(status, isAfk, idleTime, activity) }
     }
 
     private suspend fun createSession(url: GatewayBotUrl, shards: Int, shard: Int): GatewaySession {
