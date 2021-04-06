@@ -12,6 +12,12 @@ import mu.KotlinLogging
 public class BotBase {
     public val logger: KLogger = KotlinLogging.logger {}
 
+    /**
+     * Modules are plugins which implement bot functionality
+     */
+    public var modules: List<BotModule> = emptyList()
+        private set
+
     init {
         // Simple module for logging bot state
         registerModule { dispatcher, _ ->
@@ -19,12 +25,6 @@ public class BotBase {
             dispatcher.onResume { logger.info { "Bot has resumed a previous websocket session" } }
         }
     }
-
-    /**
-     * Modules are plugins which implement bot functionality
-     */
-    public var modules: List<BotModule> = emptyList()
-        private set
 
     public fun registerModule(botModule: BotModule) {
         modules = modules + botModule
