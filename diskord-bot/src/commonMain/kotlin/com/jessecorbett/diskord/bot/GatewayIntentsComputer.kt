@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.api.common.*
-import com.jessecorbett.diskord.api.gateway.DispatchBase
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
@@ -10,148 +9,148 @@ import kotlinx.serialization.json.JsonElement
 internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     val intents: MutableList<GatewayIntent> = mutableListOf()
 
-    override fun onReady(handler: suspend DispatchBase.(Ready) -> Unit) {}
+    override fun onReady(handler: suspend (Ready) -> Unit) {}
 
-    override fun onResume(handler: suspend DispatchBase.(Resumed) -> Unit) {}
+    override fun onResume(handler: suspend (Resumed) -> Unit) {}
 
-    override fun onChannelCreate(handler: suspend DispatchBase.(Channel) -> Unit) {
+    override fun onChannelCreate(handler: suspend (Channel) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onChannelUpdate(handler: suspend DispatchBase.(Channel) -> Unit) {
+    override fun onChannelUpdate(handler: suspend (Channel) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onChannelDelete(handler: suspend DispatchBase.(Channel) -> Unit) {
+    override fun onChannelDelete(handler: suspend (Channel) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onChannelPinsUpdate(handler: suspend DispatchBase.(ChannelPinUpdate) -> Unit) {
+    override fun onChannelPinsUpdate(handler: suspend (ChannelPinUpdate) -> Unit) {
         intents += GatewayIntent.GUILDS
         intents += GatewayIntent.DIRECT_MESSAGES
     }
 
-    override fun onGuildCreate(handler: suspend DispatchBase.(Guild) -> Unit) {
+    override fun onGuildCreate(handler: suspend (Guild) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildUpdate(handler: suspend DispatchBase.(Guild) -> Unit) {
+    override fun onGuildUpdate(handler: suspend (Guild) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildDelete(handler: suspend DispatchBase.(UnavailableGuild) -> Unit) {
+    override fun onGuildDelete(handler: suspend (UnavailableGuild) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildBanAdd(handler: suspend DispatchBase.(GuildBan) -> Unit) {
+    override fun onGuildBanAdd(handler: suspend (GuildBan) -> Unit) {
         intents += GatewayIntent.GUILD_BANS
     }
 
-    override fun onGuildBanRemove(handler: suspend DispatchBase.(GuildBan) -> Unit) {
+    override fun onGuildBanRemove(handler: suspend (GuildBan) -> Unit) {
         intents += GatewayIntent.GUILD_BANS
     }
 
-    override fun onGuildEmojiUpdate(handler: suspend DispatchBase.(GuildEmojiUpdate) -> Unit) {
+    override fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_EMOJIS
     }
 
-    override fun onGuildIntegrationsUpdate(handler: suspend DispatchBase.(GuildIntegrationUpdate) -> Unit) {
+    override fun onGuildIntegrationsUpdate(handler: suspend (GuildIntegrationUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_INTEGRATIONS
     }
 
-    override fun onGuildMemberAdd(handler: suspend DispatchBase.(GuildMemberAdd) -> Unit) {
+    override fun onGuildMemberAdd(handler: suspend (GuildMemberAdd) -> Unit) {
         intents += GatewayIntent.GUILD_MEMBERS
     }
 
-    override fun onGuildMemberUpdate(handler: suspend DispatchBase.(GuildMemberUpdate) -> Unit) {
+    override fun onGuildMemberUpdate(handler: suspend (GuildMemberUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_MEMBERS
     }
 
-    override fun onGuildMemberRemove(handler: suspend DispatchBase.(GuildMemberRemove) -> Unit) {
+    override fun onGuildMemberRemove(handler: suspend (GuildMemberRemove) -> Unit) {
         intents += GatewayIntent.GUILD_MEMBERS
     }
 
-    override fun onGuildMembersChunk(handler: suspend DispatchBase.(GuildMembersChunk) -> Unit) {
+    override fun onGuildMembersChunk(handler: suspend (GuildMembersChunk) -> Unit) {
         intents += GatewayIntent.GUILD_MEMBERS // Not technically necessary, but safe to assume by default
     }
 
-    override fun onGuildRoleCreate(handler: suspend DispatchBase.(GuildRoleCreate) -> Unit) {
+    override fun onGuildRoleCreate(handler: suspend (GuildRoleCreate) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildRoleUpdate(handler: suspend DispatchBase.(GuildRoleUpdate) -> Unit) {
+    override fun onGuildRoleUpdate(handler: suspend (GuildRoleUpdate) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildRoleDelete(handler: suspend DispatchBase.(GuildRoleDelete) -> Unit) {
+    override fun onGuildRoleDelete(handler: suspend (GuildRoleDelete) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 
-    override fun onGuildInviteCreate(handler: suspend DispatchBase.(GuildInviteCreate) -> Unit) {
+    override fun onGuildInviteCreate(handler: suspend (GuildInviteCreate) -> Unit) {
         intents += GatewayIntent.GUILD_INVITES
     }
 
-    override fun onGuildInviteDelete(handler: suspend DispatchBase.(GuildInviteDelete) -> Unit) {
+    override fun onGuildInviteDelete(handler: suspend (GuildInviteDelete) -> Unit) {
         intents += GatewayIntent.GUILD_INVITES
     }
 
-    override fun onMessageCreate(handler: suspend DispatchBase.(Message) -> Unit) {
+    override fun onMessageCreate(handler: suspend (Message) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGES
         intents += GatewayIntent.DIRECT_MESSAGES
     }
 
-    override fun onMessageUpdate(handler: suspend DispatchBase.(Message) -> Unit) {
+    override fun onMessageUpdate(handler: suspend (Message) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGES
         intents += GatewayIntent.DIRECT_MESSAGES
     }
 
-    override fun onMessageDelete(handler: suspend DispatchBase.(MessageDelete) -> Unit) {
+    override fun onMessageDelete(handler: suspend (MessageDelete) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGES
         intents += GatewayIntent.DIRECT_MESSAGES
     }
 
-    override fun onMessageDeleteBulk(handler: suspend DispatchBase.(BulkMessageDelete) -> Unit) {
+    override fun onMessageDeleteBulk(handler: suspend (BulkMessageDelete) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGES
     }
 
-    override fun onMessageReactionAdd(handler: suspend DispatchBase.(MessageReactionAdd) -> Unit) {
+    override fun onMessageReactionAdd(handler: suspend (MessageReactionAdd) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_REACTIONS
         intents += GatewayIntent.DIRECT_MESSAGE_REACTIONS
     }
 
-    override fun onMessageReactionRemove(handler: suspend DispatchBase.(MessageReactionRemove) -> Unit) {
+    override fun onMessageReactionRemove(handler: suspend (MessageReactionRemove) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_REACTIONS
         intents += GatewayIntent.DIRECT_MESSAGE_REACTIONS
     }
 
-    override fun onMessageReactionRemoveAll(handler: suspend DispatchBase.(MessageReactionRemoveAll) -> Unit) {
+    override fun onMessageReactionRemoveAll(handler: suspend (MessageReactionRemoveAll) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_REACTIONS
         intents += GatewayIntent.DIRECT_MESSAGE_REACTIONS
     }
 
-    override fun onMessageReactionRemoveEmoji(handler: suspend DispatchBase.(MessageReactionRemoveEmoji) -> Unit) {
+    override fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_REACTIONS
         intents += GatewayIntent.DIRECT_MESSAGE_REACTIONS
     }
 
-    override fun onPresenceUpdate(handler: suspend DispatchBase.(PresenceUpdate) -> Unit) {
+    override fun onPresenceUpdate(handler: suspend (PresenceUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_PRESENCES
     }
 
-    override fun onTypingStart(handler: suspend DispatchBase.(TypingStart) -> Unit) {
+    override fun onTypingStart(handler: suspend (TypingStart) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_TYPING
         intents += GatewayIntent.DIRECT_MESSAGE_TYPING
     }
 
-    override fun onUserUpdate(handler: suspend DispatchBase.(User) -> Unit) {}
+    override fun onUserUpdate(handler: suspend (User) -> Unit) {}
 
-    override fun onVoiceStateUpdate(handler: suspend DispatchBase.(VoiceState) -> Unit) {
+    override fun onVoiceStateUpdate(handler: suspend (VoiceState) -> Unit) {
         intents += GatewayIntent.GUILD_VOICE_STATES
     }
 
-    override fun onVoiceServerUpdate(handler: suspend DispatchBase.(VoiceServerUpdate) -> Unit) {}
+    override fun onVoiceServerUpdate(handler: suspend (VoiceServerUpdate) -> Unit) {}
 
-    override fun onWebhookUpdate(handler: suspend DispatchBase.(WebhookUpdate) -> Unit) {
+    override fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_WEBHOOKS
     }
 

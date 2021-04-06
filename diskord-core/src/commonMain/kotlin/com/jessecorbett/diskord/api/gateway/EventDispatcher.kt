@@ -10,13 +10,6 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.json.JsonElement
 import mu.KotlinLogging
 
-
-/**
- * No-op object to enforce DSL syntax and prevent undesireable nesting of on* calls
- */
-@DiskordDsl
-public object DispatchBase
-
 /**
  * Dispatcher which distributes events to function hooks
  */
@@ -28,7 +21,7 @@ public interface EventDispatcher<T> {
      * @param handler Bootstrapping information about the current user.
      */
     @DiskordDsl
-    public fun onReady(handler: suspend DispatchBase.(Ready) -> T)
+    public fun onReady(handler: suspend (Ready) -> T)
 
     /**
      * Called when a gateway acknowledges the connection has resumed.
@@ -36,7 +29,7 @@ public interface EventDispatcher<T> {
      * @param handler Resume trace info (not generally useful).
      */
     @DiskordDsl
-    public fun onResume(handler: suspend DispatchBase.(Resumed) -> T)
+    public fun onResume(handler: suspend (Resumed) -> T)
 
     /**
      * Called when a channel is created, the current user gets access to a channel, or the current user receives a DM.
@@ -44,7 +37,7 @@ public interface EventDispatcher<T> {
      * @param handler The created/received channel.
      */
     @DiskordDsl
-    public fun onChannelCreate(handler: suspend DispatchBase.(Channel) -> T)
+    public fun onChannelCreate(handler: suspend (Channel) -> T)
 
     /**
      * Called when a channel is updated. Does not include [TextChannel.lastMessageId] updates.
@@ -52,7 +45,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated channel.
      */
     @DiskordDsl
-    public fun onChannelUpdate(handler: suspend DispatchBase.(Channel) -> T)
+    public fun onChannelUpdate(handler: suspend (Channel) -> T)
 
     /**
      * Called when a channel is deleted.
@@ -60,7 +53,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted channel.
      */
     @DiskordDsl
-    public fun onChannelDelete(handler: suspend DispatchBase.(Channel) -> T)
+    public fun onChannelDelete(handler: suspend (Channel) -> T)
 
     /**
      * Called when a message is pinned or unpinned in a channel.
@@ -68,7 +61,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted channel.
      */
     @DiskordDsl
-    public fun onChannelPinsUpdate(handler: suspend DispatchBase.(ChannelPinUpdate) -> T)
+    public fun onChannelPinsUpdate(handler: suspend (ChannelPinUpdate) -> T)
 
     /**
      * Called when the user first connects to lazy-fill unavailable guilds from the [Ready] event,
@@ -81,7 +74,7 @@ public interface EventDispatcher<T> {
      * @param handler The loaded/available/joined guild.
      */
     @DiskordDsl
-    public fun onGuildCreate(handler: suspend DispatchBase.(Guild) -> T)
+    public fun onGuildCreate(handler: suspend (Guild) -> T)
 
     /**
      * Called when a guild is updated.
@@ -89,7 +82,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated guild.
      */
     @DiskordDsl
-    public fun onGuildUpdate(handler: suspend DispatchBase.(Guild) -> T)
+    public fun onGuildUpdate(handler: suspend (Guild) -> T)
 
     /**
      * Called when a guild is unavailable or the user is removed.
@@ -99,7 +92,7 @@ public interface EventDispatcher<T> {
      * @param handler The unavailable guild.
      */
     @DiskordDsl
-    public fun onGuildDelete(handler: suspend DispatchBase.(UnavailableGuild) -> T)
+    public fun onGuildDelete(handler: suspend (UnavailableGuild) -> T)
 
     /**
      * Called when a user is banned from a guild.
@@ -107,7 +100,7 @@ public interface EventDispatcher<T> {
      * @param handler The ban.
      */
     @DiskordDsl
-    public fun onGuildBanAdd(handler: suspend DispatchBase.(GuildBan) -> T)
+    public fun onGuildBanAdd(handler: suspend (GuildBan) -> T)
 
     /**
      * Called when a user is unbanned from a guild.
@@ -115,7 +108,7 @@ public interface EventDispatcher<T> {
      * @param handler The ban.
      */
     @DiskordDsl
-    public fun onGuildBanRemove(handler: suspend DispatchBase.(GuildBan) -> T)
+    public fun onGuildBanRemove(handler: suspend (GuildBan) -> T)
 
     /**
      * Called when a guild's custom emoji have been updated.
@@ -123,7 +116,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated emoji.
      */
     @DiskordDsl
-    public fun onGuildEmojiUpdate(handler: suspend DispatchBase.(GuildEmojiUpdate) -> T)
+    public fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> T)
 
     /**
      * Called when a guild's integrations have been updated.
@@ -131,7 +124,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated guild.
      */
     @DiskordDsl
-    public fun onGuildIntegrationsUpdate(handler: suspend DispatchBase.(GuildIntegrationUpdate) -> T)
+    public fun onGuildIntegrationsUpdate(handler: suspend (GuildIntegrationUpdate) -> T)
 
     /**
      * Called when someone joins a guild
@@ -139,7 +132,7 @@ public interface EventDispatcher<T> {
      * @param handler The new guild member.
      */
     @DiskordDsl
-    public fun onGuildMemberAdd(handler: suspend DispatchBase.(GuildMemberAdd) -> T)
+    public fun onGuildMemberAdd(handler: suspend (GuildMemberAdd) -> T)
 
     /**
      * Called when a guild membership is updated
@@ -147,7 +140,7 @@ public interface EventDispatcher<T> {
      * @param handler The guild member update.
      */
     @DiskordDsl
-    public fun onGuildMemberUpdate(handler: suspend DispatchBase.(GuildMemberUpdate) -> T)
+    public fun onGuildMemberUpdate(handler: suspend (GuildMemberUpdate) -> T)
 
     /**
      * Called when someone is removed from a guild, either from leaving, being kicked, or being banned
@@ -155,7 +148,7 @@ public interface EventDispatcher<T> {
      * @param handler The removed guild member.
      */
     @DiskordDsl
-    public fun onGuildMemberRemove(handler: suspend DispatchBase.(GuildMemberRemove) -> T)
+    public fun onGuildMemberRemove(handler: suspend (GuildMemberRemove) -> T)
 
     /**
      * Sent in response to Guild Request Members
@@ -165,7 +158,7 @@ public interface EventDispatcher<T> {
      * @param handler A requested chunk of guild members.
      */
     @DiskordDsl
-    public fun onGuildMembersChunk(handler: suspend DispatchBase.(GuildMembersChunk) -> T)
+    public fun onGuildMembersChunk(handler: suspend (GuildMembersChunk) -> T)
 
     /**
      * Called when a role is created
@@ -173,7 +166,7 @@ public interface EventDispatcher<T> {
      * @param handler The created role.
      */
     @DiskordDsl
-    public fun onGuildRoleCreate(handler: suspend DispatchBase.(GuildRoleCreate) -> T)
+    public fun onGuildRoleCreate(handler: suspend (GuildRoleCreate) -> T)
 
     /**
      * Called when a role is updated
@@ -181,7 +174,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated role.
      */
     @DiskordDsl
-    public fun onGuildRoleUpdate(handler: suspend DispatchBase.(GuildRoleUpdate) -> T)
+    public fun onGuildRoleUpdate(handler: suspend (GuildRoleUpdate) -> T)
 
     /**
      * Called when a role is deleted
@@ -189,7 +182,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted role.
      */
     @DiskordDsl
-    public fun onGuildRoleDelete(handler: suspend DispatchBase.(GuildRoleDelete) -> T)
+    public fun onGuildRoleDelete(handler: suspend (GuildRoleDelete) -> T)
 
     /**
      * Called when an invite is created
@@ -197,7 +190,7 @@ public interface EventDispatcher<T> {
      * @param handler The created invite.
      */
     @DiskordDsl
-    public fun onGuildInviteCreate(handler: suspend DispatchBase.(GuildInviteCreate) -> T)
+    public fun onGuildInviteCreate(handler: suspend (GuildInviteCreate) -> T)
 
     /**
      * Called when an invite is deleted
@@ -205,7 +198,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted invite.
      */
     @DiskordDsl
-    public fun onGuildInviteDelete(handler: suspend DispatchBase.(GuildInviteDelete) -> T)
+    public fun onGuildInviteDelete(handler: suspend (GuildInviteDelete) -> T)
 
     /**
      * Called when a message has been created.
@@ -213,7 +206,7 @@ public interface EventDispatcher<T> {
      * @param handler The created message.
      */
     @DiskordDsl
-    public fun onMessageCreate(handler: suspend DispatchBase.(Message) -> T)
+    public fun onMessageCreate(handler: suspend (Message) -> T)
 
     /**
      * Called when a message has been updated.
@@ -221,7 +214,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated message.
      */
     @DiskordDsl
-    public fun onMessageUpdate(handler: suspend DispatchBase.(Message) -> T)
+    public fun onMessageUpdate(handler: suspend (Message) -> T)
 
     /**
      * Called when a message has been deleted.
@@ -229,7 +222,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted message.
      */
     @DiskordDsl
-    public fun onMessageDelete(handler: suspend DispatchBase.(MessageDelete) -> T)
+    public fun onMessageDelete(handler: suspend (MessageDelete) -> T)
 
     /**
      * Called when messages have been bulk deleted.
@@ -237,7 +230,7 @@ public interface EventDispatcher<T> {
      * @param handler The deleted messages.
      */
     @DiskordDsl
-    public fun onMessageDeleteBulk(handler: suspend DispatchBase.(BulkMessageDelete) -> T)
+    public fun onMessageDeleteBulk(handler: suspend (BulkMessageDelete) -> T)
 
     /**
      * Called when a message is reacted to.
@@ -245,7 +238,7 @@ public interface EventDispatcher<T> {
      * @param handler The added reaction.
      */
     @DiskordDsl
-    public fun onMessageReactionAdd(handler: suspend DispatchBase.(MessageReactionAdd) -> T)
+    public fun onMessageReactionAdd(handler: suspend (MessageReactionAdd) -> T)
 
     /**
      * Called when a message reaction is removed.
@@ -253,7 +246,7 @@ public interface EventDispatcher<T> {
      * @param handler The removed reaction.
      */
     @DiskordDsl
-    public fun onMessageReactionRemove(handler: suspend DispatchBase.(MessageReactionRemove) -> T)
+    public fun onMessageReactionRemove(handler: suspend (MessageReactionRemove) -> T)
 
     /**
      * Called when a message has all reactions removed.
@@ -261,7 +254,7 @@ public interface EventDispatcher<T> {
      * @param handler The removed reactions.
      */
     @DiskordDsl
-    public fun onMessageReactionRemoveAll(handler: suspend DispatchBase.(MessageReactionRemoveAll) -> T)
+    public fun onMessageReactionRemoveAll(handler: suspend (MessageReactionRemoveAll) -> T)
 
     /**
      * Called when a message has all reactions for a single emoji removed.
@@ -269,7 +262,7 @@ public interface EventDispatcher<T> {
      * @param handler The removed reactions.
      */
     @DiskordDsl
-    public fun onMessageReactionRemoveEmoji(handler: suspend DispatchBase.(MessageReactionRemoveEmoji) -> T)
+    public fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> T)
 
     /**
      * Called when a guild member's presence is updated.
@@ -277,7 +270,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated presence.
      */
     @DiskordDsl
-    public fun onPresenceUpdate(handler: suspend DispatchBase.(PresenceUpdate) -> T)
+    public fun onPresenceUpdate(handler: suspend (PresenceUpdate) -> T)
 
     /**
      * Called when a user starts typing.
@@ -285,7 +278,7 @@ public interface EventDispatcher<T> {
      * @param handler The typing event.
      */
     @DiskordDsl
-    public fun onTypingStart(handler: suspend DispatchBase.(TypingStart) -> T)
+    public fun onTypingStart(handler: suspend (TypingStart) -> T)
 
     /**
      * Called when a user is updated.
@@ -293,7 +286,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated user.
      */
     @DiskordDsl
-    public fun onUserUpdate(handler: suspend DispatchBase.(User) -> T)
+    public fun onUserUpdate(handler: suspend (User) -> T)
 
     /**
      * Called when a joins, leaves, or moves voice channels.
@@ -301,7 +294,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated voice state.
      */
     @DiskordDsl
-    public fun onVoiceStateUpdate(handler: suspend DispatchBase.(VoiceState) -> T)
+    public fun onVoiceStateUpdate(handler: suspend (VoiceState) -> T)
 
     /**
      * Called when a voice server is updated.
@@ -309,7 +302,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated voice server.
      */
     @DiskordDsl
-    public fun onVoiceServerUpdate(handler: suspend DispatchBase.(VoiceServerUpdate) -> T)
+    public fun onVoiceServerUpdate(handler: suspend (VoiceServerUpdate) -> T)
 
     /**
      * Called when a guild webhook is updated.
@@ -317,7 +310,7 @@ public interface EventDispatcher<T> {
      * @param handler The updated webhook.
      */
     @DiskordDsl
-    public fun onWebhookUpdate(handler: suspend DispatchBase.(WebhookUpdate) -> T)
+    public fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> T)
 
     /**
      * Copies this [EventDispatcher] with a new return type [C]
@@ -343,219 +336,219 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
     private val logger = KotlinLogging.logger {}
     private val listeners: MutableList<(DiscordEvent, JsonElement) -> Deferred<T>?> = mutableListOf()
 
-    override fun onReady(handler: suspend DispatchBase.(Ready) -> T) {
+    override fun onReady(handler: suspend (Ready) -> T) {
         listeners += forEvent(DiscordEvent.READY) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Ready.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Ready.serializer(), it))
         }
     }
 
-    override fun onResume(handler: suspend DispatchBase.(Resumed) -> T) {
+    override fun onResume(handler: suspend (Resumed) -> T) {
         listeners += forEvent(DiscordEvent.RESUMED) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Resumed.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Resumed.serializer(), it))
         }
     }
 
-    override fun onChannelCreate(handler: suspend DispatchBase.(Channel) -> T) {
+    override fun onChannelCreate(handler: suspend (Channel) -> T) {
         listeners += forEvent(DiscordEvent.CHANNEL_CREATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
-    override fun onChannelUpdate(handler: suspend DispatchBase.(Channel) -> T) {
+    override fun onChannelUpdate(handler: suspend (Channel) -> T) {
         listeners += forEvent(DiscordEvent.CHANNEL_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
-    override fun onChannelDelete(handler: suspend DispatchBase.(Channel) -> T) {
+    override fun onChannelDelete(handler: suspend (Channel) -> T) {
         listeners += forEvent(DiscordEvent.CHANNEL_DELETE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Channel.serializer(), it))
         }
     }
 
-    override fun onChannelPinsUpdate(handler: suspend DispatchBase.(ChannelPinUpdate) -> T) {
+    override fun onChannelPinsUpdate(handler: suspend (ChannelPinUpdate) -> T) {
         listeners += forEvent(DiscordEvent.CHANNEL_PINS_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(ChannelPinUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(ChannelPinUpdate.serializer(), it))
         }
     }
 
-    override fun onGuildCreate(handler: suspend DispatchBase.(Guild) -> T) {
+    override fun onGuildCreate(handler: suspend (Guild) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_CREATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
         }
     }
 
-    override fun onGuildUpdate(handler: suspend DispatchBase.(Guild) -> T) {
+    override fun onGuildUpdate(handler: suspend (Guild) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
         }
     }
 
-    override fun onGuildDelete(handler: suspend DispatchBase.(UnavailableGuild) -> T) {
+    override fun onGuildDelete(handler: suspend (UnavailableGuild) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_DELETE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(UnavailableGuild.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(UnavailableGuild.serializer(), it))
         }
     }
 
-    override fun onGuildBanAdd(handler: suspend DispatchBase.(GuildBan) -> T) {
+    override fun onGuildBanAdd(handler: suspend (GuildBan) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_BAN_ADD) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
         }
     }
 
-    override fun onGuildBanRemove(handler: suspend DispatchBase.(GuildBan) -> T) {
+    override fun onGuildBanRemove(handler: suspend (GuildBan) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildBan.serializer(), it))
         }
     }
 
-    override fun onGuildEmojiUpdate(handler: suspend DispatchBase.(GuildEmojiUpdate) -> T) {
+    override fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildEmojiUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildEmojiUpdate.serializer(), it))
         }
     }
 
-    override fun onGuildIntegrationsUpdate(handler: suspend DispatchBase.(GuildIntegrationUpdate) -> T) {
+    override fun onGuildIntegrationsUpdate(handler: suspend (GuildIntegrationUpdate) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildIntegrationUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildIntegrationUpdate.serializer(), it))
         }
     }
 
-    override fun onGuildMemberAdd(handler: suspend DispatchBase.(GuildMemberAdd) -> T) {
+    override fun onGuildMemberAdd(handler: suspend (GuildMemberAdd) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_MEMBER_ADD) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberAdd.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildMemberAdd.serializer(), it))
         }
     }
 
-    override fun onGuildMemberUpdate(handler: suspend DispatchBase.(GuildMemberUpdate) -> T) {
+    override fun onGuildMemberUpdate(handler: suspend (GuildMemberUpdate) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_MEMBER_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildMemberUpdate.serializer(), it))
         }
     }
 
-    override fun onGuildMemberRemove(handler: suspend DispatchBase.(GuildMemberRemove) -> T) {
+    override fun onGuildMemberRemove(handler: suspend (GuildMemberRemove) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_MEMBER_REMOVE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMemberRemove.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildMemberRemove.serializer(), it))
         }
     }
 
-    override fun onGuildMembersChunk(handler: suspend DispatchBase.(GuildMembersChunk) -> T) {
+    override fun onGuildMembersChunk(handler: suspend (GuildMembersChunk) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_MEMBERS_CHUNK) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildMembersChunk.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildMembersChunk.serializer(), it))
         }
     }
 
-    override fun onGuildRoleCreate(handler: suspend DispatchBase.(GuildRoleCreate) -> T) {
+    override fun onGuildRoleCreate(handler: suspend (GuildRoleCreate) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_BAN_REMOVE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleCreate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildRoleCreate.serializer(), it))
         }
     }
 
-    override fun onGuildRoleUpdate(handler: suspend DispatchBase.(GuildRoleUpdate) -> T) {
+    override fun onGuildRoleUpdate(handler: suspend (GuildRoleUpdate) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_ROLE_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildRoleUpdate.serializer(), it))
         }
     }
 
-    override fun onGuildRoleDelete(handler: suspend DispatchBase.(GuildRoleDelete) -> T) {
+    override fun onGuildRoleDelete(handler: suspend (GuildRoleDelete) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_ROLE_DELETE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildRoleDelete.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildRoleDelete.serializer(), it))
         }
     }
 
-    override fun onGuildInviteCreate(handler: suspend DispatchBase.(GuildInviteCreate) -> T) {
+    override fun onGuildInviteCreate(handler: suspend (GuildInviteCreate) -> T) {
         listeners += forEvent(DiscordEvent.INVITE_CREATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteCreate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildInviteCreate.serializer(), it))
         }
     }
 
-    override fun onGuildInviteDelete(handler: suspend DispatchBase.(GuildInviteDelete) -> T) {
+    override fun onGuildInviteDelete(handler: suspend (GuildInviteDelete) -> T) {
         listeners += forEvent(DiscordEvent.INVITE_DELETE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(GuildInviteDelete.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(GuildInviteDelete.serializer(), it))
         }
     }
 
-    override fun onMessageCreate(handler: suspend DispatchBase.(Message) -> T) {
+    override fun onMessageCreate(handler: suspend (Message) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_CREATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
         }
     }
 
-    override fun onMessageUpdate(handler: suspend DispatchBase.(Message) -> T) {
+    override fun onMessageUpdate(handler: suspend (Message) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(Message.serializer(), it))
         }
     }
 
-    override fun onMessageDelete(handler: suspend DispatchBase.(MessageDelete) -> T) {
+    override fun onMessageDelete(handler: suspend (MessageDelete) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_DELETE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageDelete.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(MessageDelete.serializer(), it))
         }
     }
 
-    override fun onMessageDeleteBulk(handler: suspend DispatchBase.(BulkMessageDelete) -> T) {
+    override fun onMessageDeleteBulk(handler: suspend (BulkMessageDelete) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_DELETE_BULK) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(BulkMessageDelete.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(BulkMessageDelete.serializer(), it))
         }
     }
 
-    override fun onMessageReactionAdd(handler: suspend DispatchBase.(MessageReactionAdd) -> T) {
+    override fun onMessageReactionAdd(handler: suspend (MessageReactionAdd) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_REACTION_ADD) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionAdd.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(MessageReactionAdd.serializer(), it))
         }
     }
 
-    override fun onMessageReactionRemove(handler: suspend DispatchBase.(MessageReactionRemove) -> T) {
+    override fun onMessageReactionRemove(handler: suspend (MessageReactionRemove) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemove.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(MessageReactionRemove.serializer(), it))
         }
     }
 
-    override fun onMessageReactionRemoveAll(handler: suspend DispatchBase.(MessageReactionRemoveAll) -> T) {
+    override fun onMessageReactionRemoveAll(handler: suspend (MessageReactionRemoveAll) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_ALL) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveAll.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveAll.serializer(), it))
         }
     }
 
-    override fun onMessageReactionRemoveEmoji(handler: suspend DispatchBase.(MessageReactionRemoveEmoji) -> T) {
+    override fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_EMOJI) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveEmoji.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveEmoji.serializer(), it))
         }
     }
 
-    override fun onPresenceUpdate(handler: suspend DispatchBase.(PresenceUpdate) -> T) {
+    override fun onPresenceUpdate(handler: suspend (PresenceUpdate) -> T) {
         listeners += forEvent(DiscordEvent.PRESENCE_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(PresenceUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(PresenceUpdate.serializer(), it))
         }
     }
 
-    override fun onTypingStart(handler: suspend DispatchBase.(TypingStart) -> T) {
+    override fun onTypingStart(handler: suspend (TypingStart) -> T) {
         listeners += forEvent(DiscordEvent.TYPING_START) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(TypingStart.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(TypingStart.serializer(), it))
         }
     }
 
-    override fun onUserUpdate(handler: suspend DispatchBase.(User) -> T) {
+    override fun onUserUpdate(handler: suspend (User) -> T) {
         listeners += forEvent(DiscordEvent.USER_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(User.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(User.serializer(), it))
         }
     }
 
-    override fun onVoiceStateUpdate(handler: suspend DispatchBase.(VoiceState) -> T) {
+    override fun onVoiceStateUpdate(handler: suspend (VoiceState) -> T) {
         listeners += forEvent(DiscordEvent.VOICE_STATE_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceState.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(VoiceState.serializer(), it))
         }
     }
 
-    override fun onVoiceServerUpdate(handler: suspend DispatchBase.(VoiceServerUpdate) -> T) {
+    override fun onVoiceServerUpdate(handler: suspend (VoiceServerUpdate) -> T) {
         listeners += forEvent(DiscordEvent.VOICE_SERVER_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(VoiceServerUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(VoiceServerUpdate.serializer(), it))
         }
     }
 
-    override fun onWebhookUpdate(handler: suspend DispatchBase.(WebhookUpdate) -> T) {
+    override fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> T) {
         listeners += forEvent(DiscordEvent.WEBHOOKS_UPDATE) {
-            DispatchBase.handler(defaultJson.decodeFromJsonElement(WebhookUpdate.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(WebhookUpdate.serializer(), it))
         }
     }
 
