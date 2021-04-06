@@ -18,6 +18,7 @@ public fun BotBase.events(eventsBuilder: EventDispatcherWithContext.() -> Unit) 
  * I'm at the (taco bell) bot context,
  * I'm at the combination dispatcher and bot context
  */
+@DiskordDsl
 public class EventDispatcherWithContext(
     private val dispatcher: EventDispatcher<Unit>,
     private val context: BotContext
