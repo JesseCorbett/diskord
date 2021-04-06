@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.AutoGateway
-import com.jessecorbett.diskord.DiskordDsl
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.internal.client.RestClient
@@ -10,28 +9,29 @@ import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
 
-
-/**
- * Function for setting up event listeners
- */
-public typealias EventHandler = suspend EventDispatcher<Unit>.() -> Unit
-
-public class BotBase(override val client: RestClient) : BotContext {
+public class BotBase {
     public val logger: KLogger = KotlinLogging.logger {}
 
+    init {
+        // Simple module for logging bot state
+        registerModule { dispatcher, _ ->
+            dispatcher.onReady { logger.info { "Bot has started and is ready for events" } }
+            dispatcher.onResume { logger.info { "Bot has resumed a previous websocket session" } }
+        }
+    }
+
     /**
-     * Handlers are functions called on top of an event dispatcher
-     *
-     * We use this intermediary step so that we can invoke the handlers once to compute which event
-     * hooks are called to determine the appropriate intents and then we invoke them again on the Real dispatcher
+     * Modules are plugins which implement bot functionality
      */
-    internal val handlers: MutableList<EventHandler> = mutableListOf({
-        onReady { logger.info { "Bot has started and is ready for events" } }
-        onResume { logger.info { "Bot has resumed a previous websocket session" } }
-    })
-    @DiskordDsl
-    public fun events(handler: EventHandler) {
-        handlers += handler
+    public var modules: List<BotModule> = emptyList()
+        private set
+
+    public fun registerModule(botModule: BotModule) {
+        modules = modules + botModule
+    }
+
+    public fun interface BotModule {
+        public fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
     }
 }
 
@@ -44,24 +44,37 @@ public class BotBase(override val client: RestClient) : BotContext {
 public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
     val client = RestClient.default(token)
 
-    val base = BotBase(client)
-    base.builder()
-
-    val intents = GatewayIntentsComputer().apply {
-        base.handlers.forEach { it() }
-    }.intents.map { GatewayIntents(it.mask) }.reduceOrNull { a, b -> a + b } ?: GatewayIntents.NON_PRIVILEGED
-
-    val eventHandler = EventDispatcher.build(CoroutineScope(Dispatchers.Default)).apply {
-        base.handlers.forEach { it() }
+    // Contains the rest client and provides the context for related bot utils
+    val virtualContext: BotContext = object : BotContext {
+        override val client: RestClient
+            get() = client
     }
 
+    // Container for modules and utils like the logger
+    val base = BotBase().apply { builder() }
+
+    // Compute intents from the provided modules
+    val intentsComputer = GatewayIntentsComputer()
+    base.modules.forEach { it.register(intentsComputer, virtualContext) }
+    val intents = intentsComputer.intents
+        .map { GatewayIntents(it.mask) }
+        .reduceOrNull { a, b -> a + b }
+        ?: GatewayIntents.NON_PRIVILEGED
+
+    // Create the real dispatcher and register the modules with it
+    val dispatcher = EventDispatcher.build(CoroutineScope(Dispatchers.Default))
+    base.modules.forEach { it.register(dispatcher, virtualContext) }
+
+    // Create the autogateway using what we've constructed
     val gateway = AutoGateway(
         token = token,
         intents = intents,
         restClient = client,
-        eventDispatcher = eventHandler
+        eventDispatcher = dispatcher
     )
 
+    // Start the gateway, block, and gracefully close after
     gateway.start()
     gateway.block()
+    gateway.stop()
 }
