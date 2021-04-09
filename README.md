@@ -49,8 +49,6 @@ The library is packaged into two artifacts.
 `diskord-bot` provides an easier to use API for common bot functions.
 [Read more](https://gitlab.com/jesselcorbett/diskord/-/blob/master/diskord-bot/README.md)
 
-### diskord-bot details
-
 ### Simple Example
 
 ```kotlin
