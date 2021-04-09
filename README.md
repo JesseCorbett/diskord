@@ -44,10 +44,10 @@ configurations {
 The library is packaged into two artifacts.
 
 `diskord-core` is the low level implementation of the Discord API.
-[Read more](/discord-core/README.md)
+[Read more](https://gitlab.com/jesselcorbett/diskord/-/blob/master/diskord-core/README.md)
 
 `diskord-bot` provides an easier to use API for common bot functions.
-[Read more](/discord-bot/README.md)
+[Read more](https://gitlab.com/jesselcorbett/diskord/-/blob/master/diskord-bot/README.md)
 
 ### diskord-bot details
 
