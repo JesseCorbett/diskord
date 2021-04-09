@@ -25,21 +25,8 @@ dependencies {
 }
 ```
 
-```groovy
-// Groovy build.gradle
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'com.jessecorbett:diskord-bot:2.0.0'
-    // or, if you only want the low level implementation
-    implementation 'com.jessecorbett:diskord-core:2.0.0'
-}
-```
-
-Note: The `diskord-core` and `diskord-bot` artifacts bundle `org.slf4j:slf4j-simple` to provide basic logging to STDOUT with no
-configuration. This can be excluded using the standard exclusion syntax:
+Note: The `diskord-bot` artifact bundles `org.slf4j:slf4j-simple` to provide basic logging to STDOUT with no
+configuration. This can be excluded in favor of your own slf4 logger using gradle exclusion:
 
 ```kotlin
 // Kotlin build.gradle.kts
@@ -50,30 +37,51 @@ configurations {
 }
 ```
 
-```groovy
-// Groovy build.gradle
-configurations {
-  implementation {
-    exclude 'org.slf4j', 'slf4j-simple'
-  }
-}
-```
-
 ## How do I use this?
 
-[Diskord Core Documentation](https://jesselcorbett.gitlab.io/diskord-core/diskord-core/index.html)
+[Diskord Dokka documentation](https://jesselcorbett.gitlab.io/index.html)
 
-[Diskord Bot Documentation](https://jesselcorbett.gitlab.io/diskord-bot/diskord-bot/index.html)
+The library is packaged into two artifacts.
+
+`diskord-core` is the low level implementation of the Discord API.
+[Read more](/discord-core/README.md)
+
+`diskord-bot` provides an easier to use API for common bot functions.
+[Read more](/discord-bot/README.md)
+
+### diskord-bot details
+
+### Simple Example
+
+```kotlin
+import com.jessecorbett.diskord.bot.*
+
+suspend fun main() {
+    bot(TOKEN) {
+        events {
+            onGuildMemberAdd {
+                channel(WELCOME_CHANNEL_ID).sendMessage("Welcome to the server, ${it.user?.username}!")
+            }
+        }
+      
+        commands {
+            command("ping") {
+                it.respond("pong")
+            }
+        }
+    }
+}
+```
 
 
 ## FAQ
 * Does this support voice chat?
     * No, voice chat is not supported at this time. If you need it I recommend checking out another SDK
 * Is this library done?
-    * Diskord is actively maintained, but the API is always changing and there may be some lag between an API change and Diskord getting updated
+    * Diskord is actively maintained, but the Discord API is always changing and there may be some lag between an API change and Diskord getting updated
     * If you want to speed things along, PRs are welcome and tickets appreciated
 * Can I contact you to ask a question/contribute to the project/report a bug?
-    * [We've got a discord server for just that!](https://discord.gg/UPTWsZ5)
+    * [We've got a discord server for just that](https://discord.gg/UPTWsZ5)
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?
     * You can use our development versions by using the snapshot repository
     * Include https://oss.sonatype.org/content/repositories/snapshots/ in your gradle repositories
