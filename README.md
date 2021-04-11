@@ -6,6 +6,8 @@ A Kotlin client for Discord bots with a simple and concise DSL
 
 Built as a lean client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use SDK
 
+[Documentation available here](https://jesselcorbett.gitlab.io/index.html)
+
 Using Diskord? Send me a tweet about it [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by the [discord server](https://discord.gg/UPTWsZ5)
 
 ## How do I import this?
@@ -37,10 +39,6 @@ configurations {
 }
 ```
 
-## How do I use this?
-
-[Diskord Dokka documentation](https://jesselcorbett.gitlab.io/index.html)
-
 The library is packaged into two artifacts.
 
 `diskord-core` is the low level implementation of the Discord API.
@@ -48,6 +46,14 @@ The library is packaged into two artifacts.
 
 `diskord-bot` provides an easier to use API for common bot functions.
 [Read more](https://gitlab.com/jesselcorbett/diskord/-/blob/master/diskord-bot/README.md)
+
+## How do I use this?
+
+[Dokka documentation](https://jesselcorbett.gitlab.io/index.html)
+
+For an example project you can easily clone to get started, look at the [diskord-starter repo.](https://gitlab.com/incendium/diskord-starter)
+
+There are also a collection of examples in the [diskord-examples repo.](https://gitlab.com/incendium/diskord-examples)
 
 ### Simple Example
 
