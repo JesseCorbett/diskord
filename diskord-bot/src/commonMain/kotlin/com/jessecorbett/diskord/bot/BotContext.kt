@@ -67,7 +67,9 @@ public interface BotContext {
     }
 
     /**
-     * Sends a message in the same channel without using the discord reply feature
+     * Send a message in the same channel as this message.
+     *
+     * @param message the message to respond with
      *
      * @see reply
      */
@@ -76,11 +78,32 @@ public interface BotContext {
     }
 
     /**
-     * Sends a message in the same channel using the discord reply feature
+     * Send a message in the same channel as this message.
+     *
+     * @param message the message to respond with
+     *
+     * @see reply
+     */
+    public suspend fun Message.respondAndDelete(message: String): Message {
+        channel.deleteMessage(id)
+        return channel.sendMessage(message)
+    }
+
+    /**
+     * Sends a reply to an existing message using the Discord reply feature.
+     *
+     * @param message the message to reply with
      *
      * @see respond
      */
     public suspend fun Message.reply(message: String): Message {
         return channel.sendReply(this, message)
+    }
+
+    /**
+     * Add a reaction to this message.
+     */
+    public suspend fun Message.react(emoji: String) {
+        return channel.addMessageReaction(id, emoji)
     }
 }
