@@ -36,6 +36,9 @@ public class BotBase {
         public fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
     }
 
+    /**
+     * Shutdown this bot instance.
+     */
     public suspend fun shutdown() {
         gateway.stop()
     }

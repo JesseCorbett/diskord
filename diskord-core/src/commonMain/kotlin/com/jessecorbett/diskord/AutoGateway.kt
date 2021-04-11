@@ -29,6 +29,9 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
 
     private val sessionScope = CoroutineScope(sessionDispatcher)
 
+    /**
+     * Whether or not this gateway has at least one active session.
+     */
     public val isRunning: Boolean get() = sessions.isNotEmpty() && sessions.any { it.running }
 
     /**
