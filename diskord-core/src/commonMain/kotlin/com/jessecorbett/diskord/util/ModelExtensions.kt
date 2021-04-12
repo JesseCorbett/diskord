@@ -1,9 +1,8 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.channel.ChannelClient
-import com.jessecorbett.diskord.api.channel.CreateMessage
+import com.jessecorbett.diskord.api.channel.*
 import com.jessecorbett.diskord.api.channel.Embed
-import com.jessecorbett.diskord.api.channel.FileData
+import com.jessecorbett.diskord.api.channel.EmbedImage
 import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.guild.PatchGuildMember
@@ -208,6 +207,47 @@ public suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed?
 }
 
 /**
+ * Calls [ChannelClient.createMessage] for embedded messages without needing to create a [CreateMessage] object first. Also
+ * accepts a lambda that can be used to configure an [Embed] object.
+ *
+ * @param message The text message to send.
+ * @param block The block to configure the [Embed] object with.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
+public suspend fun ChannelClient.sendEmbed(
+    message: String = "",
+    block: Embed.() -> Unit
+): Message {
+    return createMessage(CreateMessage(message, embed = Embed().apply { block() }))
+}
+
+/**
+ * Calls [ChannelClient.createMessage] for embedded messages and images without needing to create a [CreateMessage] object first. Also
+ * accepts a lambda that can be used to configure an [Embed] object.
+ *
+ * @param message The text message to send.
+ * @param block The block to configure the [Embed] object with.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
+public suspend fun ChannelClient.sendEmbeddedImage(
+    message: String = "",
+    image: FileData,
+    block: Embed.() -> Unit
+): Message {
+    return createMessage(
+        CreateMessage(message, embed = Embed().apply {
+            block()
+            this.image = EmbedImage(url = "attachment://${image.filename}")
+        }),
+        image
+    )
+}
+
+/**
  * Calls [ChannelClient.createMessage] to reply to a specific text message without needing to create a [CreateMessage] object first.
  *
  * @param message The message to reply to.
@@ -222,10 +262,10 @@ public suspend fun ChannelClient.sendReply(message: Message, reply: String = "",
 }
 
 /**
- * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
+ * Calls [ChannelClient.createMessage] for to attach a file without needing to create a [CreateMessage] object first.
  *
  * @param data The file to attach.
- * @param comment The comment to send with the file.
+ * @param comment An optional comment to send with the file.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
@@ -234,6 +274,15 @@ public suspend fun ChannelClient.sendFile(data: FileData, comment: String = ""):
     return createMessage(CreateMessage(content = comment), data)
 }
 
+/**
+ * Adds a reaction to the specified message.
+ *
+ *  @param messageId The ID of the message to react to.
+ *  @param emojiId The ID of the emoji.
+ *  @param emojiName The name of the emoji.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
 public suspend fun ChannelClient.addMessageReaction(messageId: String, emojiId: String, emojiName: String) {
     addMessageReaction(messageId, Emoji(emojiId, emojiName))
 }
