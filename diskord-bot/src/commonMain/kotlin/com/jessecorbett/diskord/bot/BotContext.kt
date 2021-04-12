@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
@@ -84,6 +85,17 @@ public interface BotContext {
      *
      * @see reply
      */
+    public suspend fun Message.respondEmbed(message: String = "", block: Embed.() -> Unit): Message {
+        return channel.sendMessage(message, Embed().apply { block() })
+    }
+
+    /**
+     * Send a message in the same channel as this message.
+     *
+     * @param message the message to respond with
+     *
+     * @see reply
+     */
     public suspend fun Message.respondAndDelete(message: String): Message {
         channel.deleteMessage(id)
         return channel.sendMessage(message)
@@ -98,6 +110,17 @@ public interface BotContext {
      */
     public suspend fun Message.reply(message: String): Message {
         return channel.sendReply(this, message)
+    }
+
+    /**
+     * Sends a reply to an existing message using the Discord reply feature.
+     *
+     * @param message the message to reply with
+     *
+     * @see respond
+     */
+    public suspend fun Message.replyEmbed(message: String = "", block: Embed.() -> Unit): Message {
+        return channel.sendReply(this, message, Embed().apply { block() })
     }
 
     /**
