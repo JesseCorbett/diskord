@@ -47,7 +47,11 @@ public enum class MessageType {
     @SerialName("12") CHANNEL_FOLLOW_ADD,
     @SerialName("14") GUILD_DISCOVERY_DISQUALIFIED,
     @SerialName("15") GUILD_DISCOVERY_REQUALIFIED,
-    @SerialName("19") REPLY
+    @SerialName("16") GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING,
+    @SerialName("17") GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING,
+    @SerialName("19") REPLY,
+    @SerialName("20") APPLICATION_COMMAND,
+    @SerialName("22") GUILD_INVITE_REMINDER
 }
 
 @Serializable
