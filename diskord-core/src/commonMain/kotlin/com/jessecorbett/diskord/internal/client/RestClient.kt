@@ -10,6 +10,7 @@ import com.jessecorbett.diskord.util.auditLogEntryJson
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.omitNullsJson
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.delay
@@ -32,6 +33,7 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
 }
 
 public interface RestClient {
+    @DiskordInternals
     public suspend fun GET(
         majorPath: String,
         minorPath: String = "",
@@ -40,6 +42,7 @@ public interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
+    @DiskordInternals
     public suspend fun POST(
         majorPath: String,
         minorPath: String = "",
@@ -48,6 +51,7 @@ public interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
+    @DiskordInternals
     public suspend fun PUT(
         majorPath: String,
         minorPath: String = "",
@@ -56,6 +60,7 @@ public interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
+    @DiskordInternals
     public suspend fun PATCH(
         majorPath: String,
         minorPath: String = "",
@@ -64,6 +69,7 @@ public interface RestClient {
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
+    @DiskordInternals
     public suspend fun DELETE(
         majorPath: String,
         minorPath: String = "",
@@ -142,8 +148,10 @@ public class DefaultRestClient(
             this.method = method
             header("Authorization", authorizationHeader)
             header("User-Agent", userAgentHeader)
-            contentType(ContentType.Application.Json)
             block()
+            if (body !is MultiPartFormDataContent) {
+                contentType(ContentType.Application.Json)
+            }
         }
 
         // Update rate limit data store from response

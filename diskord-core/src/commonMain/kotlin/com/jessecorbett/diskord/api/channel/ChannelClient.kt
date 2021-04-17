@@ -6,7 +6,7 @@ import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
-import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 
@@ -283,8 +283,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun createMessage(message: CreateMessage, attachment: FileData): Message {
         return POST("/channels/$channelId/messages") {
-            contentType(ContentType.MultiPart.FormData)
-            body = formData {
+            body = MultiPartFormDataContent(formData {
                 append("payload_json", defaultJson.encodeToString(message)) // TODO: Check if this should be omitNulls?
                 append("file", attachment.packet, Headers.build {
                     append(
@@ -292,7 +291,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
                         """form-data; name="file"; filename="${attachment.filename}""""
                     )
                 })
-            }
+            })
         }.receive()
     }
 
