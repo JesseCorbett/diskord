@@ -79,9 +79,10 @@ public interface BotContext {
     }
 
     /**
-     * Send a message in the same channel as this message.
+     * Send an embed in the same channel as this message.
      *
      * @param message the message to respond with
+     * @param block a block to set the embed parameters with
      *
      * @see reply
      */
@@ -90,7 +91,7 @@ public interface BotContext {
     }
 
     /**
-     * Send a message in the same channel as this message.
+     * Send a message in the same channel as this message and delete the original message.
      *
      * @param message the message to respond with
      *
@@ -116,6 +117,7 @@ public interface BotContext {
      * Sends a reply to an existing message using the Discord reply feature.
      *
      * @param message the message to reply with
+     * @param block a block to set the embed parameters with
      *
      * @see respond
      */
@@ -125,6 +127,8 @@ public interface BotContext {
 
     /**
      * Add a reaction to this message.
+     *
+     * @param emoji the emoji to react with
      */
     public suspend fun Message.react(emoji: String) {
         return channel.addMessageReaction(id, emoji)
