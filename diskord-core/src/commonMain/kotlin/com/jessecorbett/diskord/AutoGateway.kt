@@ -9,7 +9,7 @@ import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 
 /**
@@ -19,12 +19,20 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     restClient: RestClient,
-    private val eventDispatcher: EventDispatcher<Unit>
+    private val eventDispatcher: EventDispatcher<Unit>,
+    sessionDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     private val logger = KotlinLogging.logger {}
     private val globalClient = GlobalClient(restClient)
     private var sessions: List<GatewaySession> = emptyList()
+
+    private val sessionScope = CoroutineScope(sessionDispatcher)
+
+    /**
+     * Whether or not this gateway has at least one active session.
+     */
+    public val isRunning: Boolean get() = sessions.isNotEmpty() && sessions.any { it.running }
 
     /**
      * Starts the gateway sessions if they aren't already running
@@ -43,6 +51,8 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
             sessions = listOf(createSession(botUrl, 0, 0))
         }
 
+        logger.debug { "Now tracking ${sessions.size} sessions" }
+
         return this
     }
 
@@ -50,7 +60,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
      * Blocks the current process in case your program is only the bot
      */
     public suspend fun block() {
-        while (sessions.any { it.running }) {
+        while (isRunning) {
             delay(100) // If we could find a way to make Gateway a session or similar this would be better I think
         }
     }
@@ -59,6 +69,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
      * Closes all the gateway sessions
      */
     public suspend fun stop() {
+        logger.debug { "Tracking ${sessions.size} sessions to close" }
         if (sessions.isEmpty()) {
             logger.warn { "Attempted to stop an AutoGateway that was not running" }
             return
@@ -80,8 +91,10 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     }
 
     private suspend fun createSession(url: GatewayBotUrl, shards: Int, shard: Int): GatewaySession {
+        logger.debug { "Creating new session ${shard + 1} of ${shards + 1}" }
+
         return GatewaySession(token, url, intents, shards, shard, eventDispatcher).also {
-            it.startSession()
+            sessionScope.launch { it.startSession() }
         }
     }
 }

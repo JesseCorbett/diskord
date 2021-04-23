@@ -18,6 +18,8 @@ public class BotBase {
     public var modules: List<BotModule> = emptyList()
         private set
 
+    internal lateinit var gateway: AutoGateway
+
     init {
         // Simple module for logging bot state
         registerModule { dispatcher, _ ->
@@ -32,6 +34,13 @@ public class BotBase {
 
     public fun interface BotModule {
         public fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
+    }
+
+    /**
+     * Shutdown this bot instance.
+     */
+    public suspend fun shutdown() {
+        gateway.stop()
     }
 }
 
@@ -72,9 +81,12 @@ public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
         restClient = client,
         eventDispatcher = dispatcher
     )
+    base.gateway = gateway
 
     // Start the gateway, block, and gracefully close after
     gateway.start()
     gateway.block()
-    gateway.stop()
+    if (gateway.isRunning) {
+        gateway.stop()
+    }
 }
