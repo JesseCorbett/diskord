@@ -1,8 +1,11 @@
 package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.AutoGateway
+import com.jessecorbett.diskord.api.common.UserStatus
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
+import com.jessecorbett.diskord.api.gateway.model.ActivityType
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
+import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +44,40 @@ public class BotBase {
      */
     public suspend fun shutdown() {
         gateway.stop()
+    }
+
+    /**
+     * Sets the status of the bot
+     *
+     * @param status The user status (color indicator)
+     * @param isAfk Whether the bot is considered AFK
+     * @param idleTime How long the bot has been idle
+     * @param activity The user activity status (text)
+     */
+    public suspend fun setStatus(
+        status: UserStatus,
+        isAfk: Boolean = false,
+        idleTime: Int? = null,
+        activity: UserStatusActivity? = null
+    ) {
+        gateway.setStatus(status, isAfk, idleTime, activity)
+    }
+
+    /**
+     * Sets the status of the bot
+     *
+     * @param status The user status text
+     */
+    public suspend fun setStatus(status: String) {
+        setStatus(
+            UserStatus.ONLINE,
+            false,
+            null,
+            UserStatusActivity(
+                status,
+                ActivityType.GAME
+            )
+        )
     }
 }
 

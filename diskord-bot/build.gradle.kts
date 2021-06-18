@@ -49,15 +49,15 @@ kotlin {
         }
     }
 
-    js(IR) {
-        nodejs()
-        browser()
-        binaries.executable()
-
-        mavenPublication {
-            artifact(javadocJar)
-        }
-    }
+//    js(IR) {
+//        nodejs()
+//        browser()
+//        binaries.executable()
+//
+//        mavenPublication {
+//            artifact(javadocJar)
+//        }
+//    }
 
     metadata {
         mavenPublication {
@@ -92,9 +92,9 @@ kotlin {
             }
         }
 
-        val jsMain by getting {
-
-        }
+//        val jsMain by getting {
+//
+//        }
     }
 }
 

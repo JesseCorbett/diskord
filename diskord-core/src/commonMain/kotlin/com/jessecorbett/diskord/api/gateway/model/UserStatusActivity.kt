@@ -2,13 +2,18 @@ package com.jessecorbett.diskord.api.gateway.model
 
 import com.jessecorbett.diskord.api.common.Emoji
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public data class UserStatusActivity(
     @SerialName("name") val name: String,
     @SerialName("type") val type: ActivityType,
     @SerialName("url") val streamUrl: String? = null,
-    @SerialName("created_at") val createdAt: String,
+    @SerialName("created_at") val createdAt: String? = null,
     @SerialName("timestamps") val timestamps: Timestamps? = null,
     @SerialName("application_id") val applicationId: String? = null,
     @SerialName("details") val details: String? = null,
@@ -48,11 +53,19 @@ public data class RichPresenceSecrets(
     @SerialName("match") val joinInstance: String? = null
 )
 
-@Serializable
-public enum class ActivityType {
-    @SerialName("0") GAME,
-    @SerialName("1") STREAMING,
-    @SerialName("2") LISTENING,
-    @SerialName("4") CUSTOM_STATUS,
-    @SerialName("5") COMPETING
+@Serializable(with = ActivityTypeSerializer::class)
+public enum class ActivityType(public val code: Int) {
+    @SerialName("0") GAME(0),
+    @SerialName("1") STREAMING(1),
+    @SerialName("2") LISTENING(2),
+    @SerialName("4") CUSTOM_STATUS(4),
+    @SerialName("5") COMPETING(5)
+}
+
+public object ActivityTypeSerializer : KSerializer<ActivityType> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.INT)
+
+    override fun deserialize(decoder: Decoder): ActivityType = ActivityType.values().find { it.code == decoder.decodeInt() }!!
+
+    override fun serialize(encoder: Encoder, value: ActivityType): Unit = encoder.encodeInt(value.code)
 }

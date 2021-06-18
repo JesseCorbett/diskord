@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class UpdateStatus(
-    @SerialName("since") val idleSince: Int? = null,
-    @SerialName("game") val activity: UserStatusActivity? = null,
-    @SerialName("status") val status: UserStatus = UserStatus.ONLINE,
-    @SerialName("afk") val isAfk: Boolean = false
+    @SerialName("since") val idleSince: Int?,
+    @SerialName("activities") val activities: List<UserStatusActivity>,
+    @SerialName("status") val status: UserStatus,
+    @SerialName("afk") val isAfk: Boolean
 )

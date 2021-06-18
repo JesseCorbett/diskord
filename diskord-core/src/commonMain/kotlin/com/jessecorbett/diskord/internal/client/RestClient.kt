@@ -15,8 +15,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
+import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.seconds
 
 private const val DISCORD_API_URL = "https://discord.com/api"
 
@@ -29,7 +29,7 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
     // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
     val resetsAt = rateLimitInfo.reset - epochSecondNow()
-    delay(resetsAt.seconds)
+    delay(Duration.seconds(resetsAt))
 }
 
 public interface RestClient {

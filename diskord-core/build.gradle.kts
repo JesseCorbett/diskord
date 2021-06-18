@@ -69,15 +69,15 @@ kotlin {
         }
     }
 
-    js(IR) {
-        nodejs()
-        browser()
-        binaries.executable()
-
-        mavenPublication {
-            artifact(javadocJar)
-        }
-    }
+//    js(IR) {
+//        nodejs()
+//        browser()
+//        binaries.executable()
+//
+//        mavenPublication {
+//            artifact(javadocJar)
+//        }
+//    }
 
     metadata {
         mavenPublication {
@@ -131,16 +131,16 @@ kotlin {
             }
         }
 
-        val jsMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
-            }
-        }
-        val jsTest by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
-            }
-        }
+//        val jsMain by getting {
+//            dependencies {
+//                implementation("io.ktor:ktor-client-js:$ktorVersion")
+//            }
+//        }
+//        val jsTest by getting {
+//            dependencies {
+//                implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
+//            }
+//        }
     }
 }
 

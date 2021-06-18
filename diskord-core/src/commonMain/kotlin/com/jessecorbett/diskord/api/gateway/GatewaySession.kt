@@ -6,10 +6,7 @@ import com.jessecorbett.diskord.api.gateway.commands.*
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
-import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
-import com.jessecorbett.diskord.api.gateway.model.GatewayMessage
-import com.jessecorbett.diskord.api.gateway.model.OpCode
-import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
+import com.jessecorbett.diskord.api.gateway.model.*
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
@@ -71,14 +68,11 @@ public class GatewaySession(
         idleTime: Int? = null,
         activity: UserStatusActivity? = null
     ) {
-        socketManager.send(
-            GatewayMessage(
-                OpCode.STATUS_UPDATE,
-                defaultJson.encodeToJsonElement(UpdateStatus(idleTime, activity, status, isAfk)),
-                null,
-                null
-            )
-        )
+        val json = defaultJson.encodeToJsonElement(UpdateStatus(idleTime, listOfNotNull(activity), status, isAfk))
+        socketManager.send(GatewayMessage(
+            OpCode.STATUS_UPDATE,
+            json
+        ))
     }
 
     private suspend fun receiveGatewayMessage(gatewayMessage: GatewayMessage) = coroutineScope {

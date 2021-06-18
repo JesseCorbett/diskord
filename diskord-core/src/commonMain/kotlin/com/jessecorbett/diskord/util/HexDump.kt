@@ -88,26 +88,26 @@ internal fun ByteArray.hexDump(
 /**
  * Convert a byte to a two character hexidecimal string.
  */
-private fun Byte.toHexString() = toString(16).padStart(Byte.SIZE_BYTES, '0').toUpperCase()
+private fun Byte.toHexString() = toString(16).padStart(Byte.SIZE_BYTES, '0').uppercase()
 
 /**
  * Convert an integer to a four character hexidecimal string.
  */
-private fun Int.toHexString() = toString(16).padStart(Int.SIZE_BYTES, '0').toUpperCase()
+private fun Int.toHexString() = toString(16).padStart(Int.SIZE_BYTES, '0').uppercase()
 
 /**
  * Convert a long to an eight character hexidecimal string.
  */
-private fun Long.toHexString() = toString(16).padStart(Long.SIZE_BYTES, '0').toUpperCase()
+private fun Long.toHexString() = toString(16).padStart(Long.SIZE_BYTES, '0').uppercase()
 
 /**
  * Determine whether or not a byte is printable.
  */
-private fun Byte.isPrintable() = this >= ' '.toByte() && this < 127
+private fun Byte.isPrintable() = this >= ' '.code.toByte() && this < 127
 
 /**
  * Convert a byte to a character if it is printable, otherwise return the default character.
  *
  * @param defaultValue the char to use if the byte is not printable
  */
-private fun Byte.toCharOr(defaultValue: Char) = if (isPrintable()) this.toChar() else defaultValue
+private fun Byte.toCharOr(defaultValue: Char) = if (isPrintable()) this.toInt().toChar() else defaultValue
