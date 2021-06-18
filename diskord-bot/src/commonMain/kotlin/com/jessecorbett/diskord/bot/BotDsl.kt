@@ -49,28 +49,12 @@ public class BotBase {
     /**
      * Sets the status of the bot
      *
-     * @param status The user status (color indicator)
-     * @param isAfk Whether the bot is considered AFK
-     * @param idleTime How long the bot has been idle
-     * @param activity The user activity status (text)
-     */
-    public suspend fun setStatus(
-        status: UserStatus,
-        isAfk: Boolean = false,
-        idleTime: Int? = null,
-        activity: UserStatusActivity? = null
-    ) {
-        gateway.setStatus(status, isAfk, idleTime, activity)
-    }
-
-    /**
-     * Sets the status of the bot
-     *
      * @param status The user status text
+     * @param userStatus The user state
      */
-    public suspend fun setStatus(status: String) {
-        setStatus(
-            UserStatus.ONLINE,
+    public suspend fun setStatus(status: String, userStatus: UserStatus = UserStatus.ONLINE) {
+        gateway.setStatus(
+            userStatus,
             false,
             null,
             UserStatusActivity(
