@@ -10,12 +10,12 @@ stages:
 test:
   stage: build
   script:
-    - gradle check
+    - sh gradlew check
 
 pages:
   stage: build
   script:
-    - gradle dokkaHtml
+    - sh gradlew dokkaHtmlMultiModule
   artifacts:
     paths:
       - public/
@@ -25,7 +25,7 @@ pages:
 publishDevelopmentVersion:
   stage: release
   script:
-    - gradle publishAllPublicationsToOssrhSnapshotsRepository
+    - sh gradlew publishAllPublicationsToOssrhSnapshotsRepository
   tags:
     - docker
   only:
@@ -34,7 +34,7 @@ publishDevelopmentVersion:
 publishMavenCentralVersion:
   stage: release
   script:
-    - gradle publishAllPublicationsToOssrhStagingRepository
+    - sh gradlew publishAllPublicationsToOssrhStagingRepository
   only:
     - master
   when: manual
