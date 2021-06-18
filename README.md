@@ -68,7 +68,7 @@ suspend fun main() {
             }
         }
       
-        commands {
+        classicCommands {
             command("ping") {
                 it.respond("pong")
             }
