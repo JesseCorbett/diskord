@@ -1,4 +1,4 @@
-image: gradle:6.5.1-jdk8
+image: gradle:6.8.3-jdk8
 
 variables:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
@@ -25,7 +25,6 @@ pages:
 publishDevelopmentVersion:
   stage: release
   script:
-    - gradle publishJvmPublicationToGitlabRepository publishKotlinMultiplatformPublicationToGitlabRepository publishMetadataPublicationToGitlabRepository
     - gradle publishAllPublicationsToOssrhSnapshotsRepository
   tags:
     - docker

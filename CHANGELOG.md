@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.0.0] - 2021-03-XX
+
+### !! This is a major breaking change !!
+It is recommended to read through the documentation as this is essentially
+a complete rewrite with a new API, new artifacts, and new usage
+
+### Added
+- Added multiple API endpoints which were missing
+- New Bot DSL framework
+
+### Changed
+- Separated into two artifacts
+    - `diskord-core` which contains the core REST API and Gateway implementation
+    - `diskord-bot` which contains the high level DSL and utilities
+- New DSL
+- `diskord-bot` ships with a simple logger implementation by default
+- New interface with the gateway
+- REST clients are now backed by a shared `RestClient` which manages
+rate limits across requests more intelligently
+- Updated audit logging to automatically translate JSON into concrete classes
+- The Command DSL is now the Classic Command DSL, as we develop a new Command DSL using the slash command API
+- The Classic Command DSL now passes messages as `it` instead of `this`
+
+### Removed
+- Old experimental DSL
+- `DiscordGateway`
+
 ## [1.8.0] - 2020-10-18
 
 ### Added
