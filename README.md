@@ -6,7 +6,7 @@ A Kotlin client for Discord bots with a simple and concise DSL
 
 Built as a lean client using coroutines that gets the intricacies of rate limits, async, and data models out of your way in a clean and easy to use SDK
 
-[Documentation available here](https://jesselcorbett.gitlab.io/index.html)
+[Documentation available here](https://jesselcorbett.gitlab.io/diskord/)
 
 Using Diskord? Send me a tweet about it [@JesseLCorbett](https://twitter.com/JesseLCorbett) or drop by the [discord server](https://discord.gg/UPTWsZ5)
 
