@@ -4,9 +4,6 @@ import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.util.sendMessage
 
-private val token = "MzQyMDg1NTExNTc1MjQwNzA1.WYEN9Q.EnLiqB5ohmpnATTEf7KFYPLSEw8"
-
-
 // Hack to get node envvars
 external val process: Process
 external interface Process {
