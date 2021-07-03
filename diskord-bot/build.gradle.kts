@@ -51,8 +51,6 @@ kotlin {
 
     js(IR) {
         nodejs()
-        browser()
-        binaries.executable()
 
         mavenPublication {
             artifact(javadocJar)
