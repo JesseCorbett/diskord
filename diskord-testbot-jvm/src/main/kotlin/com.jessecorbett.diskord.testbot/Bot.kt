@@ -5,7 +5,6 @@ import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.util.sendMessage
 
-
 suspend fun main() {
     bot(System.getenv("DISKORD_JVM_BOT")) {
         events {
@@ -16,6 +15,12 @@ suspend fun main() {
                     setStatus("Making sure JVM runtime works")
                 }
                 started = true
+            }
+        }
+
+        classicCommands {
+            command("jvm") {
+                it.respondAndDelete("JVM bot is working!")
             }
         }
     }

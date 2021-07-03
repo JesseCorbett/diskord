@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.testbot
 
 import com.jessecorbett.diskord.bot.bot
+import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.util.sendMessage
 
@@ -20,6 +21,12 @@ suspend fun main() {
                     setStatus("Making sure JS runtime works")
                 }
                 started = true
+            }
+        }
+
+        classicCommands {
+            command("js") {
+                it.respondAndDelete("JS bot is working!")
             }
         }
     }
