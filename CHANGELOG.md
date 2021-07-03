@@ -1,6 +1,19 @@
 # Changelog
 
-## [2.0.0] - 2021-03-XX
+## [2.0.2] - 2021-07-XX
+
+### Added
+Experimental support for JavaScript IR target
+
+### Changed
+Upgrade to kotlin 1.5.20
+
+## [2.0.1] - 2021-07-03
+
+### Fixed
+- Fixed an issue where rate limit errors might overly aggressively retry
+
+## [2.0.0] - 2021-06-18
 
 ### !! This is a major breaking change !!
 It is recommended to read through the documentation as this is essentially
