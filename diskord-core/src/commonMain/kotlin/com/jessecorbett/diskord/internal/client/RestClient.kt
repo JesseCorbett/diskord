@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.DiscordUserType
 import com.jessecorbett.diskord.api.exceptions.*
 import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
+import com.jessecorbett.diskord.internal.epochMillisNow
 import com.jessecorbett.diskord.internal.epochSecondNow
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.auditLogEntryJson
@@ -15,6 +16,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
+import kotlin.math.ceil
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -22,14 +24,14 @@ private const val DISCORD_API_URL = "https://discord.com/api"
 
 private val logger = KotlinLogging.logger {}
 
-private data class RateLimitInfo(val limit: Int, val remaining: Int, val reset: Long)
+private data class RateLimitInfo(val limit: Int, val remaining: Int, val reset: Float)
 
 @OptIn(ExperimentalTime::class)
 private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
     // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
-    val resetsAt = rateLimitInfo.reset - epochSecondNow()
-    delay(Duration.seconds(resetsAt))
+    val resetsAt = ceil(rateLimitInfo.reset * 1000).toLong() - epochMillisNow()
+    delay(Duration.milliseconds(resetsAt))
 }
 
 public interface RestClient {
@@ -109,7 +111,7 @@ public class DefaultRestClient(
     private val auditLogsClient by lazy { buildClient(auditLogEntryJson) }
 
     private val pathToBucketMap: MutableMap<String, String> = mutableMapOf()
-    private var globalRateLimit = RateLimitInfo(1, 1, Long.MAX_VALUE)
+    private var globalRateLimit = RateLimitInfo(1, 1, Float.MAX_VALUE)
     private val rateLimitBuckets: MutableMap<String, RateLimitInfo> = mutableMapOf()
 
     /**
@@ -133,7 +135,7 @@ public class DefaultRestClient(
         // Wait on rate limits if any apply
         waitForRateLimit(globalRateLimit)
         pathToBucketMap[rateKey]?.let { bucket ->
-            val rateLimit = rateLimitBuckets.getOrPut(bucket) { RateLimitInfo(1, 1, Long.MAX_VALUE) }
+            val rateLimit = rateLimitBuckets.getOrPut(bucket) { RateLimitInfo(1, 1, Float.MAX_VALUE) }
             waitForRateLimit(rateLimit)
         }
 
@@ -176,7 +178,7 @@ public class DefaultRestClient(
         var bucket = headers["X-RateLimit-Bucket"]
         val limit = headers["X-RateLimit-Limit"]?.toInt() ?: 1
         val remaining = headers["X-RateLimit-Remaining"]?.toInt() ?: 1
-        val resetAt = headers["X-RateLimit-Reset"]?.toLong() ?: Long.MAX_VALUE
+        val resetAt = headers["X-RateLimit-Reset"]?.toFloat() ?: Float.MAX_VALUE
 
         if (bucket == null) {
             logger.warn { "Encountered an API response without a rate limit bucket, using a fallback bucket for safety" }
