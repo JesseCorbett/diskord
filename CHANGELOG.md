@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.2] - 2021-07-XX
+## [2.0.2] - 2021-07-03
 
 ### Added
 Experimental support for JavaScript IR target

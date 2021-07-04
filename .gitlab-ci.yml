@@ -1,4 +1,4 @@
-image: gradle:6.8.3-jdk8
+image: gradle:7.1.1
 
 variables:
   GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
@@ -10,12 +10,12 @@ stages:
 test:
   stage: build
   script:
-    - sh gradlew check
+    - gradle check
 
 pages:
   stage: build
   script:
-    - sh gradlew dokkaHtmlMultiModule
+    - gradle dokkaHtmlMultiModule
   artifacts:
     paths:
       - public/
@@ -25,7 +25,7 @@ pages:
 publishDevelopmentVersion:
   stage: release
   script:
-    - sh gradlew publishAllPublicationsToOssrhSnapshotsRepository
+    - gradle publishAllPublicationsToOssrhSnapshotsRepository
   tags:
     - docker
   only:
@@ -34,7 +34,7 @@ publishDevelopmentVersion:
 publishMavenCentralVersion:
   stage: release
   script:
-    - sh gradlew publishAllPublicationsToOssrhStagingRepository
+    - gradle publishAllPublicationsToOssrhStagingRepository
   only:
     - master
   when: manual
