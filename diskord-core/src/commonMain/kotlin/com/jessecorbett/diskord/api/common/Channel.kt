@@ -155,6 +155,15 @@ public data class GuildStoreChannel(
 ) : Channel(), GuildChannel
 
 @Serializable
+@SerialName("7")
+public data class PartialChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("type") val type: Int,
+    @SerialName("permission_overwrites") val permissionOverwrites: List<Overwrite> = emptyList(),
+) : Channel(), NamedChannel
+
+@Serializable
 @SerialName("10")
 public data class GuildNewsThread(
     @SerialName("id") override val id: String,
