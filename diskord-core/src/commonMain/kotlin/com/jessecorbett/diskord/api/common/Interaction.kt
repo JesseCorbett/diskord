@@ -12,29 +12,29 @@ import kotlinx.serialization.encoding.Encoder
 public data class Interaction(
     @SerialName("id") val id: String,
     @SerialName("application_id") val application_id: String,
-    @SerialName("type") val type: InteractionRequestType,
-    @SerialName("data") val data: InteractionData?,
-    @SerialName("guild_id") val guild_id: String?,
-    @SerialName("channel_id") val channel_id: String?,
-    @SerialName("member") val member: GuildMember?,
-    @SerialName("user") val user: User?,
+    @SerialName("type") val type: InteractionType,
+    @SerialName("data") val data: CommandInteractionData? = null,
+    @SerialName("guild_id") val guild_id: String = "",
+    @SerialName("channel_id") val channel_id: String = "",
+    @SerialName("member") val member: GuildMember? = null,
+    @SerialName("user") val user: User? = null,
     @SerialName("token") val token: String,
     @SerialName("version") val version: Int,
-    @SerialName("message") val message: Message?
+    @SerialName("message") val message: Message? = null
 )
 
-@Serializable(with = InteractionRequestType.Serializer::class)
-public sealed class InteractionRequestType(public val type: Int) {
-    public object Ping : InteractionRequestType(1)
-    public object ApplicationCommand : InteractionRequestType(2)
-    public object MessageComponent : InteractionRequestType(3)
-    public class Other(type: Int) : InteractionRequestType(type)
+@Serializable(with = InteractionType.Serializer::class)
+public sealed class InteractionType(public val type: Int) {
+    public object Ping : InteractionType(1)
+    public object ApplicationCommand : InteractionType(2)
+    public object MessageComponent : InteractionType(3)
+    public class Other(type: Int) : InteractionType(type)
 
-    internal object Serializer : KSerializer<InteractionRequestType> {
+    internal object Serializer : KSerializer<InteractionType> {
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor("InteractionRequestType", PrimitiveKind.INT)
 
-        override fun deserialize(decoder: Decoder): InteractionRequestType {
+        override fun deserialize(decoder: Decoder): InteractionType {
             return when(val type = decoder.decodeInt()) {
                 1 -> Ping
                 2 -> ApplicationCommand
@@ -43,42 +43,42 @@ public sealed class InteractionRequestType(public val type: Int) {
             }
         }
 
-        override fun serialize(encoder: Encoder, value: InteractionRequestType) {
+        override fun serialize(encoder: Encoder, value: InteractionType) {
             encoder.encodeInt(value.type)
         }
     }
 }
 
 @Serializable
-public data class InteractionData(
+public data class CommandInteractionData(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
-    @SerialName("resolved") val resolved: InteractionDataResolved?,
-    @SerialName("options") val options: List<InteractionDataOption>?,
+    @SerialName("resolved") val resolved: CommandInteractionDataResolved? = null,
+    @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList(),
     @SerialName("custom_id") val custom_id: String,
     @SerialName("component_type") val component_type: Int,
 )
 
 @Serializable
-public data class InteractionDataOption(
-    val name: String,
-    val type: CommandOptionType,
-    val value: Int? = null,
-    val options: List<InteractionDataOption> = emptyList()
+public data class CommandInteractionDataResolved(
+    @SerialName("users") val users: Map<String, User> = emptyMap(),
+    @SerialName("members") val members: Map<String, PartialMember> = emptyMap(),
+    @SerialName("roles") val roles: Map<String, Role> = emptyMap(),
+    @SerialName("channels") val channels: Map<String, PartialChannel> = emptyMap()
 )
 
 @Serializable
-public data class InteractionDataResolved(
-    @SerialName("users") val users: Map<String, User>?,
-    @SerialName("members") val members: Map<String, PartialMember>?,
-    @SerialName("roles") val roles: Map<String, Role>?,
-    @SerialName("channels") val channels: Map<String, PartialChannel>?
+public data class CommandInteractionDataOption(
+    @SerialName("name") val name: String,
+    @SerialName("type") val type: CommandOptionType,
+    @SerialName("value") val value: CommandOptionType? = null,
+    @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList()
 )
 
 @Serializable
 public data class InteractionResponse(
     @SerialName("type") val type: InteractionCallbackType,
-    @SerialName("data") val data: InteractionCommandCallbackData?
+    @SerialName("data") val data: InteractionCommandCallbackData? = null
 )
 
 // https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
@@ -119,7 +119,7 @@ public data class InteractionCommandCallbackData(
     @SerialName("content") val content: String = "",
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
     @SerialName("allowed_mentions") val allowed_mentions: AllowedMentions? = null,
-    @SerialName("flags") val flags: Int? = null,
+    @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.None,
     @SerialName("components") val components: List<Message> = emptyList()
 )
 
@@ -152,7 +152,7 @@ public sealed class InteractionCommandCallbackDataFlags(public val code: Int) {
 @Serializable
 public data class MessageInteraction(
     @SerialName("id") val id: String,
-    @SerialName("type") val type: InteractionRequestType,
+    @SerialName("type") val type: InteractionType,
     @SerialName("name") val name: String,
     @SerialName("user") val user: User
 )
