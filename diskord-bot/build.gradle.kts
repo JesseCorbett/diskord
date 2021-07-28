@@ -49,7 +49,7 @@ kotlin {
         }
     }
 
-    js(IR) {
+    js(BOTH) {
         nodejs()
 
         mavenPublication {
