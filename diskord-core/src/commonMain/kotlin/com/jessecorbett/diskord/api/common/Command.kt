@@ -11,12 +11,12 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable
 public data class Command(
     @SerialName("id") val id: String,
-    @SerialName("application_id") val application_id: String,
-    @SerialName("guild_id") val guild_id: String = "",
+    @SerialName("application_id") val applicationId: String,
+    @SerialName("guild_id") val guildId: String = "",
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,
     @SerialName("options") val options: List<CommandOption> = emptyList(),
-    @SerialName("default_permission") val default_permission: Boolean = true
+    @SerialName("default_permission") val defaultPermission: Boolean = true
 )
 
 @Serializable
@@ -86,8 +86,8 @@ public sealed class CommandOptionChoice {
 @Serializable
 public data class GuildCommandPermissions(
     @SerialName("id") val id: String,
-    @SerialName("application_id") val application_id: String,
-    @SerialName("guild_id") val guild_id: String,
+    @SerialName("application_id") val applicationId: String,
+    @SerialName("guild_id") val guildId: String,
     @SerialName("permissions") val permissions: List<CommandPermissions>
 )
 

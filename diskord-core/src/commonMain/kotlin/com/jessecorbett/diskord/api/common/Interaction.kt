@@ -11,11 +11,11 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable
 public data class Interaction(
     @SerialName("id") val id: String,
-    @SerialName("application_id") val application_id: String,
+    @SerialName("application_id") val applicationId: String,
     @SerialName("type") val type: InteractionType,
     @SerialName("data") val data: CommandInteractionData? = null,
-    @SerialName("guild_id") val guild_id: String = "",
-    @SerialName("channel_id") val channel_id: String = "",
+    @SerialName("guild_id") val guildId: String = "",
+    @SerialName("channel_id") val channelId: String = "",
     @SerialName("member") val member: GuildMember? = null,
     @SerialName("user") val user: User? = null,
     @SerialName("token") val token: String,
@@ -55,8 +55,8 @@ public data class CommandInteractionData(
     @SerialName("name") val name: String,
     @SerialName("resolved") val resolved: CommandInteractionDataResolved? = null,
     @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList(),
-    @SerialName("custom_id") val custom_id: String,
-    @SerialName("component_type") val component_type: Int,
+    @SerialName("custom_id") val customId: String,
+    @SerialName("component_type") val componentType: Int,
 )
 
 @Serializable
@@ -118,7 +118,7 @@ public data class InteractionCommandCallbackData(
     @SerialName("tts") val tts: Boolean = false,
     @SerialName("content") val content: String = "",
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
-    @SerialName("allowed_mentions") val allowed_mentions: AllowedMentions? = null,
+    @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
     @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.None,
     @SerialName("components") val components: List<Message> = emptyList()
 )
