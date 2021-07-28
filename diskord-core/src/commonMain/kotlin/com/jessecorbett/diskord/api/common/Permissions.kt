@@ -7,7 +7,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-public enum class Permission(internal val mask: Int) {
+public enum class Permission(internal val mask: Long) {
     /**
      * Allows creation of instant invites.
      *
@@ -210,7 +210,7 @@ public enum class Permission(internal val mask: Int) {
 }
 
 @Serializable(with = PermissionsSerializer::class)
-public data class Permissions(val value: Int) {
+public data class Permissions(val value: Long) {
     public operator fun contains(permission: Permission): Boolean {
         if (Permission.ADMINISTRATOR in value) {
             return true
@@ -223,7 +223,7 @@ public data class Permissions(val value: Int) {
         return value and permissions.value == permissions.value
     }
 
-    public operator fun plus(permissions: Int): Permissions = Permissions(value or permissions)
+    public operator fun plus(permissions: Long): Permissions = Permissions(value or permissions)
 
     public operator fun plus(permissions: Permissions): Permissions = plus(permissions.value)
 
@@ -231,7 +231,7 @@ public data class Permissions(val value: Int) {
 
     public operator fun plus(permission: Permission): Permissions = plus(permission.mask)
 
-    public operator fun minus(permissions: Int): Permissions = Permissions(value and permissions.inv())
+    public operator fun minus(permissions: Long): Permissions = Permissions(value and permissions.inv())
 
     public operator fun minus(permissions: Permissions): Permissions = minus(permissions.value)
 
@@ -250,14 +250,14 @@ public data class Permissions(val value: Int) {
             return Permissions(permissions.map { permission -> permission.mask }.reduce { left, right -> left or right })
         }
 
-        private operator fun Int.contains(permission: Permission) = this and permission.mask == permission.mask
+        private operator fun Long.contains(permission: Permission) = this and permission.mask == permission.mask
     }
 }
 
 public object PermissionsSerializer : KSerializer<Permissions> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.LONG)
 
-    override fun deserialize(decoder: Decoder): Permissions = Permissions(decoder.decodeInt())
+    override fun deserialize(decoder: Decoder): Permissions = Permissions(decoder.decodeLong())
 
-    override fun serialize(encoder: Encoder, value: Permissions): Unit = encoder.encodeInt(value.value)
+    override fun serialize(encoder: Encoder, value: Permissions): Unit = encoder.encodeLong(value.value)
 }

@@ -73,8 +73,8 @@ internal fun computeOverwrites(
     val everyone = guild.roles.find { it.name == "@everyone" }
 
     return channel.permissionOverwrites.let { overwrites ->
-        var deniedOverwrites = 0
-        var allowedOverwrites = 0
+        var deniedOverwrites = 0L
+        var allowedOverwrites = 0L
 
         if (everyone != null) {
             overwrites.find { it.type == OverwriteType.ROLE && it.id == everyone.id }?.also {
@@ -97,4 +97,4 @@ internal fun computeOverwrites(
     }
 }
 
-private infix fun Int.or(permissions: Permissions) = this or permissions.value
+private infix fun Long.or(permissions: Permissions) = this or permissions.value
