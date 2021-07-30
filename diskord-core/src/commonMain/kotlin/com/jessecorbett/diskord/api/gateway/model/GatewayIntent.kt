@@ -25,6 +25,12 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * - [DiscordEvent.CHANNEL_UPDATE]
      * - [DiscordEvent.CHANNEL_DELETE]
      * - [DiscordEvent.CHANNEL_PINS_UPDATE]
+     * - [DiscordEvent.THREAD_CREATE]
+     * - [DiscordEvent.THREAD_UPDATE]
+     * - [DiscordEvent.THREAD_DELETE]
+     * - [DiscordEvent.THREAD_LIST_SYNC]
+     * - [DiscordEvent.THREAD_MEMBER_UPDATE]
+     * - [DiscordEvent.THREAD_MEMBERS_UPDATE]
      */
     GUILDS(0x00000001),
 
@@ -34,6 +40,7 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * - [DiscordEvent.GUILD_MEMBER_ADD]
      * - [DiscordEvent.GUILD_MEMBER_UPDATE]
      * - [DiscordEvent.GUILD_MEMBER_REMOVE]
+     * - [DiscordEvent.THREAD_MEMBERS_UPDATE]
      *
      * *Note: This intent is privileged and may require verification with Discord
      * (see [https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting]).*
@@ -52,13 +59,18 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * Subscribe to the following events:
      *
      * - [DiscordEvent.GUILD_EMOJIS_UPDATE]
+     * - [DiscordEvent.GUILD_STICKERS_UPDATE]
      */
+    // TODO - Rename to GUILD_EMOJIS_AND_STICKERS(?)
     GUILD_EMOJIS(0x00000008),
 
     /**
      * Subscribe to the following events:
      *
      * - [DiscordEvent.GUILD_INTEGRATIONS_UPDATE]
+     * - [DiscordEvent.INTEGRATION_CREATE]
+     * - [DiscordEvent.INTEGRATION_UPDATE]
+     * - [DiscordEvent.INTEGRATION_DELETE]
      */
     GUILD_INTEGRATIONS(0x00000010),
 
