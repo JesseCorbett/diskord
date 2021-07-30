@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3] - 20XX-XX-XX
+
+### Added
+
+### Changed
+* Updated sticker fields to match latest API revisions
+
 ## [2.0.2] - 2021-07-03
 
 ### Added

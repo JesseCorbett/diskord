@@ -27,7 +27,8 @@ public data class Message(
     @SerialName("application") val application: MessageApplication? = null,
     @SerialName("message_reference") val reference: MessageReference? = null,
     @SerialName("flags") val flags: Int? = null,
-    @SerialName("stickers") val stickers: List<MessageSticker> = emptyList()
+    @SerialName("stickers_items") val stickerList: List<PartialSticker> = emptyList(),
+    @SerialName("stickers") @Deprecated("Deprecated in favor of stickerList") val stickers: List<MessageSticker> = emptyList()
 )
 
 @Serializable
@@ -84,6 +85,7 @@ public data class MessageReference(
     @SerialName("guild_id") val guildId: String? = null
 )
 
+@Deprecated("Use Sticker instead.", replaceWith = ReplaceWith("Sticker"))
 @Serializable
 public data class MessageSticker(
     @SerialName("id") val id: String,
@@ -95,10 +97,3 @@ public data class MessageSticker(
     @SerialName("preview_asset") val previewHash: String?,
     @SerialName("format_type") val formatType: StickerFormat
 )
-
-@Serializable
-public enum class StickerFormat {
-    @SerialName("1") PNG,
-    @SerialName("2") APNG,
-    @SerialName("3") LOTTIE
-}

@@ -7,6 +7,8 @@ import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 
 /*
@@ -609,4 +611,71 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
     public suspend fun deleteTemplate(templateCode: String) {
         DELETE("/guilds/$guildId/templates", "/$templateCode").receive<Unit>()
     }
+
+    /**
+     * Get a list of all sticker packs for this guild.
+     *
+     * @return The list of sticker packs.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getStickers(): List<Sticker> = GET("/guilds/$guildId/stickers").receive()
+
+    /**
+     * Get a specific sticker from this guild by sticker ID.
+     *
+     * @param stickerId the sticker ID
+     * @return The sticker.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getSticker(stickerId: String): Sticker = GET("/guilds/$guildId/stickers/$stickerId").receive()
+
+    /**
+     * Create a new sticker.
+     *
+     * Note: [CreateSticker.file] must have a `contentType` specified. Recommended values:
+     * - PNG -> `image/png`
+     * - Animated PNG -> `image/apng`
+     * - Lottie -> `application/json`
+     *
+     * @param sticker the sticker to create
+     * @return the created sticker
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun createSticker(sticker: CreateSticker): Sticker {
+        requireNotNull(sticker.file.contentType) { "sticker.file.contentType must not be null" }
+
+        return POST("/guilds/$guildId/stickers") {
+            body = MultiPartFormDataContent(formData {
+                append("name", sticker.name)
+                append("description", sticker.description)
+                append("tags", sticker.tags)
+                append("file", sticker.file.packet, Headers.build {
+                    append(HttpHeaders.ContentType, sticker.file.contentType)
+                    append(HttpHeaders.ContentDisposition,
+                        """form-data; name="file"; filename="${sticker.file.filename}""""
+                    )
+                })
+            })
+        }.receive()
+    }
+
+    /**
+     * Update an existing sticker.
+     *
+     * @param stickerId the sticker to update
+     * @param sticker the updates to make
+     * @return the updated sticker
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateSticker(stickerId: String, sticker: PatchSticker): Sticker = PATCH("/guilds/$guildId/stickers/$stickerId") {
+        body = sticker
+    }.receive()
+
+    /**
+     * Delete a sticker
+     *
+     * @param stickerId the sticker to delete
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun deleteSticker(stickerId: String) = DELETE("/guilds/$guildId/stickers/$stickerId").receive<Unit>()
 }

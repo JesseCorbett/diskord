@@ -286,6 +286,10 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             body = MultiPartFormDataContent(formData {
                 append("payload_json", defaultJson.encodeToString(message)) // TODO: Check if this should be omitNulls?
                 append("file", attachment.packet, Headers.build {
+                    if (attachment.contentType != null) {
+                        append(HttpHeaders.ContentType, attachment.contentType)
+                    }
+
                     append(
                         HttpHeaders.ContentDisposition,
                         """form-data; name="file"; filename="${attachment.filename}""""

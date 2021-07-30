@@ -154,6 +154,8 @@ public class DefaultRestClient(
             if (body !is MultiPartFormDataContent) {
                 contentType(ContentType.Application.Json)
             }
+
+            logger.debug { "Outgoing contentType is: ${contentType()}" }
         }
 
         // Update rate limit data store from response
