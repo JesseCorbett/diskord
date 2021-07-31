@@ -51,7 +51,11 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     }
 
     override fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> Unit) {
-        intents += GatewayIntent.GUILD_EMOJIS
+        intents += GatewayIntent.GUILD_EMOJI_AND_STICKERS
+    }
+
+    override fun onGuildStickersUpdate(handler: suspend (GuildStickersUpdate) -> Unit) {
+        intents += GatewayIntent.GUILD_EMOJI_AND_STICKERS
     }
 
     override fun onGuildIntegrationsUpdate(handler: suspend (GuildIntegrationUpdate) -> Unit) {

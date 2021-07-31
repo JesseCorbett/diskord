@@ -61,8 +61,7 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * - [DiscordEvent.GUILD_EMOJIS_UPDATE]
      * - [DiscordEvent.GUILD_STICKERS_UPDATE]
      */
-    // TODO - Rename to GUILD_EMOJIS_AND_STICKERS(?)
-    GUILD_EMOJIS(0x00000008),
+    GUILD_EMOJI_AND_STICKERS(0x00000008),
 
     /**
      * Subscribe to the following events:

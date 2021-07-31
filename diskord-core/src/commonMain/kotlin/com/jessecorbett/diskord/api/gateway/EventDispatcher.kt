@@ -119,6 +119,14 @@ public interface EventDispatcher<T> {
     public fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> T)
 
     /**
+     * Called when a guild's custom stickers have been updated.
+     *
+     * @param handler The updated sticker.
+     */
+    @DiskordDsl
+    public fun onGuildStickersUpdate(handler: suspend (GuildStickersUpdate) -> T)
+
+    /**
      * Called when a guild's integrations have been updated.
      *
      * @param handler The updated guild.
@@ -403,8 +411,14 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
     }
 
     override fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> T) {
-        listeners += forEvent(DiscordEvent.GUILD_INTEGRATIONS_UPDATE) {
+        listeners += forEvent(DiscordEvent.GUILD_EMOJIS_UPDATE) {
             handler(defaultJson.decodeFromJsonElement(GuildEmojiUpdate.serializer(), it))
+        }
+    }
+
+    override fun onGuildStickersUpdate(handler: suspend (GuildStickersUpdate) -> T) {
+        listeners += forEvent(DiscordEvent.GUILD_STICKERS_UPDATE) {
+            handler(defaultJson.decodeFromJsonElement(GuildStickersUpdate.serializer(), it))
         }
     }
 
