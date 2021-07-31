@@ -17,7 +17,12 @@ public enum class SystemChannelFlag(internal val mask: Int) {
     /**
      * Suppress server boost notifications.
      */
-    SUPPRESS_PREMIUM_SUBSCRIPTIONS(0x00000002)
+    SUPPRESS_PREMIUM_SUBSCRIPTIONS(0x00000002),
+
+    /**
+     * Suppress server setup tips.
+     */
+    SUPPRESS_GUILD_REMINDER_NOTIFICATIONS(0x00000004),
 }
 
 /**

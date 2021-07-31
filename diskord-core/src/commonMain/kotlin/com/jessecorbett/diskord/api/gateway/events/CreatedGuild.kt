@@ -14,7 +14,7 @@ public data class CreatedGuild(
     @SerialName("owner") val userIsOwner: Boolean? = null,
     @SerialName("owner_id") val ownerId: String,
     @SerialName("permissions") val permissions: Permissions? = null,
-    @SerialName("region") val region: String,
+    @SerialName("region") val region: String, // FIXME: API docs says this is removed?
     @SerialName("afk_channel_id") val afkChannelId: String?,
     @SerialName("afk_timeout") val afkTimeoutSeconds: Int,
     @SerialName("widget_enabled") val widgetEnabled: Boolean? = null,
@@ -28,7 +28,7 @@ public data class CreatedGuild(
     @SerialName("mfa_level") val mfaLevel: MFALevel,
     @SerialName("application_id") val owningApplicationId: String?,
     @SerialName("system_channel_id") val systemMessageChannelId: String?,
-    @SerialName("system_channel_flags") val systemChannelFlags: Int, // TODO: Make bitwise flags,
+    @SerialName("system_channel_flags") val systemChannelFlags: SystemChannelFlags,
     @SerialName("rules_channel_id") val rulesChannelId: String?,
     @SerialName("joined_at") val joinedAt: String? = null,
     @SerialName("large") val isLarge: Boolean? = null,
@@ -50,5 +50,8 @@ public data class CreatedGuild(
     @SerialName("max_video_channel_users") val maxVideoChannelUsers: Int? = null,
     @SerialName("approximate_member_count") val approximateMemberCount: Int? = null,
     @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null,
-    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null
+    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null,
+    @SerialName("nsfw_level") val nsfwLevel: GuildNSFWLevel,
+    @SerialName("stage_instances") val stageInstances: List<StageInstance>? = null,
+    @SerialName("stickers") val sticker: List<Sticker>? = null
 )
