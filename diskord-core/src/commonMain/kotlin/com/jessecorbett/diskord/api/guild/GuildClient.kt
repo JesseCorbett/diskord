@@ -110,7 +110,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @return The updated guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun updateChannel(guild: PatchGuild): Guild {
+    public suspend fun updateGuild(guild: PatchGuild): Guild {
         return PATCH("/guilds/$guildId") { body = guild }.receive()
     }
 
@@ -119,7 +119,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteChannel(): Unit = DELETE("/guilds/$guildId").receive()
+    public suspend fun deleteGuild(): Unit = DELETE("/guilds/$guildId").receive()
 
     /**
      * Get this guild's channels.
