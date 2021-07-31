@@ -135,7 +135,7 @@ public enum class Permission(internal val mask: Long) {
     /**
      * Allows for viewing guild insights.
      */
-    VIEW_GUILD_INSIGHTS(0x00040000),
+    VIEW_GUILD_INSIGHTS(0x00080000),
 
     /**
      * Allows for joining of a voice channel.

@@ -12,6 +12,7 @@
 
 ### Fixed
 * Fixed an issue where emoji updates may not have been received
+* Fixed incorrect permissions mask for VIEW_GUILD_INSIGHTS
 
 ## [2.0.2] - 2021-07-03
 
