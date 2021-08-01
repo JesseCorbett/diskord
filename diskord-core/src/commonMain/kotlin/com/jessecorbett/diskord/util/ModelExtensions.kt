@@ -207,8 +207,8 @@ public suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed?
 }
 
 /**
- * Calls [ChannelClient.createMessage] for embedded messages without needing to create a [CreateMessage] object first. Also
- * accepts a lambda that can be used to configure an [Embed] object.
+ * Calls [ChannelClient.createMessage] for embedded messages without needing to create a [CreateMessage] object first.
+ * Also accepts a lambda that can be used to configure an [Embed] object.
  *
  * @param message The text message to send.
  * @param block The block to configure the [Embed] object with.
@@ -224,10 +224,11 @@ public suspend fun ChannelClient.sendEmbed(
 }
 
 /**
- * Calls [ChannelClient.createMessage] for embedded messages and images without needing to create a [CreateMessage] object first. Also
- * accepts a lambda that can be used to configure an [Embed] object.
+ * Calls [ChannelClient.createMessage] for embedded messages and images without needing to create a [CreateMessage]
+ * object first. Also accepts a lambda that can be used to configure an [Embed] object.
  *
  * @param message The text message to send.
+ * @param image The image to embed.
  * @param block The block to configure the [Embed] object with.
  *
  * @return the created [Message].
@@ -248,7 +249,8 @@ public suspend fun ChannelClient.sendEmbeddedImage(
 }
 
 /**
- * Calls [ChannelClient.createMessage] to reply to a specific text message without needing to create a [CreateMessage] object first.
+ * Calls [ChannelClient.createMessage] to reply to a specific text message without needing to create a [CreateMessage]
+ * object first.
  *
  * @param message The message to reply to.
  * @param reply The text reply message to send.
@@ -258,7 +260,60 @@ public suspend fun ChannelClient.sendEmbeddedImage(
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
 public suspend fun ChannelClient.sendReply(message: Message, reply: String = "", embed: Embed? = null): Message {
-    return createMessage(CreateMessage(content = reply, embed = embed, messageReference = MessageReference(messageId = message.id)))
+    return createMessage(
+        CreateMessage(content = reply, embed = embed, messageReference = MessageReference(messageId = message.id))
+    )
+}
+
+/**
+ * Calls [ChannelClient.createMessage] to reply to a specific text message with an embedded message without needing to
+ * create a [CreateMessage] object first. Also accepts a lambda that can be used to configure an [Embed] object.
+ *
+ * @param message The message to reply to.
+ * @param reply The text reply message to send.
+ * @param block The block to configure the [Embed] object with.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
+public suspend fun ChannelClient.sendEmbeddedReply(
+    message: Message,
+    reply: String = "",
+    block: Embed.() -> Unit
+): Message {
+    return createMessage(CreateMessage(
+        content = reply,
+        embed = Embed().apply { block() },
+        messageReference = MessageReference(messageId = message.id)
+    ))
+}
+
+/**
+ * Calls [ChannelClient.createMessage] to reply to a specific text message with an embedded message and image without
+ * needing to create a [CreateMessage] object first. Also accepts a lambda that can be used to configure an [Embed]
+ * object.
+ *
+ * @param message The message to reply to.
+ * @param reply The text reply message to send.
+ * @param image The image to embed.
+ * @param block The block to configure the [Embed] object with.
+ *
+ * @return the created [Message].
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
+ */
+public suspend fun ChannelClient.sendEmbeddedImageReply(
+    message: Message,
+    reply: String = "",
+    image: FileData,
+    block: Embed.() -> Unit
+): Message {
+    return createMessage(
+        CreateMessage(content = reply, embed = Embed().apply {
+            block()
+            this.image = EmbedImage(url = "attachment://${image.filename}")
+        }, messageReference = MessageReference(messageId = message.id)),
+        image
+    )
 }
 
 /**
