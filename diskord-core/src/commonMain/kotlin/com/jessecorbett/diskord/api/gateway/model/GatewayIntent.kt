@@ -59,7 +59,7 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      * Deprecated in favor of [GUILD_EMOJI_AND_STICKERS].
      */
     @Deprecated("Use GUILD_EMOJI_AND_STICKERS instead.", ReplaceWith("GUILD_EMOJI_AND_STICKERS"))
-    GUILD_EMOJI(0x00000008),
+    GUILD_EMOJIS(0x00000008),
 
     /**
      * Subscribe to the following events:

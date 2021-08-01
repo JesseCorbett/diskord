@@ -5,10 +5,14 @@
 ### Added
 * Added support for stickers
 * Added support for threads
+* Added extensions for sending embedded replies
 
 ### Changed
 * `MessageSticker` has been deprecated in favor of `Sticker`.
 * \*\*Minor Breaking\** `Channel.rateLimitPerUser` is now marked as nullable
+* FileData now supports specifying a content type (this is required for sticker uploads)
+* `Permission.MANAGE_EMOJIS` has been deprecated in favor of `Permission.MANAGE_EMOJIS_AND_STICKERS`
+* `GatewayIntent.GUILD_EMOJIS` has been deprecated in favor of `Permission.GUILD_EMOJIS_AND_STICKERS`
 
 ### Fixed
 * Fixed an issue where emoji updates may not have been received
