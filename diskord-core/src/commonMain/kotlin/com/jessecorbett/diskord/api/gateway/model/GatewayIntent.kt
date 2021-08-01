@@ -56,12 +56,19 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
     GUILD_BANS(0x00000004),
 
     /**
+     * Deprecated in favor of [GUILD_EMOJI_AND_STICKERS].
+     */
+    @Deprecated("Use GUILD_EMOJI_AND_STICKERS instead.", ReplaceWith("GUILD_EMOJI_AND_STICKERS"))
+    GUILD_EMOJI(0x00000008),
+
+    /**
      * Subscribe to the following events:
      *
      * - [DiscordEvent.GUILD_EMOJIS_UPDATE]
      * - [DiscordEvent.GUILD_STICKERS_UPDATE]
      */
     GUILD_EMOJI_AND_STICKERS(0x00000008),
+
 
     /**
      * Subscribe to the following events:

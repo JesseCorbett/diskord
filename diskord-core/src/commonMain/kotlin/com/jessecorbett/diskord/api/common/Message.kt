@@ -50,8 +50,10 @@ public enum class MessageType {
     @SerialName("15") GUILD_DISCOVERY_REQUALIFIED,
     @SerialName("16") GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING,
     @SerialName("17") GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING,
+    @SerialName("18") THREAD_CREATED,
     @SerialName("19") REPLY,
     @SerialName("20") APPLICATION_COMMAND,
+    @SerialName("21") THREAD_STARTER_MESSAGE,
     @SerialName("22") GUILD_INVITE_REMINDER
 }
 

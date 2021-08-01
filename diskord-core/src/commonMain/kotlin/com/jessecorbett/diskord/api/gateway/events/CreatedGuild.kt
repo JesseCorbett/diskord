@@ -37,6 +37,7 @@ public data class CreatedGuild(
     @SerialName("voice_states") val voiceStates: List<VoiceState>? = null,
     @SerialName("members") val members: List<GuildMember>? = null,
     @SerialName("channels") val channels: List<Channel>? = null,
+    @SerialName("threads") val threads: List<GuildThread>? = null,
     @SerialName("presences") val presences: List<PresenceUpdate>? = null,
     @SerialName("max_presences") val maxPresences: Int? = null,
     @SerialName("max_members") val maxMembers: Int? = null,

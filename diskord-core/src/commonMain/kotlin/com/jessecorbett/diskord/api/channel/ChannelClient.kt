@@ -188,6 +188,54 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     }
 
     /**
+     * Update the channel's voice region.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param regionId The ID of the new [VoiceRegion].
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateRtcRegion(regionId: String?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchRtcRegion(regionId)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's video quality mode.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param videoQualityMode The new [VideoQualityMode].
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateVideoQualityMode(videoQualityMode: VideoQualityMode?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchVideoQualityMode(videoQualityMode)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's default duration for newly created threads to automatically archive after recent activity.
+     *
+     * Can only be performed on [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * @param defaultAutoArchiveDuration The archive duration, in minutes.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateDefaultAutoArchiveDuration(defaultAutoArchiveDuration: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchDefaultAutoArchiveDuration(defaultAutoArchiveDuration)
+        }.receive()
+    }
+
+    /**
      * Delete this channel, or closes it if it is a [DM].
      *
      * Use with caution, cannot be undone except for DMs.

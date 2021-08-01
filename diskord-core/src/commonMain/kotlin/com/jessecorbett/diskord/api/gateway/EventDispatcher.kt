@@ -273,6 +273,67 @@ public interface EventDispatcher<T> {
     public fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> T)
 
     /**
+     * Called when a thread has been created.
+     *
+     * @param handler The created thread.
+     */
+    @DiskordDsl
+    public fun onThreadCreate(handler: suspend (GuildThread) -> T)
+
+    /**
+     * Called when a thread has been updated.
+     *
+     * @param handler The updated thread.
+     */
+    @DiskordDsl
+    public fun onThreadUpdate(handler: suspend (GuildThread) -> T)
+
+    /**
+     * Called when a thread has been deleted.
+     *
+     * @param handler The deleted thread.
+     */
+    @DiskordDsl
+    public fun onThreadDelete(handler: suspend (ThreadDelete) -> T)
+
+    /**
+     * Called when added to a channel which has threads.
+     *
+     * @param handler The thread information.
+     */
+    @DiskordDsl
+    public fun onThreadListSync(handler: suspend (ThreadListSync) -> T)
+
+    /**
+     * Called when the thread member object for the current user is updated.
+     *
+     * @param handler The thread member.
+     */
+    @DiskordDsl
+    public fun onThreadMemberUpdate(handler: suspend (ThreadMember) -> T)
+
+    /**
+     * Called when a user is added or removed from a thread.
+     *
+     * Note: This is associated with the [GatewayIntent.GUILDS] intent and will only
+     * show information for the current user.
+     *
+     * @param handler The updated thread members.
+     */
+    @DiskordDsl
+    public fun onThreadMembersUpdate(handler: suspend (ThreadMembersUpdate) -> T)
+
+    /**
+     * Called when a user is added or removed from a thread.
+     *
+     * Note: This is associated with the privileged [GatewayIntent.GUILD_MEMBERS] intent.
+     *
+     * @param handler The updated thread members.
+     */
+    @DiskordDsl
+    public fun onThreadMembersUpdatePrivileged(handler: suspend (ThreadMembersUpdate) -> T)
+
+    /**
      * Called when a guild member's presence is updated.
      *
      * @param handler The updated presence.
@@ -527,6 +588,48 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
     override fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> T) {
         listeners += forEvent(DiscordEvent.MESSAGE_REACTION_REMOVE_EMOJI) {
             handler(defaultJson.decodeFromJsonElement(MessageReactionRemoveEmoji.serializer(), it))
+        }
+    }
+
+    override fun onThreadCreate(handler: suspend (GuildThread) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_CREATE) {
+            handler(defaultJson.decodeFromJsonElement(GuildThread.serializer(), it))
+        }
+    }
+
+    override fun onThreadUpdate(handler: suspend (GuildThread) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_UPDATE) {
+            handler(defaultJson.decodeFromJsonElement(GuildThread.serializer(), it))
+        }
+    }
+
+    override fun onThreadDelete(handler: suspend (ThreadDelete) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_DELETE) {
+            handler(defaultJson.decodeFromJsonElement(ThreadDelete.serializer(), it))
+        }
+    }
+
+    override fun onThreadListSync(handler: suspend (ThreadListSync) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_LIST_SYNC) {
+            handler(defaultJson.decodeFromJsonElement(ThreadListSync.serializer(), it))
+        }
+    }
+
+    override fun onThreadMemberUpdate(handler: suspend (ThreadMember) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_MEMBER_UPDATE) {
+            handler(defaultJson.decodeFromJsonElement(ThreadMember.serializer(), it))
+        }
+    }
+
+    override fun onThreadMembersUpdate(handler: suspend (ThreadMembersUpdate) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_MEMBERS_UPDATE) {
+            handler(defaultJson.decodeFromJsonElement(ThreadMembersUpdate.serializer(), it))
+        }
+    }
+
+    override fun onThreadMembersUpdatePrivileged(handler: suspend (ThreadMembersUpdate) -> T) {
+        listeners += forEvent(DiscordEvent.THREAD_MEMBERS_UPDATE) {
+            handler(defaultJson.decodeFromJsonElement(ThreadMembersUpdate.serializer(), it))
         }
     }
 

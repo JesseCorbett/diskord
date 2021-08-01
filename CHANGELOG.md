@@ -3,12 +3,12 @@
 ## [2.0.3] - 20XX-XX-XX
 
 ### Added
-* Added full support for stickers
+* Added support for stickers
+* Added support for threads
 
 ### Changed
 * `MessageSticker` has been deprecated in favor of `Sticker`.
-* Intent `GUILD_EMOJIS` has been renamed to `GUILD_EMOJIS_AND_STICKERS`. This is a minor breaking change as no public
-  consumers should be using this API (there is no reason to do so as intents are handled automatically).
+* \*\*Minor Breaking\** `Channel.rateLimitPerUser` is now marked as nullable
 
 ### Fixed
 * Fixed an issue where emoji updates may not have been received
