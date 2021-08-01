@@ -72,16 +72,6 @@ public fun String.withMultiLineCode(): String = "```$this```"
 public fun String.withMultiLineCode(language: String): String = "```$language $this```"
 
 /*
- * Channel extensions
- */
-
-/**
- * Shortcut to check if a channel is a thread.
- */
-public val Channel.isThread: Boolean
-    get() = this is Thread
-
-/*
  * Message extensions
  */
 
