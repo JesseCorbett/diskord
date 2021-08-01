@@ -365,3 +365,106 @@ public suspend fun GuildClient.changeNickname(nickname: String) {
 public suspend fun GuildClient.changeNickname(userId: String, nickname: String) {
     updateMember(userId, PatchGuildMember(nickname))
 }
+
+/**
+ * Create a thread from an existing message.
+ *
+ * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+ *
+ * @param message The message to attach the thread to.
+ * @param createThread The thread to create.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.createThreadFromMessage(message: Message, createThread: CreateThread): GuildThread =
+    createThreadFromMessage(message.id, createThread)
+
+/**
+ * Add a user to the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * @param user The user to add to the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.addThreadMember(user: User): Unit =
+    addThreadMember(user.id)
+
+/**
+ * Add a user to the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * @param member The user to add to the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.addThreadMember(member: ThreadMember): Unit =
+    addThreadMember(requireNotNull(member.userId) { "member.userId must not be null" })
+
+/**
+ * Add a user to the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * @param member The user to add to the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.addThreadMember(member: GuildMember): Unit =
+    addThreadMember(requireNotNull(member.user) { "member.user must not be null" }.id)
+
+/**
+ * Remove a user from the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * Requires [Permission.MANAGE_THREADS] permission if the thread is not private or current user
+ * is not the creator of the thread.
+ *
+ * @param user The user to remove from the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.removeThreadMember(user: User): Unit =
+    removeThreadMember(user.id)
+
+/**
+ * Remove a user from the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * Requires [Permission.MANAGE_THREADS] permission if the thread is not private or current user
+ * is not the creator of the thread.
+ *
+ * @param member The user to remove from the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.removeThreadMember(member: ThreadMember): Unit =
+    removeThreadMember(requireNotNull(member.userId) { "member.userId must not be null" })
+
+/**
+ * Remove a user from the current thread.
+ *
+ * Only usable for [GuildThread].
+ *
+ * Requires [Permission.MANAGE_THREADS] permission if the thread is not private or current user
+ * is not the creator of the thread.
+ *
+ * @param member The user to remove from the thread.
+ *
+ * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+ */
+public suspend fun ChannelClient.removeThreadMember(member: GuildMember): Unit =
+    removeThreadMember(requireNotNull(member.user) { "member.user must not be null" }.id)
+
+/**
+ * Determine if the channel type represents a thread.
+ *
+ * @return if the channel is a thread
+ */
+internal val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
+        || this == ChannelType.GUILD_PRIVATE_THREAD
+        || this == ChannelType.GUILD_NEWS_THREAD
