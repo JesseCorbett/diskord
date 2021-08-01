@@ -69,7 +69,6 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
      */
     GUILD_EMOJI_AND_STICKERS(0x00000008),
 
-
     /**
      * Subscribe to the following events:
      *
