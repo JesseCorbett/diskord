@@ -72,6 +72,16 @@ public fun String.withMultiLineCode(): String = "```$this```"
 public fun String.withMultiLineCode(language: String): String = "```$language $this```"
 
 /*
+ * Channel extensions
+ */
+
+/**
+ * Shortcut to check if a channel is a thread.
+ */
+public val Channel.isThread: Boolean
+    get() = this is Thread
+
+/*
  * Message extensions
  */
 
@@ -465,6 +475,6 @@ public suspend fun ChannelClient.removeThreadMember(member: GuildMember): Unit =
  *
  * @return if the channel is a thread
  */
-internal val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
+public val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
         || this == ChannelType.GUILD_PRIVATE_THREAD
         || this == ChannelType.GUILD_NEWS_THREAD

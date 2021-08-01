@@ -238,10 +238,12 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     }
 
     /**
-     * Delete this channel, or closes it if it is a [DM].
+     * Delete this channel or thread, or closes it if it is a [DM].
      *
      * Use with caution, cannot be undone except for DMs.
      * Deleting a [GuildCategory] does not delete the children.
+     *
+     * Requires [Permission.MANAGE_CHANNELS] for a guild channel or [Permission.MANAGE_THREADS] for a thread.
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
