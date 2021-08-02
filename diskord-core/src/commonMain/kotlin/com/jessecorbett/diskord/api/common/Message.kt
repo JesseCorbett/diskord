@@ -28,7 +28,7 @@ public data class Message(
     @SerialName("message_reference") val reference: MessageReference? = null,
     @SerialName("flags") val flags: Int? = null,
     @SerialName("stickers_items") val stickerList: List<PartialSticker> = emptyList(),
-    @SerialName("stickers") @Deprecated("Deprecated in favor of stickerList") val stickers: List<MessageSticker> = emptyList()
+    @SerialName("stickers") @Deprecated("Deprecated in the Discord API. Use stickerList instead.", ReplaceWith("stickerList")) val stickers: List<MessageSticker> = emptyList()
 )
 
 @Serializable

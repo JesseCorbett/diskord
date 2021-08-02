@@ -154,7 +154,6 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The list of sticker packs.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    // FIXME: This either needs to be finalized or converted to a proper "StickerPackResponse" class
     public suspend fun getStickerPacks(): List<StickerPack> = defaultJson.decodeFromJsonElement(
         ListSerializer(StickerPack.serializer()),
         GET("/sticker-packs").receive<JsonObject>().getValue("sticker_packs")

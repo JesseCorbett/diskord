@@ -14,7 +14,6 @@ public data class CreatedGuild(
     @SerialName("owner") val userIsOwner: Boolean? = null,
     @SerialName("owner_id") val ownerId: String,
     @SerialName("permissions") val permissions: Permissions? = null,
-    @SerialName("region") val region: String, // FIXME: API docs says this is removed?
     @SerialName("afk_channel_id") val afkChannelId: String?,
     @SerialName("afk_timeout") val afkTimeoutSeconds: Int,
     @SerialName("widget_enabled") val widgetEnabled: Boolean? = null,

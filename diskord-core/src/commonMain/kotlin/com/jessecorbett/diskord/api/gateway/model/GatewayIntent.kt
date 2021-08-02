@@ -170,20 +170,6 @@ public enum class GatewayIntent(public val mask: Int, internal val privileged: B
  * An immutable collection of [GatewayIntent] values stored as a bitmask integer.  This is intended for use when
  * creating a Diskord bot instance to signal to the Discord API requested intents.
  *
- * FIXME: Update this example with updated DSL (or remove it completely)
- *
- * Example:
- * ```kotlin
- *     bot(apiKey, intents = GatewayIntents.of(GatewayIntents.GUILDS, GatewayIntents.GUILD_MEMBERS)) {
- *         guildUpdated {
- *             // do something
- *         }
- *         userJoinedGuild {
- *             // do something
- *         }
- *     }
- * ```
- *
  * *Note: All operations on [GatewayIntents] instances will create a new [GatewayIntents] instance.*
  */
 @Serializable(with = GatewayIntentsSerializer::class)
