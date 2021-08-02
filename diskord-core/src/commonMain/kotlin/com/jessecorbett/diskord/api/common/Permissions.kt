@@ -135,7 +135,7 @@ public enum class Permission(internal val mask: Long) {
     /**
      * Allows for viewing guild insights.
      */
-    VIEW_GUILD_INSIGHTS(0x00040000),
+    VIEW_GUILD_INSIGHTS(0x00080000),
 
     /**
      * Allows for joining of a voice channel.
@@ -206,7 +206,41 @@ public enum class Permission(internal val mask: Long) {
     /**
      * Allows management and editing of emojis.
      */
-    MANAGE_EMOJIS(0x40000000);
+    @Deprecated("Use MANAGE_EMOJIS_AND_STICKERS instead.", ReplaceWith("MANAGE_EMOJIS_AND_STICKERS"))
+    MANAGE_EMOJIS(0x40000000),
+
+    /**
+     * Allows management and editing of emojis.
+     */
+    MANAGE_EMOJIS_AND_STICKERS(0x40000000),
+
+    /**
+     * Allows for deleting and archiving threads, and viewing all private threads.
+     *
+     * Channel Type(s): Text
+     */
+    MANAGE_THREADS(0x0400000000),
+
+    /**
+     * Allows for creating and participating in threads.
+     *
+     * Channel Type(s): Text
+     */
+    USE_PUBLIC_THREADS(0x0800000000),
+
+    /**
+     * Allows for creating and participating in private threads.
+     *
+     * Channel Type(s): Text
+     */
+    USE_PRIVATE_THREADS(0x1000000000),
+
+    /**
+     * Allows the usage of custom stickers from other servers.
+     *
+     * Channel Type(s): Text
+     */
+    USE_EXTERNAL_STICKERS(0x2000000000);
 }
 
 @Serializable(with = PermissionsSerializer::class)

@@ -1,10 +1,12 @@
 package com.jessecorbett.diskord.api.channel
 
 import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
+import com.jessecorbett.diskord.util.isThread
 import io.ktor.client.call.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -188,10 +190,60 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     }
 
     /**
-     * Delete this channel, or closes it if it is a [DM].
+     * Update the channel's voice region.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param regionId The ID of the new [VoiceRegion].
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateRtcRegion(regionId: String?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchRtcRegion(regionId)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's video quality mode.
+     *
+     * Can only be performed on [GuildVoiceChannel].
+     *
+     * @param videoQualityMode The new [VideoQualityMode].
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateVideoQualityMode(videoQualityMode: VideoQualityMode?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchVideoQualityMode(videoQualityMode)
+        }.receive()
+    }
+
+    /**
+     * Update the channel's default duration for newly created threads to automatically archive after recent activity.
+     *
+     * Can only be performed on [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * @param defaultAutoArchiveDuration The archive duration, in minutes.
+     *
+     * @return The updated channel.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateDefaultAutoArchiveDuration(defaultAutoArchiveDuration: Int?): Channel {
+        return PATCH("/channels/$channelId") {
+            body = PatchDefaultAutoArchiveDuration(defaultAutoArchiveDuration)
+        }.receive()
+    }
+
+    /**
+     * Delete this channel or thread, or closes it if it is a [DM].
      *
      * Use with caution, cannot be undone except for DMs.
      * Deleting a [GuildCategory] does not delete the children.
+     *
+     * Requires [Permission.MANAGE_CHANNELS] for a guild channel or [Permission.MANAGE_THREADS] for a thread.
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
@@ -286,6 +338,10 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             body = MultiPartFormDataContent(formData {
                 append("payload_json", defaultJson.encodeToString(message)) // TODO: Check if this should be omitNulls?
                 append("file", attachment.packet, Headers.build {
+                    if (attachment.contentType != null) {
+                        append(HttpHeaders.ContentType, attachment.contentType)
+                    }
+
                     append(
                         HttpHeaders.ContentDisposition,
                         """form-data; name="file"; filename="${attachment.filename}""""
@@ -593,6 +649,137 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun removeGroupDMRecipient(userId: String) {
         DELETE("/channels/$channelId/recipients", "/$userId").receive<Unit>()
     }
+
+    /**
+     * Create a thread from an existing message.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * @param messageId The message to attach the thread to.
+     * @param createThread The thread to create.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun createThreadFromMessage(messageId: String, createThread: CreateThread): GuildThread =
+        POST("/channels/$channelId/messages/$messageId/threads") { body = createThread }.receive()
+
+    /**
+     * Create a thread not connected to an existing message.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * @param createThread The thread to create.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun createThread(createThread: CreateThreadWithType): GuildThread {
+        require(createThread.type.isThread) { "createThread.type must be a thread" }
+
+        return POST("/channels/$channelId/threads") { body = createThread }.receive()
+    }
+
+    /**
+     * Join the current thread.
+     *
+     * Only usable for [GuildThread].
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun joinThread(): Unit = PUT("/channels/$channelId/thread-members/@me").receive()
+
+    /**
+     * Add a user to the current thread.
+     *
+     * Only usable for [GuildThread].
+     *
+     * @param userId The user to add to the thread.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun addThreadMember(userId: String): Unit =
+        PUT("/channels/$channelId/thread-members/$userId").receive()
+
+    /**
+     * Leave the current thread.
+     *
+     * Only usable for [GuildThread].
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun leaveThread(): Unit = DELETE("/channels/$channelId/thread-members/@me").receive()
+
+    /**
+     * Remove a user from the current thread.
+     *
+     * Only usable for [GuildThread].
+     *
+     * Requires [Permission.MANAGE_THREADS] permission if the thread is not private or current user
+     * is not the creator of the thread.
+     *
+     * @param userId The user to remove from the thread.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun removeThreadMember(userId: String): Unit =
+        DELETE("/channels/$channelId/thread-members/$userId").receive()
+
+    /**
+     * Get a list of members for the current thread.
+     *
+     * Only usable for [GuildThread].
+     *
+     * Requires [GatewayIntent.GUILD_MEMBERS] intent.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getThreadMembers(): List<ThreadMember> = GET("/channels/$channelId/thread-members").receive()
+
+    /**
+     * Get a list of active threads and associated members for the current channel.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * Requires [Permission.READ_MESSAGE_HISTORY] permissions.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getActiveThreads(): ActiveThreads = GET("/channels/$channelId/threads/active").receive()
+
+    /**
+     * Get a list of public archived threads and associated members for the current channel.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * Requires [Permission.READ_MESSAGE_HISTORY] and [Permission.MANAGE_THREADS] permissions.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getPublicArchivedThreads(): ArchivedThreads =
+        GET("/channels/{channel.id}/threads/archived/public").receive()
+
+    /**
+     * Get a list of private archived threads and associated members for the current channel.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * Requires [Permission.READ_MESSAGE_HISTORY] and [Permission.MANAGE_THREADS] permissions.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getPrivateArchivedThreads(): ArchivedThreads =
+        GET("/channels/{channel.id}/threads/archived/private").receive()
+
+    /**
+     * Get a list of joined private threads.
+     *
+     * Only usable for [GuildTextChannel] or [GuildNewsChannel].
+     *
+     * Requires [Permission.MANAGE_THREADS] permissions.
+     *
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getJoinedPrivateArchivedThreads(): ArchivedThreads =
+        GET("/channels/{channel.id}/threads/archived/private").receive()
 
     /**
      * Get the webhooks in this channel.

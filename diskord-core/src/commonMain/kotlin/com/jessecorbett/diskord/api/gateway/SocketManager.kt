@@ -60,7 +60,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
     private suspend fun initializeNewConnection() = try {
             coroutineScope {
                 socketClient.wss(host = url, port = 443, request = {
-                    this.url.parameters["v"] = "8"
+                    this.url.parameters["v"] = "9"
                     this.url.parameters["encoding"] = "json"
                     logger.trace { "Building a socket HttpRequest" }
                 }) {

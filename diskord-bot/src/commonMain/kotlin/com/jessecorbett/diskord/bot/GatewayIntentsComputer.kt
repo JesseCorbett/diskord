@@ -51,7 +51,11 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     }
 
     override fun onGuildEmojiUpdate(handler: suspend (GuildEmojiUpdate) -> Unit) {
-        intents += GatewayIntent.GUILD_EMOJIS
+        intents += GatewayIntent.GUILD_EMOJI_AND_STICKERS
+    }
+
+    override fun onGuildStickersUpdate(handler: suspend (GuildStickersUpdate) -> Unit) {
+        intents += GatewayIntent.GUILD_EMOJI_AND_STICKERS
     }
 
     override fun onGuildIntegrationsUpdate(handler: suspend (GuildIntegrationUpdate) -> Unit) {
@@ -131,6 +135,35 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     override fun onMessageReactionRemoveEmoji(handler: suspend (MessageReactionRemoveEmoji) -> Unit) {
         intents += GatewayIntent.GUILD_MESSAGE_REACTIONS
         intents += GatewayIntent.DIRECT_MESSAGE_REACTIONS
+    }
+
+    override fun onThreadCreate(handler: suspend (GuildThread) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadUpdate(handler: suspend (GuildThread) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadDelete(handler: suspend (ThreadDelete) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadListSync(handler: suspend (ThreadListSync) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadMemberUpdate(handler: suspend (ThreadMember) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadMembersUpdate(handler: suspend (ThreadMembersUpdate) -> Unit) {
+        intents += GatewayIntent.GUILDS
+    }
+
+    override fun onThreadMembersUpdatePrivileged(handler: suspend (ThreadMembersUpdate) -> Unit) {
+        intents += GatewayIntent.GUILDS
+        intents += GatewayIntent.GUILD_MESSAGES
     }
 
     override fun onPresenceUpdate(handler: suspend (PresenceUpdate) -> Unit) {

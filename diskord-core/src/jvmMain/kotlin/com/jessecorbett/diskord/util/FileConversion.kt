@@ -32,14 +32,14 @@ public fun File.toBase64(): String {
  *
  * @return the [FileData] representing this file
  */
-public fun File.toFileData(): FileData {
+public fun File.toFileData(contentType: String? = null): FileData {
     val packet = buildPacket {
         forEachBlock { buffer, bytesRead ->
             writeFully(buffer, length = bytesRead)
         }
     }
 
-    return FileData(packet, name)
+    return FileData(packet, name, contentType)
 }
 
 /**
@@ -47,6 +47,6 @@ public fun File.toFileData(): FileData {
  *
  * @return the [FileData] representing this file
  */
-public fun Path.toFileData(): FileData {
-    return toFile().toFileData()
+public fun Path.toFileData(contentType: String? = null): FileData {
+    return toFile().toFileData(contentType)
 }

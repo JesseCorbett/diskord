@@ -3,7 +3,10 @@ package com.jessecorbett.diskord.api.global
 import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
+import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.JsonObject
 
 /**
  * A REST client for a user and their discord-wide content
@@ -144,4 +147,24 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/voice/regions").receive()
+
+    /**
+     * Get a list of all sticker packs available to Nitro users.
+     *
+     * @return The list of sticker packs.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getStickerPacks(): List<StickerPack> = defaultJson.decodeFromJsonElement(
+        ListSerializer(StickerPack.serializer()),
+        GET("/sticker-packs").receive<JsonObject>().getValue("sticker_packs")
+    )
+
+    /**
+     * Get a specific sticker by sticker ID.
+     *
+     * @param stickerId the sticker ID
+     * @return The sticker.
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun getSticker(stickerId: String): Sticker = GET("/stickers/$stickerId").receive()
 }
