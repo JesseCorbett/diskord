@@ -119,34 +119,66 @@ public data class InteractionCommandCallbackData(
     @SerialName("content") val content: String? = null,
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
-    @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.None,
+    @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
     @SerialName("components") val components: List<Message> = emptyList()
 )
 
-// This will need more work when more flags are added, but for now it's fine
-@Serializable(with = InteractionCommandCallbackDataFlags.Serializer::class)
-public sealed class InteractionCommandCallbackDataFlags(public val code: Int) {
-    public object None : InteractionCommandCallbackDataFlags(0)
-    public object Ephemeral : InteractionCommandCallbackDataFlags(1 shl 6)
-    public class Other(code: Int) : InteractionCommandCallbackDataFlags(code)
+public enum class InteractionCommandCallbackDataFlag(internal val mask: Int) {
+    /**
+     * Only the use receiving the message can see it
+     */
+    EPHEMERAL(0x40);
+}
 
-    internal object Serializer : KSerializer<InteractionCommandCallbackDataFlags> {
-        override val descriptor
-            get() = PrimitiveSerialDescriptor("InteractionCommandCallbackDataFlags", PrimitiveKind.INT)
+private typealias Flag = InteractionCommandCallbackDataFlag
+private typealias Flags = InteractionCommandCallbackDataFlags
+private typealias FlagsSerializer = InteractionCommandCallbackDataFlagsSerializer
 
-        override fun deserialize(decoder: Decoder): InteractionCommandCallbackDataFlags {
-            return when(val code = decoder.decodeInt()) {
-                0 -> None
-                (1 shl 6) -> Ephemeral
-                else -> Other(code)
-            }
+@Serializable(with = FlagsSerializer::class)
+public data class InteractionCommandCallbackDataFlags(val value: Int) {
+    public operator fun contains(flag: Flag): Boolean = flag in value
+
+    public operator fun contains(flags: Flags): Boolean = value and flags.value == flags.value
+
+
+    public operator fun plus(flags: Int): Flags = Flags(value or flags)
+
+    public operator fun plus(flags: Flags): Flags = plus(flags.value)
+
+    public operator fun plus(flags: Collection<Flag>): Unit = flags.forEach { plus(it.mask) }
+
+    public operator fun plus(flag: Flag): Flags = plus(flag.mask)
+
+    public operator fun minus(flags: Int): Flags = Flags(value and flags.inv())
+
+    public operator fun minus(flags: Flags): Flags = minus(flags.value)
+
+    public operator fun minus(flags: Collection<Flag>): Unit = flags.forEach { minus(it.mask) }
+
+    public operator fun minus(flag: Flag): Flags = minus(flag.mask)
+
+    override fun toString(): String = "InteractionCommandCallbackDataFlags($value) --> ${Flag.values().filter { it in value }.joinToString()}"
+
+    public companion object {
+        public val ALL: Flags = of(*Flag.values())
+
+        public val NONE: Flags = Flags(0)
+
+        public fun of(vararg flags: Flag): Flags {
+            return Flags(flags.map { flag -> flag.mask }.reduce { left, right -> left or right })
         }
 
-        override fun serialize(encoder: Encoder, value: InteractionCommandCallbackDataFlags) {
-            encoder.encodeInt(value.code)
-        }
-
+        private operator fun Int.contains(flag: Flag) = this and flag.mask == flag.mask
     }
+}
+
+public object InteractionCommandCallbackDataFlagsSerializer : KSerializer<Flags> {
+    override val descriptor: SerialDescriptor
+        get() = PrimitiveSerialDescriptor("InteractionCommandCallbackDataFlags", PrimitiveKind.INT)
+
+    override fun deserialize(decoder: Decoder): Flags = Flags(decoder.decodeInt())
+
+    override fun serialize(encoder: Encoder, value: Flags): Unit = encoder.encodeInt(value.value)
 }
 
 @Serializable
