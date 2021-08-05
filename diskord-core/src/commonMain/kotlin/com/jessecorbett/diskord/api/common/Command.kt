@@ -80,6 +80,10 @@ public sealed class CommandOptionChoice {
         @SerialName("name") public val name: kotlin.String,
         @SerialName("value") public val value: kotlin.Int) : CommandOptionChoice()
 
+    @Serializable
+    public data class Double(
+        @SerialName("name") public val name: kotlin.String,
+        @SerialName("value") public val value: kotlin.Double) : CommandOptionChoice()
 }
 
 // https://discord.com/developers/docs/interactions/slash-commands#application-command-permissions-object-guild-application-command-permissions-structure
