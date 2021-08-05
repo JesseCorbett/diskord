@@ -14,8 +14,8 @@ public data class Interaction(
     @SerialName("application_id") val applicationId: String,
     @SerialName("type") val type: InteractionType,
     @SerialName("data") val data: CommandInteractionData? = null,
-    @SerialName("guild_id") val guildId: String = "",
-    @SerialName("channel_id") val channelId: String = "",
+    @SerialName("guild_id") val guildId: String? = null,
+    @SerialName("channel_id") val channelId: String? = null,
     @SerialName("member") val member: GuildMember? = null,
     @SerialName("user") val user: User? = null,
     @SerialName("token") val token: String,
@@ -116,7 +116,7 @@ public sealed class InteractionCallbackType(public val code: Int) {
 @Serializable
 public data class InteractionCommandCallbackData(
     @SerialName("tts") val tts: Boolean = false,
-    @SerialName("content") val content: String = "",
+    @SerialName("content") val content: String? = null,
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
     @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.None,

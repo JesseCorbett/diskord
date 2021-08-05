@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
 public data class Command(
     @SerialName("id") val id: String,
     @SerialName("application_id") val applicationId: String,
-    @SerialName("guild_id") val guildId: String = "",
+    @SerialName("guild_id") val guildId: String? = null,
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,
     @SerialName("options") val options: List<CommandOption> = emptyList(),
