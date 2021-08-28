@@ -1,6 +1,6 @@
 # Changelog
 
-## [X.X.X] - 20XX-XX-XX
+## [2.1.0] - 20XX-XX-XX
 
 ### Breaking Changes
 The following minor breaking changes have been made:
@@ -21,6 +21,10 @@ The following minor breaking changes have been made:
 * `GatewayIntent.GUILD_EMOJIS` has been deprecated in favor of `Permission.GUILD_EMOJIS_AND_STICKERS`
 * `MessageSticker` has been deprecated in favor of `Sticker`.
 * `Message.stickers` has been deprecated in favor of `Message.stickerList`
+* Simplified BotContext reply extensions so that embeds are optional parts of `reply` rather than their own distinct `replyEmbed`
+* Updated kotlin to 1.5.30
+* Updated kotlinx.serialization to 1.2.2
+* Updated ktor dependency to 1.6.3
 
 ### Fixed
 * Fixed an issue where emoji updates may not have been received

@@ -86,6 +86,19 @@ public interface BotContext {
      *
      * @see reply
      */
+    public suspend fun Message.respond(message: String = "", block: Embed.() -> Unit): Message {
+        return channel.sendMessage(message, Embed().apply { block() })
+    }
+
+    /**
+     * Send an embed in the same channel as this message.
+     *
+     * @param message the message to respond with
+     * @param block a block to set the embed parameters with
+     *
+     * @see reply
+     */
+    @Deprecated(message = "Simplified to respond with optional embed builder", replaceWith = ReplaceWith("respond"))
     public suspend fun Message.respondEmbed(message: String = "", block: Embed.() -> Unit): Message {
         return channel.sendMessage(message, Embed().apply { block() })
     }
@@ -98,8 +111,21 @@ public interface BotContext {
      * @see reply
      */
     public suspend fun Message.respondAndDelete(message: String): Message {
-        channel.deleteMessage(id)
+        delete()
         return channel.sendMessage(message)
+    }
+
+    /**
+     * Send a message in the same channel as this message and delete the original message.
+     *
+     * @param message the message to respond with
+     * @param block the embed builder
+     *
+     * @see reply
+     */
+    public suspend fun Message.respondAndDelete(message: String = "", block: Embed.() -> Unit): Message {
+        delete()
+        return channel.sendMessage(message, Embed().apply { block() })
     }
 
     /**
@@ -121,6 +147,19 @@ public interface BotContext {
      *
      * @see respond
      */
+    public suspend fun Message.reply(message: String = "", block: Embed.() -> Unit): Message {
+        return channel.sendReply(this, message, Embed().apply { block() })
+    }
+
+    /**
+     * Sends a reply to an existing message using the Discord reply feature.
+     *
+     * @param message the message to reply with
+     * @param block a block to set the embed parameters with
+     *
+     * @see respond
+     */
+    @Deprecated(message = "Simplified to reply with optional embed builder", replaceWith = ReplaceWith("reply"))
     public suspend fun Message.replyEmbed(message: String = "", block: Embed.() -> Unit): Message {
         return channel.sendReply(this, message, Embed().apply { block() })
     }
