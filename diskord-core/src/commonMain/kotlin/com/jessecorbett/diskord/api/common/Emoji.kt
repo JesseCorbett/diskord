@@ -15,6 +15,13 @@ public data class Emoji(
     @SerialName("available") val isAvailable: Boolean = false
 )
 
+@Serializable
+public data class PartialEmoji(
+    @SerialName("id") val id: String? = null,
+    @SerialName("name") val name: String? = null,
+    @SerialName("animated") val isAnimated: Boolean = false
+)
+
 public val Emoji.stringified: String
     get() = if (id == null) {
         name ?: "null"
@@ -31,10 +38,3 @@ public val Emoji.formatted: String
         isAnimated -> "<a:$stringified>"
         else -> "<:$stringified>"
     }
-
-@Serializable
-public data class PartialEmoji(
-    @SerialName("id") val id: String? = null,
-    @SerialName("name") val name: String? = null,
-    @SerialName("animated") val isAnimated: Boolean = false
-)

@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.common
 
+import com.jessecorbett.diskord.api.interaction.MessageInteraction
 import kotlinx.serialization.*
 
 @Serializable

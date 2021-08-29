@@ -1,4 +1,4 @@
-package com.jessecorbett.diskord.api.common
+package com.jessecorbett.diskord.api.interaction
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PrimitiveKind

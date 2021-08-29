@@ -1,6 +1,7 @@
-package com.jessecorbett.diskord.api.common
+package com.jessecorbett.diskord.api.interaction
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
+import com.jessecorbett.diskord.api.common.*
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
