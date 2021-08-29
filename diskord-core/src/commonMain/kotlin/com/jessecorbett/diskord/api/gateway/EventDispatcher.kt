@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.DiskordDsl
 import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
+import com.jessecorbett.diskord.api.interaction.Interaction
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.coroutines.*
@@ -382,6 +383,14 @@ public interface EventDispatcher<T> {
     public fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> T)
 
     /**
+     * Called when a new interaction is created.
+     *
+     * @param handler The updated webhook.
+     */
+    @DiskordDsl
+    public fun onInteractionCreate(handler: suspend (Interaction) -> T)
+
+    /**
      * Copies this [EventDispatcher] with a new return type [C]
      */
     public fun <C> forType(): EventDispatcher<C>
@@ -666,6 +675,12 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
     override fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> T) {
         listeners += forEvent(DiscordEvent.WEBHOOKS_UPDATE) {
             handler(defaultJson.decodeFromJsonElement(WebhookUpdate.serializer(), it))
+        }
+    }
+
+    override fun onInteractionCreate(handler: suspend (Interaction) -> T) {
+        listeners += forEvent(DiscordEvent.INTERACTION_CREATE) {
+            handler(defaultJson.decodeFromJsonElement(Interaction.serializer(), it))
         }
     }
 

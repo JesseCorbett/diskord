@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 public data class CreateCommand(
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,
-    @SerialName("options") val options: List<CommandOption> = emptyList(),
+    @SerialName("options") val options: List<CommandOption>? = emptyList(),
     @SerialName("default_permission") val defaultPermission: Boolean = true,
     @SerialName("type") val type: CommandType = CommandType.ChatInput,
 )

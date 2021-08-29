@@ -11,7 +11,7 @@ import com.jessecorbett.diskord.api.common.audit.AuditLogEntry
 internal val defaultJson = Json {
     ignoreUnknownKeys = true
     isLenient = true
-    classDiscriminator = "class"
+    // classDiscriminator = "class"
 }
 
 /**

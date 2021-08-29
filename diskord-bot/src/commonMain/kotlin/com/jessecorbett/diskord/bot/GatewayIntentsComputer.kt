@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.events.*
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
+import com.jessecorbett.diskord.api.interaction.Interaction
 import kotlinx.serialization.json.JsonElement
 
 internal class GatewayIntentsComputer : EventDispatcher<Unit> {
@@ -186,6 +187,8 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
     override fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> Unit) {
         intents += GatewayIntent.GUILD_WEBHOOKS
     }
+
+    override fun onInteractionCreate(handler: suspend (Interaction) -> Unit) {}
 
     override fun <C> forType(): EventDispatcher<C> {
         throw NotImplementedError("forType intentionally not implemented for this class")

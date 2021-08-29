@@ -29,7 +29,15 @@ public sealed class InteractionType(public val type: Int) {
     public object Ping : InteractionType(1)
     public object ApplicationCommand : InteractionType(2)
     public object MessageComponent : InteractionType(3)
-    public class Other(type: Int) : InteractionType(type)
+    public class Other(type: Int) : InteractionType(type) {
+        override fun toString(): String {
+            return "Other($type)"
+        }
+    }
+
+    override fun toString(): String {
+        return checkNotNull(this::class.simpleName)
+    }
 
     internal object Serializer : KSerializer<InteractionType> {
         override val descriptor: SerialDescriptor
@@ -54,10 +62,13 @@ public sealed class InteractionType(public val type: Int) {
 public data class CommandInteractionData(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
+    @SerialName("type") val type: CommandType,
     @SerialName("resolved") val resolved: CommandInteractionDataResolved? = null,
     @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList(),
-    @SerialName("custom_id") val customId: String,
-    @SerialName("component_type") val componentType: Int,
+    @SerialName("custom_id") val customId: String? = null,
+    @SerialName("component_type") val componentType: Int? = null,
+    @SerialName("values") val values: List<Unit>? = null,
+    @SerialName("target_id") val targetId: String? = null,
 )
 
 @Serializable
@@ -65,7 +76,10 @@ public data class CommandInteractionDataResolved(
     @SerialName("users") val users: Map<String, User> = emptyMap(),
     @SerialName("members") val members: Map<String, PartialMember> = emptyMap(),
     @SerialName("roles") val roles: Map<String, Role> = emptyMap(),
-    @SerialName("channels") val channels: Map<String, PartialChannel> = emptyMap()
+    @SerialName("channels") val channels: Map<String, PartialChannel> = emptyMap(),
+
+    // Note: API denotes "partial" but does not mention what constitutes a partial message
+    @SerialName("messages") val messages: Map<String, Message> = emptyMap(),
 )
 
 @Serializable
