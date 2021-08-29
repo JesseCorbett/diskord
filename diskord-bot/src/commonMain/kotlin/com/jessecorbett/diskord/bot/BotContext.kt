@@ -5,6 +5,7 @@ import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.api.interaction.InteractionClient
 import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
 import com.jessecorbett.diskord.internal.client.RestClient
@@ -40,6 +41,11 @@ public interface BotContext {
      * Create an instance of an invite client
      */
     public fun invite(inviteCode: String): InviteClient = InviteClient(inviteCode, client)
+
+    /**
+     * Create an instance of an interaction client
+     */
+    public fun interaction(applicationId: String): InteractionClient = InteractionClient(applicationId, client)
 
     /**
      * Create an instance of a webhook client
