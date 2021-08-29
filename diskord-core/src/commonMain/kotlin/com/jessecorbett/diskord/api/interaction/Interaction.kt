@@ -181,11 +181,3 @@ public object InteractionCommandCallbackDataFlagsSerializer : KSerializer<Flags>
 
     override fun serialize(encoder: Encoder, value: Flags): Unit = encoder.encodeInt(value.value)
 }
-
-@Serializable
-public data class MessageInteraction(
-    @SerialName("id") val id: String,
-    @SerialName("type") val type: InteractionType,
-    @SerialName("name") val name: String,
-    @SerialName("user") val user: User
-)

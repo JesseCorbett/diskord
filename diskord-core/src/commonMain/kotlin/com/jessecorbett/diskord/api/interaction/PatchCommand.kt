@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class PatchGlobalCommand(
+public data class PatchCommand(
     @SerialName("name") val name: String? = null,
     @SerialName("description") val description: String? = null,
     @SerialName("options") val options: List<CommandOption>? = null,

@@ -128,6 +128,12 @@ public data class GuildCommandPermissions(
 )
 
 @Serializable
+public data class PartialGuildCommandPermissions(
+    @SerialName("id") val id: String,
+    @SerialName("permissions") val permissions: List<CommandPermissions>
+)
+
+@Serializable
 public data class CommandPermissions(
     @SerialName("id") val id: String,
     @SerialName("type") val type: CommandPermissionsType,

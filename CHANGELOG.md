@@ -11,6 +11,7 @@ The following minor breaking changes have been made:
 ### Added
 * Added support for stickers
 * Added support for threads
+* Added support for interactions and slash commands
 * Added extensions for sending embedded replies
 * Added missing enums to `GuildFeatures`
 
@@ -19,9 +20,12 @@ The following minor breaking changes have been made:
 * `FileData` now supports specifying a content type (this is required for sticker uploads)
 * `Permission.MANAGE_EMOJIS` has been deprecated in favor of `Permission.MANAGE_EMOJIS_AND_STICKERS`
 * `GatewayIntent.GUILD_EMOJIS` has been deprecated in favor of `Permission.GUILD_EMOJIS_AND_STICKERS`
-* `MessageSticker` has been deprecated in favor of `Sticker`.
+* `MessageSticker` has been deprecated in favor of `Sticker`
 * `Message.stickers` has been deprecated in favor of `Message.stickerList`
-* Simplified BotContext reply extensions so that embeds are optional parts of `reply` rather than their own distinct `replyEmbed`
+* `WebhookSubmission` has been deprecated in favor of `CreateWebhookMessage`
+* `WebhookClient.execute` using `WebhookSubmission` has been deprecated in favor of a new variant which uses `CreateWebhookMessage` and returns `Message`
+* `WebhookClient.updateWebhookMessage` using `WebhookSubmission` has been deprecated in favor of a new variant which uses `PatchWebhookMessage`
+* Simplified `BotContext` reply extensions so that embeds are optional parts of `reply` rather than their own distinct `replyEmbed`
 * Updated kotlin to 1.5.30
 * Updated kotlinx.serialization to 1.2.2
 * Updated ktor dependency to 1.6.3
