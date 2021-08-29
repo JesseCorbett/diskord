@@ -7,10 +7,11 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-// https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-structure
+// https://discord.com/developers/docs/interactions/application-commands#application-command-object
 @Serializable
 public data class Command(
     @SerialName("id") val id: String,
+    @SerialName("type") val type: CommandType = CommandType.ChatInput,
     @SerialName("application_id") val applicationId: String,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("name") val name: String,
@@ -18,6 +19,32 @@ public data class Command(
     @SerialName("options") val options: List<CommandOption> = emptyList(),
     @SerialName("default_permission") val defaultPermission: Boolean = true
 )
+
+@Serializable(with = CommandType.Serializer::class)
+public sealed class CommandType(public val type: Int) {
+    public object ChatInput : CommandType(1)
+    public object User : CommandType(2)
+    public object Message : CommandType(3)
+    public class Other(type: Int) : CommandType(type)
+
+    internal object Serializer : KSerializer<CommandType> {
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor("CommandType", PrimitiveKind.INT)
+
+        override fun deserialize(decoder: Decoder): CommandType {
+            return when(val type = decoder.decodeInt()) {
+                1 -> ChatInput
+                2 -> User
+                3 -> Message
+                else -> Other(type)
+            }
+        }
+
+        override fun serialize(encoder: Encoder, value: CommandType) {
+            encoder.encodeInt(value.type)
+        }
+    }
+}
 
 @Serializable
 public data class CommandOption(
@@ -40,11 +67,12 @@ public sealed class CommandOptionType(public val type: Int) {
     public object Channel : CommandOptionType(7)
     public object Role : CommandOptionType(8)
     public object Mentionable : CommandOptionType(9)
+    public object Number : CommandOptionType(10)
     public class Other(type: Int) : CommandOptionType(type)
 
     internal object Serializer : KSerializer<CommandOptionType> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("CommandOptionType", PrimitiveKind.INT)
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor("CommandOptionType", PrimitiveKind.INT)
 
         override fun deserialize(decoder: Decoder): CommandOptionType {
             return when(val type = decoder.decodeInt()) {
@@ -57,6 +85,7 @@ public sealed class CommandOptionType(public val type: Int) {
                 7 -> Channel
                 8 -> Role
                 9 -> Mentionable
+                10 -> Number
                 else -> Other(type)
             }
         }
@@ -67,23 +96,26 @@ public sealed class CommandOptionType(public val type: Int) {
     }
 }
 
-// https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-choice-structure
+// https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
 @Serializable
 public sealed class CommandOptionChoice {
     @Serializable
     public data class String(
         @SerialName("name") public val name: kotlin.String,
-        @SerialName("value") public val value: kotlin.String) : CommandOptionChoice()
+        @SerialName("value") public val value: kotlin.String
+    ) : CommandOptionChoice()
 
     @Serializable
     public data class Int(
         @SerialName("name") public val name: kotlin.String,
-        @SerialName("value") public val value: kotlin.Int) : CommandOptionChoice()
+        @SerialName("value") public val value: kotlin.Int
+    ) : CommandOptionChoice()
 
     @Serializable
     public data class Double(
         @SerialName("name") public val name: kotlin.String,
-        @SerialName("value") public val value: kotlin.Double) : CommandOptionChoice()
+        @SerialName("value") public val value: kotlin.Double
+    ) : CommandOptionChoice()
 }
 
 // https://discord.com/developers/docs/interactions/slash-commands#application-command-permissions-object-guild-application-command-permissions-structure
@@ -110,8 +142,8 @@ public sealed class CommandPermissionsType(public val code: Int) {
 
     internal object Serializer : KSerializer<CommandPermissionsType> {
 
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("CommandPermissionsType", PrimitiveKind.INT)
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor("CommandPermissionsType", PrimitiveKind.INT)
 
         override fun deserialize(decoder: Decoder): CommandPermissionsType {
             return when(val code = decoder.decodeInt()) {
@@ -124,6 +156,5 @@ public sealed class CommandPermissionsType(public val code: Int) {
         override fun serialize(encoder: Encoder, value: CommandPermissionsType) {
             encoder.encodeInt(value.code)
         }
-
     }
 }
