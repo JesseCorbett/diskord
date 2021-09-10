@@ -21,9 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:2.0.2")
+    implementation("com.jessecorbett:diskord-bot:2.1.0")
     // or, if you only want the low level implementation
-    implementation("com.jessecorbett:diskord-core:2.0.2")
+    implementation("com.jessecorbett:diskord-core:2.1.0")
 }
 ```
 
