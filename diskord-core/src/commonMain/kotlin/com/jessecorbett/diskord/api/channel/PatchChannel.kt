@@ -2,6 +2,7 @@ package com.jessecorbett.diskord.api.channel
 
 import com.jessecorbett.diskord.api.common.ChannelType
 import com.jessecorbett.diskord.api.common.Overwrite
+import com.jessecorbett.diskord.api.common.VideoQualityMode
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,3 +35,12 @@ public data class PatchChannelOverwrites(@SerialName("permission_overwrites") va
 
 @Serializable
 public data class PatchChannelParent(@SerialName("parent_id") val parentId: String?)
+
+@Serializable
+public data class PatchRtcRegion(@SerialName("rtc_region") val regionId: String?)
+
+@Serializable
+public data class PatchVideoQualityMode(@SerialName("video_quality_mode") val videoQualityMode: VideoQualityMode?)
+
+@Serializable
+public data class PatchDefaultAutoArchiveDuration(@SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Int?)

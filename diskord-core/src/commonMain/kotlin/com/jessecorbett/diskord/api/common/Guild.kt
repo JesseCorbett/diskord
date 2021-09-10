@@ -12,7 +12,6 @@ public data class Guild(
     @SerialName("owner") val userIsOwner: Boolean? = null,
     @SerialName("owner_id") val ownerId: String,
     @SerialName("permissions") val permissions: Permissions? = null,
-    @SerialName("region") val region: String,
     @SerialName("afk_channel_id") val afkChannelId: String?,
     @SerialName("afk_timeout") val afkTimeoutSeconds: Int,
     @SerialName("widget_enabled") val widgetEnabled: Boolean? = null,
@@ -40,7 +39,10 @@ public data class Guild(
     @SerialName("max_video_channel_users") val maxVideoChannelUsers: Int? = null,
     @SerialName("approximate_member_count") val approximateMemberCount: Int? = null,
     @SerialName("approximate_presence_count") val approximatePresenceCount: Int? = null,
-    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null
+    @SerialName("welcome_screen") val welcomeScreen: WelcomeScreen? = null,
+    @SerialName("nsfw_level") val nsfwLevel: GuildNSFWLevel,
+    @SerialName("stage_instances") val stageInstances: List<StageInstance>? = null,
+    @SerialName("stickers") val sticker: List<Sticker>? = null,
 )
 
 @Serializable
@@ -66,21 +68,27 @@ public enum class ExplicitContentFilterLevel {
 }
 
 public enum class GuildFeatures {
-    INVITE_SPLASH,
-    VIP_REGIONS,
-    VANITY_URL,
-    VERIFIED,
-    PARTNERED,
-    COMMUNITY,
-    COMMERCE,
-    NEWS,
-    DISCOVERABLE,
-    FEATURABLE,
     ANIMATED_ICON,
     BANNER,
-    WELCOME_SCREEN_ENABLED,
+    COMMERCE,
+    COMMUNITY,
+    DISCOVERABLE,
+    FEATURABLE,
+    INVITE_SPLASH,
     MEMBER_VERIFICATION_GATE_ENABLED,
-    PREVIEW_ENABLED
+    NEWS,
+    PARTNERED,
+    PREVIEW_ENABLED,
+    VANITY_URL,
+    VERIFIED,
+    VIP_REGIONS,
+    WELCOME_SCREEN_ENABLED,
+    TICKETED_EVENTS_ENABLED,
+    MONETIZATION_ENABLED,
+    MORE_STICKERS,
+    THREE_DAY_THREAD_ARCHIVE,
+    SEVEN_DAY_THREAD_ARCHIVE,
+    PRIVATE_THREADS
 }
 
 @Serializable
@@ -110,3 +118,27 @@ public data class WelcomeScreenChannel(
     @SerialName("emoji_id") val emojiId: String?,
     @SerialName("emoji_name") val emojiName: String?
 )
+
+@Serializable
+public enum class GuildNSFWLevel {
+    @SerialName("0") DEFAULT,
+    @SerialName("1") EXPLICIT,
+    @SerialName("2") SAFE,
+    @SerialName("3") AGE_RESTRICTED,
+}
+
+@Serializable
+public data class StageInstance(
+    @SerialName("id") val id: String,
+    @SerialName("guild_id") val guildId: String,
+    @SerialName("channel_id") val channelId: String,
+    @SerialName("topic") val topic: String,
+    @SerialName("privacy_level") val privacyLevel: StagePrivacyLevel,
+    @SerialName("discoverable_disabled") val discoverable_disabled: Boolean,
+)
+
+@Serializable
+public enum class StagePrivacyLevel {
+    @SerialName("1") PUBLIC,
+    @SerialName("2") GUILD_ONLY,
+}

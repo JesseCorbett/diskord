@@ -10,7 +10,6 @@ import io.ktor.client.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import io.ktor.util.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
@@ -60,7 +59,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
     private suspend fun initializeNewConnection() = try {
             coroutineScope {
                 socketClient.wss(host = url, port = 443, request = {
-                    this.url.parameters["v"] = "8"
+                    this.url.parameters["v"] = "9"
                     this.url.parameters["encoding"] = "json"
                     logger.trace { "Building a socket HttpRequest" }
                 }) {

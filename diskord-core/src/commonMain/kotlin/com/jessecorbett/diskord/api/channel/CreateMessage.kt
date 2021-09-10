@@ -78,7 +78,12 @@ public data class EmbedField(
     @SerialName("inline") val inline: Boolean
 )
 
-public data class FileData(val packet: ByteReadPacket, val filename: String)
+// TODO: This should be moved to the common package on the next breaking pass.
+public data class FileData(
+    val packet: ByteReadPacket,
+    val filename: String,
+    val contentType: String? = null
+)
 
 @Serializable
 public data class AllowedMentions(

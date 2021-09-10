@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class CreateChannel(
     @SerialName("name") val name: String,
-    @SerialName("type") val type: ChannelType,
+    @SerialName("type") val type: ChannelType? = null,
+    @SerialName("topic") val topic: String? = null,
     @SerialName("bitrate") val bitrate: Int? = null,
     @SerialName("user_limit") val voiceChannelUserLimit: Int? = null, // Only set if a voice channel
     @SerialName("rate_limit_per_user") val timeBetweenUserMessages: Int? = null, // Does not apply to bots/users with manage permissions,

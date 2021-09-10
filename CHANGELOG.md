@@ -1,5 +1,36 @@
 # Changelog
 
+## [2.1.0] - 2021-09-09
+
+### Breaking Changes
+The following minor breaking changes have been made:
+* `Guild.region` has been removed from the Discord API v9 (it has been replaced with `Channel.rtcRegion`)
+* `Channel.rateLimitPerUser` has been marked as nullable to support threads (as per the Discord API)
+* Fixed incorrectly named methods: `Guild.updateChannel` -> `Guild.updateGuild`, `Guild.deleteChannel` -> `Guild.deleteGuild`
+
+### Added
+* Added support for stickers
+* Added support for threads
+* Added extensions for sending embedded replies
+* Added missing enums to `GuildFeatures`
+
+### Changed
+* JavaScript module now supports both Legacy and IR backends
+* `FileData` now supports specifying a content type (this is required for sticker uploads)
+* `Permission.MANAGE_EMOJIS` has been deprecated in favor of `Permission.MANAGE_EMOJIS_AND_STICKERS`
+* `GatewayIntent.GUILD_EMOJIS` has been deprecated in favor of `Permission.GUILD_EMOJIS_AND_STICKERS`
+* `MessageSticker` has been deprecated in favor of `Sticker`.
+* `Message.stickers` has been deprecated in favor of `Message.stickerList`
+* Simplified BotContext reply extensions so that embeds are optional parts of `reply` rather than their own distinct `replyEmbed`
+* Updated kotlin to 1.5.30
+* Updated kotlinx.serialization to 1.2.2
+* Updated ktor dependency to 1.6.3
+
+### Fixed
+* Fixed an issue where emoji updates may not have been received
+* Fixed incorrect permissions mask for VIEW_GUILD_INSIGHTS
+* `Permissions` now uses `Long` for internal bitmask representation
+
 ## [2.0.2] - 2021-07-03
 
 ### Added

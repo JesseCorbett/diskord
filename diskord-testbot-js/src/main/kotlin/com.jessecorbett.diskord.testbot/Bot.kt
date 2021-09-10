@@ -18,8 +18,8 @@ suspend fun main() {
             onReady {
                 if (!started) {
                     channel("547517051556855808").sendMessage("Diskord JS bot has started")
-                    setStatus("Making sure JS runtime works")
                 }
+                setStatus("Making sure JS runtime works")
                 started = true
             }
         }

@@ -7,7 +7,7 @@ fun randomString(length: Long = 10): String {
     return Random().ints(length, 0, source.length).toArray()
         .asSequence()
         .map(source::get)
-        .map { if (it.isLetter() && Random().nextBoolean()) it.toLowerCase() else it }
+        .map { if (it.isLetter() && Random().nextBoolean()) it.lowercaseChar() else it }
         .joinToString("")
 }
 
