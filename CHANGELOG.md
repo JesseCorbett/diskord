@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.0] - 20XX-XX-XX
+## [2.1.0] - 2021-09-09
 
 ### Breaking Changes
 The following minor breaking changes have been made:
