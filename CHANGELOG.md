@@ -1,5 +1,7 @@
 # Changelog
 
+## [2.1.1] - XXXX-XX-XX
+
 ## [2.1.0] - 2021-09-09
 
 ### Breaking Changes
