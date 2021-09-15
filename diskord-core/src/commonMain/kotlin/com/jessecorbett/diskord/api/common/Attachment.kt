@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 public data class Attachment(
     @SerialName("id") val id: String,
     @SerialName("filename") val fileName: String,
+    @SerialName("content_type") val contentType: String? = null,
     @SerialName("size") val sizeInBytes: Int,
     @SerialName("url") val url: String,
     @SerialName("proxy_url") val proxiedUrl: String,
