@@ -171,6 +171,7 @@ public class DefaultRestClient(
                 logger.info { "Attempting to recover from rate limit error with a retry after ${delayMillis}ms" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
                 delay(delayMillis)
+                logger.info { "Attempting retry" }
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
             }
         }
@@ -240,16 +241,22 @@ public class DefaultRestClient(
 }
 
 @DiskordInternals
-private fun throwFailure(code: Int, body: String?): Nothing = throw when (code) {
-    400 -> DiscordBadRequestException(body)
-    401 -> DiscordUnauthorizedException()
-    403 -> DiscordBadPermissionsException()
-    404 -> DiscordNotFoundException()
-    429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
-        logger.info { "Encountered a rate limit exception" }
-        DiscordRateLimitException(it.message, it.retryAfter, it.isGlobal)
+private fun throwFailure(code: Int, body: String?): Nothing {
+    val exception = when (code) {
+        400 -> DiscordBadRequestException(body)
+        401 -> DiscordUnauthorizedException()
+        403 -> DiscordBadPermissionsException()
+        404 -> DiscordNotFoundException()
+        429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
+            logger.info { "Encountered a rate limit exception" }
+            DiscordRateLimitException(it.message, it.retryAfter, it.isGlobal)
+        }
+        502 -> DiscordGatewayException()
+        in 500..599 -> DiscordInternalServerException()
+        else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
     }
-    502 -> DiscordGatewayException()
-    in 500..599 -> DiscordInternalServerException()
-    else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
+
+    logger.warn { "Encountered exception $exception making an API call" }
+
+    throw exception
 }
