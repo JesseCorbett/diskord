@@ -30,6 +30,13 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
     // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
     val resetsAt = ceil(rateLimitInfo.reset * 1000).toLong() - epochMillisNow()
+
+    when {
+        resetsAt < 5000 -> logger.debug { "Delaying API call to satisfy low rate limit reset of ${resetsAt}ms" }
+        resetsAt in 5000..10000 -> logger.info { "Delaying API call to satisfy rate limit reset of ${resetsAt}ms" }
+        resetsAt > 10000 -> logger.info { "Delaying API call to satisfy high rate limit reset of ${resetsAt}ms. If you frequently encounter this consider reducing API calls" }
+    }
+
     delay(Duration.milliseconds(resetsAt))
 }
 
