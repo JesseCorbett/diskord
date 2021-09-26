@@ -4,6 +4,7 @@
 
 ### Fixed
 * Two issues related to rate limiting
+* Added missing content_type field to Attachments
 
 ### Changed
 * Added logging around rate limits and API exceptions
