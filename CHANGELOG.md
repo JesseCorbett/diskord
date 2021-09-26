@@ -1,5 +1,7 @@
 # Changelog
 
+## [2.1.2] - XXXX-XX-XX
+
 ## [2.1.1] - 2020-09-35
 
 ### Fixed
