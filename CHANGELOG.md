@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.1] - 2020-09-35
+
+### Fixed
+* Two issues related to rate limiting
+* Added missing content_type field to Attachments
+
+### Changed
+* Added logging around rate limits and API exceptions
+
 ## [2.1.0] - 2021-09-09
 
 ### Breaking Changes

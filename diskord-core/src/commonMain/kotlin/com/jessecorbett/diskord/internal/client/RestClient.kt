@@ -5,7 +5,6 @@ import com.jessecorbett.diskord.api.exceptions.*
 import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.epochMillisNow
-import com.jessecorbett.diskord.internal.epochSecondNow
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.auditLogEntryJson
 import com.jessecorbett.diskord.util.defaultJson
@@ -31,6 +30,13 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
     // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
     val resetsAt = ceil(rateLimitInfo.reset * 1000).toLong() - epochMillisNow()
+
+    when {
+        resetsAt < 5000 -> logger.debug { "Delaying API call to satisfy low rate limit reset of ${resetsAt}ms" }
+        resetsAt in 5000..10000 -> logger.info { "Delaying API call to satisfy rate limit reset of ${resetsAt}ms" }
+        resetsAt > 10000 -> logger.info { "Delaying API call to satisfy high rate limit reset of ${resetsAt}ms. If you frequently encounter this consider reducing API calls" }
+    }
+
     delay(Duration.milliseconds(resetsAt))
 }
 
@@ -123,6 +129,7 @@ public class DefaultRestClient(
         auditLogsClient.close()
     }
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun request(
         majorPath: String,
         minorPath: String,
@@ -168,8 +175,10 @@ public class DefaultRestClient(
             try {
                 throwFailure(response.status.value, response.readText())
             } catch (rateLimitException: DiscordRateLimitException) {
+                logger.info { "Attempting to recover from rate limit error with a retry after ${rateLimitException.retryAfterSeconds}s" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
-                delay(rateLimitException.retryAfterSeconds * 1000)
+                delay(Duration.seconds(rateLimitException.retryAfterSeconds))
+                logger.info { "Attempting retry" }
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
             }
         }
@@ -182,6 +191,7 @@ public class DefaultRestClient(
         val remaining = headers["X-RateLimit-Remaining"]?.toInt() ?: 1
         val resetAt = headers["X-RateLimit-Reset"]?.toFloat() ?: Float.MAX_VALUE
 
+        // Sets the associated bucket in case we don't know it yet
         if (bucket == null) {
             logger.warn { "Encountered an API response without a rate limit bucket, using a fallback bucket for safety" }
             bucket = "fallback-bucket"
@@ -192,9 +202,7 @@ public class DefaultRestClient(
         if (isGlobal) {
             globalRateLimit = RateLimitInfo(1, 0, resetAt)
         } else {
-            rateLimitBuckets.getOrPut(bucket) {
-                RateLimitInfo(limit, remaining, resetAt)
-            }
+            rateLimitBuckets[bucket] = RateLimitInfo(limit, remaining, resetAt)
         }
     }
 
@@ -239,17 +247,23 @@ public class DefaultRestClient(
 }
 
 @DiskordInternals
-private fun throwFailure(code: Int, body: String?): Nothing = throw when (code) {
-    400 -> DiscordBadRequestException(body)
-    401 -> DiscordUnauthorizedException()
-    403 -> DiscordBadPermissionsException()
-    404 -> DiscordNotFoundException()
-    429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
-        println(it)
-        logger.info { "Encountered a rate limit exception" }
-        DiscordRateLimitException(it.message, it.retryAfter, it.isGlobal)
+private fun throwFailure(code: Int, body: String?): Nothing {
+    val exception = when (code) {
+        400 -> DiscordBadRequestException(body)
+        401 -> DiscordUnauthorizedException()
+        403 -> DiscordBadPermissionsException()
+        404 -> DiscordNotFoundException()
+        429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
+            logger.info { "Encountered a rate limit exception" }
+            // Converting from millis to seconds as it appears the API is doing so despite documentation
+            DiscordRateLimitException(it.message, it.retryAfterSeconds / 1000, it.isGlobal)
+        }
+        502 -> DiscordGatewayException()
+        in 500..599 -> DiscordInternalServerException()
+        else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
     }
-    502 -> DiscordGatewayException()
-    in 500..599 -> DiscordInternalServerException()
-    else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
+
+    logger.warn { "Encountered exception $exception making an API call" }
+
+    throw exception
 }
