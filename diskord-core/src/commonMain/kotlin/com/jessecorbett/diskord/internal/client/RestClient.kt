@@ -249,7 +249,7 @@ private fun throwFailure(code: Int, body: String?): Nothing {
         404 -> DiscordNotFoundException()
         429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
             logger.info { "Encountered a rate limit exception" }
-            DiscordRateLimitException(it.message, it.retryAfter, it.isGlobal)
+            DiscordRateLimitException(it.message, it.retryAfterSeconds, it.isGlobal)
         }
         502 -> DiscordGatewayException()
         in 500..599 -> DiscordInternalServerException()
