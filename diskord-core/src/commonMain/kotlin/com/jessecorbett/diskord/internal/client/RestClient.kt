@@ -184,6 +184,7 @@ public class DefaultRestClient(
         val remaining = headers["X-RateLimit-Remaining"]?.toInt() ?: 1
         val resetAt = headers["X-RateLimit-Reset"]?.toFloat() ?: Float.MAX_VALUE
 
+        // Sets the associated bucket in case we don't know it yet
         if (bucket == null) {
             logger.warn { "Encountered an API response without a rate limit bucket, using a fallback bucket for safety" }
             bucket = "fallback-bucket"
@@ -249,7 +250,8 @@ private fun throwFailure(code: Int, body: String?): Nothing {
         404 -> DiscordNotFoundException()
         429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
             logger.info { "Encountered a rate limit exception" }
-            DiscordRateLimitException(it.message, it.retryAfterSeconds, it.isGlobal)
+            // Converting from millis to seconds as it appears the API is doing so despite documentation
+            DiscordRateLimitException(it.message, it.retryAfterSeconds / 1000, it.isGlobal)
         }
         502 -> DiscordGatewayException()
         in 500..599 -> DiscordInternalServerException()
