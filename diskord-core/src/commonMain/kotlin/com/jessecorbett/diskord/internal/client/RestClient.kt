@@ -122,6 +122,7 @@ public class DefaultRestClient(
         auditLogsClient.close()
     }
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun request(
         majorPath: String,
         minorPath: String,
@@ -167,10 +168,9 @@ public class DefaultRestClient(
             try {
                 throwFailure(response.status.value, response.readText())
             } catch (rateLimitException: DiscordRateLimitException) {
-                val delayMillis = rateLimitException.retryAfterSeconds * 1000
-                logger.info { "Attempting to recover from rate limit error with a retry after ${delayMillis}ms" }
+                logger.info { "Attempting to recover from rate limit error with a retry after ${rateLimitException.retryAfterSeconds}s" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
-                delay(delayMillis)
+                delay(Duration.seconds(rateLimitException.retryAfterSeconds))
                 logger.info { "Attempting retry" }
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
             }

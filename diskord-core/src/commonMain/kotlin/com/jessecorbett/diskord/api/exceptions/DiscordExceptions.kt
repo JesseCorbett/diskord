@@ -49,7 +49,7 @@ public class DiscordBadPermissionsException : DiscordException()
  */
 public class DiscordRateLimitException(
     override val message: String,
-    public val retryAfterSeconds: Float,
+    public val retryAfterSeconds: Double,
     public val isGlobalRateLimit: Boolean
 ) : DiscordException()
 
@@ -63,7 +63,7 @@ public class DiscordRateLimitException(
 @Serializable
 public data class RateLimitExceeded(
     @SerialName("message") val message: String,
-    @SerialName("retry_after") val retryAfterSeconds: Float,
+    @SerialName("retry_after") val retryAfterSeconds: Double,
     @SerialName("global") val isGlobal: Boolean
 )
 
