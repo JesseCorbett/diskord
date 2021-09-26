@@ -195,9 +195,7 @@ public class DefaultRestClient(
         if (isGlobal) {
             globalRateLimit = RateLimitInfo(1, 0, resetAt)
         } else {
-            rateLimitBuckets.getOrPut(bucket) {
-                RateLimitInfo(limit, remaining, resetAt)
-            }
+            rateLimitBuckets[bucket] = RateLimitInfo(limit, remaining, resetAt)
         }
     }
 
