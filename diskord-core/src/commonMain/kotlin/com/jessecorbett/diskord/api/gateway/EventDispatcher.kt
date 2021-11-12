@@ -74,7 +74,7 @@ public interface EventDispatcher<T> {
      * @param handler The loaded/available/joined guild.
      */
     @DiskordDsl
-    public fun onGuildCreate(handler: suspend (Guild) -> T)
+    public fun onGuildCreate(handler: suspend (CreatedGuild) -> T)
 
     /**
      * Called when a guild is updated.
@@ -441,9 +441,9 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
         }
     }
 
-    override fun onGuildCreate(handler: suspend (Guild) -> T) {
+    override fun onGuildCreate(handler: suspend (CreatedGuild) -> T) {
         listeners += forEvent(DiscordEvent.GUILD_CREATE) {
-            handler(defaultJson.decodeFromJsonElement(Guild.serializer(), it))
+            handler(defaultJson.decodeFromJsonElement(CreatedGuild.serializer(), it))
         }
     }
 
