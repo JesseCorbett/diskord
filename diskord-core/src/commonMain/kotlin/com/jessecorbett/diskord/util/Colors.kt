@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.util
 
 import com.jessecorbett.diskord.api.common.Color
+import kotlin.math.roundToInt
 
 /**
  * A collection of convenience methods and predefined colors for working with the color field in embeds.
@@ -158,12 +159,24 @@ public object Colors {
      * @param green The green value.
      * @param blue The blue value.
      */
+    public fun rgb(red: Double, green: Double, blue: Double): Color = rgb(red.toFloat(), green.toFloat(), blue.toFloat())
+
+    /**
+     * Creates a [Color] instance which represents the specified red, green, and blue values.
+     *
+     * Each specified value should be between 0.0 and 1.0.
+     *
+     * @param red The red value.
+     * @param green The green value.
+     * @param blue The blue value.
+     */
     public fun rgb(red: Float, green: Float, blue: Float): Color {
         require(red in 0.0F..1.0F) { "$red is not between 0 and 1." }
         require(green in 0.0F..1.0F) { "$green is not between 0 and 1." }
         require(blue in 0.0F..1.0F) { "$blue is not between 0 and 1." }
 
-        return rgb((red * 255).toInt(), (green * 255).toInt(), (blue * 255).toInt())
+        // Use roundToInt instead of toInt, as toInt truncates the float 254.745 (an input of 0.999) to 254, when it should be 255.
+        return rgb((red * 255).roundToInt(), (green * 255).roundToInt(), (blue * 255).roundToInt())
     }
 
     /**
