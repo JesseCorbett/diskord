@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class GuildMemberAdd(
-    @SerialName("user") val user: User? = null,
+    @SerialName("user") val user: User,
     @SerialName("nick") val nickname: String? = null,
     @SerialName("roles") val roleIds: List<String>,
     @SerialName("joined_at") val joinedAt: String,
