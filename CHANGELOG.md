@@ -9,7 +9,7 @@
 * Updated to kotlin 1.6.10 and related dependencies
 * Changed behavior to bot startup so that it blocks until connection is established
 
-## [2.1.1] - 2020-09-35
+## [2.1.1] - 2020-09-25
 
 ### Fixed
 * Two issues related to rate limiting
