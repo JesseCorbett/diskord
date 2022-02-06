@@ -263,8 +263,10 @@ private fun throwFailure(code: Int, body: String?, httpResponse: HttpResponse): 
         else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
     }
 
-    val request = httpResponse.request
-    logger.warn { "Encountered exception $exception making API call " + request.method.value + " " + request.url }
+    val exceptionMessage = listOfNotNull(exception::class.simpleName, exception.message).joinToString(" ")
+    val method = httpResponse.request.method.value
+    val path = httpResponse.request.url.encodedPath
+    logger.warn { "Encountered $exceptionMessage making API call $method $path" }
 
     throw exception
 }
