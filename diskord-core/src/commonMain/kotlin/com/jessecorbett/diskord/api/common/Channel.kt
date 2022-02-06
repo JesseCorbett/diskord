@@ -19,7 +19,7 @@ public interface TextChannel {
 public interface GuildChannel : NamedChannel {
     public val guildId: String
     public val position: Int
-    public val nsfw: Boolean
+    public val nsfw: Boolean?
     public val permissionOverwrites: List<Overwrite>
 }
 
@@ -123,7 +123,7 @@ public data class GuildCategory(
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
-    @SerialName("nsfw") override val nsfw: Boolean
+    @SerialName("nsfw") override val nsfw: Boolean? = null
 ) : Channel(), GuildChannel
 
 @Serializable
@@ -135,7 +135,7 @@ public data class GuildNewsChannel(
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
     @SerialName("topic") override val topic: String? = null,
-    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("parent_id") override val parentId: String?,
@@ -150,7 +150,7 @@ public data class GuildStoreChannel(
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
-    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("parent_id") val parentId: String?,
 ) : Channel(), GuildChannel
 
@@ -236,8 +236,8 @@ public data class Overwrite(
 
 @Serializable
 public enum class OverwriteType {
-    @SerialName("role") ROLE,
-    @SerialName("member") MEMBER
+    @SerialName("0") ROLE,
+    @SerialName("1") MEMBER
 }
 
 @Serializable

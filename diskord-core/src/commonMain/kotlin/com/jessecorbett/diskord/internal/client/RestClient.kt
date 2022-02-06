@@ -173,7 +173,7 @@ public class DefaultRestClient(
             response
         } else {
             try {
-                throwFailure(response.status.value, response.readText())
+                throwFailure(response.status.value, response.readText(), response)
             } catch (rateLimitException: DiscordRateLimitException) {
                 logger.info { "Attempting to recover from rate limit error with a retry after ${rateLimitException.retryAfterSeconds}s" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
@@ -247,7 +247,7 @@ public class DefaultRestClient(
 }
 
 @DiskordInternals
-private fun throwFailure(code: Int, body: String?): Nothing {
+private fun throwFailure(code: Int, body: String?, httpResponse: HttpResponse): Nothing {
     val exception = when (code) {
         400 -> DiscordBadRequestException(body)
         401 -> DiscordUnauthorizedException()
@@ -263,7 +263,10 @@ private fun throwFailure(code: Int, body: String?): Nothing {
         else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
     }
 
-    logger.warn { "Encountered exception $exception making an API call" }
+    val exceptionMessage = listOfNotNull(exception::class.simpleName, exception.message).joinToString(" ")
+    val method = httpResponse.request.method.value
+    val path = httpResponse.request.url.encodedPath
+    logger.warn { "Encountered $exceptionMessage making API call $method $path" }
 
     throw exception
 }
