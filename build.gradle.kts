@@ -12,6 +12,10 @@ val diskordVersion: String by project
 group = "com.jessecorbett"
 version = diskordVersion
 
+rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin> {
+    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension>().nodeVersion = "16.0.0"
+}
+
 allprojects {
     repositories {
         mavenCentral()
