@@ -30,7 +30,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val sessionScope = CoroutineScope(sessionDispatcher)
 
     /**
-     * Whether or not this gateway has at least one active session.
+     * Whether this gateway has at least one active session.
      */
     public val isRunning: Boolean get() = sessions.isNotEmpty() && sessions.any { it.running }
 
@@ -60,9 +60,9 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
      * Blocks the current process in case your program is only the bot
      */
     public suspend fun block() {
-        while (isRunning) {
+        do {
             delay(100) // If we could find a way to make Gateway a session or similar this would be better I think
-        }
+        } while (isRunning)
     }
 
     /**

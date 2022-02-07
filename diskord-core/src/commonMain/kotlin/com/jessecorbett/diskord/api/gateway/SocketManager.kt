@@ -83,6 +83,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                             is Frame.Binary -> TODO("Add support for binary formatted data")
                             is Frame.Close -> logger.info { "Close Frame sent with message: $frame" }
                             is Frame.Ping, is Frame.Pong -> logger.debug { frame }
+                            else -> logger.error { "Encountered unexpected frame type " + frame::class.simpleName }
                         }
                     }
                     logger.info { "Exited the incoming loop" }

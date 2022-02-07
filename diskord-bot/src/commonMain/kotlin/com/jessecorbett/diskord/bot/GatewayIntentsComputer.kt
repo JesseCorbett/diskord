@@ -31,7 +31,7 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
         intents += GatewayIntent.DIRECT_MESSAGES
     }
 
-    override fun onGuildCreate(handler: suspend (Guild) -> Unit) {
+    override fun onGuildCreate(handler: suspend (CreatedGuild) -> Unit) {
         intents += GatewayIntent.GUILDS
     }
 

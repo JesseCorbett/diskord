@@ -1,5 +1,5 @@
 # Diskord - A Kotlin Discord SDK
-[![Maven Central](https://img.shields.io/maven-central/v/com.jessecorbett/diskord-bot.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.jessecorbett%22%20AND%20a:%22diskord%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.jessecorbett/diskord-bot.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.jessecorbett%22%20AND%20a:%22diskord-bot%22)
 [![Discord](https://img.shields.io/discord/424046347428167688.svg?style=flat-square)](https://discord.gg/UPTWsZ5)
 
 A multiplatform Kotlin client for Discord bots with a simple and concise DSL supporting JVM and NodeJS
@@ -21,9 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:2.0.2")
+    implementation("com.jessecorbett:diskord-bot:2.1.1")
     // or, if you only want the low level implementation
-    implementation("com.jessecorbett:diskord-core:2.0.2")
+    implementation("com.jessecorbett:diskord-core:2.1.1")
 }
 ```
 
