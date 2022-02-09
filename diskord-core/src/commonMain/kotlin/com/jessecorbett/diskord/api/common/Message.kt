@@ -1,14 +1,8 @@
 package com.jessecorbett.diskord.api.common
 
 import com.jessecorbett.diskord.api.interaction.InteractionType
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public data class Message(
@@ -111,12 +105,19 @@ public data class MessageSticker(
     @SerialName("format_type") val formatType: StickerFormat
 )
 
+/**
+ * The interaction that triggered this message, if the original interaction does not have a message of its own
+ * So MessageComponent interactions don't have this property, since they require an existing message
+ *
+ * https://discord.com/developers/docs/interactions/receiving-and-responding#message-interaction-object
+ */
 @Serializable
 public data class MessageInteraction(
     @SerialName("id") val id: String,
     @SerialName("type") val type: InteractionType,
-    @SerialName("name") val name: String,
-    @SerialName("user") val user: User
+    @SerialName("name") val commandName: String,
+    @SerialName("user") val invokingUser: User,
+    @SerialName("member") val guildMember: GuildMember? = null
 )
 
 @Serializable
@@ -149,32 +150,19 @@ public data class SelectMenu(
     @SerialName("max_values") public val maxValues: Int = 1,
 ) : MessageComponent(3)
 
-@Serializable(with = ButtonStyle.Serializer::class)
-public sealed class ButtonStyle(public val code: Int) {
-    public object Primary : ButtonStyle(1)
-    public object Secondary : ButtonStyle(2)
-    public object Success : ButtonStyle(3)
-    public object Danger : ButtonStyle(4)
-    public object Link : ButtonStyle(5)
 
-    public class Other(code: Int) : ButtonStyle(code)
-
-    internal object Serializer : KSerializer<ButtonStyle> {
-        override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("ButtonStyle", PrimitiveKind.INT)
-
-        override fun deserialize(decoder: Decoder): ButtonStyle {
-            return when(val code = decoder.decodeInt()) {
-                1 -> Primary
-                2 -> Secondary
-                3 -> Success
-                4 -> Danger
-                5 -> Link
-                else -> Other(code)
-            }
-        }
-
-        override fun serialize(encoder: Encoder, value: ButtonStyle) = encoder.encodeInt(value.code)
-    }
+@Serializable
+public enum class ButtonStyle {
+    @SerialName("1")
+    Primary,
+    @SerialName("2")
+    Secondary,
+    @SerialName("3")
+    Success,
+    @SerialName("4")
+    Danger,
+    @SerialName("5")
+    Link
 }
 
 @Serializable

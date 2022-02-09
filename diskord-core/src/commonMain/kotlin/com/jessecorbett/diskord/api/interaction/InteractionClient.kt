@@ -1,6 +1,7 @@
 package com.jessecorbett.diskord.api.interaction
 
 import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
 import com.jessecorbett.diskord.api.webhook.CreateWebhookMessage
 import com.jessecorbett.diskord.api.webhook.PatchWebhookMessage
 import com.jessecorbett.diskord.internal.client.RestClient

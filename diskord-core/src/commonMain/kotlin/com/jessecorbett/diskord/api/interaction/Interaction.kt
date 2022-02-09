@@ -1,62 +1,107 @@
 package com.jessecorbett.diskord.api.interaction
 
-import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.common.*
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import com.jessecorbett.diskord.api.interaction.command.CommandType
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-public data class Interaction(
+@JsonClassDiscriminator("type")
+public sealed class Interaction {
+    public abstract val id: String
+    public abstract val applicationId: String
+    public abstract val token: String
+    public abstract val version: Int
+}
+
+@Serializable
+public enum class InteractionType {
+    @SerialName("1")
+    Ping,
+    @SerialName("2")
+    ApplicationCommand,
+    @SerialName("3")
+    MessageComponent,
+    @SerialName("4")
+    AutocompletePrompt
+}
+
+@Serializable
+@SerialName("1")
+public data class InteractionPing(
+    @SerialName("id") override val id: String,
+    @SerialName("application_id") override val applicationId: String,
+    @SerialName("token") override val token: String,
+    @SerialName("version") override val version: Int = 1
+) : Interaction()
+
+@Serializable
+@SerialName("2")
+public data class ApplicationCommand(
+    @SerialName("id") override val id: String,
+    @SerialName("application_id") override val applicationId: String,
+    @SerialName("token") override val token: String,
+    @SerialName("version") override val version: Int,
+    @SerialName("data") val data: Data,
+    @SerialName("guild_id") val guildId: String? = null,
+    @SerialName("channel_id") val channelId: String? = null,
+    @SerialName("member") val member: GuildMember? = null,
+    @SerialName("user") val user: User? = null,
+    @SerialName("message") val message: Message? = null,
+    @SerialName("locale") val userLocale: String? = null,
+    @SerialName("guild_locale") val guildLocale: String? = null
+) : Interaction() {
+    @Serializable
+    public data class Data(
+        @SerialName("id") public val commandId: String,
+        @SerialName("name") public val commandName: String,
+        @SerialName("type") public val type: CommandType,
+        @SerialName("resolved") public val convertedUsersRolesChannels: CommandInteractionDataResolved? = null,
+        @SerialName("options") public val options: List<CommandInteractionOptionResponse>
+    )
+}
+
+@Serializable
+@SerialName("3")
+public data class MessageComponent(
     @SerialName("id") val id: String,
     @SerialName("application_id") val applicationId: String,
-    @SerialName("type") val type: InteractionType,
+    @SerialName("data") val data: Data,
+    @SerialName("guild_id") val guildId: String? = null,
+    @SerialName("channel_id") val channelId: String? = null,
+    @SerialName("member") val member: GuildMember? = null,
+    @SerialName("user") val user: User? = null,
+    @SerialName("token") val token: String,
+    @SerialName("version") val version: Long,
+    @SerialName("message") val message: Message? = null,
+    @SerialName("locale") val userLocale: String? = null,
+    @SerialName("guild_locale") val guildLocale: String? = null
+) {
+    @Serializable
+    public data class Data(
+        @SerialName("custom_id") public val customId: String,
+        @SerialName("component_type") public val type: String, // TODO: Can this be a sealed class as well?
+        @SerialName("values") public val values: List<SelectOption>
+    )
+}
+
+@Serializable
+@SerialName("4")
+public data class AutocompletePrompt(
+    @SerialName("id") val id: String,
+    @SerialName("application_id") val applicationId: String,
     @SerialName("data") val data: CommandInteractionData? = null,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("channel_id") val channelId: String? = null,
     @SerialName("member") val member: GuildMember? = null,
     @SerialName("user") val user: User? = null,
     @SerialName("token") val token: String,
-    @SerialName("version") val version: Int,
-    @SerialName("message") val message: Message? = null
+    @SerialName("version") val version: Long,
+    @SerialName("message") val message: Message? = null,
+    @SerialName("locale") val userLocale: String? = null,
+    @SerialName("guild_locale") val guildLocale: String? = null
 )
-
-@Serializable(with = InteractionType.Serializer::class)
-public sealed class InteractionType(public val type: Int) {
-    public object Ping : InteractionType(1)
-    public object ApplicationCommand : InteractionType(2)
-    public object MessageComponent : InteractionType(3)
-    public class Other(type: Int) : InteractionType(type) {
-        override fun toString(): String {
-            return "Other($type)"
-        }
-    }
-
-    override fun toString(): String {
-        return checkNotNull(this::class.simpleName)
-    }
-
-    internal object Serializer : KSerializer<InteractionType> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("InteractionRequestType", PrimitiveKind.INT)
-
-        override fun deserialize(decoder: Decoder): InteractionType {
-            return when(val type = decoder.decodeInt()) {
-                1 -> Ping
-                2 -> ApplicationCommand
-                3 -> MessageComponent
-                else -> Other(type)
-            }
-        }
-
-        override fun serialize(encoder: Encoder, value: InteractionType) {
-            encoder.encodeInt(value.type)
-        }
-    }
-}
 
 @Serializable
 public data class CommandInteractionData(
@@ -64,7 +109,7 @@ public data class CommandInteractionData(
     @SerialName("name") val name: String,
     @SerialName("type") val type: CommandType,
     @SerialName("resolved") val resolved: CommandInteractionDataResolved? = null,
-    @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList(),
+    @SerialName("options") val options: List<CommandInteractionOptionResponse> = emptyList(),
     @SerialName("custom_id") val customId: String? = null,
     @SerialName("component_type") val componentType: Int? = null,
     @SerialName("values") val values: List<Unit>? = null,
@@ -83,115 +128,76 @@ public data class CommandInteractionDataResolved(
 )
 
 @Serializable
-public data class CommandInteractionDataOption(
-    @SerialName("name") val name: String,
-    @SerialName("type") val type: CommandOptionType,
-    @SerialName("value") val value: CommandOptionType? = null,
-    @SerialName("options") val options: List<CommandInteractionDataOption> = emptyList()
-)
-
-@Serializable
-public data class InteractionResponse(
-    @SerialName("type") val type: InteractionCallbackType,
-    @SerialName("data") val data: InteractionCommandCallbackData? = null
-)
-
-// https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
-@Serializable(with = InteractionCallbackType.Serializer::class)
-public sealed class InteractionCallbackType(public val code: Int) {
-    public object Pong : InteractionCallbackType(1)
-    public object ChannelMessageWithSource : InteractionCallbackType(4)
-    public object DeferredChannelMessageWithSource : InteractionCallbackType(5)
-    public object DeferredUpdateMessage : InteractionCallbackType(6)
-    public object UpdateMessage : InteractionCallbackType(7)
-    public class Other(code: Int) : InteractionCallbackType(code)
-
-    internal object Serializer : KSerializer<InteractionCallbackType> {
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("InterationCallbackType", PrimitiveKind.INT)
-
-        override fun deserialize(decoder: Decoder): InteractionCallbackType {
-            return when(val code = decoder.decodeInt()) {
-                1 -> Pong
-                4 -> ChannelMessageWithSource
-                5 -> DeferredChannelMessageWithSource
-                6 -> DeferredUpdateMessage
-                7 -> UpdateMessage
-                else -> Other(code)
-            }
-        }
-
-        override fun serialize(encoder: Encoder, value: InteractionCallbackType) {
-            encoder.encodeInt(value.code)
-        }
-
-    }
+public sealed class CommandInteractionOptionResponse {
+    public abstract val name: String
 }
 
 @Serializable
-public data class InteractionCommandCallbackData(
-    @SerialName("tts") val tts: Boolean = false,
-    @SerialName("content") val content: String? = null,
-    @SerialName("embeds") val embeds: List<Embed> = emptyList(),
-    @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
-    @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
-    @SerialName("components") val components: List<Message> = emptyList()
-)
+@SerialName("1")
+public data class SubCommandResponse(
+    override val name: String,
+    val options: List<CommandInteractionOptionResponse>,
+) : CommandInteractionOptionResponse()
 
-public enum class InteractionCommandCallbackDataFlag(internal val mask: Int) {
-    /**
-     * Only the use receiving the message can see it
-     */
-    EPHEMERAL(0x40);
-}
+@Serializable
+@SerialName("2")
+public data class SubCommandGroupResponse(
+    override val name: String,
+    val options: List<CommandInteractionOptionResponse>,
+) : CommandInteractionOptionResponse()
 
-private typealias Flag = InteractionCommandCallbackDataFlag
-private typealias Flags = InteractionCommandCallbackDataFlags
-private typealias FlagsSerializer = InteractionCommandCallbackDataFlagsSerializer
+@Serializable
+@SerialName("3")
+public data class StringResponse(
+    override val name: String,
+    val value: String?,
+) : CommandInteractionOptionResponse()
 
-@Serializable(with = FlagsSerializer::class)
-public data class InteractionCommandCallbackDataFlags(val value: Int) {
-    public operator fun contains(flag: Flag): Boolean = flag in value
+@Serializable
+@SerialName("4")
+public data class IntegerResponse(
+    override val name: String,
+    val value: Int?,
+) : CommandInteractionOptionResponse()
 
-    public operator fun contains(flags: Flags): Boolean = value and flags.value == flags.value
+@Serializable
+@SerialName("5")
+public data class BooleanResponse(
+    override val name: String,
+    val value: Boolean?,
+) : CommandInteractionOptionResponse()
 
+@Serializable
+@SerialName("6")
+public data class UserResponse(
+    override val name: String,
+    val value: String?,
+) : CommandInteractionOptionResponse()
 
-    public operator fun plus(flags: Int): Flags = Flags(value or flags)
+@Serializable
+@SerialName("7")
+public data class ChannelResponse(
+    override val name: String,
+    val value: String?,
+) : CommandInteractionOptionResponse()
 
-    public operator fun plus(flags: Flags): Flags = plus(flags.value)
+@Serializable
+@SerialName("8")
+public data class RoleResponse(
+    override val name: String,
+    val value: String?,
+) : CommandInteractionOptionResponse()
 
-    public operator fun plus(flags: Collection<Flag>): Unit = flags.forEach { plus(it.mask) }
+@Serializable
+@SerialName("9")
+public data class MentionableResponse(
+    override val name: String,
+    val value: String?,
+) : CommandInteractionOptionResponse()
 
-    public operator fun plus(flag: Flag): Flags = plus(flag.mask)
-
-    public operator fun minus(flags: Int): Flags = Flags(value and flags.inv())
-
-    public operator fun minus(flags: Flags): Flags = minus(flags.value)
-
-    public operator fun minus(flags: Collection<Flag>): Unit = flags.forEach { minus(it.mask) }
-
-    public operator fun minus(flag: Flag): Flags = minus(flag.mask)
-
-    override fun toString(): String = "InteractionCommandCallbackDataFlags($value) --> ${Flag.values().filter { it in value }.joinToString()}"
-
-    public companion object {
-        public val ALL: Flags = of(*Flag.values())
-
-        public val NONE: Flags = Flags(0)
-
-        public fun of(vararg flags: Flag): Flags {
-            return Flags(flags.map { flag -> flag.mask }.reduce { left, right -> left or right })
-        }
-
-        private operator fun Int.contains(flag: Flag) = this and flag.mask == flag.mask
-    }
-}
-
-public object InteractionCommandCallbackDataFlagsSerializer : KSerializer<Flags> {
-    override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor("InteractionCommandCallbackDataFlags", PrimitiveKind.INT)
-
-    override fun deserialize(decoder: Decoder): Flags = Flags(decoder.decodeInt())
-
-    override fun serialize(encoder: Encoder, value: Flags): Unit = encoder.encodeInt(value.value)
-}
+@Serializable
+@SerialName("10")
+public data class NumberResponse(
+    override val name: String,
+    val value: Float?,
+) : CommandInteractionOptionResponse()

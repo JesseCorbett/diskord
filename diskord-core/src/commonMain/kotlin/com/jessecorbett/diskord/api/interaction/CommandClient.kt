@@ -1,5 +1,9 @@
 package com.jessecorbett.diskord.api.interaction
 
+import com.jessecorbett.diskord.api.interaction.command.Command
+import com.jessecorbett.diskord.api.interaction.command.CommandPermissions
+import com.jessecorbett.diskord.api.interaction.command.GuildCommandPermissions
+import com.jessecorbett.diskord.api.interaction.command.PartialGuildCommandPermissions
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.call.*

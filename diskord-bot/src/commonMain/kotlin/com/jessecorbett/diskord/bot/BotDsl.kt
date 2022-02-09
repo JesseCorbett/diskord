@@ -24,7 +24,7 @@ public class BotBase {
     internal lateinit var gateway: AutoGateway
 
     init {
-        // Simple module for logging bot state
+        // Simple module for logging bot state and handling interactions pings
         registerModule { dispatcher, _ ->
             dispatcher.onReady { logger.info { "Bot has started and is ready for events" } }
             dispatcher.onResume { logger.info { "Bot has resumed a previous websocket session" } }
@@ -36,7 +36,7 @@ public class BotBase {
     }
 
     public fun interface BotModule {
-        public fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
+        public suspend fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
     }
 
     /**
@@ -71,7 +71,7 @@ public class BotBase {
  * @param token Discord bot API token
  * @param builder Function to build the bot
  */
-public suspend fun bot(token: String, builder: BotBase.() -> Unit) {
+public suspend fun bot(token: String, builder: suspend BotBase.() -> Unit) {
     val client = RestClient.default(token)
 
     // Contains the rest client and provides the context for related bot utils

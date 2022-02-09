@@ -6,6 +6,7 @@ import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.interaction.CommandClient
+import com.jessecorbett.diskord.api.interaction.Interaction
 import com.jessecorbett.diskord.api.interaction.InteractionClient
 import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
@@ -185,4 +186,12 @@ public interface BotContext {
     public suspend fun Message.react(emoji: String) {
         return channel.addMessageReaction(id, emoji)
     }
+
+    // Interaction receivers
+
+    /**
+     * Get the interaction client from an interaction
+     */
+    public val Interaction.client: InteractionClient
+        get() = interaction(applicationId, token)
 }

@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.api.interaction
 
+import com.jessecorbett.diskord.api.interaction.command.CommandOption
+import com.jessecorbett.diskord.api.interaction.command.CommandType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
