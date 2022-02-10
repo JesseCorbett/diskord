@@ -53,13 +53,36 @@ public data class ApplicationCommand(
     @SerialName("guild_locale") val guildLocale: String? = null
 ) : Interaction() {
     @Serializable
-    public data class Data(
-        @SerialName("id") public val commandId: String,
-        @SerialName("name") public val commandName: String,
-        @SerialName("type") public val type: CommandType,
+    @JsonClassDiscriminator("type")
+    public sealed class Data {
+        public abstract val commandId: String
+        public abstract val commandName: String
+    }
+
+    @Serializable
+    @SerialName("1")
+    public data class ChatData(
+        @SerialName("id") override val commandId: String,
+        @SerialName("name") override val commandName: String,
         @SerialName("resolved") public val convertedUsersRolesChannels: CommandInteractionDataResolved? = null,
         @SerialName("options") public val options: List<CommandInteractionOptionResponse>
-    )
+    ) : Data()
+
+    @Serializable
+    @SerialName("2")
+    public data class UserData(
+        @SerialName("id") override val commandId: String,
+        @SerialName("name") override val commandName: String,
+        @SerialName("resolved") public val convertedUsersRolesChannels: CommandInteractionDataResolved? = null,
+    ) : Data()
+
+    @Serializable
+    @SerialName("3")
+    public data class MessageData(
+        @SerialName("id") override val commandId: String,
+        @SerialName("name") override val commandName: String,
+        @SerialName("resolved") public val convertedUsersRolesChannels: CommandInteractionDataResolved? = null,
+    ) : Data()
 }
 
 @Serializable

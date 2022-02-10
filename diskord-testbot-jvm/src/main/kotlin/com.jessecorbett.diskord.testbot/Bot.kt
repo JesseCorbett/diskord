@@ -29,16 +29,11 @@ suspend fun main() {
         }
 
         interactions {
-            slashCommand("echo", "Have the bot echo a command") {
-                val message by stringParameter("echo", "Message you want the bot to say")
-                val user by mentionableParameter("name", "Which mentionable to mock")
-
-                callback {
-                    it.client.createInteractionResponse(it.id, InteractionResponse(
-                        type = InteractionCallbackType.ChannelMessageWithSource,
-                        data = InteractionCommandCallbackData(content = "$user: $message")
-                    ))
-                }
+            userCommand("echo") {
+                it.client.createInteractionResponse(it.id, InteractionResponse(
+                    type = InteractionCallbackType.ChannelMessageWithSource,
+                    data = InteractionCommandCallbackData(content = "Test data for interaction")
+                ))
             }
         }
     }

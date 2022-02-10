@@ -5,7 +5,7 @@ import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.bot.BotContext
 import kotlin.reflect.KProperty
 
-public class SlashCommandBuilder {
+public class ApplicationCommandBuilder {
     private val delegates = mutableListOf<CommandDelegate<*>>()
     internal val parameters = mutableListOf<CommandOption>()
     internal var callbackFunction: suspend BotContext.(Interaction) -> Unit = {}
