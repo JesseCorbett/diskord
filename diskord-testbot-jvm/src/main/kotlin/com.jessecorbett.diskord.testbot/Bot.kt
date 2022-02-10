@@ -15,7 +15,7 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    channel("347593960417656834").sendMessage("Diskord JVM bot has started")
+                    channel("547517051556855808").sendMessage("Diskord JVM bot has started")
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
@@ -31,7 +31,7 @@ suspend fun main() {
         interactions {
             slashCommand("echo", "Have the bot echo a command") {
                 val message by stringParameter("echo", "Message you want the bot to say")
-                val user by userParameter("name", "Which user to mock")
+                val user by mentionableParameter("name", "Which mentionable to mock")
 
                 callback {
                     it.client.createInteractionResponse(it.id, InteractionResponse(
