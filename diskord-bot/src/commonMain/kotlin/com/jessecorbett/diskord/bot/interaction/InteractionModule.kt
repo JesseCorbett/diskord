@@ -1,8 +1,7 @@
 package com.jessecorbett.diskord.bot.interaction
 
 import com.jessecorbett.diskord.api.interaction.*
-import com.jessecorbett.diskord.api.interaction.callback.InteractionCallbackType
-import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
+import com.jessecorbett.diskord.api.interaction.callback.PingResponse
 import com.jessecorbett.diskord.bot.BotBase
 
 @DslMarker
@@ -21,7 +20,7 @@ public fun BotBase.interactions(commands: InteractionBuilder.() -> Unit) {
             if (interaction is InteractionPing) {
                 context.interaction(user.id, interaction.token).createInteractionResponse(
                     interactionId = interaction.id,
-                    interactionResponse = InteractionResponse(InteractionCallbackType.Pong, null)
+                    interactionResponse = PingResponse
                 )
             }
         }

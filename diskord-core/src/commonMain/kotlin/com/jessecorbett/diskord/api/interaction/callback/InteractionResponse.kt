@@ -1,8 +1,11 @@
 package com.jessecorbett.diskord.api.interaction.callback
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
+import com.jessecorbett.diskord.api.common.Attachment
 import com.jessecorbett.diskord.api.common.Embed
 import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.interaction.MessageComponent
+import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,28 +14,80 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-public data class InteractionResponse(
-    @SerialName("type") val type: InteractionCallbackType,
-    @SerialName("data") val data: InteractionCommandCallbackData? = null
-)
+@JsonClassDiscriminator("type")
+public sealed class InteractionResponse
 
-// https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type
 @Serializable
-public enum class InteractionCallbackType {
-    @SerialName("1")
-    Pong,
-    @SerialName("4")
-    ChannelMessageWithSource,
-    @SerialName("5")
-    DeferredChannelMessageWithSource,
-    @SerialName("6")
-    DeferredUpdateMessage,
-    @SerialName("7")
-    UpdateMessage,
-    @SerialName("8")
-    ApplicationCommandAutocompleteResult
+@SerialName("1")
+public object PingResponse : InteractionResponse()
+
+@Serializable
+@SerialName("4")
+public data class ChannelMessageWithSource(
+    public val data: Data
+) : InteractionResponse() {
+    @Serializable
+    public data class Data(
+        @SerialName("tts") val tts: Boolean = false,
+        @SerialName("content") val content: String? = null,
+        @SerialName("embeds") val embeds: List<Embed> = emptyList(),
+        @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
+        @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
+        @SerialName("components") val components: List<Message> = emptyList(),
+        @SerialName("attachments") val attachments: List<Attachment> = emptyList()
+    )
+}
+
+@Serializable
+@SerialName("5")
+public object DeferredChannelMessageWithSource : InteractionResponse()
+
+@Serializable
+@SerialName("6")
+public object DeferredUpdateMessage : InteractionResponse()
+
+@Serializable
+@SerialName("7")
+public data class UpdateMessage(
+    public val data: Data
+) : InteractionResponse() {
+    @Serializable
+    public data class Data(
+        @SerialName("tts") val tts: Boolean = false,
+        @SerialName("content") val content: String? = null,
+        @SerialName("embeds") val embeds: List<Embed> = emptyList(),
+        @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
+        @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
+        @SerialName("components") val components: List<Message> = emptyList(),
+        @SerialName("attachments") val attachments: List<Attachment> = emptyList()
+    )
+}
+
+@Serializable
+@SerialName("8")
+public data class ApplicationCommandAutocompleteResult(
+    public val data: Data
+) : InteractionResponse() {
+    @Serializable
+    public data class Data(
+        @SerialName("choices") val suggestions: List<CommandOption.CommandOptionChoice>
+    )
+}
+
+@Serializable
+@SerialName("9")
+public data class ModalResult(
+    public val data: Data
+) : InteractionResponse() {
+    @Serializable
+    public data class Data(
+        @SerialName("custom_id") val customId: String,
+        @SerialName("title") val modalTitle: String,
+        @SerialName("components") val components: List<MessageComponent>
+    )
 }
 
 @Serializable
@@ -42,7 +97,8 @@ public data class InteractionCommandCallbackData(
     @SerialName("embeds") val embeds: List<Embed> = emptyList(),
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
     @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
-    @SerialName("components") val components: List<Message> = emptyList()
+    @SerialName("components") val components: List<Message> = emptyList(),
+    @SerialName("attachments") val attachments: List<Attachment> = emptyList()
 )
 
 public enum class InteractionCommandCallbackDataFlag(internal val mask: Int) {

@@ -3,7 +3,6 @@ package com.jessecorbett.diskord.bot.interaction
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
 import com.jessecorbett.diskord.api.interaction.CreateCommand
-import com.jessecorbett.diskord.api.interaction.Interaction
 import com.jessecorbett.diskord.api.interaction.command.Command
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.bot.BotContext
@@ -20,7 +19,7 @@ public class InteractionBuilder(
         description: String,
         guildId: String? = null,
         availableByDefault: Boolean = true,
-        block: suspend ApplicationCommandBuilder.() -> Unit
+        block: suspend ApplicationCommandBuilder<ApplicationCommand.ChatData>.() -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
@@ -38,7 +37,7 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         availableByDefault: Boolean = true,
-        callback: suspend BotContext.(Interaction) -> Unit
+        callback: suspend BotContext.(ApplicationCommand, ApplicationCommand.UserData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
@@ -48,7 +47,7 @@ public class InteractionBuilder(
             type = CommandType.User
         )
 
-        applicationCommand(createCommand, guildId, block = { callback(callback) })
+        applicationCommand<ApplicationCommand.UserData>(createCommand, guildId, block = { callback(callback) })
     }
 
     @InteractionModule
@@ -56,7 +55,7 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         availableByDefault: Boolean = true,
-        callback: suspend BotContext.(Interaction) -> Unit
+        callback: suspend BotContext.(ApplicationCommand, ApplicationCommand.MessageData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
@@ -66,16 +65,16 @@ public class InteractionBuilder(
             type = CommandType.Message
         )
 
-        applicationCommand(createCommand, guildId, block = { callback(callback) })
+        applicationCommand<ApplicationCommand.MessageData>(createCommand, guildId, block = { callback(callback) })
     }
 
-    private fun applicationCommand(
+    private fun <D: ApplicationCommand.Data> applicationCommand(
         createCommand: CreateCommand,
         guildId: String? = null,
-        block: suspend ApplicationCommandBuilder.() -> Unit
+        block: suspend ApplicationCommandBuilder<D>.() -> Unit
     ) {
         var command: Command? = null
-        val builder = ApplicationCommandBuilder()
+        val builder = ApplicationCommandBuilder<D>()
 
         dispatcher.onReady {
             builder.block()
@@ -88,7 +87,6 @@ public class InteractionBuilder(
 
         dispatcher.onInteractionCreate { interaction ->
             if (interaction is ApplicationCommand && interaction.data.commandId == command?.id) {
-                println(interaction)
                 val data = interaction.data
                 if (data is ApplicationCommand.ChatData) {
                     builder.setResponses(data.options)
@@ -96,7 +94,11 @@ public class InteractionBuilder(
                     builder.setResponses(emptyList())
                 }
                 builder.callbackFunction.let { callback ->
-                    botContext.callback(interaction)
+                    /*
+                    Cast should be safe as we should never have command ID match but somehow have the wrong Data subclass
+                     */
+                    @Suppress("UNCHECKED_CAST")
+                    botContext.callback(interaction, data as D)
                 }
             }
         }

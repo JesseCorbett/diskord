@@ -5,13 +5,13 @@ import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.bot.BotContext
 import kotlin.reflect.KProperty
 
-public class ApplicationCommandBuilder {
+public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
     private val delegates = mutableListOf<CommandDelegate<*>>()
-    internal val parameters = mutableListOf<CommandOption>()
-    internal var callbackFunction: suspend BotContext.(Interaction) -> Unit = {}
+    private val parameters = mutableListOf<CommandOption>()
+    internal var callbackFunction: suspend BotContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
 
     @InteractionModule
-    public fun callback(block: suspend BotContext.(Interaction) -> Unit) {
+    public fun callback(block: suspend BotContext.(ApplicationCommand, D) -> Unit) {
         callbackFunction = block
     }
 

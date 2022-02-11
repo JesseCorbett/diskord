@@ -1,8 +1,6 @@
 package com.jessecorbett.diskord.testbot
 
-import com.jessecorbett.diskord.api.interaction.callback.InteractionCallbackType
-import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackData
-import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
+import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
@@ -29,11 +27,14 @@ suspend fun main() {
         }
 
         interactions {
-            userCommand("echo") {
-                it.client.createInteractionResponse(it.id, InteractionResponse(
-                    type = InteractionCallbackType.ChannelMessageWithSource,
-                    data = InteractionCommandCallbackData(content = "Test data for interaction")
+            userCommand("echo") { it, data ->
+                it.client.createInteractionResponse(it.id, ChannelMessageWithSource(
+                    data = ChannelMessageWithSource.Data(content = "Test data for interaction " + data.convertedUsersRolesChannels)
                 ))
+            }
+
+            messageCommand("delete") { interaction, data ->
+                println(interaction)
             }
         }
     }
