@@ -63,6 +63,28 @@ public class BotBase {
             )
         )
     }
+
+    /**
+     * Sets the status of the bot
+     *
+     * @param status The user status activity
+     * @param afk Whether the user is AFK
+     * @param idleTime How long the user has been idle
+     * @param userStatus The user state
+     */
+    public suspend fun setStatus(
+        status: UserStatusActivity,
+        afk: Boolean = false,
+        idleTime: Int? = null,
+        userStatus: UserStatus = UserStatus.ONLINE
+    ) {
+        gateway.setStatus(
+            userStatus,
+            afk,
+            idleTime,
+            status
+        )
+    }
 }
 
 /**
