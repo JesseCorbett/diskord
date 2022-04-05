@@ -82,10 +82,11 @@ public class InteractionBuilder(
 
         dispatcher.onReady {
             builder.block()
+            val commandWithParams = createCommand.copy(options = builder.parameters)
             command = if (guildId != null) {
-                botContext.command(applicationId).createGuildCommand(guildId, createCommand)
+                botContext.command(applicationId).createGuildCommand(guildId, commandWithParams)
             } else {
-                botContext.command(applicationId).createGlobalCommand(createCommand)
+                botContext.command(applicationId).createGlobalCommand(commandWithParams)
             }
         }
 

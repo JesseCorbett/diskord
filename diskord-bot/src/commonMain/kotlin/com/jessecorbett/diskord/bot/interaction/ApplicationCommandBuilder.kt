@@ -7,7 +7,7 @@ import kotlin.reflect.KProperty
 
 public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
     private val delegates = mutableListOf<CommandDelegate<*>>()
-    private val parameters = mutableListOf<CommandOption>()
+    internal val parameters = mutableListOf<CommandOption>()
     internal var callbackFunction: suspend BotContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
 
     @InteractionModule

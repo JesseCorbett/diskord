@@ -1,11 +1,13 @@
 package com.jessecorbett.diskord.bot
 
 import com.jessecorbett.diskord.AutoGateway
+import com.jessecorbett.diskord.api.common.User
 import com.jessecorbett.diskord.api.common.UserStatus
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.gateway.model.ActivityType
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
+import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,7 @@ public class BotBase {
 
     init {
         // Simple module for logging bot state and handling interactions pings
-        registerModule { dispatcher, _ ->
+        registerModule { dispatcher, _, _ ->
             dispatcher.onReady { logger.info { "Bot has started and is ready for events" } }
             dispatcher.onResume { logger.info { "Bot has resumed a previous websocket session" } }
         }
@@ -36,7 +38,12 @@ public class BotBase {
     }
 
     public fun interface BotModule {
-        public suspend fun register(dispatcher: EventDispatcher<Unit>, context: BotContext)
+        /**
+         * @param dispatcher The event dispatcher for registering event hooks
+         * @param context Bot related context
+         * @param configuring Whether this invocation is the config registration (false for actual runs)
+         */
+        public suspend fun register(dispatcher: EventDispatcher<Unit>, context: BotContext, configuring: Boolean)
     }
 
     /**
@@ -96,10 +103,14 @@ public class BotBase {
 public suspend fun bot(token: String, builder: suspend BotBase.() -> Unit) {
     val client = RestClient.default(token)
 
+    val user = GlobalClient(client).getUser()
+
     // Contains the rest client and provides the context for related bot utils
     val virtualContext: BotContext = object : BotContext {
         override val client: RestClient
             get() = client
+        override val botUser: User
+            get() = user
     }
 
     // Container for modules and utils like the logger
@@ -107,7 +118,7 @@ public suspend fun bot(token: String, builder: suspend BotBase.() -> Unit) {
 
     // Compute intents from the provided modules
     val intentsComputer = GatewayIntentsComputer()
-    base.modules.forEach { it.register(intentsComputer, virtualContext) }
+    base.modules.forEach { it.register(intentsComputer, virtualContext, false) }
     val intents = intentsComputer.intents
         .map { GatewayIntents(it.mask) }
         .reduceOrNull { a, b -> a + b }
@@ -115,7 +126,7 @@ public suspend fun bot(token: String, builder: suspend BotBase.() -> Unit) {
 
     // Create the real dispatcher and register the modules with it
     val dispatcher = EventDispatcher.build(CoroutineScope(Dispatchers.Default))
-    base.modules.forEach { it.register(dispatcher, virtualContext) }
+    base.modules.forEach { it.register(dispatcher, virtualContext, true) }
 
     // Create the autogateway using what we've constructed
     val gateway = AutoGateway(

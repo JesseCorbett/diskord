@@ -12,7 +12,7 @@ public annotation class ClassicCommandModule
  */
 @ClassicCommandModule
 public fun BotBase.classicCommands(commandPrefix: String = ".", commands: CommandBuilder.() -> Unit) {
-    registerModule { dispatcher, context ->
+    registerModule { dispatcher, context, _ ->
         CommandBuilder(commandPrefix, dispatcher, context).commands()
     }
 }

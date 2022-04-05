@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.bot
 import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.User
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.interaction.CommandClient
@@ -19,6 +20,7 @@ import com.jessecorbett.diskord.util.sendReply
  */
 public interface BotContext {
     public val client: RestClient
+    public val botUser: User
 
     // Global functions
 

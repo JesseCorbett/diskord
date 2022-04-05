@@ -17,18 +17,21 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-@JsonClassDiscriminator("type")
+@JsonClassDiscriminator("typeString")
 public sealed class InteractionResponse
 
 @Serializable
 @SerialName("1")
-public object PingResponse : InteractionResponse()
+public object PingResponse : InteractionResponse() {
+    public val type: Int = 1
+}
 
 @Serializable
 @SerialName("4")
 public data class ChannelMessageWithSource(
     public val data: Data
 ) : InteractionResponse() {
+    public val type: Int = 4
     @Serializable
     public data class Data(
         @SerialName("tts") val tts: Boolean = false,
@@ -43,17 +46,22 @@ public data class ChannelMessageWithSource(
 
 @Serializable
 @SerialName("5")
-public object DeferredChannelMessageWithSource : InteractionResponse()
+public object DeferredChannelMessageWithSource : InteractionResponse() {
+    public val type: Int = 5
+}
 
 @Serializable
 @SerialName("6")
-public object DeferredUpdateMessage : InteractionResponse()
+public object DeferredUpdateMessage : InteractionResponse() {
+    public val type: Int = 6
+}
 
 @Serializable
 @SerialName("7")
 public data class UpdateMessage(
     public val data: Data
 ) : InteractionResponse() {
+    public val type: Int = 7
     @Serializable
     public data class Data(
         @SerialName("tts") val tts: Boolean = false,
@@ -71,6 +79,7 @@ public data class UpdateMessage(
 public data class ApplicationCommandAutocompleteResult(
     public val data: Data
 ) : InteractionResponse() {
+    public val type: Int = 8
     @Serializable
     public data class Data(
         @SerialName("choices") val suggestions: List<CommandOption.CommandOptionChoice>
@@ -82,6 +91,7 @@ public data class ApplicationCommandAutocompleteResult(
 public data class ModalResult(
     public val data: Data
 ) : InteractionResponse() {
+    public val type: Int = 9
     @Serializable
     public data class Data(
         @SerialName("custom_id") val customId: String,
@@ -146,6 +156,9 @@ public data class InteractionCommandCallbackDataFlags(val value: Int) {
         public val ALL: Flags = of(*Flag.values())
 
         public val NONE: Flags = Flags(0)
+
+        public val SUPPRESS_EMBEDS: Flags = Flags(1 shl 2)
+        public val EPHEMERAL: Flags = Flags(1 shl 6)
 
         public fun of(vararg flags: Flag): Flags {
             return Flags(flags.map { flag -> flag.mask }.reduce { left, right -> left or right })

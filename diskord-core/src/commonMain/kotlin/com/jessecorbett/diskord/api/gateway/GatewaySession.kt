@@ -8,7 +8,6 @@ import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
 import com.jessecorbett.diskord.api.gateway.model.*
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
-import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.JsonPrimitive
@@ -16,7 +15,6 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import mu.KotlinLogging
 
-@OptIn(DiskordInternals::class)
 public class GatewaySession(
     private val token: String,
     gatewayBotUrl: GatewayBotUrl,

@@ -19,7 +19,7 @@ import kotlin.math.ceil
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
-private const val DISCORD_API_URL = "https://discord.com/api"
+private const val DISCORD_API_URL = "https://discord.com/api/v10"
 
 private val logger = KotlinLogging.logger {}
 

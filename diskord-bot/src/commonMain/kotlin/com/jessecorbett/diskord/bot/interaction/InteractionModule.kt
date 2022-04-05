@@ -15,20 +15,19 @@ public annotation class InteractionModule
  */
 @InteractionModule
 public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuilder.() -> Unit) {
-    registerModule { dispatcher, context ->
-        val user = context.global().getUser()
+    registerModule { dispatcher, context, configuring ->
 
         // Handle pings automatically
         dispatcher.onInteractionCreate { interaction ->
             if (interaction is InteractionPing) {
-                context.interaction(user.id, interaction.token).createInteractionResponse(
+                context.interaction(context.botUser.id, interaction.token).createInteractionResponse(
                     interactionId = interaction.id,
                     interactionResponse = PingResponse
                 )
             }
         }
 
-        val builder = InteractionBuilder(user.id, dispatcher, context).apply {
+        val builder = InteractionBuilder(context.botUser.id, dispatcher, context).apply {
             commands()
         }
 
@@ -37,8 +36,8 @@ public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuild
          * Fingers crossed it is nothing
          * - Jesse
          */
-        if (trim) {
-            val commandClient = context.command(user.id)
+        if (trim && !configuring) {
+            val commandClient = context.command(context.botUser.id)
             (context.global().getAllGuilds().map { it.id } + null).forEach {
                 val created = builder.commandSet.getOrElse(it) { emptySet() }
 

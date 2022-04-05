@@ -9,6 +9,12 @@ import com.jessecorbett.diskord.api.global.PartialGuild
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.guild.PatchGuildMember
 import com.jessecorbett.diskord.api.guild.PatchGuildMemberNickname
+import com.jessecorbett.diskord.api.interaction.InteractionClient
+import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
+import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackDataFlags
+import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /*
  * Primitive extensions
@@ -283,11 +289,13 @@ public suspend fun ChannelClient.sendEmbeddedReply(
     reply: String = "",
     block: Embed.() -> Unit
 ): Message {
-    return createMessage(CreateMessage(
-        content = reply,
-        embed = Embed().apply { block() },
-        messageReference = MessageReference(messageId = message.id)
-    ))
+    return createMessage(
+        CreateMessage(
+            content = reply,
+            embed = Embed().apply { block() },
+            messageReference = MessageReference(messageId = message.id)
+        )
+    )
 }
 
 /**
@@ -467,9 +475,10 @@ public suspend fun ChannelClient.removeThreadMember(member: GuildMember): Unit =
  *
  * @return if the channel is a thread
  */
-public val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
-        || this == ChannelType.GUILD_PRIVATE_THREAD
-        || this == ChannelType.GUILD_NEWS_THREAD
+public val ChannelType.isThread: Boolean
+    get() = this == ChannelType.GUILD_PUBLIC_THREAD
+            || this == ChannelType.GUILD_PRIVATE_THREAD
+            || this == ChannelType.GUILD_NEWS_THREAD
 
 /**
  * Fetches all guilds from the [GuildClient] over potentially multiple API calls
@@ -485,4 +494,18 @@ public suspend fun GlobalClient.getAllGuilds(): List<PartialGuild> {
     } while (last.size == 200)
 
     return total
+}
+
+/**
+ * Convenience method for responding to an interaction with a message
+ */
+public suspend fun InteractionClient.messageResponse(interactionId: String, message: String, ephemeral: Boolean) {
+    val data = ChannelMessageWithSource(
+        data = ChannelMessageWithSource.Data(
+            content = message,
+            flags = if (ephemeral) InteractionCommandCallbackDataFlags.EPHEMERAL else InteractionCommandCallbackDataFlags.NONE
+        )
+    )
+    println(defaultJson.encodeToString<InteractionResponse>(data))
+    createInteractionResponse(interactionId, data)
 }
