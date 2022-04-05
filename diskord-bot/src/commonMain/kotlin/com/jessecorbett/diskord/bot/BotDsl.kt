@@ -21,7 +21,7 @@ public class BotBase {
     public var modules: List<BotModule> = emptyList()
         private set
 
-    internal lateinit var gateway: AutoGateway
+    public lateinit var gateway: AutoGateway
 
     init {
         // Simple module for logging bot state and handling interactions pings

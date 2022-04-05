@@ -27,13 +27,18 @@ public class CommandBuilder(
      * Creates a command listener on [DiscordEvent.MESSAGE_CREATE] events
      */
     @ClassicCommandModule
-    public fun command(key: String, block: suspend BotContext.(Message) -> Unit) {
+    public fun command(vararg key: String, block: suspend BotContext.(Message) -> Unit) {
         dispatcher.onMessageCreate { message ->
-            if (message.content.startsWith("${this@CommandBuilder.prefix}$key ")) {
-                botContext.block(message)
-            } else if (message.content == "${this@CommandBuilder.prefix}$key") {
+            if (key.any { keyInMessage(it, message.content) }) {
                 botContext.block(message)
             }
         }
+    }
+
+    /**
+     * Detects whether the message starts with the command prefix and the command key
+     */
+    private fun keyInMessage(key: String, message: String): Boolean {
+        return message.startsWith("$prefix$key ") || message == "$prefix$key"
     }
 }

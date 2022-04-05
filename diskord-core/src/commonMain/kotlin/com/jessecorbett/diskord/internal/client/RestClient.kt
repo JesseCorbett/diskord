@@ -193,7 +193,10 @@ public class DefaultRestClient(
 
         // Sets the associated bucket in case we don't know it yet
         if (bucket == null) {
-            logger.warn { "Encountered an API response without a rate limit bucket, using a fallback bucket for safety" }
+            logger.info {
+                ("Encountered an API response without a rate limit bucket, using a fallback bucket for safety. "
+                + "This is expected behavior for some calls and can safely be ignored.")
+            }
             bucket = "fallback-bucket"
         } else {
             pathToBucketMap[rateKey] = bucket

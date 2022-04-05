@@ -13,6 +13,8 @@ public class InteractionBuilder(
     private val dispatcher: EventDispatcher<Unit>,
     private val botContext: BotContext
 ) {
+    internal val commandSet: MutableMap<String?, Set<String>> = mutableMapOf(null to emptySet())
+
     @InteractionModule
     public fun slashCommand(
         name: String,
@@ -73,6 +75,8 @@ public class InteractionBuilder(
         guildId: String? = null,
         block: suspend ApplicationCommandBuilder<D>.() -> Unit
     ) {
+        commandSet[guildId] = commandSet.getOrPut(guildId) { mutableSetOf() } + createCommand.name.lowercase()
+
         var command: Command? = null
         val builder = ApplicationCommandBuilder<D>()
 

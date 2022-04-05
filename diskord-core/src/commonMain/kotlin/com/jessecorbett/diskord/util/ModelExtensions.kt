@@ -4,6 +4,8 @@ import com.jessecorbett.diskord.api.channel.*
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.channel.EmbedImage
 import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.global.GlobalClient
+import com.jessecorbett.diskord.api.global.PartialGuild
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.guild.PatchGuildMember
 import com.jessecorbett.diskord.api.guild.PatchGuildMemberNickname
@@ -468,3 +470,19 @@ public suspend fun ChannelClient.removeThreadMember(member: GuildMember): Unit =
 public val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
         || this == ChannelType.GUILD_PRIVATE_THREAD
         || this == ChannelType.GUILD_NEWS_THREAD
+
+/**
+ * Fetches all guilds from the [GuildClient] over potentially multiple API calls
+ */
+public suspend fun GlobalClient.getAllGuilds(): List<PartialGuild> {
+    val client = this
+    val total: MutableList<PartialGuild> = mutableListOf()
+    var last: List<PartialGuild> = emptyList()
+
+    do {
+        last = client.getGuilds(200, null, last.lastOrNull()?.id)
+        total += last
+    } while (last.size == 200)
+
+    return total
+}
