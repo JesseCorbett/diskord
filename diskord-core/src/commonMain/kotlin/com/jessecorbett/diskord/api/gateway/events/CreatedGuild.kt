@@ -102,7 +102,7 @@ public data class CreatedGuildTextChannel(
     @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : CreatedChannel(), CreatedGuildText
 
