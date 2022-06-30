@@ -6,6 +6,7 @@ import com.jessecorbett.diskord.api.common.Webhook
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.call.*
+import io.ktor.client.request.*
 
 /**
  * A REST client for a specific webhook
@@ -22,7 +23,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @return This webhook.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getWebhook(): Webhook = GET("/webhooks/$webhookId").receive()
+    public suspend fun getWebhook(): Webhook = GET("/webhooks/$webhookId").body()
 
     /**
      * Get this webhook using the secure token.
@@ -35,7 +36,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getWebhook(webhookToken: String): Webhook {
-        return GET("/webhooks/$webhookId", "/$webhookToken").receive()
+        return GET("/webhooks/$webhookId", "/$webhookToken").body()
     }
 
     /**
@@ -47,7 +48,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun update(webhook: PatchWebhook): Webhook {
-        return PATCH("/webhooks/$webhookId") { body = webhook }.receive()
+        return PATCH("/webhooks/$webhookId") { setBody(webhook) }.body()
     }
 
     /**
@@ -61,7 +62,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun update(webhook: PatchWebhook, webhookToken: String): Webhook {
-        return PATCH("/webhooks/$webhookId", "/$webhookToken") { body = webhook }.receive()
+        return PATCH("/webhooks/$webhookId", "/$webhookToken") { setBody(webhook) }.body()
     }
 
     /**
@@ -69,7 +70,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteWebhook(): Unit = DELETE("/webhooks/$webhookId").receive()
+    public suspend fun deleteWebhook(): Unit = DELETE("/webhooks/$webhookId").body()
 
     /**
      * Delete this webhook using the secure token.
@@ -79,7 +80,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteWebhook(webhookToken: String) {
-        DELETE("/webhooks/$webhookId", "/$webhookToken").receive<Unit>()
+        DELETE("/webhooks/$webhookId", "/$webhookToken").body<Unit>()
     }
 
 
@@ -94,7 +95,10 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = true): WebhookSubmission {
-        return POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") { body = webhookSubmission }.receive()
+        return POST(
+            "/webhooks/$webhookId",
+            "/$webhookToken?wait=$waitForValidation"
+        ) { setBody(webhookSubmission) }.body()
     }
 
     /**
@@ -109,8 +113,8 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      */
     public suspend fun updateWebhookMessage(webhookToken: String, messageId: String, messageEdit: MessageEdit): Message {
         return PATCH("/webhooks/$webhookId", "/$webhookToken/messages/$messageId") {
-            body = messageEdit
-        }.receive()
+            setBody(messageEdit)
+        }.body()
     }
 
     /**
@@ -122,6 +126,6 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteWebhookMessage(webhookToken: String, messageId: String) {
-        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").receive<Unit>()
+        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").body<Unit>()
     }
 }

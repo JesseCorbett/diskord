@@ -1,7 +1,7 @@
 package com.jessecorbett.diskord.util
 
 import io.ktor.client.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.*
@@ -23,16 +23,16 @@ internal class StripBlankSWSEHeader {
 
     class EmptyConfig
 
-    internal companion object Feature : HttpClientFeature<EmptyConfig, StripBlankSWSEHeader> {
+    internal companion object Feature : HttpClientPlugin<EmptyConfig, StripBlankSWSEHeader> {
         override val key: AttributeKey<StripBlankSWSEHeader> = AttributeKey("StripEmptyWSExtensionHeader")
 
         override fun prepare(block: EmptyConfig.() -> Unit): StripBlankSWSEHeader {
             return StripBlankSWSEHeader()
         }
 
-        override fun install(feature: StripBlankSWSEHeader, scope: HttpClient) {
+        override fun install(plugin: StripBlankSWSEHeader, scope: HttpClient) {
             scope.requestPipeline.intercept(HttpRequestPipeline.Render) {
-                feature.stripHeader(context)
+                plugin.stripHeader(context)
 
                 proceed()
             }
