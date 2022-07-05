@@ -95,8 +95,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
         }

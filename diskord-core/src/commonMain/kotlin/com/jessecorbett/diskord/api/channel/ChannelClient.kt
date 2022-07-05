@@ -8,6 +8,7 @@ import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.isThread
 import io.ktor.client.call.*
+import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
@@ -27,7 +28,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @return This channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getChannel(): Channel = GET("/channels/$channelId").receive()
+    public suspend fun getChannel(): Channel = GET("/channels/$channelId").body()
 
     /**
      * Update this channel's name.
@@ -41,8 +42,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateName(name: String): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelName(name)
-        }.receive()
+            setBody(PatchChannelName(name))
+        }.body()
     }
 
     /**
@@ -57,8 +58,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateType(type: ChannelType): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelType(type)
-        }.receive()
+            setBody(PatchChannelType(type))
+        }.body()
     }
 
     /**
@@ -73,8 +74,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updatePosition(position: Int?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelPosition(position)
-        }.receive()
+            setBody(PatchChannelPosition(position))
+        }.body()
     }
 
     /**
@@ -89,8 +90,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateTopic(topic: String?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelTopic(topic)
-        }.receive()
+            setBody(PatchChannelTopic(topic))
+        }.body()
     }
 
     /**
@@ -105,8 +106,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateNSFW(isNSFW: Boolean): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelNSFW(isNSFW)
-        }.receive()
+            setBody(PatchChannelNSFW(isNSFW))
+        }.body()
     }
 
     /**
@@ -121,8 +122,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateUserRateLimit(rateLimit: Int?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelUserRateLimit(rateLimit)
-        }.receive()
+            setBody(PatchChannelUserRateLimit(rateLimit))
+        }.body()
     }
 
     /**
@@ -137,8 +138,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateBitrate(bitrate: Int?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelBitrate(bitrate)
-        }.receive()
+            setBody(PatchChannelBitrate(bitrate))
+        }.body()
     }
 
     /**
@@ -153,8 +154,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateUserLimit(userLimit: Int?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelUserLimit(userLimit)
-        }.receive()
+            setBody(PatchChannelUserLimit(userLimit))
+        }.body()
     }
 
     /**
@@ -169,8 +170,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updatePermissions(permissionsOverwrites: List<Overwrite>): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelOverwrites(permissionsOverwrites)
-        }.receive()
+            setBody(PatchChannelOverwrites(permissionsOverwrites))
+        }.body()
     }
 
     /**
@@ -185,8 +186,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateParentChannel(parentId: String?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchChannelParent(parentId)
-        }.receive()
+            setBody(PatchChannelParent(parentId))
+        }.body()
     }
 
     /**
@@ -201,8 +202,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateRtcRegion(regionId: String?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchRtcRegion(regionId)
-        }.receive()
+            setBody(PatchRtcRegion(regionId))
+        }.body()
     }
 
     /**
@@ -217,8 +218,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateVideoQualityMode(videoQualityMode: VideoQualityMode?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchVideoQualityMode(videoQualityMode)
-        }.receive()
+            setBody(PatchVideoQualityMode(videoQualityMode))
+        }.body()
     }
 
     /**
@@ -233,8 +234,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun updateDefaultAutoArchiveDuration(defaultAutoArchiveDuration: Int?): Channel {
         return PATCH("/channels/$channelId") {
-            body = PatchDefaultAutoArchiveDuration(defaultAutoArchiveDuration)
-        }.receive()
+            setBody(PatchDefaultAutoArchiveDuration(defaultAutoArchiveDuration))
+        }.body()
     }
 
     /**
@@ -247,7 +248,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteChannel(): Unit = DELETE("/channels/$channelId").receive()
+    public suspend fun deleteChannel(): Unit = DELETE("/channels/$channelId").body()
 
     /**
      * Get messages from this channel.
@@ -258,7 +259,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getMessages(limit: Int = 50): List<Message> {
-        return GET("/channels/$channelId/messages", "?limit=$limit").receive()
+        return GET("/channels/$channelId/messages", "?limit=$limit").body()
     }
 
     /**
@@ -271,7 +272,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getMessagesAround(limit: Int = 50, messageId: String): List<Message> {
-        return GET("/channels/$channelId/messages", "?limit=$limit&around=$messageId").receive()
+        return GET("/channels/$channelId/messages", "?limit=$limit&around=$messageId").body()
     }
 
     /**
@@ -284,7 +285,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getMessagesBefore(limit: Int = 50, messageId: String): List<Message> {
-        return GET("/channels/$channelId/messages", "?limit=$limit&before=$messageId").receive()
+        return GET("/channels/$channelId/messages", "?limit=$limit&before=$messageId").body()
     }
 
     /**
@@ -297,7 +298,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getMessagesAfter(limit: Int = 50, messageId: String): List<Message> {
-        return GET("/channels/$channelId/messages", "?limit=$limit&after=$messageId").receive()
+        return GET("/channels/$channelId/messages", "?limit=$limit&after=$messageId").body()
     }
 
     /**
@@ -309,7 +310,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getMessage(messageId: String): Message {
-        return GET("/channels/$channelId/messages", "/$messageId").receive()
+        return GET("/channels/$channelId/messages", "/$messageId").body()
     }
 
     /**
@@ -321,7 +322,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun createMessage(message: CreateMessage): Message {
-        return POST("/channels/$channelId/messages") { body = message }.receive()
+        return POST("/channels/$channelId/messages") { setBody(message) }.body()
     }
 
     /**
@@ -335,7 +336,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      */
     public suspend fun createMessage(message: CreateMessage, attachment: FileData): Message {
         return POST("/channels/$channelId/messages") {
-            body = MultiPartFormDataContent(formData {
+            setBody(MultiPartFormDataContent(formData {
                 append("payload_json", defaultJson.encodeToString(message)) // TODO: Check if this should be omitNulls?
                 append("file", attachment.packet, Headers.build {
                     if (attachment.contentType != null) {
@@ -347,8 +348,8 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
                         """form-data; name="file"; filename="${attachment.filename}""""
                     )
                 })
-            })
-        }.receive()
+            }))
+        }.body()
     }
 
     /**
@@ -360,7 +361,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun crosspostMessage(messageId: String): Message {
-        return POST("/channels/$channelId/messages/$messageId/crosspost").receive()
+        return POST("/channels/$channelId/messages/$messageId/crosspost").body()
     }
 
     /**
@@ -378,7 +379,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             "/channels/$channelId/messages/$messageId/reactions",
             "/${urlEncode(emojiText)}/@me",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
-        ).receive<Unit>()
+        ).body<Unit>()
     }
 
     /**
@@ -409,7 +410,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             "/channels/$channelId/messages/$messageId/reactions",
             "/${urlEncode(emojiText)}/$userId",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
-        ).receive<Unit>()
+        ).body<Unit>()
     }
 
     /**
@@ -441,7 +442,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             "/channels/$channelId/messages/$messageId/reactions",
             "/${urlEncode(textEmoji)}",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
-        ).receive()
+        ).body()
     }
 
     /**
@@ -468,7 +469,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
         DELETE(
             "/channels/$channelId/messages/$messageId/reactions",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
-        ).receive<Unit>()
+        ).body<Unit>()
     }
 
     /**
@@ -484,7 +485,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
             "/channels/$channelId/messages/$messageId/reactions",
             "/${urlEncode(textEmoji)}",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
-        ).receive<Unit>()
+        ).body<Unit>()
     }
 
     /**
@@ -509,7 +510,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun editMessage(messageId: String, messageEdit: MessageEdit): Message {
-        return PATCH("/channels/$channelId/messages", "/$messageId") { body = messageEdit }.receive()
+        return PATCH("/channels/$channelId/messages", "/$messageId") { setBody(messageEdit) }.body()
     }
 
     /**
@@ -520,7 +521,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteMessage(messageId: String) {
-        DELETE("/channels/$channelId/messages", "/$messageId").receive<Unit>()
+        DELETE("/channels/$channelId/messages", "/$messageId").body<Unit>()
     }
 
     /**
@@ -533,7 +534,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun bulkDeleteMessages(bulkMessageDelete: BulkMessageDelete): BulkMessageDelete {
-        return POST("/channels/$channelId/messages/bulk-delete") { body = bulkMessageDelete }.receive()
+        return POST("/channels/$channelId/messages/bulk-delete") { setBody(bulkMessageDelete) }.body()
     }
 
     /**
@@ -544,7 +545,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun editPermissions(overwrite: Overwrite) {
-        PUT("/channels/$channelId/permissions", "/${overwrite.id}").receive<Unit>()
+        PUT("/channels/$channelId/permissions", "/${overwrite.id}").body<Unit>()
     }
 
     /**
@@ -555,7 +556,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @return The list of invites for this channel.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getInvites(): List<Invite> = GET("/channels/$channelId/invites").receive()
+    public suspend fun getInvites(): List<Invite> = GET("/channels/$channelId/invites").body()
 
     /**
      * Create an invite for this channel.
@@ -566,7 +567,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun createInvite(createInvite: CreateInvite): Invite {
-        return POST("/channels/$channelId/invites") { body = createInvite }.receive()
+        return POST("/channels/$channelId/invites") { setBody(createInvite) }.body()
     }
 
     /**
@@ -579,7 +580,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deletePermissions(overwriteId: String) {
-        DELETE("/channels/$channelId/permissions", "/$overwriteId").receive<Unit>()
+        DELETE("/channels/$channelId/permissions", "/$overwriteId").body<Unit>()
     }
 
     /**
@@ -588,7 +589,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun triggerTypingIndicator() {
-        POST("/channels/$channelId/typing").receive<Unit>()
+        POST("/channels/$channelId/typing").body<Unit>()
     }
 
     /**
@@ -597,7 +598,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @return The pinned messages.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getPinnedMessages(): List<Message> = GET("/channels/$channelId/pins").receive()
+    public suspend fun getPinnedMessages(): List<Message> = GET("/channels/$channelId/pins").body()
 
     /**
      * Pin a message in this channel.
@@ -609,7 +610,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun pinMessage(messageId: String) {
-        PUT("/channels/$channelId/pins", "/$messageId").receive<Unit>()
+        PUT("/channels/$channelId/pins", "/$messageId").body<Unit>()
     }
 
     /**
@@ -620,7 +621,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun unpinMessage(messageId: String) {
-        PUT("/channels/$channelId/pins", "/$messageId").receive<Unit>()
+        PUT("/channels/$channelId/pins", "/$messageId").body<Unit>()
     }
 
     /**
@@ -634,7 +635,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun addGroupDMRecipient(userId: String, groupDMAddRecipient: GroupDMAddRecipient) {
-        PUT("/channels/$channelId/recipients", "/$userId") { body = groupDMAddRecipient }.receive<Unit>()
+        PUT("/channels/$channelId/recipients", "/$userId") { setBody(groupDMAddRecipient) }.body<Unit>()
     }
 
     /**
@@ -647,7 +648,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun removeGroupDMRecipient(userId: String) {
-        DELETE("/channels/$channelId/recipients", "/$userId").receive<Unit>()
+        DELETE("/channels/$channelId/recipients", "/$userId").body<Unit>()
     }
 
     /**
@@ -661,7 +662,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun createThreadFromMessage(messageId: String, createThread: CreateThread): GuildThread =
-        POST("/channels/$channelId/messages/$messageId/threads") { body = createThread }.receive()
+        POST("/channels/$channelId/messages/$messageId/threads") { setBody(createThread) }.body()
 
     /**
      * Create a thread not connected to an existing message.
@@ -675,7 +676,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun createThread(createThread: CreateThreadWithType): GuildThread {
         require(createThread.type.isThread) { "createThread.type must be a thread" }
 
-        return POST("/channels/$channelId/threads") { body = createThread }.receive()
+        return POST("/channels/$channelId/threads") { setBody(createThread) }.body()
     }
 
     /**
@@ -685,7 +686,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun joinThread(): Unit = PUT("/channels/$channelId/thread-members/@me").receive()
+    public suspend fun joinThread(): Unit = PUT("/channels/$channelId/thread-members/@me").body()
 
     /**
      * Add a user to the current thread.
@@ -697,7 +698,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun addThreadMember(userId: String): Unit =
-        PUT("/channels/$channelId/thread-members/$userId").receive()
+        PUT("/channels/$channelId/thread-members/$userId").body()
 
     /**
      * Leave the current thread.
@@ -706,7 +707,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun leaveThread(): Unit = DELETE("/channels/$channelId/thread-members/@me").receive()
+    public suspend fun leaveThread(): Unit = DELETE("/channels/$channelId/thread-members/@me").body()
 
     /**
      * Remove a user from the current thread.
@@ -721,7 +722,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun removeThreadMember(userId: String): Unit =
-        DELETE("/channels/$channelId/thread-members/$userId").receive()
+        DELETE("/channels/$channelId/thread-members/$userId").body()
 
     /**
      * Get a list of members for the current thread.
@@ -732,7 +733,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getThreadMembers(): List<ThreadMember> = GET("/channels/$channelId/thread-members").receive()
+    public suspend fun getThreadMembers(): List<ThreadMember> = GET("/channels/$channelId/thread-members").body()
 
     /**
      * Get a list of active threads and associated members for the current channel.
@@ -743,7 +744,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getActiveThreads(): ActiveThreads = GET("/channels/$channelId/threads/active").receive()
+    public suspend fun getActiveThreads(): ActiveThreads = GET("/channels/$channelId/threads/active").body()
 
     /**
      * Get a list of public archived threads and associated members for the current channel.
@@ -755,7 +756,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getPublicArchivedThreads(): ArchivedThreads =
-        GET("/channels/{channel.id}/threads/archived/public").receive()
+        GET("/channels/{channel.id}/threads/archived/public").body()
 
     /**
      * Get a list of private archived threads and associated members for the current channel.
@@ -767,7 +768,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getPrivateArchivedThreads(): ArchivedThreads =
-        GET("/channels/{channel.id}/threads/archived/private").receive()
+        GET("/channels/{channel.id}/threads/archived/private").body()
 
     /**
      * Get a list of joined private threads.
@@ -779,7 +780,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getJoinedPrivateArchivedThreads(): ArchivedThreads =
-        GET("/channels/{channel.id}/threads/archived/private").receive()
+        GET("/channels/{channel.id}/threads/archived/private").body()
 
     /**
      * Get the webhooks in this channel.
@@ -787,7 +788,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @return The list webhooks present.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getWebhooks(): List<Webhook> = GET("/channels/$channelId/webhooks").receive()
+    public suspend fun getWebhooks(): List<Webhook> = GET("/channels/$channelId/webhooks").body()
 
     /**
      * Create a webhook for this channel.
@@ -798,6 +799,6 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun createWebhook(webhook: CreateWebhook): Webhook {
-        return POST("/channels/$channelId/webhooks") { body = webhook }.receive()
+        return POST("/channels/$channelId/webhooks") { setBody(webhook) }.body()
     }
 }

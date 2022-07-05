@@ -7,9 +7,9 @@ import com.jessecorbett.diskord.util.StripBlankSWSEHeader
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
 import io.ktor.client.*
-import io.ktor.client.features.logging.*
-import io.ktor.client.features.websocket.*
-import io.ktor.http.cio.websocket.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope

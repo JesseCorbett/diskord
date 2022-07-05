@@ -16,7 +16,8 @@ import io.ktor.http.*
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
 import kotlin.math.ceil
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 private const val DISCORD_API_URL = "https://discord.com/api"
@@ -37,7 +38,7 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
         resetsAt > 10000 -> logger.info { "Delaying API call to satisfy high rate limit reset of ${resetsAt}ms. If you frequently encounter this consider reducing API calls" }
     }
 
-    delay(Duration.milliseconds(resetsAt))
+    delay(resetsAt.milliseconds)
 }
 
 public interface RestClient {
@@ -173,11 +174,11 @@ public class DefaultRestClient(
             response
         } else {
             try {
-                throwFailure(response.status.value, response.readText(), response)
+                throwFailure(response.status.value, response.bodyAsText(), response)
             } catch (rateLimitException: DiscordRateLimitException) {
                 logger.info { "Attempting to recover from rate limit error with a retry after ${rateLimitException.retryAfterSeconds}s" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
-                delay(Duration.seconds(rateLimitException.retryAfterSeconds))
+                delay(rateLimitException.retryAfterSeconds.seconds)
                 logger.info { "Attempting retry" }
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
             }
