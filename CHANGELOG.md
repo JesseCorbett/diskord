@@ -1,6 +1,14 @@
 # Changelog
 
-## [2.1.2] - 2021-02-05
+## [2.1.3] - 2022-03-05
+
+### Fixed
+* An issue where a new message type, CONTEXT_MENU_COMMAND, was missing
+
+### Changed
+* Updated to kotlin 1.6.20 and related dependencies
+
+## [2.1.2] - 2022-02-05
 
 ### Fixed
 * An issue where colors were not always calculated accurately
@@ -9,7 +17,7 @@
 * Updated to kotlin 1.6.10 and related dependencies
 * Changed behavior to bot startup so that it blocks until connection is established
 
-## [2.1.1] - 2020-09-25
+## [2.1.1] - 2021-09-25
 
 ### Fixed
 * Two issues related to rate limiting
