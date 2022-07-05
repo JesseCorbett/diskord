@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.api.common
 
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,15 +18,18 @@ public data class Webhook(
     @SerialName("application_id") val applicationId: String? = null
 )
 
-@Serializable
-public enum class WebhookType {
+@Serializable(with = WebhookTypeSerializer::class)
+public enum class WebhookType(public override val code: Int): CodeEnum {
+    UNKNOWN(-1),
     /**
      * The main webhook type
      */
-    @SerialName("0") INCOMING,
+    INCOMING(0),
 
     /**
      * An internal webhook type used for the Channel Following feature
      */
-    @SerialName("1") CHANNEL_FOLLOWER
+    CHANNEL_FOLLOWER(1)
 }
+
+public class WebhookTypeSerializer : CodeEnumSerializer<WebhookType>(WebhookType.UNKNOWN, WebhookType.values())

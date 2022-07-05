@@ -1,7 +1,6 @@
 .gradle/
 build/
 out/
-.idea/
 *.iml
 *.hprof
 public/

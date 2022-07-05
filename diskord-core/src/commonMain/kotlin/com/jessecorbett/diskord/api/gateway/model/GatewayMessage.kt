@@ -32,6 +32,11 @@ public data class GatewayMessage(
 @Serializable(with = OpCodeSerializer::class)
 public enum class OpCode(public val code: Int) {
     /**
+     * Fallback opcode, in case discord has one they don't tell us about
+     */
+    UNKNOWN(-1),
+
+    /**
      * A discord event has been sent to the client.
      */
     DISPATCH(0),
@@ -94,7 +99,7 @@ public object OpCodeSerializer : KSerializer<OpCode> {
 
     override fun deserialize(decoder: Decoder): OpCode {
         val code = decoder.decodeInt()
-        return OpCode.values().first { it.code == code }
+        return OpCode.values().find { it.code == code } ?: OpCode.UNKNOWN
     }
 }
 

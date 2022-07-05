@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.api.common
 
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -28,11 +30,14 @@ public data class IntegrationAccount(
     @SerialName("name") val name: String
 )
 
-@Serializable
-public enum class IntegrationExpireBehavior {
-    @SerialName("0") REMOVE_ROLE,
-    @SerialName("1") KICK
+@Serializable(with = IntegrationExpireBehaviorSerializer::class)
+public enum class IntegrationExpireBehavior(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    REMOVE_ROLE(0),
+    KICK(1)
 }
+
+public class IntegrationExpireBehaviorSerializer : CodeEnumSerializer<IntegrationExpireBehavior>(IntegrationExpireBehavior.UNKNOWN, IntegrationExpireBehavior.values())
 
 @Serializable
 public data class IntegrationApplication(

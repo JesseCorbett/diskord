@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0] - 2022-07-XX
+
+### Added
+- Interactions API!
+- Fallback behavior for enum values to have unknown types
+
+### Changed
+- Updated nearly all the dependencies
+- Expect breaking changes to some APIs
+- Removed deprecated APIs
+
 ## [2.1.3] - 2022-03-05
 
 ### Fixed

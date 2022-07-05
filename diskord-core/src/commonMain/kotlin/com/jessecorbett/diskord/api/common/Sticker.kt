@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.api.common
 
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -32,18 +34,24 @@ public data class Sticker(
     @SerialName("sort_value") val sortValue: Int? = null,
 ) : StickerItem
 
-@Serializable
-public enum class StickerType {
-    @SerialName("1") STANDARD,
-    @SerialName("2") GUILD,
+@Serializable(with = StickerTypeSerializer::class)
+public enum class StickerType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    STANDARD(1),
+    GUILD(2),
 }
 
-@Serializable
-public enum class StickerFormat {
-    @SerialName("1") PNG,
-    @SerialName("2") APNG,
-    @SerialName("3") LOTTIE
+public class StickerTypeSerializer : CodeEnumSerializer<StickerType>(StickerType.UNKNOWN, StickerType.values())
+
+@Serializable(with = StickerFormatSerializer::class)
+public enum class StickerFormat(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    PNG(1),
+    APNG(2),
+    LOTTIE(3)
 }
+
+public class StickerFormatSerializer : CodeEnumSerializer<StickerFormat>(StickerFormat.UNKNOWN, StickerFormat.values())
 
 @Serializable
 public data class StickerPack(

@@ -1,6 +1,8 @@
 package com.jessecorbett.diskord.api.common
 
 import com.jessecorbett.diskord.api.interaction.InteractionType
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,35 +35,37 @@ public data class Message(
     @SerialName("thread") val thread: Channel? = null,
     @SerialName("components") val components: List<MessageComponent> = emptyList(),
     @SerialName("stickers_items") val stickerList: List<PartialSticker> = emptyList(),
-    @SerialName("stickers") @Deprecated("Deprecated in the Discord API. Use stickerList instead.", ReplaceWith("stickerList")) val stickers: List<MessageSticker> = emptyList(),
 )
 
-@Serializable
-public enum class MessageType {
-    @SerialName("0") DEFAULT,
-    @SerialName("1") RECIPIENT_ADD,
-    @SerialName("2") RECIPIENT_REMOVE,
-    @SerialName("3") CALL,
-    @SerialName("4") CHANNEL_NAME_CHANGE,
-    @SerialName("5") CHANNEL_ICON_CHANGE,
-    @SerialName("6") CHANNEL_PINNED_MESSAGE,
-    @SerialName("7") GUILD_MEMBER_JOIN,
-    @SerialName("8") USER_PREMIUM_GUILD_SUBSCRIPTION,
-    @SerialName("9") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1,
-    @SerialName("10") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2,
-    @SerialName("11") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3,
-    @SerialName("12") CHANNEL_FOLLOW_ADD,
-    @SerialName("14") GUILD_DISCOVERY_DISQUALIFIED,
-    @SerialName("15") GUILD_DISCOVERY_REQUALIFIED,
-    @SerialName("16") GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING,
-    @SerialName("17") GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING,
-    @SerialName("18") THREAD_CREATED,
-    @SerialName("19") REPLY,
-    @SerialName("20") APPLICATION_COMMAND,
-    @SerialName("21") THREAD_STARTER_MESSAGE,
-    @SerialName("22") GUILD_INVITE_REMINDER,
-    @SerialName("23") CONTEXT_MENU_COMMAND,
+@Serializable(with = MessageTypeSerializer::class)
+public enum class MessageType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    DEFAULT(0),
+    RECIPIENT_ADD(1),
+    RECIPIENT_REMOVE(2),
+    CALL(3),
+    CHANNEL_NAME_CHANGE(4),
+    CHANNEL_ICON_CHANGE(5),
+    CHANNEL_PINNED_MESSAGE(6),
+    GUILD_MEMBER_JOIN(7),
+    USER_PREMIUM_GUILD_SUBSCRIPTION(8),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1(9),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2(10),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3(11),
+    CHANNEL_FOLLOW_ADD(12),
+    GUILD_DISCOVERY_DISQUALIFIED(14),
+    GUILD_DISCOVERY_REQUALIFIED(15),
+    GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING(16),
+    GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING(17),
+   THREAD_CREATED(18),
+    REPLY(19),
+    APPLICATION_COMMAND(20),
+    THREAD_STARTER_MESSAGE(21),
+    GUILD_INVITE_REMINDER(22),
+    CONTEXT_MENU_COMMAND(23),
 }
+
+public class MessageTypeSerializer : CodeEnumSerializer<MessageType>(MessageType.UNKNOWN, MessageType.values())
 
 @Serializable
 public data class MessageActivity(
@@ -69,13 +73,16 @@ public data class MessageActivity(
     @SerialName("party_id") val partyId: String? = null
 )
 
-@Serializable
-public enum class MessageActivityType {
-    @SerialName("1") JOIN,
-    @SerialName("2") SPECTATE,
-    @SerialName("3") LISTEN,
-    @SerialName("5") JOIN_REQUEST
+@Serializable(with = MessageActivityTypeSerializer::class)
+public enum class MessageActivityType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    JOIN(1),
+    SPECTATE(2),
+    LISTEN(3),
+    JOIN_REQUEST(5)
 }
+
+public class MessageActivityTypeSerializer : CodeEnumSerializer<MessageActivityType>(MessageActivityType.UNKNOWN, MessageActivityType.values())
 
 @Serializable
 public data class MessageApplication(
@@ -91,19 +98,6 @@ public data class MessageReference(
     @SerialName("message_id") val messageId: String? = null,
     @SerialName("channel_id") val channelId: String? = null,
     @SerialName("guild_id") val guildId: String? = null
-)
-
-@Deprecated("Use Sticker instead.", replaceWith = ReplaceWith("Sticker"))
-@Serializable
-public data class MessageSticker(
-    @SerialName("id") val id: String,
-    @SerialName("pack_id") val packId: String,
-    @SerialName("name") val name: String,
-    @SerialName("description") val description: String,
-    @SerialName("tags") val tags: String? = null,
-    @SerialName("asset") val hash: String,
-    @SerialName("preview_asset") val previewHash: String?,
-    @SerialName("format_type") val formatType: StickerFormat
 )
 
 /**
@@ -152,19 +146,17 @@ public data class SelectMenu(
 ) : MessageComponent(3)
 
 
-@Serializable
-public enum class ButtonStyle {
-    @SerialName("1")
-    Primary,
-    @SerialName("2")
-    Secondary,
-    @SerialName("3")
-    Success,
-    @SerialName("4")
-    Danger,
-    @SerialName("5")
-    Link
+@Serializable(with = ButtonStyleSerializer::class)
+public enum class ButtonStyle(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    Primary(1),
+    Secondary(2),
+    Success(3),
+    Danger(4),
+    Link(5)
 }
+
+public class ButtonStyleSerializer : CodeEnumSerializer<ButtonStyle>(ButtonStyle.UNKNOWN, ButtonStyle.values())
 
 @Serializable
 public data class SelectOption(

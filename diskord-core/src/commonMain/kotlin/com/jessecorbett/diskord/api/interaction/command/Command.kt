@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.api.interaction.command
 
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -39,10 +41,12 @@ public data class CommandPermissions(
     @SerialName("permission") val permission: Boolean
 )
 
-@Serializable
-public enum class CommandPermissionsType {
-    @SerialName("1")
-    Role,
-    @SerialName("2")
-    User
+@Serializable(with = CommandPermissionsTypeSerializer::class)
+public enum class CommandPermissionsType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    Role(1),
+    User(2)
 }
+
+public class CommandPermissionsTypeSerializer : CodeEnumSerializer<CommandPermissionsType>(CommandPermissionsType.UNKNOWN, CommandPermissionsType.values())
+

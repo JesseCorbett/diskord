@@ -1,7 +1,15 @@
 package com.jessecorbett.diskord.api.interaction
 
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.common.GuildMember
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.PartialChannel
+import com.jessecorbett.diskord.api.common.PartialMember
+import com.jessecorbett.diskord.api.common.Role
+import com.jessecorbett.diskord.api.common.SelectOption
+import com.jessecorbett.diskord.api.common.User
 import com.jessecorbett.diskord.api.interaction.command.CommandType
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
@@ -15,17 +23,16 @@ public sealed class Interaction {
     public abstract val version: Int
 }
 
-@Serializable
-public enum class InteractionType {
-    @SerialName("1")
-    Ping,
-    @SerialName("2")
-    ApplicationCommand,
-    @SerialName("3")
-    MessageComponent,
-    @SerialName("4")
-    AutocompletePrompt
+@Serializable(with = InteractionTypeSerializer::class)
+public enum class InteractionType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    Ping(1),
+    ApplicationCommand(2),
+    MessageComponent(3),
+    AutocompletePrompt(4)
 }
+
+public class InteractionTypeSerializer : CodeEnumSerializer<InteractionType>(InteractionType.UNKNOWN, InteractionType.values())
 
 @Serializable
 @SerialName("1")
