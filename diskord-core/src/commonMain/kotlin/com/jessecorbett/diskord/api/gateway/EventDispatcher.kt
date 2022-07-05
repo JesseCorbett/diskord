@@ -748,7 +748,7 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
     }
 
     private fun forEvent(discordEvent: DiscordEvent, block: suspend (JsonElement) -> T): (DiscordEvent, JsonElement) -> Deferred<T>? {
-        return { event, json->
+        return { event, json ->
             if (event == discordEvent) {
                 dispatcherScope.async { block(json) }
             } else {
