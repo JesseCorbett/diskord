@@ -93,27 +93,6 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @return The created message
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    @Deprecated("Use variant with CreateWebhookMessage instead.", ReplaceWith("execute"))
-    public suspend fun execute(
-        webhookToken: String,
-        webhookSubmission: WebhookSubmission,
-        waitForValidation: Boolean = true
-    ): WebhookSubmission {
-        return POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") {
-            setBody(webhookSubmission)
-        }.body()
-    }
-
-    /**
-     * Execute the webhook.
-     *
-     * @param webhookToken The webhook's secure token.
-     * @param message The post the webhook will make.
-     * @param waitForValidation Wait for the message to be posted before the call returns. Defaults to false.
-     *
-     * @return The created message
-     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
-     */
     public suspend fun execute(
         webhookToken: String,
         message: CreateWebhookMessage,
@@ -174,6 +153,6 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteWebhookMessage(webhookToken: String, messageId: String) {
-        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").body()
+        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").body<Unit>()
     }
 }

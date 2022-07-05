@@ -11,5 +11,4 @@ public enum class CommandType {
     User,
     @SerialName("3")
     Message,
-
 }

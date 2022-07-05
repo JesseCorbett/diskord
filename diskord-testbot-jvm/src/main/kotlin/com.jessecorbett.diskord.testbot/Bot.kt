@@ -30,11 +30,21 @@ suspend fun main() {
             userCommand("echo") { it, data ->
                 it.client.createInteractionResponse(it.id, ChannelMessageWithSource(
                     data = ChannelMessageWithSource.Data(content = "Test data for interaction " + data.convertedUsersRolesChannels)
-                ))
+                )
+                )
             }
 
-            messageCommand("delete") { interaction, data ->
+            messageCommand("test") { interaction, data ->
                 println(interaction)
+            }
+
+            slashCommand("echo", "Makes the bot say something") {
+                val message by stringParameter("message", "The message")
+                callback { applicationCommand, chatData ->
+                    applicationCommand.client.createInteractionResponse(applicationCommand.id, ChannelMessageWithSource(
+                        data = ChannelMessageWithSource.Data(content = message)
+                    ))
+                }
             }
         }
     }

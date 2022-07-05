@@ -7,6 +7,7 @@ import com.jessecorbett.diskord.api.interaction.command.PartialGuildCommandPermi
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.call.*
+import io.ktor.client.request.setBody
 
 @OptIn(DiskordInternals::class)
 public class CommandClient(public val applicationId: String, client: RestClient) : RestClient by client {
@@ -14,63 +15,63 @@ public class CommandClient(public val applicationId: String, client: RestClient)
      * FIXME - Document me!
      */
     public suspend fun getGlobalCommands(): List<Command> {
-        return GET("/applications/$applicationId/commands").receive()
+        return GET("/applications/$applicationId/commands").body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun createGlobalCommand(command: CreateCommand): Command {
-        return POST("/applications/$applicationId/commands") { body = command }.receive()
+        return POST("/applications/$applicationId/commands") { setBody(command) }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getGlobalCommand(commandId: String): Command {
-        return GET("/applications/$applicationId/commands/$commandId").receive()
+        return GET("/applications/$applicationId/commands/$commandId").body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun updateGlobalCommand(commandId: String, command: PatchCommand): Command {
-        return PATCH("/applications/$applicationId/commands/$commandId") { body = command }.receive()
+        return PATCH("/applications/$applicationId/commands/$commandId") { setBody(command) }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun deleteGlobalCommand(commandId: String) {
-        DELETE("/applications/$applicationId/commands/$commandId").receive<Unit>()
+        DELETE("/applications/$applicationId/commands/$commandId").body<Unit>()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun bulkOverwriteGlobalCommands(commands: List<Command>): List<Command> {
-        return PUT("/applications/$applicationId/commands") { body = commands }.receive()
+        return PUT("/applications/$applicationId/commands") { setBody(commands) }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getGuildCommands(guildId: String): List<Command> {
-        return GET("/applications/$applicationId/guilds/$guildId/commands").receive()
+        return GET("/applications/$applicationId/guilds/$guildId/commands").body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun createGuildCommand(guildId: String, command: CreateCommand): Command {
-        return POST("/applications/$applicationId/guilds/$guildId/commands") { body = command }.receive()
+        return POST("/applications/$applicationId/guilds/$guildId/commands") { setBody(command) }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getGuildCommand(guildId: String, commandId: String): Command {
-        return GET("/applications/$applicationId/guilds/$guildId/commands/$commandId").receive()
+        return GET("/applications/$applicationId/guilds/$guildId/commands/$commandId").body()
     }
 
     /**
@@ -78,36 +79,36 @@ public class CommandClient(public val applicationId: String, client: RestClient)
      */
     public suspend fun updateGuildCommand(guildId: String, commandId: String, command: PatchCommand): Command {
         return PATCH("/applications/$applicationId/guilds/$guildId/commands/$commandId") {
-            body = command
-        }.receive()
+            setBody(command)
+        }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun deleteGuildCommand(guildId: String, commandId: String) {
-        DELETE("/applications/$applicationId/guilds/$guildId/commands/$commandId").receive<Unit>()
+        DELETE("/applications/$applicationId/guilds/$guildId/commands/$commandId").body<Unit>()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun bulkOverwriteGuildCommands(guildId: String, commands: List<Command>): List<Command> {
-        return PUT("/applications/$applicationId/guilds/$guildId/commands") { body = commands }.receive()
+        return PUT("/applications/$applicationId/guilds/$guildId/commands") { setBody(commands) }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getGuildCommandsPermissions(guildId: String): List<GuildCommandPermissions> {
-        return GET("/applications/$applicationId/guilds/$guildId/commands/permissions").receive()
+        return GET("/applications/$applicationId/guilds/$guildId/commands/permissions").body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getGuildCommandPermissions(guildId: String, commandId: String): GuildCommandPermissions {
-        return GET("/applications/$applicationId/guilds/$guildId/commands/$commandId/permissions").receive()
+        return GET("/applications/$applicationId/guilds/$guildId/commands/$commandId/permissions").body()
     }
 
     /**
@@ -119,8 +120,8 @@ public class CommandClient(public val applicationId: String, client: RestClient)
         permissions: List<CommandPermissions>
     ) {
         return PUT("/applications/$applicationId/guilds/$guildId/commands/$commandId/permissions") {
-            body = permissions
-        }.receive()
+            setBody(permissions)
+        }.body()
     }
 
     /**
@@ -131,7 +132,7 @@ public class CommandClient(public val applicationId: String, client: RestClient)
         permissions: List<PartialGuildCommandPermissions>
     ) {
         return PUT("/applications/$applicationId/guilds/$guildId/commands/permissions") {
-            body = permissions
-        }.receive()
+            setBody(permissions)
+        }.body()
     }
 }

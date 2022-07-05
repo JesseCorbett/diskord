@@ -7,6 +7,7 @@ import com.jessecorbett.diskord.api.webhook.PatchWebhookMessage
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.call.*
+import io.ktor.client.request.setBody
 
 @OptIn(DiskordInternals::class)
 public class InteractionClient(
@@ -22,15 +23,15 @@ public class InteractionClient(
         interactionResponse: InteractionResponse
     ) {
         POST("/interactions/$interactionId/$interactionToken/callback") {
-            body = interactionResponse
-        }.receive<Unit>()
+            setBody(interactionResponse)
+        }.body<Unit>()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getOriginalInteractionResponse(): Message {
-        return GET("/webhooks/$applicationId/$interactionToken/messages/@original").receive()
+        return GET("/webhooks/$applicationId/$interactionToken/messages/@original").body()
     }
 
     /**
@@ -38,29 +39,31 @@ public class InteractionClient(
      */
     public suspend fun updateOriginalInteractionResponse(message: PatchWebhookMessage): Message {
         return PATCH("/webhooks/$applicationId/$interactionToken/messages/@original") {
-            body = message
-        }.receive()
+            setBody(message)
+        }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun deleteOriginalInteractionResponse() {
-        DELETE("/webhooks/$applicationId/$interactionToken/messages/@original").receive<Unit>()
+        DELETE("/webhooks/$applicationId/$interactionToken/messages/@original").body<Unit>()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun createFollowupMessage(message: CreateWebhookMessage): Message {
-        return POST("/webhooks/$applicationId/$interactionToken").receive()
+        return POST("/webhooks/$applicationId/$interactionToken") {
+            setBody(message)
+        }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun getFollowupMessage(messageId: String): Message {
-        return GET("/webhooks/$applicationId/$interactionToken/messages/$messageId").receive()
+        return GET("/webhooks/$applicationId/$interactionToken/messages/$messageId").body()
     }
 
     /**
@@ -68,14 +71,14 @@ public class InteractionClient(
      */
     public suspend fun updateFollowupMessage(messageId: String, message: PatchWebhookMessage): Message {
         return PATCH("/webhooks/$applicationId/$interactionToken/messages/$messageId") {
-            body = message
-        }.receive()
+            setBody(message)
+        }.body()
     }
 
     /**
      * FIXME - Document me!
      */
     public suspend fun deleteFollowupMessage(messageId: String) {
-        DELETE("/webhooks/$applicationId/$interactionToken/messages/$messageId").receive<Unit>()
+        DELETE("/webhooks/$applicationId/$interactionToken/messages/$messageId").body<Unit>()
     }
 }
