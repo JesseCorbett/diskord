@@ -21,7 +21,7 @@ public class InviteClient(public val inviteCode: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getInvite(withCounts: Boolean = false): Invite {
-        return GET("/invites/$inviteCode?with_counts=$withCounts").receive()
+        return GET("/invites/$inviteCode?with_counts=$withCounts").body()
     }
 
     /**
@@ -31,7 +31,7 @@ public class InviteClient(public val inviteCode: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteInvite() {
-        DELETE("/invites/$inviteCode").receive<Unit>()
+        DELETE("/invites/$inviteCode").body<Unit>()
     }
 
 }

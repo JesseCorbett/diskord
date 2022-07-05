@@ -60,7 +60,7 @@ public enum class MessageType {
     @SerialName("20") APPLICATION_COMMAND,
     @SerialName("21") THREAD_STARTER_MESSAGE,
     @SerialName("22") GUILD_INVITE_REMINDER,
-    @SerialName("23") CONTEXT_MENU_COMMAND
+    @SerialName("23") CONTEXT_MENU_COMMAND,
 }
 
 @Serializable

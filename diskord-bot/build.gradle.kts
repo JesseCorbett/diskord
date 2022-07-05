@@ -4,7 +4,7 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform")
+    kotlin("multiplatform")
     id("org.jetbrains.dokka")
 }
 

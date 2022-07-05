@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.bot
 
+import com.jessecorbett.diskord.api.channel.MessageEdit
 import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
@@ -188,6 +189,14 @@ public interface BotContext {
     public suspend fun Message.react(emoji: String) {
         return channel.addMessageReaction(id, emoji)
     }
+
+	/**
+	 * Edit this message
+	 * @param messageEdit the MessageEdit to apply on message
+	 */
+	public suspend fun Message.edit(messageEdit: MessageEdit) {
+        channel.editMessage(this.id, messageEdit)
+	}
 
     // Interaction receivers
 

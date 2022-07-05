@@ -2,15 +2,19 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform") version "1.6.20" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.20" apply false
-    id("org.jetbrains.dokka") version "1.6.10"
+    kotlin("multiplatform") version "1.6.21" apply false
+    kotlin("plugin.serialization") version "1.6.21" apply false
+    id("org.jetbrains.dokka") version "1.7.0"
 }
 
 val diskordVersion: String by project
 
 group = "com.jessecorbett"
 version = diskordVersion
+
+rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin> {
+    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension>().nodeVersion = "16.0.0"
+}
 
 allprojects {
     repositories {
