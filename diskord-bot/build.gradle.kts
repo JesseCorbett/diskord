@@ -84,6 +84,9 @@ kotlin {
         }
 
         val jvmMain by getting {
+            jvmToolchain {
+                languageVersion.set(JavaLanguageVersion.of(8))
+            }
             dependencies {
                 implementation("org.slf4j:slf4j-api:$slf4jVersion")
                 implementation("org.slf4j:slf4j-simple:$slf4jVersion")
