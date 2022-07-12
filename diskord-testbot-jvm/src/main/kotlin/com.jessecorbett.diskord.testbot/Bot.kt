@@ -1,6 +1,5 @@
 package com.jessecorbett.diskord.testbot
 
-import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
@@ -27,11 +26,11 @@ suspend fun main() {
         }
 
         interactions {
-            userCommand("echo") { it, data ->
-                it.client.createInteractionResponse(it.id, ChannelMessageWithSource(
-                    data = ChannelMessageWithSource.Data(content = "Test data for interaction " + data.convertedUsersRolesChannels)
-                )
-                )
+            userCommand("print") { it, data ->
+                it.respond {
+                    content = "Test data for interaction " + data.convertedUsersRolesChannels
+                    ephemeral
+                }
             }
 
             messageCommand("test") { interaction, data ->
@@ -40,10 +39,10 @@ suspend fun main() {
 
             slashCommand("echo", "Makes the bot say something") {
                 val message by stringParameter("message", "The message")
-                callback { applicationCommand, chatData ->
-                    applicationCommand.client.createInteractionResponse(applicationCommand.id, ChannelMessageWithSource(
-                        data = ChannelMessageWithSource.Data(content = message)
-                    ))
+                callback { interaction, _ ->
+                    interaction.respond {
+                        content = message
+                    }
                 }
             }
         }

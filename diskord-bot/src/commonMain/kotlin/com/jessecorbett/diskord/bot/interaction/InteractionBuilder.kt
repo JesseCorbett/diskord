@@ -31,7 +31,7 @@ public class InteractionBuilder(
             type = CommandType.ChatInput
         )
 
-        applicationCommand(createCommand, guildId, block)
+        interactionCommand(createCommand, guildId, block)
     }
 
     @InteractionModule
@@ -39,7 +39,7 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         availableByDefault: Boolean = true,
-        callback: suspend BotContext.(ApplicationCommand, ApplicationCommand.UserData) -> Unit
+        callback: suspend ResponseContext.(ApplicationCommand, ApplicationCommand.UserData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
@@ -49,7 +49,7 @@ public class InteractionBuilder(
             type = CommandType.User
         )
 
-        applicationCommand<ApplicationCommand.UserData>(createCommand, guildId, block = { callback(callback) })
+        interactionCommand(createCommand, guildId, block = { callback(callback) })
     }
 
     @InteractionModule
@@ -57,7 +57,7 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         availableByDefault: Boolean = true,
-        callback: suspend BotContext.(ApplicationCommand, ApplicationCommand.MessageData) -> Unit
+        callback: suspend ResponseContext.(ApplicationCommand, ApplicationCommand.MessageData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
@@ -67,10 +67,10 @@ public class InteractionBuilder(
             type = CommandType.Message
         )
 
-        applicationCommand<ApplicationCommand.MessageData>(createCommand, guildId, block = { callback(callback) })
+        interactionCommand(createCommand, guildId, block = { callback(callback) })
     }
 
-    private fun <D: ApplicationCommand.Data> applicationCommand(
+    private fun <D: ApplicationCommand.Data> interactionCommand(
         createCommand: CreateCommand,
         guildId: String? = null,
         block: suspend ApplicationCommandBuilder<D>.() -> Unit
@@ -103,7 +103,7 @@ public class InteractionBuilder(
                     Cast should be safe as we should never have command ID match but somehow have the wrong Data subclass
                      */
                     @Suppress("UNCHECKED_CAST")
-                    botContext.callback(interaction, data as D)
+                    ResponseContext(botContext).callback(interaction, data as D)
                 }
             }
         }

@@ -1,17 +1,25 @@
 package com.jessecorbett.diskord.bot.interaction
 
-import com.jessecorbett.diskord.api.interaction.*
+import com.jessecorbett.diskord.api.interaction.ApplicationCommand
+import com.jessecorbett.diskord.api.interaction.BooleanResponse
+import com.jessecorbett.diskord.api.interaction.ChannelResponse
+import com.jessecorbett.diskord.api.interaction.CommandInteractionOptionResponse
+import com.jessecorbett.diskord.api.interaction.IntegerResponse
+import com.jessecorbett.diskord.api.interaction.MentionableResponse
+import com.jessecorbett.diskord.api.interaction.NumberResponse
+import com.jessecorbett.diskord.api.interaction.RoleResponse
+import com.jessecorbett.diskord.api.interaction.StringResponse
+import com.jessecorbett.diskord.api.interaction.UserResponse
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
-import com.jessecorbett.diskord.bot.BotContext
 import kotlin.reflect.KProperty
 
 public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
     private val delegates = mutableListOf<CommandDelegate<*>>()
     internal val parameters = mutableListOf<CommandOption>()
-    internal var callbackFunction: suspend BotContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
+    internal var callbackFunction: suspend ResponseContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
 
     @InteractionModule
-    public fun callback(block: suspend BotContext.(ApplicationCommand, D) -> Unit) {
+    public fun callback(block: suspend ResponseContext.(ApplicationCommand, D) -> Unit) {
         callbackFunction = block
     }
 
