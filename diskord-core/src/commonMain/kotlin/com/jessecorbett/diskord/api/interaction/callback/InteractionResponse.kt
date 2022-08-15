@@ -46,13 +46,13 @@ public data class ChannelMessageWithSource(
 
 @Serializable
 @SerialName("5")
-public object DeferredChannelMessageWithSource : InteractionResponse() {
+public class DeferredChannelMessageWithSource : InteractionResponse() {
     public val type: Int = 5
 }
 
 @Serializable
 @SerialName("6")
-public object DeferredUpdateMessage : InteractionResponse() {
+public class DeferredUpdateMessage : InteractionResponse() {
     public val type: Int = 6
 }
 

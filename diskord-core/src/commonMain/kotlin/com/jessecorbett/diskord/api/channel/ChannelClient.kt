@@ -1,16 +1,37 @@
 package com.jessecorbett.diskord.api.channel
 
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.common.Channel
+import com.jessecorbett.diskord.api.common.ChannelType
+import com.jessecorbett.diskord.api.common.DM
+import com.jessecorbett.diskord.api.common.Emoji
+import com.jessecorbett.diskord.api.common.GuildCategory
+import com.jessecorbett.diskord.api.common.GuildChannel
+import com.jessecorbett.diskord.api.common.GuildNewsChannel
+import com.jessecorbett.diskord.api.common.GuildTextChannel
+import com.jessecorbett.diskord.api.common.GuildThread
+import com.jessecorbett.diskord.api.common.GuildVoiceChannel
+import com.jessecorbett.diskord.api.common.Invite
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.Overwrite
+import com.jessecorbett.diskord.api.common.Permission
+import com.jessecorbett.diskord.api.common.ThreadMember
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.common.VideoQualityMode
+import com.jessecorbett.diskord.api.common.VoiceRegion
+import com.jessecorbett.diskord.api.common.Webhook
+import com.jessecorbett.diskord.api.common.stringified
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.isThread
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.http.*
+import io.ktor.client.call.body
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.setBody
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import kotlinx.serialization.encodeToString
 
 /**

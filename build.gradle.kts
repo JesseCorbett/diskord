@@ -4,9 +4,9 @@ plugins {
     `maven-publish`
     signing
 
-    kotlin("multiplatform") version "1.7.0" apply false
-    kotlin("plugin.serialization") version "1.7.0" apply false
-    id("org.jetbrains.dokka") version "1.7.0"
+    kotlin("multiplatform") version "1.7.10" apply false
+    kotlin("plugin.serialization") version "1.7.10" apply false
+    id("org.jetbrains.dokka") version "1.7.10"
 }
 
 val diskordVersion: String by project

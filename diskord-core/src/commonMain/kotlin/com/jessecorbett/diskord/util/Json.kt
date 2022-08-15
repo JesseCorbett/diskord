@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.util
 
-import kotlinx.serialization.json.Json
 import com.jessecorbett.diskord.api.common.audit.AuditLogChange
 import com.jessecorbett.diskord.api.common.audit.AuditLogEntry
+import kotlinx.serialization.json.Json
 
 
 /**
@@ -12,7 +12,6 @@ internal val defaultJson = Json {
     ignoreUnknownKeys = true
     isLenient = true
     encodeDefaults = true
-    // classDiscriminator = "class"
 }
 
 /**
