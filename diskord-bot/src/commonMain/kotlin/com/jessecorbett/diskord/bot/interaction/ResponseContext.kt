@@ -16,7 +16,7 @@ public class ResponseContext internal constructor(private val context: BotContex
     /**
      * Acknowledges the interaction and informs the user and Discord that a response will be coming shortly
      */
-    public suspend fun ApplicationCommand.acknowledge() {
+    public suspend fun ApplicationCommand.acknowledgeForFutureResponse() {
         respond(DeferredChannelMessageWithSource())
     }
 
