@@ -2,8 +2,14 @@ package com.jessecorbett.diskord.api.common
 
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public data class Guild(
@@ -79,7 +85,9 @@ public enum class ExplicitContentFilterLevel(public override val code: Int) : Co
 
 public class ExplicitContentFilterLevelSerializer : CodeEnumSerializer<ExplicitContentFilterLevel>(ExplicitContentFilterLevel.UNKNOWN, ExplicitContentFilterLevel.values())
 
+@Serializable(with = GuildFeaturesSerializer::class)
 public enum class GuildFeatures {
+    UNKNOWN,
     ANIMATED_ICON,
     BANNER,
     COMMERCE,
@@ -100,8 +108,27 @@ public enum class GuildFeatures {
     MORE_STICKERS,
     THREE_DAY_THREAD_ARCHIVE,
     SEVEN_DAY_THREAD_ARCHIVE,
-    PRIVATE_THREADS
+    PRIVATE_THREADS,
+    EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT
 }
+
+public class GuildFeaturesSerializer : KSerializer<GuildFeatures> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(GuildFeatures::class.simpleName!!, PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): GuildFeatures {
+        val value = decoder.decodeString()
+        return try {
+            GuildFeatures.valueOf(value)
+        } catch (e: IllegalArgumentException) {
+            GuildFeatures.UNKNOWN
+        }
+    }
+
+    override fun serialize(encoder: Encoder, value: GuildFeatures) {
+        encoder.encodeString(value.name)
+    }
+}
+
 
 @Serializable(with = GuildPremiumTypeSerializer::class)
 public enum class GuildPremiumType(public override val code: Int) : CodeEnum {
