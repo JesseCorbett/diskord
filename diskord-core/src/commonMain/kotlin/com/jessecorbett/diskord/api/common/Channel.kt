@@ -2,8 +2,14 @@ package com.jessecorbett.diskord.api.common
 
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public sealed class Channel {
@@ -259,7 +265,25 @@ public enum class OverwriteType(public override val code: Int) : CodeEnum {
     MEMBER(1)
 }
 
-public class OverwriteTypeSerializer : CodeEnumSerializer<OverwriteType>(OverwriteType.UNKNOWN, OverwriteType.values())
+public class OverwriteTypeSerializer : KSerializer<OverwriteType> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(OverwriteType::class.simpleName!!, PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): OverwriteType {
+        val value = decoder.decodeString()
+        return if (value == "role") {
+            OverwriteType.ROLE
+        } else if (value == "member") {
+            OverwriteType.MEMBER
+        } else {
+            OverwriteType.values().find { it.code.toString() == value }
+        } ?: OverwriteType.UNKNOWN
+    }
+
+    override fun serialize(encoder: Encoder, value: OverwriteType) {
+        encoder.encodeInt(value.code)
+    }
+}
+
 
 @Serializable
 public data class ThreadMetadata(
