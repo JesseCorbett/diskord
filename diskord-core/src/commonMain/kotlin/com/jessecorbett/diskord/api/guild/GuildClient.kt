@@ -680,5 +680,5 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
      * @param stickerId the sticker to delete
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteSticker(stickerId: String) = DELETE("/guilds/$guildId/stickers/$stickerId").body<Unit>()
+    public suspend fun deleteSticker(stickerId: String): Unit = DELETE("/guilds/$guildId/stickers/$stickerId").body<Unit>()
 }

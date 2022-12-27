@@ -57,6 +57,7 @@ There are also a collection of examples in the [diskord-examples repo.](https://
 
 ```kotlin
 import com.jessecorbett.diskord.bot.*
+import com.jessecorbett.diskord.util.*
 
 suspend fun main() {
     bot(TOKEN) {
