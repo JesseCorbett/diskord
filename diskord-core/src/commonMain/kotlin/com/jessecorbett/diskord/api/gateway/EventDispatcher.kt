@@ -1,12 +1,53 @@
 package com.jessecorbett.diskord.api.gateway
 
 import com.jessecorbett.diskord.DiskordDsl
-import com.jessecorbett.diskord.api.common.*
-import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.api.common.BulkMessageDelete
+import com.jessecorbett.diskord.api.common.Channel
+import com.jessecorbett.diskord.api.common.Guild
+import com.jessecorbett.diskord.api.common.GuildThread
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.MessageDelete
+import com.jessecorbett.diskord.api.common.TextChannel
+import com.jessecorbett.diskord.api.common.ThreadDelete
+import com.jessecorbett.diskord.api.common.ThreadListSync
+import com.jessecorbett.diskord.api.common.ThreadMember
+import com.jessecorbett.diskord.api.common.ThreadMembersUpdate
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.common.VoiceState
+import com.jessecorbett.diskord.api.gateway.events.ChannelPinUpdate
+import com.jessecorbett.diskord.api.gateway.events.CreatedGuild
+import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
+import com.jessecorbett.diskord.api.gateway.events.GuildBan
+import com.jessecorbett.diskord.api.gateway.events.GuildEmojiUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildIntegrationUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildInviteCreate
+import com.jessecorbett.diskord.api.gateway.events.GuildInviteDelete
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberAdd
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberRemove
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildMembersChunk
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleCreate
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleDelete
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildStickersUpdate
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionAdd
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemove
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemoveAll
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemoveEmoji
+import com.jessecorbett.diskord.api.gateway.events.PresenceUpdate
+import com.jessecorbett.diskord.api.gateway.events.Ready
+import com.jessecorbett.diskord.api.gateway.events.Resumed
+import com.jessecorbett.diskord.api.gateway.events.TypingStart
+import com.jessecorbett.diskord.api.gateway.events.UnavailableGuild
+import com.jessecorbett.diskord.api.gateway.events.VoiceServerUpdate
+import com.jessecorbett.diskord.api.gateway.events.WebhookUpdate
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
+import com.jessecorbett.diskord.api.interaction.Interaction
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.serialization.json.JsonElement
 import mu.KotlinLogging
 
@@ -382,6 +423,14 @@ public interface EventDispatcher<T> {
     public fun onWebhookUpdate(handler: suspend (WebhookUpdate) -> T)
 
     /**
+     * Called when a new interaction is created.
+     *
+     * @param handler The updated webhook.
+     */
+    @DiskordDsl
+    public fun onInteractionCreate(handler: suspend (Interaction) -> T)
+
+    /**
      * Copies this [EventDispatcher] with a new return type [C]
      */
     public fun <C> forType(): EventDispatcher<C>
@@ -669,25 +718,39 @@ internal class EventDispatcherImpl<T>(private val dispatcherScope: CoroutineScop
         }
     }
 
+    override fun onInteractionCreate(handler: suspend (Interaction) -> T) {
+        listeners += forEvent(DiscordEvent.INTERACTION_CREATE) {
+            handler(defaultJson.decodeFromJsonElement(Interaction.serializer(), it))
+        }
+    }
+
     override fun <C> forType(): EventDispatcher<C> {
         return EventDispatcherImpl(dispatcherScope)
     }
 
+    private sealed class EventResult<T> {
+        class Result<T>(val data: T) : EventResult<T>()
+        class NoResult<T> : EventResult<T>()
+    }
+
     override suspend fun handleEvent(event: DiscordEvent, json: JsonElement): List<T> {
-        return listeners.mapNotNull { it(event, json) }.map { it.await() }
+        return listeners.mapNotNull { it(event, json) }.map {
+            try {
+                EventResult.Result(it.await())
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                logger.debug { "a job was cancelled, routine issue we can safely hide from the users" }
+                EventResult.NoResult()
+            } catch (e: Exception) {
+                logger.warn { "Dispatched event $event caused exception $e" }
+                EventResult.NoResult()
+            }
+        }.filterIsInstance<EventResult.Result<T>>().map { it.data }
     }
 
     private fun forEvent(discordEvent: DiscordEvent, block: suspend (JsonElement) -> T): (DiscordEvent, JsonElement) -> Deferred<T>? {
-        return { event, json->
+        return { event, json ->
             if (event == discordEvent) {
-                dispatcherScope.async {
-                    try {
-                        block(json)
-                    } catch (e: Throwable) {
-                        logger.warn(e) { "Dispatched event $event caused exception $e" }
-                        throw e
-                    }
-                }
+                dispatcherScope.async { block(json) }
             } else {
                 null
             }

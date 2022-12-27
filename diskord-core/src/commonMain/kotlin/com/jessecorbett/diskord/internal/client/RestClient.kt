@@ -1,7 +1,16 @@
 package com.jessecorbett.diskord.internal.client
 
 import com.jessecorbett.diskord.api.DiscordUserType
-import com.jessecorbett.diskord.api.exceptions.*
+import com.jessecorbett.diskord.api.exceptions.DiscordBadPermissionsException
+import com.jessecorbett.diskord.api.exceptions.DiscordBadRequestException
+import com.jessecorbett.diskord.api.exceptions.DiscordCompatibilityException
+import com.jessecorbett.diskord.api.exceptions.DiscordException
+import com.jessecorbett.diskord.api.exceptions.DiscordGatewayException
+import com.jessecorbett.diskord.api.exceptions.DiscordInternalServerException
+import com.jessecorbett.diskord.api.exceptions.DiscordNotFoundException
+import com.jessecorbett.diskord.api.exceptions.DiscordRateLimitException
+import com.jessecorbett.diskord.api.exceptions.DiscordUnauthorizedException
+import com.jessecorbett.diskord.api.exceptions.RateLimitExceeded
 import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.epochMillisNow
@@ -9,23 +18,36 @@ import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.auditLogEntryJson
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.omitNullsJson
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.header
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
+import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.delay
 import mu.KotlinLogging
+import kotlin.collections.MutableMap
+import kotlin.collections.getOrPut
+import kotlin.collections.joinToString
+import kotlin.collections.listOfNotNull
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 import kotlin.math.ceil
-import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
-private const val DISCORD_API_URL = "https://discord.com/api"
+private const val DISCORD_API_URL = "https://discord.com/api/v10"
 
 private val logger = KotlinLogging.logger {}
 
 private data class RateLimitInfo(val limit: Int, val remaining: Int, val reset: Float)
 
-@OptIn(ExperimentalTime::class)
 private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
     // TODO: Handle time drift
     if (rateLimitInfo.remaining != 0) return
@@ -37,7 +59,7 @@ private suspend fun waitForRateLimit(rateLimitInfo: RateLimitInfo) {
         resetsAt > 10000 -> logger.info { "Delaying API call to satisfy high rate limit reset of ${resetsAt}ms. If you frequently encounter this consider reducing API calls" }
     }
 
-    delay(Duration.milliseconds(resetsAt))
+    delay(resetsAt.milliseconds)
 }
 
 public interface RestClient {
@@ -113,6 +135,7 @@ public class DefaultRestClient(
 
     private val defaultClient = buildClient(defaultJson)
     private val omitNullsClient = buildClient(omitNullsJson)
+
     // Not often used, so we'll lazily initialize it just to be safe
     private val auditLogsClient by lazy { buildClient(auditLogEntryJson) }
 
@@ -129,7 +152,6 @@ public class DefaultRestClient(
         auditLogsClient.close()
     }
 
-    @OptIn(ExperimentalTime::class)
     private suspend fun request(
         majorPath: String,
         minorPath: String,
@@ -173,13 +195,16 @@ public class DefaultRestClient(
             response
         } else {
             try {
-                throwFailure(response.status.value, response.readText(), response)
+                throwFailure(response.status.value, response.bodyAsText(), response)
             } catch (rateLimitException: DiscordRateLimitException) {
                 logger.info { "Attempting to recover from rate limit error with a retry after ${rateLimitException.retryAfterSeconds}s" }
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
-                delay(Duration.seconds(rateLimitException.retryAfterSeconds))
+                delay(rateLimitException.retryAfterSeconds.seconds)
                 logger.info { "Attempting retry" }
                 request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
+            } catch (discordException: DiscordException) {
+                logger.warn { "${method.value} $majorPath$minorPath responded with $discordException" }
+                throw discordException
             }
         }
     }
@@ -193,7 +218,9 @@ public class DefaultRestClient(
 
         // Sets the associated bucket in case we don't know it yet
         if (bucket == null) {
-            logger.warn { "Encountered an API response without a rate limit bucket, using a fallback bucket for safety" }
+            logger.debug {
+                "Using a fallback rate bucket for an API response. This is expected for some calls and can be ignored."
+            }
             bucket = "fallback-bucket"
         } else {
             pathToBucketMap[rateKey] = bucket
@@ -250,23 +277,23 @@ public class DefaultRestClient(
 private fun throwFailure(code: Int, body: String?, httpResponse: HttpResponse): Nothing {
     val exception = when (code) {
         400 -> DiscordBadRequestException(body)
-        401 -> DiscordUnauthorizedException()
-        403 -> DiscordBadPermissionsException()
-        404 -> DiscordNotFoundException()
+        401 -> DiscordUnauthorizedException(body)
+        403 -> DiscordBadPermissionsException(body)
+        404 -> DiscordNotFoundException(body)
         429 -> defaultJson.decodeFromString(RateLimitExceeded.serializer(), body!!).let {
             logger.info { "Encountered a rate limit exception" }
             // Converting from millis to seconds as it appears the API is doing so despite documentation
             DiscordRateLimitException(it.message, it.retryAfterSeconds / 1000, it.isGlobal)
         }
-        502 -> DiscordGatewayException()
-        in 500..599 -> DiscordInternalServerException()
+        502 -> DiscordGatewayException(body)
+        in 500..599 -> DiscordInternalServerException(body)
         else -> DiscordCompatibilityException("An unhandled HTTP status code $code was thrown")
     }
 
     val exceptionMessage = listOfNotNull(exception::class.simpleName, exception.message).joinToString(" ")
     val method = httpResponse.request.method.value
     val path = httpResponse.request.url.encodedPath
-    logger.warn { "Encountered $exceptionMessage making API call $method $path" }
+    logger.debug { "Encountered $exceptionMessage making API call $method $path" }
 
     throw exception
 }

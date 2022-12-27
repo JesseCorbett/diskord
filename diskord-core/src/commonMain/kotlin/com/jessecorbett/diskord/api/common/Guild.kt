@@ -1,6 +1,15 @@
 package com.jessecorbett.diskord.api.common
 
-import kotlinx.serialization.*
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public data class Guild(
@@ -45,29 +54,40 @@ public data class Guild(
     @SerialName("stickers") val sticker: List<Sticker>? = null,
 )
 
-@Serializable
-public enum class VerificationLevel {
-    @SerialName("0") NONE,
-    @SerialName("1") LOW,
-    @SerialName("2") MEDIUM,
-    @SerialName("3") HIGH,
-    @SerialName("4") VERY_HIGH
+@Serializable(with = VerificationLevelSerializer::class)
+public enum class VerificationLevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    NONE(0),
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3),
+    VERY_HIGH(4)
 }
 
-@Serializable
-public enum class NotificationsLevel {
-    @SerialName("0") ALL_MESSAGES,
-    @SerialName("1") ONLY_MENTIONS
+public class VerificationLevelSerializer : CodeEnumSerializer<VerificationLevel>(VerificationLevel.UNKNOWN, VerificationLevel.values())
+
+@Serializable(with = NotificationsLevelSerializer::class)
+public enum class NotificationsLevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    ALL_MESSAGES(0),
+    ONLY_MENTIONS(1)
 }
 
-@Serializable
-public enum class ExplicitContentFilterLevel {
-    @SerialName("0") DISABLED,
-    @SerialName("1") MEMBERS_WITHOUT_ROLES,
-    @SerialName("2") ALL_MEMBERS
+public class NotificationsLevelSerializer : CodeEnumSerializer<NotificationsLevel>(NotificationsLevel.UNKNOWN, NotificationsLevel.values())
+
+@Serializable(with = ExplicitContentFilterLevelSerializer::class)
+public enum class ExplicitContentFilterLevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    DISABLED(0),
+    MEMBERS_WITHOUT_ROLES(1),
+    ALL_MEMBERS(2)
 }
 
+public class ExplicitContentFilterLevelSerializer : CodeEnumSerializer<ExplicitContentFilterLevel>(ExplicitContentFilterLevel.UNKNOWN, ExplicitContentFilterLevel.values())
+
+@Serializable(with = GuildFeaturesSerializer::class)
 public enum class GuildFeatures {
+    UNKNOWN,
     ANIMATED_ICON,
     BANNER,
     COMMERCE,
@@ -88,22 +108,47 @@ public enum class GuildFeatures {
     MORE_STICKERS,
     THREE_DAY_THREAD_ARCHIVE,
     SEVEN_DAY_THREAD_ARCHIVE,
-    PRIVATE_THREADS
+    PRIVATE_THREADS,
+    EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT
 }
 
-@Serializable
-public enum class GuildPremiumType(public val code: Int) {
-    @SerialName("0") NONE(0),
-    @SerialName("1") TIER_1(1),
-    @SerialName("2") TIER_2(2),
-    @SerialName("2") TIER_3(3)
+public class GuildFeaturesSerializer : KSerializer<GuildFeatures> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(GuildFeatures::class.simpleName!!, PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): GuildFeatures {
+        val value = decoder.decodeString()
+        return try {
+            GuildFeatures.valueOf(value)
+        } catch (e: IllegalArgumentException) {
+            GuildFeatures.UNKNOWN
+        }
+    }
+
+    override fun serialize(encoder: Encoder, value: GuildFeatures) {
+        encoder.encodeString(value.name)
+    }
 }
 
-@Serializable
-public enum class MFALevel {
-    @SerialName("0") NONE,
-    @SerialName("1") ELEVATED
+
+@Serializable(with = GuildPremiumTypeSerializer::class)
+public enum class GuildPremiumType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    NONE(0),
+    TIER_1(1),
+    TIER_2(2),
+    TIER_3(3)
 }
+
+public class GuildPremiumTypeSerializer : CodeEnumSerializer<GuildPremiumType>(GuildPremiumType.UNKNOWN, GuildPremiumType.values())
+
+@Serializable(with = MFALevelSerializer::class)
+public enum class MFALevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    NONE(0),
+    ELEVATED(1)
+}
+
+public class MFALevelSerializer : CodeEnumSerializer<MFALevel>(MFALevel.UNKNOWN, MFALevel.values())
 
 @Serializable
 public data class WelcomeScreen(
@@ -119,13 +164,16 @@ public data class WelcomeScreenChannel(
     @SerialName("emoji_name") val emojiName: String?
 )
 
-@Serializable
-public enum class GuildNSFWLevel {
-    @SerialName("0") DEFAULT,
-    @SerialName("1") EXPLICIT,
-    @SerialName("2") SAFE,
-    @SerialName("3") AGE_RESTRICTED,
+@Serializable(with = GuildNSFWLevelSerializer::class)
+public enum class GuildNSFWLevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    DEFAULT(0),
+    EXPLICIT(1),
+    SAFE(2),
+    AGE_RESTRICTED(3)
 }
+
+public class GuildNSFWLevelSerializer : CodeEnumSerializer<GuildNSFWLevel>(GuildNSFWLevel.UNKNOWN, GuildNSFWLevel.values())
 
 @Serializable
 public data class StageInstance(
@@ -137,8 +185,11 @@ public data class StageInstance(
     @SerialName("discoverable_disabled") val discoverable_disabled: Boolean,
 )
 
-@Serializable
-public enum class StagePrivacyLevel {
-    @SerialName("1") PUBLIC,
-    @SerialName("2") GUILD_ONLY,
+@Serializable(with = StagePrivacyLevelSerializer::class)
+public enum class StagePrivacyLevel(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    PUBLIC(1),
+    GUILD_ONLY(2)
 }
+
+public class StagePrivacyLevelSerializer : CodeEnumSerializer<StagePrivacyLevel>(StagePrivacyLevel.UNKNOWN, StagePrivacyLevel.values())

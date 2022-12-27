@@ -5,7 +5,6 @@ import assertk.assertions.isEqualTo
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -33,7 +32,7 @@ internal class StripBlankSWSEHeaderTest {
     @Test
     fun `should strip correct header if blank`(): Unit = runBlocking {
         val client = setupClient()
-        val response = client.get<HttpResponse>(TEST_ENDPOINT) {
+        val response = client.get(TEST_ENDPOINT) {
             header(HttpHeaders.SecWebSocketExtensions, "")
         }
 
@@ -43,7 +42,7 @@ internal class StripBlankSWSEHeaderTest {
     @Test
     fun `should not strip correct header if not blank`(): Unit = runBlocking {
         val client = setupClient()
-        val response = client.get<HttpResponse>(TEST_ENDPOINT) {
+        val response = client.get(TEST_ENDPOINT) {
             header(HttpHeaders.SecWebSocketExtensions, "not empty")
         }
 

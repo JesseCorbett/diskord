@@ -5,7 +5,6 @@ public enum class DiscordEvent {
     READY,
     RESUMED,
     RECONNECT,
-    // TODO: Command API Events
     CHANNEL_CREATE,
     CHANNEL_UPDATE,
     CHANNEL_DELETE,
@@ -49,5 +48,6 @@ public enum class DiscordEvent {
     USER_UPDATE,
     VOICE_STATE_UPDATE,
     VOICE_SERVER_UPDATE,
-    WEBHOOKS_UPDATE
+    WEBHOOKS_UPDATE,
+    INTERACTION_CREATE,
 }

@@ -1,12 +1,34 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.channel.*
+import com.jessecorbett.diskord.api.channel.ChannelClient
+import com.jessecorbett.diskord.api.channel.CreateMessage
+import com.jessecorbett.diskord.api.channel.CreateThread
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.channel.EmbedImage
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.channel.FileData
+import com.jessecorbett.diskord.api.common.ChannelType
+import com.jessecorbett.diskord.api.common.Emoji
+import com.jessecorbett.diskord.api.common.GuildMember
+import com.jessecorbett.diskord.api.common.GuildNewsChannel
+import com.jessecorbett.diskord.api.common.GuildText
+import com.jessecorbett.diskord.api.common.GuildTextChannel
+import com.jessecorbett.diskord.api.common.GuildThread
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.MessageReference
+import com.jessecorbett.diskord.api.common.Permission
+import com.jessecorbett.diskord.api.common.Role
+import com.jessecorbett.diskord.api.common.ThreadMember
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.global.GlobalClient
+import com.jessecorbett.diskord.api.global.PartialGuild
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.api.guild.PatchGuildMember
 import com.jessecorbett.diskord.api.guild.PatchGuildMemberNickname
+import com.jessecorbett.diskord.api.interaction.InteractionClient
+import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
+import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackDataFlags
+import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
+import kotlinx.serialization.encodeToString
 
 /*
  * Primitive extensions
@@ -197,13 +219,13 @@ public val Emoji.tag: String
  * Calls [ChannelClient.createMessage] for text messages without needing to create a [CreateMessage] object first.
  *
  * @param message The text message to send.
- * @param embed The embed to include with the message.
+ * @param embeds The embeds to include with the message.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
-public suspend fun ChannelClient.sendMessage(message: String = "", embed: Embed? = null): Message {
-    return createMessage(CreateMessage(content = message, embed = embed))
+public suspend fun ChannelClient.sendMessage(message: String = "", vararg embeds: Embed): Message {
+    return createMessage(CreateMessage(content = message, embeds = embeds.toList()))
 }
 
 /**
@@ -220,7 +242,7 @@ public suspend fun ChannelClient.sendEmbed(
     message: String = "",
     block: Embed.() -> Unit
 ): Message {
-    return createMessage(CreateMessage(message, embed = Embed().apply { block() }))
+    return createMessage(CreateMessage(message, embeds = listOf(Embed().apply { block() })))
 }
 
 /**
@@ -240,10 +262,12 @@ public suspend fun ChannelClient.sendEmbeddedImage(
     block: Embed.() -> Unit
 ): Message {
     return createMessage(
-        CreateMessage(message, embed = Embed().apply {
-            block()
-            this.image = EmbedImage(url = "attachment://${image.filename}")
-        }),
+        CreateMessage(message, embeds = listOf(
+            Embed().apply {
+                block()
+                this.image = EmbedImage(url = "attachment://${image.filename}")
+            }
+        )),
         image
     )
 }
@@ -261,7 +285,7 @@ public suspend fun ChannelClient.sendEmbeddedImage(
  */
 public suspend fun ChannelClient.sendReply(message: Message, reply: String = "", embed: Embed? = null): Message {
     return createMessage(
-        CreateMessage(content = reply, embed = embed, messageReference = MessageReference(messageId = message.id))
+        CreateMessage(content = reply, embeds = listOfNotNull(embed), messageReference = MessageReference(messageId = message.id))
     )
 }
 
@@ -281,11 +305,13 @@ public suspend fun ChannelClient.sendEmbeddedReply(
     reply: String = "",
     block: Embed.() -> Unit
 ): Message {
-    return createMessage(CreateMessage(
-        content = reply,
-        embed = Embed().apply { block() },
-        messageReference = MessageReference(messageId = message.id)
-    ))
+    return createMessage(
+        CreateMessage(
+            content = reply,
+            embeds = listOf(Embed().apply { block() }),
+            messageReference = MessageReference(messageId = message.id)
+        )
+    )
 }
 
 /**
@@ -308,10 +334,10 @@ public suspend fun ChannelClient.sendEmbeddedImageReply(
     block: Embed.() -> Unit
 ): Message {
     return createMessage(
-        CreateMessage(content = reply, embed = Embed().apply {
+        CreateMessage(content = reply, embeds = listOf(Embed().apply {
             block()
             this.image = EmbedImage(url = "attachment://${image.filename}")
-        }, messageReference = MessageReference(messageId = message.id)),
+        }), messageReference = MessageReference(messageId = message.id)),
         image
     )
 }
@@ -465,6 +491,37 @@ public suspend fun ChannelClient.removeThreadMember(member: GuildMember): Unit =
  *
  * @return if the channel is a thread
  */
-public val ChannelType.isThread: Boolean get() = this == ChannelType.GUILD_PUBLIC_THREAD
-        || this == ChannelType.GUILD_PRIVATE_THREAD
-        || this == ChannelType.GUILD_NEWS_THREAD
+public val ChannelType.isThread: Boolean
+    get() = this == ChannelType.GUILD_PUBLIC_THREAD
+            || this == ChannelType.GUILD_PRIVATE_THREAD
+            || this == ChannelType.GUILD_NEWS_THREAD
+
+/**
+ * Fetches all guilds from the [GuildClient] over potentially multiple API calls
+ */
+public suspend fun GlobalClient.getAllGuilds(): List<PartialGuild> {
+    val client = this
+    val total: MutableList<PartialGuild> = mutableListOf()
+    var last: List<PartialGuild> = emptyList()
+
+    do {
+        last = client.getGuilds(200, null, last.lastOrNull()?.id)
+        total += last
+    } while (last.size == 200)
+
+    return total
+}
+
+/**
+ * Convenience method for responding to an interaction with a message
+ */
+public suspend fun InteractionClient.messageResponse(interactionId: String, message: String, ephemeral: Boolean) {
+    val data = ChannelMessageWithSource(
+        data = ChannelMessageWithSource.Data(
+            content = message,
+            flags = if (ephemeral) InteractionCommandCallbackDataFlags.EPHEMERAL else InteractionCommandCallbackDataFlags.NONE
+        )
+    )
+    println(defaultJson.encodeToString<InteractionResponse>(data))
+    createInteractionResponse(interactionId, data)
+}

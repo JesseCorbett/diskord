@@ -5,6 +5,7 @@ import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.JsonObject
 
@@ -22,7 +23,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The gateway url.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getApiGateway(): GatewayUrl = GET("/gateway").receive()
+    public suspend fun getApiGateway(): GatewayUrl = GET("/gateway").body()
 
     /**
      * Get the bot specific gateway information from the API.
@@ -30,7 +31,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The gateway url with bot specific data.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getBotGateway(): GatewayBotUrl = GET("/gateway/bot").receive()
+    public suspend fun getBotGateway(): GatewayBotUrl = GET("/gateway/bot").body()
 
     /**
      * Create a guild.
@@ -40,7 +41,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The created guild.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun createGuild(guild: CreateGuild): Guild = POST("/guilds") { body = guild }.receive()
+    public suspend fun createGuild(guild: CreateGuild): Guild = POST("/guilds") { setBody(guild) }.body()
 
     /**
      * Get an invite.
@@ -50,7 +51,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The invite.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getInvite(inviteCode: String): Invite = GET("/invites", "/$inviteCode").receive()
+    public suspend fun getInvite(inviteCode: String): Invite = GET("/invites", "/$inviteCode").body()
 
     /**
      * Delete an invite.
@@ -59,7 +60,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteInvite(inviteCode: String): Unit = DELETE("/invites", "/$inviteCode").receive()
+    public suspend fun deleteInvite(inviteCode: String): Unit = DELETE("/invites", "/$inviteCode").body()
 
     /**
      * Get a user.
@@ -69,7 +70,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The requested user.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getUser(userId: String = "@me"): User = GET("/users", "/$userId").receive()
+    public suspend fun getUser(userId: String = "@me"): User = GET("/users", "/$userId").body()
 
     /**
      * Modify the current user.
@@ -80,7 +81,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun modifyUser(user: ModifyUser): User {
-        return PATCH("/users", "/@me") { body = user }.receive()
+        return PATCH("/users", "/@me") { setBody(user) }.body()
     }
 
     /**
@@ -101,7 +102,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
         if (after != null) {
             path += "&after=$after"
         }
-        return GET("/users/@me/guilds", path).receive()
+        return GET("/users/@me/guilds", path).body()
     }
 
     /**
@@ -111,7 +112,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     @Deprecated("This endpoint no longer works for bots. Instead messages in DMs fire the CHANNEL_CREATE event and you can get a specific DM channel using createDM()")
-    public suspend fun getDMs(): List<Channel> = GET("/users/@me/channels").receive()
+    public suspend fun getDMs(): List<Channel> = GET("/users/@me/channels").body()
 
     /**
      * Open a DM channel between the current user and another.
@@ -127,7 +128,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun createDM(createDM: CreateDM): Channel {
-        return POST("/users/@me/channels") { body = createDM }.receive()
+        return POST("/users/@me/channels") { setBody(createDM) }.body()
     }
 
     /**
@@ -138,7 +139,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The user's connections.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getUserConnections(): List<UserConnection> = GET("/users/@me/channels").receive()
+    public suspend fun getUserConnections(): List<UserConnection> = GET("/users/@me/channels").body()
 
     /**
      * Get the voice regions available for creating a guild.
@@ -146,7 +147,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The list of voice regions.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/voice/regions").receive()
+    public suspend fun getVoiceRegions(): List<VoiceRegion> = GET("/voice/regions").body()
 
     /**
      * Get a list of all sticker packs available to Nitro users.
@@ -156,7 +157,7 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      */
     public suspend fun getStickerPacks(): List<StickerPack> = defaultJson.decodeFromJsonElement(
         ListSerializer(StickerPack.serializer()),
-        GET("/sticker-packs").receive<JsonObject>().getValue("sticker_packs")
+        GET("/sticker-packs").body<JsonObject>().getValue("sticker_packs")
     )
 
     /**
@@ -166,5 +167,5 @@ public class GlobalClient(client: RestClient) : RestClient by client {
      * @return The sticker.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getSticker(stickerId: String): Sticker = GET("/stickers/$stickerId").receive()
+    public suspend fun getSticker(stickerId: String): Sticker = GET("/stickers/$stickerId").body()
 }

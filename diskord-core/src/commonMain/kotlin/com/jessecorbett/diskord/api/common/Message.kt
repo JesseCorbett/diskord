@@ -1,6 +1,10 @@
 package com.jessecorbett.diskord.api.common
 
-import kotlinx.serialization.*
+import com.jessecorbett.diskord.api.interaction.InteractionType
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 public data class Message(
@@ -27,36 +31,41 @@ public data class Message(
     @SerialName("application") val application: MessageApplication? = null,
     @SerialName("message_reference") val reference: MessageReference? = null,
     @SerialName("flags") val flags: Int? = null,
+    @SerialName("interaction") val interaction: MessageInteraction? = null,
+    @SerialName("thread") val thread: Channel? = null,
+    @SerialName("components") val components: List<MessageComponent> = emptyList(),
     @SerialName("stickers_items") val stickerList: List<PartialSticker> = emptyList(),
-    @SerialName("stickers") @Deprecated("Deprecated in the Discord API. Use stickerList instead.", ReplaceWith("stickerList")) val stickers: List<MessageSticker> = emptyList()
 )
 
-@Serializable
-public enum class MessageType {
-    @SerialName("0") DEFAULT,
-    @SerialName("1") RECIPIENT_ADD,
-    @SerialName("2") RECIPIENT_REMOVE,
-    @SerialName("3") CALL,
-    @SerialName("4") CHANNEL_NAME_CHANGE,
-    @SerialName("5") CHANNEL_ICON_CHANGE,
-    @SerialName("6") CHANNEL_PINNED_MESSAGE,
-    @SerialName("7") GUILD_MEMBER_JOIN,
-    @SerialName("8") USER_PREMIUM_GUILD_SUBSCRIPTION,
-    @SerialName("9") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1,
-    @SerialName("10") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2,
-    @SerialName("11") USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3,
-    @SerialName("12") CHANNEL_FOLLOW_ADD,
-    @SerialName("14") GUILD_DISCOVERY_DISQUALIFIED,
-    @SerialName("15") GUILD_DISCOVERY_REQUALIFIED,
-    @SerialName("16") GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING,
-    @SerialName("17") GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING,
-    @SerialName("18") THREAD_CREATED,
-    @SerialName("19") REPLY,
-    @SerialName("20") APPLICATION_COMMAND,
-    @SerialName("21") THREAD_STARTER_MESSAGE,
-    @SerialName("22") GUILD_INVITE_REMINDER,
-    @SerialName("23") CONTEXT_MENU_COMMAND,
+@Serializable(with = MessageTypeSerializer::class)
+public enum class MessageType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    DEFAULT(0),
+    RECIPIENT_ADD(1),
+    RECIPIENT_REMOVE(2),
+    CALL(3),
+    CHANNEL_NAME_CHANGE(4),
+    CHANNEL_ICON_CHANGE(5),
+    CHANNEL_PINNED_MESSAGE(6),
+    GUILD_MEMBER_JOIN(7),
+    USER_PREMIUM_GUILD_SUBSCRIPTION(8),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1(9),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2(10),
+    USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3(11),
+    CHANNEL_FOLLOW_ADD(12),
+    GUILD_DISCOVERY_DISQUALIFIED(14),
+    GUILD_DISCOVERY_REQUALIFIED(15),
+    GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING(16),
+    GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING(17),
+   THREAD_CREATED(18),
+    REPLY(19),
+    APPLICATION_COMMAND(20),
+    THREAD_STARTER_MESSAGE(21),
+    GUILD_INVITE_REMINDER(22),
+    CONTEXT_MENU_COMMAND(23),
 }
+
+public class MessageTypeSerializer : CodeEnumSerializer<MessageType>(MessageType.UNKNOWN, MessageType.values())
 
 @Serializable
 public data class MessageActivity(
@@ -64,13 +73,16 @@ public data class MessageActivity(
     @SerialName("party_id") val partyId: String? = null
 )
 
-@Serializable
-public enum class MessageActivityType {
-    @SerialName("1") JOIN,
-    @SerialName("2") SPECTATE,
-    @SerialName("3") LISTEN,
-    @SerialName("5") JOIN_REQUEST
+@Serializable(with = MessageActivityTypeSerializer::class)
+public enum class MessageActivityType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    JOIN(1),
+    SPECTATE(2),
+    LISTEN(3),
+    JOIN_REQUEST(5)
 }
+
+public class MessageActivityTypeSerializer : CodeEnumSerializer<MessageActivityType>(MessageActivityType.UNKNOWN, MessageActivityType.values())
 
 @Serializable
 public data class MessageApplication(
@@ -88,15 +100,69 @@ public data class MessageReference(
     @SerialName("guild_id") val guildId: String? = null
 )
 
-@Deprecated("Use Sticker instead.", replaceWith = ReplaceWith("Sticker"))
+/**
+ * The interaction that triggered this message, if the original interaction does not have a message of its own
+ * So MessageComponent interactions don't have this property, since they require an existing message
+ *
+ * https://discord.com/developers/docs/interactions/receiving-and-responding#message-interaction-object
+ */
 @Serializable
-public data class MessageSticker(
+public data class MessageInteraction(
     @SerialName("id") val id: String,
-    @SerialName("pack_id") val packId: String,
-    @SerialName("name") val name: String,
-    @SerialName("description") val description: String,
-    @SerialName("tags") val tags: String? = null,
-    @SerialName("asset") val hash: String,
-    @SerialName("preview_asset") val previewHash: String?,
-    @SerialName("format_type") val formatType: StickerFormat
+    @SerialName("type") val type: InteractionType,
+    @SerialName("name") val commandName: String,
+    @SerialName("user") val invokingUser: User,
+    @SerialName("member") val guildMember: GuildMember? = null
+)
+
+@Serializable
+public sealed class MessageComponent(
+    @SerialName("type") public val type: Int
+)
+
+@Serializable
+public data class ActionRow(
+    @SerialName("components") public val components: List<MessageComponent>
+) : MessageComponent(1)
+
+@Serializable
+public data class Button(
+    @SerialName("custom_id") public val customId: String? = null,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("style") public val style: ButtonStyle,
+    @SerialName("label") public val label: String? = null,
+    @SerialName("emoji") public val emoji: PartialEmoji? = null,
+    @SerialName("url") public val url: String? = null,
+) : MessageComponent(2)
+
+@Serializable
+public data class SelectMenu(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("options") public val options: List<SelectOption>,
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_values") public val minValues: Int = 1,
+    @SerialName("max_values") public val maxValues: Int = 1,
+) : MessageComponent(3)
+
+
+@Serializable(with = ButtonStyleSerializer::class)
+public enum class ButtonStyle(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    Primary(1),
+    Secondary(2),
+    Success(3),
+    Danger(4),
+    Link(5)
+}
+
+public class ButtonStyleSerializer : CodeEnumSerializer<ButtonStyle>(ButtonStyle.UNKNOWN, ButtonStyle.values())
+
+@Serializable
+public data class SelectOption(
+    @SerialName("label") public val label: String,
+    @SerialName("value") public val value: String,
+    @SerialName("description") public val description: String? = null,
+    @SerialName("emoji") public val emoji: PartialEmoji? = null,
+    @SerialName("default") public val default: Boolean = false
 )

@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClassName = "com.jessecorbett.diskord.testbot.BotKt"
+    mainClass.set("com.jessecorbett.diskord.testbot.BotKt")
 }
 
 dependencies {

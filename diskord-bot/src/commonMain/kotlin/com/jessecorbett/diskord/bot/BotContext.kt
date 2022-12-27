@@ -1,10 +1,15 @@
 package com.jessecorbett.diskord.bot
 
+import com.jessecorbett.diskord.api.channel.MessageEdit
 import com.jessecorbett.diskord.api.channel.ChannelClient
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.User
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.guild.GuildClient
+import com.jessecorbett.diskord.api.interaction.CommandClient
+import com.jessecorbett.diskord.api.interaction.Interaction
+import com.jessecorbett.diskord.api.interaction.InteractionClient
 import com.jessecorbett.diskord.api.invite.InviteClient
 import com.jessecorbett.diskord.api.webhook.WebhookClient
 import com.jessecorbett.diskord.internal.client.RestClient
@@ -16,6 +21,7 @@ import com.jessecorbett.diskord.util.sendReply
  */
 public interface BotContext {
     public val client: RestClient
+    public val botUser: User
 
     // Global functions
 
@@ -40,6 +46,17 @@ public interface BotContext {
      * Create an instance of an invite client
      */
     public fun invite(inviteCode: String): InviteClient = InviteClient(inviteCode, client)
+
+    /**
+     * Create an instance of an interaction client
+     */
+    public fun interaction(applicationId: String, interactionToken: String): InteractionClient =
+        InteractionClient(applicationId, interactionToken, client)
+
+    /**
+     * Create an instance of a command client
+     */
+    public fun command(applicationId: String): CommandClient = CommandClient(applicationId, client)
 
     /**
      * Create an instance of a webhook client
@@ -172,4 +189,20 @@ public interface BotContext {
     public suspend fun Message.react(emoji: String) {
         return channel.addMessageReaction(id, emoji)
     }
+
+	/**
+	 * Edit this message
+	 * @param messageEdit the MessageEdit to apply on message
+	 */
+	public suspend fun Message.edit(messageEdit: MessageEdit) {
+        channel.editMessage(this.id, messageEdit)
+	}
+
+    // Interaction receivers
+
+    /**
+     * Get the interaction client from an interaction
+     */
+    public val Interaction.client: InteractionClient
+        get() = interaction(applicationId, token)
 }

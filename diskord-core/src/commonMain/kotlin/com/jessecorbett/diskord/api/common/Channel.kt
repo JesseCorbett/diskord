@@ -1,6 +1,15 @@
 package com.jessecorbett.diskord.api.common
 
-import kotlinx.serialization.*
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 public sealed class Channel {
@@ -155,6 +164,15 @@ public data class GuildStoreChannel(
 ) : Channel(), GuildChannel
 
 @Serializable
+@SerialName("7")
+public data class PartialChannel(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("type") val type: Int,
+    @SerialName("permission_overwrites") val permissionOverwrites: List<Overwrite> = emptyList(),
+) : Channel(), NamedChannel
+
+@Serializable
 @SerialName("10")
 public data class GuildNewsThread(
     @SerialName("id") override val id: String,
@@ -205,26 +223,32 @@ public data class GuildPrivateThread(
     @SerialName("member") override val member: ThreadMember? = null,
 ) : GuildThread()
 
-@Serializable
-public enum class ChannelType {
-    @SerialName("0") GUILD_TEXT,
-    @SerialName("1") DM,
-    @SerialName("2") GUILD_VOICE,
-    @SerialName("3") GROUP_DM,
-    @SerialName("4") GUILD_CATEGORY,
-    @SerialName("5") GUILD_NEWS,
-    @SerialName("6") GUILD_STORE,
-    @SerialName("10") GUILD_NEWS_THREAD,
-    @SerialName("11") GUILD_PUBLIC_THREAD,
-    @SerialName("12") GUILD_PRIVATE_THREAD,
-    @SerialName("13") GUILD_STAGE_VOICE,
+@Serializable(with = ChannelTypeSerializer::class)
+public enum class ChannelType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    GUILD_TEXT(0),
+    DM(1),
+    GUILD_VOICE(2),
+    GROUP_DM(3),
+    GUILD_CATEGORY(4),
+    GUILD_NEWS(5),
+    GUILD_STORE(6),
+    GUILD_NEWS_THREAD(10),
+    GUILD_PUBLIC_THREAD(11),
+    GUILD_PRIVATE_THREAD(12),
+    GUILD_STAGE_VOICE(13),
 }
 
-@Serializable
-public enum class VideoQualityMode {
-    @SerialName("1") AUTO,
-    @SerialName("2") FULL,
+public class ChannelTypeSerializer : CodeEnumSerializer<ChannelType>(ChannelType.UNKNOWN, ChannelType.values())
+
+@Serializable(with = VideoQualityModeSerializer::class)
+public enum class VideoQualityMode(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    AUTO(1),
+    FULL(2)
 }
+
+public class VideoQualityModeSerializer : CodeEnumSerializer<VideoQualityMode>(VideoQualityMode.UNKNOWN, VideoQualityMode.values())
 
 @Serializable
 public data class Overwrite(
@@ -234,11 +258,32 @@ public data class Overwrite(
     @SerialName("deny") val denied: Permissions
 )
 
-@Serializable
-public enum class OverwriteType {
-    @SerialName("0") ROLE,
-    @SerialName("1") MEMBER
+@Serializable(with = OverwriteTypeSerializer::class)
+public enum class OverwriteType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    ROLE(0),
+    MEMBER(1)
 }
+
+public class OverwriteTypeSerializer : KSerializer<OverwriteType> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(OverwriteType::class.simpleName!!, PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): OverwriteType {
+        val value = decoder.decodeString()
+        return if (value == "role") {
+            OverwriteType.ROLE
+        } else if (value == "member") {
+            OverwriteType.MEMBER
+        } else {
+            OverwriteType.values().find { it.code.toString() == value }
+        } ?: OverwriteType.UNKNOWN
+    }
+
+    override fun serialize(encoder: Encoder, value: OverwriteType) {
+        encoder.encodeInt(value.code)
+    }
+}
+
 
 @Serializable
 public data class ThreadMetadata(

@@ -6,14 +6,19 @@ import kotlinx.serialization.Serializable
 /**
  * A generic discord exception.
  */
-public sealed class DiscordException : Exception()
+public sealed class DiscordException(message: String?) : Exception(message)
+
+/**
+ *
+ */
+public sealed class DiscordHttpException(message: String?) : DiscordException(message)
 
 /**
  * Thrown when there was some sort of communication issue between discord and diskord.
  *
  * @property message The specific compatibility issue.
  */
-public class DiscordCompatibilityException(override val message: String) : DiscordException()
+public class DiscordCompatibilityException(message: String) : DiscordException(message)
 
 // HTTP 4XX
 
@@ -22,36 +27,36 @@ public class DiscordCompatibilityException(override val message: String) : Disco
  *
  * @property message The error returned by the API.
  */
-public class DiscordBadRequestException(override val message: String?) : DiscordException()
+public class DiscordBadRequestException(message: String?) : DiscordHttpException(message)
 
 /**
  * Thrown when the token used is not valid or the user does not have permission to access this resource.
  */
-public class DiscordUnauthorizedException : DiscordException()
+public class DiscordUnauthorizedException(message: String? = null) : DiscordHttpException(message)
 
 /**
  * Thrown when the resource could not be found or the client uses an incorrect path. Probably the former.
  */
-public class DiscordNotFoundException : DiscordException()
+public class DiscordNotFoundException(message: String? = null) : DiscordHttpException(message)
 
 /**
  * Thrown when the user does not have permissions for the attempted call.
  */
-public class DiscordBadPermissionsException : DiscordException()
+public class DiscordBadPermissionsException(message: String? = null) : DiscordHttpException(message)
 
 
 /**
  * Thrown when a client calls an endpoint too many times.
  *
- * @property message The error returned by the API.
+ * @param message The error returned by the API.
  * @property retryAfterSeconds When the rate limit resets in seconds.
  * @property isGlobalRateLimit if the rate limit is API specific or global.
  */
 public class DiscordRateLimitException(
-    override val message: String,
+    message: String,
     public val retryAfterSeconds: Double,
     public val isGlobalRateLimit: Boolean
-) : DiscordException()
+) : DiscordHttpException(message)
 
 /**
  * Over the wire representation of a [DiscordRateLimitException].
@@ -74,11 +79,11 @@ public data class RateLimitExceeded(
  *
  * Might be resolved by simply retrying or waiting for Discord to resolve the issue.
  */
-public class DiscordInternalServerException : DiscordException()
+public class DiscordInternalServerException(message: String? = null) : DiscordException(message)
 
 /**
  * Thrown when there was some sort of IO error communicating with discord.
  *
  * Should be resolved by simply retrying.
  */
-public class DiscordGatewayException : DiscordException()
+public class DiscordGatewayException(message: String? = null) : DiscordException(message)

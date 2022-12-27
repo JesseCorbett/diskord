@@ -6,6 +6,7 @@ import com.jessecorbett.diskord.api.common.Webhook
 import com.jessecorbett.diskord.internal.client.RestClient
 import com.jessecorbett.diskord.util.DiskordInternals
 import io.ktor.client.call.*
+import io.ktor.client.request.*
 
 /**
  * A REST client for a specific webhook
@@ -22,7 +23,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @return This webhook.
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun getWebhook(): Webhook = GET("/webhooks/$webhookId").receive()
+    public suspend fun getWebhook(): Webhook = GET("/webhooks/$webhookId").body()
 
     /**
      * Get this webhook using the secure token.
@@ -35,7 +36,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun getWebhook(webhookToken: String): Webhook {
-        return GET("/webhooks/$webhookId", "/$webhookToken").receive()
+        return GET("/webhooks/$webhookId", "/$webhookToken").body()
     }
 
     /**
@@ -47,7 +48,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun update(webhook: PatchWebhook): Webhook {
-        return PATCH("/webhooks/$webhookId") { body = webhook }.receive()
+        return PATCH("/webhooks/$webhookId") { setBody(webhook) }.body()
     }
 
     /**
@@ -61,7 +62,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun update(webhook: PatchWebhook, webhookToken: String): Webhook {
-        return PATCH("/webhooks/$webhookId", "/$webhookToken") { body = webhook }.receive()
+        return PATCH("/webhooks/$webhookId", "/$webhookToken") { setBody(webhook) }.body()
     }
 
     /**
@@ -69,7 +70,7 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      *
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun deleteWebhook(): Unit = DELETE("/webhooks/$webhookId").receive()
+    public suspend fun deleteWebhook(): Unit = DELETE("/webhooks/$webhookId").body()
 
     /**
      * Delete this webhook using the secure token.
@@ -79,22 +80,27 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteWebhook(webhookToken: String) {
-        DELETE("/webhooks/$webhookId", "/$webhookToken").receive<Unit>()
+        DELETE("/webhooks/$webhookId", "/$webhookToken").body<Unit>()
     }
-
 
     /**
      * Execute the webhook.
      *
      * @param webhookToken The webhook's secure token.
-     * @param webhookSubmission The post the webhook will make.
+     * @param message The post the webhook will make.
      * @param waitForValidation Wait for the message to be posted before the call returns. Defaults to false.
      *
      * @return The created message
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun execute(webhookToken: String, webhookSubmission: WebhookSubmission, waitForValidation: Boolean = true): WebhookSubmission {
-        return POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") { body = webhookSubmission }.receive()
+    public suspend fun execute(
+        webhookToken: String,
+        message: CreateWebhookMessage,
+        waitForValidation: Boolean = true
+    ): Message {
+        return POST("/webhooks/$webhookId", "/$webhookToken?wait=$waitForValidation") {
+            setBody(message)
+        }.body()
     }
 
     /**
@@ -107,10 +113,35 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @return The edited message
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
-    public suspend fun updateWebhookMessage(webhookToken: String, messageId: String, messageEdit: MessageEdit): Message {
+    @Deprecated("Use variant with PatchWebhookMessage instead.", ReplaceWith("updateWebhookMessage"))
+    public suspend fun updateWebhookMessage(
+        webhookToken: String,
+        messageId: String,
+        messageEdit: MessageEdit,
+    ): Message {
         return PATCH("/webhooks/$webhookId", "/$webhookToken/messages/$messageId") {
-            body = messageEdit
-        }.receive()
+            setBody(messageEdit)
+        }.body()
+    }
+
+    /**
+     * Edit a message created by this webhook.
+     *
+     * @param webhookToken The webhook's secure token.
+     * @param messageId The message this webhook created to edit.
+     * @param messageEdit The message edit.
+     *
+     * @return The edited message
+     * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
+     */
+    public suspend fun updateWebhookMessage(
+        webhookToken: String,
+        messageId: String,
+        messageEdit: PatchWebhookMessage
+    ): Message {
+        return PATCH("/webhooks/$webhookId", "/$webhookToken/messages/$messageId") {
+            setBody(messageEdit)
+        }.body()
     }
 
     /**
@@ -122,6 +153,6 @@ public class WebhookClient(public val webhookId: String, client: RestClient) : R
      * @throws com.jessecorbett.diskord.api.exceptions.DiscordException
      */
     public suspend fun deleteWebhookMessage(webhookToken: String, messageId: String) {
-        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").receive<Unit>()
+        DELETE("/webhooks/$webhookId", "/$webhookToken/messages/$messageId").body<Unit>()
     }
 }

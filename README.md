@@ -21,14 +21,12 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:2.1.1")
-    // or, if you only want the low level implementation
-    implementation("com.jessecorbett:diskord-core:2.1.1")
+    implementation("com.jessecorbett:diskord-bot:3.0.0")
 }
 ```
 
 Note: The `diskord-bot` artifact bundles `org.slf4j:slf4j-simple` to provide basic logging to STDOUT with no
-configuration. This can be excluded in favor of your own slf4 logger using gradle exclusion:
+configuration. This can be excluded in favor of your own slf4j logger using gradle exclusion:
 
 ```kotlin
 // Kotlin build.gradle.kts
@@ -59,15 +57,30 @@ There are also a collection of examples in the [diskord-examples repo.](https://
 
 ```kotlin
 import com.jessecorbett.diskord.bot.*
+import com.jessecorbett.diskord.util.*
 
 suspend fun main() {
     bot(TOKEN) {
+        // Generic hook set for all events
         events {
             onGuildMemberAdd {
                 channel(WELCOME_CHANNEL_ID).sendMessage("Welcome to the server, ${it.user?.username}!")
             }
         }
       
+        // Modern interactions API for slash commands, user commands, etc
+        interactions {
+            slashCommand("echo", "Makes the bot say something") {
+                val message by stringParameter("message", "The message")
+                callback { interaction, _ ->
+                    interaction.respond {
+                        content = message
+                    }
+                }
+            }
+        }
+      
+        // The old-fashioned way, it uses messages, such as .ping, for commands
         classicCommands {
             command("ping") {
                 it.respond("pong")
@@ -81,9 +94,6 @@ suspend fun main() {
 ## FAQ
 * Does this support voice chat?
     * No, voice chat is not supported at this time. If you need it I recommend checking out another SDK
-* Is this library done?
-    * Diskord is actively maintained, but the Discord API is always changing and there may be some lag between an API change and Diskord getting updated
-    * If you want to speed things along, PRs are welcome and tickets appreciated
 * Can I contact you to ask a question/contribute to the project/report a bug?
     * [We've got a discord server for just that](https://discord.gg/UPTWsZ5)
 * What if I'm hip and cool, and I want to use a newer more ~~unstable~~ exciting version?

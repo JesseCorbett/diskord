@@ -21,7 +21,7 @@ public class TemplateClient(public val templateCode: String, client: RestClient)
      * @return The template
      */
     public suspend fun getTemplate(): Template {
-        return GET("/guilds/templates", "/$templateCode").receive()
+        return GET("/guilds/templates", "/$templateCode").body()
     }
 
     /**
@@ -30,6 +30,6 @@ public class TemplateClient(public val templateCode: String, client: RestClient)
      * @return The created guild
      */
     public suspend fun createGuild(): Guild {
-        return POST("/guilds/templates", "/$templateCode").receive()
+        return POST("/guilds/templates", "/$templateCode").body()
     }
 }

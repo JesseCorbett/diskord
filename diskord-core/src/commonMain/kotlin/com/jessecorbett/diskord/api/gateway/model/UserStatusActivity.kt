@@ -1,7 +1,9 @@
 package com.jessecorbett.diskord.api.gateway.model
 
 import com.jessecorbett.diskord.api.common.Emoji
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -55,17 +57,23 @@ public data class RichPresenceSecrets(
 
 @Serializable(with = ActivityTypeSerializer::class)
 public enum class ActivityType(public val code: Int) {
-    @SerialName("0") GAME(0),
-    @SerialName("1") STREAMING(1),
-    @SerialName("2") LISTENING(2),
-    @SerialName("4") CUSTOM_STATUS(4),
-    @SerialName("5") COMPETING(5)
+    UNKNOWN(-1),
+    GAME(0),
+    STREAMING(1),
+    LISTENING(2),
+    CUSTOM_STATUS(4),
+    COMPETING(5)
 }
 
 public object ActivityTypeSerializer : KSerializer<ActivityType> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Permissions", PrimitiveKind.INT)
 
-    override fun deserialize(decoder: Decoder): ActivityType = ActivityType.values().find { it.code == decoder.decodeInt() }!!
+    override fun deserialize(decoder: Decoder): ActivityType {
+        val value = decoder.decodeInt()
+        return ActivityType.values().find { it.code == value } ?: ActivityType.UNKNOWN
+    }
 
-    override fun serialize(encoder: Encoder, value: ActivityType): Unit = encoder.encodeInt(value.code)
+    override fun serialize(encoder: Encoder, value: ActivityType) {
+        encoder.encodeInt(value.code)
+    }
 }

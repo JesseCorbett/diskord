@@ -12,3 +12,10 @@ public data class GuildMember(
     @SerialName("deaf") val isDeaf: Boolean,
     @SerialName("mute") val isMute: Boolean
 )
+
+@Serializable
+public data class PartialMember(
+    @SerialName("nick") val nickname: String? = null,
+    @SerialName("roles") val roleIds: List<String>,
+    @SerialName("joined_at") val joinedAt: String,
+)

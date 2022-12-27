@@ -17,7 +17,6 @@ val okhttpVersion: String by project
 val kotlinLoggingVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
-val mockkVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -86,6 +85,7 @@ kotlin {
     sourceSets {
         all {
             languageSettings.optIn("kotlin.RequiresOptIn")
+            languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi")
         }
 
         commonMain {
@@ -95,8 +95,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
                 implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
         }
@@ -106,11 +106,13 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
-                implementation("io.mockk:mockk-common:$mockkVersion")
             }
         }
 
         val jvmMain by getting {
+            jvmToolchain {
+                languageVersion.set(JavaLanguageVersion.of(8))
+            }
             dependencies {
                 implementation("org.slf4j:slf4j-api:$slf4jVersion")
                 implementation("org.slf4j:slf4j-simple:$slf4jVersion")
@@ -119,13 +121,15 @@ kotlin {
             }
         }
         val jvmTest by getting {
+            jvmToolchain {
+                languageVersion.set(JavaLanguageVersion.of(8))
+            }
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
-                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
 

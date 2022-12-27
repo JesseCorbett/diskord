@@ -1,6 +1,9 @@
 package com.jessecorbett.diskord.api.common
 
-import kotlinx.serialization.*
+import com.jessecorbett.diskord.internal.CodeEnum
+import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 public data class User(
@@ -19,9 +22,12 @@ public data class User(
     @SerialName("public_flags") val publicFlags: UserFlags = UserFlags.NONE
 )
 
-@Serializable
-public enum class PremiumType(public val code: Int) {
-    @SerialName("0") NONE(0),
-    @SerialName("1") NITRO_CLASSIC(1),
-    @SerialName("2") NITRO(2)
+@Serializable(with = PremiumTypeSerializer::class)
+public enum class PremiumType(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    NONE(0),
+    NITRO_CLASSIC(1),
+    NITRO(2)
 }
+
+public class PremiumTypeSerializer : CodeEnumSerializer<PremiumType>(PremiumType.UNKNOWN, PremiumType.values())

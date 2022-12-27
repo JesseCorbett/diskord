@@ -8,7 +8,7 @@ import com.jessecorbett.diskord.api.gateway.EventDispatcher
  */
 @DiskordDsl
 public fun BotBase.events(eventsBuilder: EventDispatcherWithContext.() -> Unit) {
-    registerModule { dispatcher, context ->
+    registerModule { dispatcher, context, _ ->
         EventDispatcherWithContext(dispatcher, context).eventsBuilder()
     }
 }

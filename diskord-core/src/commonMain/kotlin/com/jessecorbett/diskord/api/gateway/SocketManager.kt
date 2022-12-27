@@ -6,10 +6,19 @@ import com.jessecorbett.diskord.util.DEBUG_MODE
 import com.jessecorbett.diskord.util.StripBlankSWSEHeader
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
-import io.ktor.client.*
-import io.ktor.client.features.logging.*
-import io.ktor.client.features.websocket.*
-import io.ktor.http.cio.websocket.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.plugins.websocket.wss
+import io.ktor.websocket.CloseReason
+import io.ktor.websocket.Frame
+import io.ktor.websocket.WebSocketSession
+import io.ktor.websocket.close
+import io.ktor.websocket.readText
+import io.ktor.websocket.send
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
@@ -63,11 +72,11 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                     this.url.parameters["encoding"] = "json"
                     logger.trace { "Building a socket HttpRequest" }
                 }) {
-                    logger.info { "Starting a new websocket connection" }
+                    logger.debug { "Starting a new websocket connection" }
 
                     session = this
 
-                    logger.info { "Starting incoming loop" }
+                    logger.debug { "Starting incoming loop" }
 
                     launch {
                         for (message in outgoingMessages) {
