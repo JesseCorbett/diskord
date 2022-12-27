@@ -17,7 +17,6 @@ val okhttpVersion: String by project
 val kotlinLoggingVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
-val mockkVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -107,7 +106,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
-                implementation("io.mockk:mockk-common:$mockkVersion")
             }
         }
 
@@ -132,7 +130,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
                 implementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
-                implementation("io.mockk:mockk:$mockkVersion")
             }
         }
 

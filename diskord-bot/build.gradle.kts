@@ -11,7 +11,6 @@ plugins {
 val kotlinVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
-val mockkVersion: String by project
 val kotlinLoggingVersion: String by project
 
 group = rootProject.group
@@ -79,7 +78,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
                 implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
-                implementation("io.mockk:mockk-common:$mockkVersion")
             }
         }
 
