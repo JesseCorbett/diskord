@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
 import com.jessecorbett.diskord.api.interaction.CreateCommand
 import com.jessecorbett.diskord.api.interaction.command.Command
+import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.bot.BotContext
 
@@ -82,7 +83,7 @@ public class InteractionBuilder(
 
         dispatcher.onReady {
             builder.block()
-            val commandWithParams = createCommand.copy(options = builder.parameters)
+            val commandWithParams = createCommand.copy(options = builder.parameters.map { CommandOption.fromOption(it) })
             command = if (guildId != null) {
                 botContext.command(applicationId).createGuildCommand(guildId, commandWithParams)
             } else {

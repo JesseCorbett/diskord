@@ -3,8 +3,10 @@ package com.jessecorbett.diskord.api.common.audit
 import com.jessecorbett.diskord.api.common.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
+@JsonClassDiscriminator("key")
 public sealed class AuditLogChange
 
 @Serializable

@@ -552,7 +552,7 @@ public class GuildClient(public val guildId: String, client: RestClient) : RestC
             query += "&before=$before"
         }
 
-        return GET("/guilds/$guildId/audit-logs$query", auditLogs = true).body()
+        return GET("/guilds/$guildId/audit-logs$query").body()
     }
 
     /**
