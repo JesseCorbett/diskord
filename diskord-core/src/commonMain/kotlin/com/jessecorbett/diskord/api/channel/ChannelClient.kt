@@ -22,7 +22,6 @@ import com.jessecorbett.diskord.api.common.Webhook
 import com.jessecorbett.diskord.api.common.stringified
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
 import com.jessecorbett.diskord.internal.client.RestClient
-import com.jessecorbett.diskord.internal.urlEncode
 import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.isThread
@@ -398,7 +397,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun addMessageReaction(messageId: String, emojiText: String) {
         PUT(
             "/channels/$channelId/messages/$messageId/reactions",
-            "/${urlEncode(emojiText)}/@me",
+            "/$emojiText/@me",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
         ).body<Unit>()
     }
@@ -429,7 +428,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun removeMessageReaction(messageId: String, emojiText: String, userId: String = "@me") {
         DELETE(
             "/channels/$channelId/messages/$messageId/reactions",
-            "/${urlEncode(emojiText)}/$userId",
+            "/$emojiText/$userId",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
         ).body<Unit>()
     }
@@ -461,7 +460,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun getMessageReactions(messageId: String, textEmoji: String): List<User> {
         return GET(
             "/channels/$channelId/messages/$messageId/reactions",
-            "/${urlEncode(textEmoji)}",
+            "/$textEmoji",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
         ).body()
     }
@@ -504,7 +503,7 @@ public class ChannelClient(public val channelId: String, client: RestClient) : R
     public suspend fun deleteAllMessageReactions(messageId: String, textEmoji: String) {
         DELETE(
             "/channels/$channelId/messages/$messageId/reactions",
-            "/${urlEncode(textEmoji)}",
+            "/$textEmoji",
             rateKey = "/channels/$channelId/messages/messageId/reactions"
         ).body<Unit>()
     }

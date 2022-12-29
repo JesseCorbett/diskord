@@ -76,6 +76,14 @@ kotlin {
         }
     }
 
+    macosX64("mac") {
+        binaries.executable()
+    }
+
+    mingwX64("win") {
+        binaries.executable()
+    }
+
     metadata {
         mavenPublication {
             artifact(javadocJar)
@@ -138,9 +146,16 @@ kotlin {
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
         }
-        val jsTest by getting {
+
+        val macMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
+                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+            }
+        }
+
+        val winMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
             }
         }
     }
