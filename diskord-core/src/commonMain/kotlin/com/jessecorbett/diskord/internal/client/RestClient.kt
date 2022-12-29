@@ -15,7 +15,6 @@ import com.jessecorbett.diskord.internal.defaultUserAgentUrl
 import com.jessecorbett.diskord.internal.defaultUserAgentVersion
 import com.jessecorbett.diskord.internal.epochMillisNow
 import com.jessecorbett.diskord.util.DiskordInternals
-import com.jessecorbett.diskord.util.auditLogEntryJson
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.omitNullsJson
 import io.ktor.client.request.HttpRequestBuilder
@@ -68,7 +67,6 @@ public interface RestClient {
         majorPath: String,
         minorPath: String = "",
         rateKey: String = majorPath,
-        auditLogs: Boolean = false,
         block: HttpRequestBuilder.() -> Unit = {}
     ): HttpResponse
 
@@ -136,9 +134,6 @@ public class DefaultRestClient(
     private val defaultClient = buildClient(defaultJson)
     private val omitNullsClient = buildClient(omitNullsJson)
 
-    // Not often used, so we'll lazily initialize it just to be safe
-    private val auditLogsClient by lazy { buildClient(auditLogEntryJson) }
-
     private val pathToBucketMap: MutableMap<String, String> = mutableMapOf()
     private var globalRateLimit = RateLimitInfo(1, 1, Float.MAX_VALUE)
     private val rateLimitBuckets: MutableMap<String, RateLimitInfo> = mutableMapOf()
@@ -149,7 +144,6 @@ public class DefaultRestClient(
     public fun close() {
         defaultClient.close()
         omitNullsClient.close()
-        auditLogsClient.close()
     }
 
     private suspend fun request(
@@ -158,7 +152,6 @@ public class DefaultRestClient(
         rateKey: String,
         method: HttpMethod,
         omitNulls: Boolean,
-        auditLogs: Boolean,
         block: HttpRequestBuilder.() -> Unit
     ): HttpResponse {
         // Wait on rate limits if any apply
@@ -170,7 +163,6 @@ public class DefaultRestClient(
 
         val client = when {
             omitNulls -> omitNullsClient
-            auditLogs -> auditLogsClient
             else -> defaultClient
         }
 
@@ -201,7 +193,7 @@ public class DefaultRestClient(
                 // We already address rate limit updates above, so just immediately queue a retry after waiting
                 delay(rateLimitException.retryAfterSeconds.seconds)
                 logger.info { "Attempting retry" }
-                request(majorPath, minorPath, rateKey, method, omitNulls, auditLogs, block)
+                request(majorPath, minorPath, rateKey, method, omitNulls, block)
             } catch (discordException: DiscordException) {
                 logger.warn { "${method.value} $majorPath$minorPath responded with $discordException" }
                 throw discordException
@@ -237,9 +229,8 @@ public class DefaultRestClient(
         majorPath: String,
         minorPath: String,
         rateKey: String,
-        auditLogs: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Get, false, auditLogs, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Get, false, block)
 
     override suspend fun POST(
         majorPath: String,
@@ -247,7 +238,7 @@ public class DefaultRestClient(
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Post, omitNulls, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Post, omitNulls, block)
 
     override suspend fun PUT(
         majorPath: String,
@@ -255,7 +246,7 @@ public class DefaultRestClient(
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Put, omitNulls, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Put, omitNulls, block)
 
     override suspend fun PATCH(
         majorPath: String,
@@ -263,14 +254,14 @@ public class DefaultRestClient(
         rateKey: String,
         omitNulls: Boolean,
         block: HttpRequestBuilder.() -> Unit
-    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Patch, omitNulls, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Patch, omitNulls, block)
 
     override suspend fun DELETE(
         majorPath: String,
         minorPath: String,
         rateKey: String,
         block: HttpRequestBuilder.() -> Unit
-    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Delete, false, false, block)
+    ): HttpResponse = request(majorPath, minorPath, rateKey, HttpMethod.Delete, false, block)
 }
 
 @DiskordInternals

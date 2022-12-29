@@ -1,22 +1,18 @@
 package com.jessecorbett.diskord.api.common.audit
 
 import com.jessecorbett.diskord.api.common.OverwriteType
-import com.jessecorbett.diskord.util.auditLogChangeJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
+@JsonClassDiscriminator("action_type")
 public sealed class AuditLogEntry {
     public abstract val id: String
     public abstract val targetId: String?
-    public abstract val changesJson: JsonArray
+    public abstract val changes: List<AuditLogChange>
     public abstract val userId: String
     public abstract val reason: String?
-
-    public val changes: List<AuditLogChange>
-        get() = auditLogChangeJson.decodeFromJsonElement(changesJson)
 }
 
 @Serializable
@@ -24,7 +20,7 @@ public sealed class AuditLogEntry {
 public data class GuildUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -34,7 +30,7 @@ public data class GuildUpdateEntry(
 public data class ChannelCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -44,7 +40,7 @@ public data class ChannelCreateEntry(
 public data class ChannelUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -54,7 +50,7 @@ public data class ChannelUpdateEntry(
 public data class ChannelDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -64,7 +60,7 @@ public data class ChannelDeleteEntry(
 public data class ChannelOverwriteCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -82,7 +78,7 @@ public data class ChannelOverwriteCreateEntry(
 public data class ChannelOverwriteUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -100,7 +96,7 @@ public data class ChannelOverwriteUpdateEntry(
 public data class ChannelOverwriteDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -118,7 +114,7 @@ public data class ChannelOverwriteDeleteEntry(
 public data class MemberKickEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -128,7 +124,7 @@ public data class MemberKickEntry(
 public data class MemberPruneEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -145,7 +141,7 @@ public data class MemberPruneEntry(
 public data class MemberBanAddEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -155,7 +151,7 @@ public data class MemberBanAddEntry(
 public data class MemberBanRemoveEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -165,7 +161,7 @@ public data class MemberBanRemoveEntry(
 public data class MemberUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -175,7 +171,7 @@ public data class MemberUpdateEntry(
 public data class MemberRoleUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -185,7 +181,7 @@ public data class MemberRoleUpdateEntry(
 public data class MemberMoveEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -202,7 +198,7 @@ public data class MemberMoveEntry(
 public data class MemberDisconnectEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -218,7 +214,7 @@ public data class MemberDisconnectEntry(
 public data class BotAddEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -228,7 +224,7 @@ public data class BotAddEntry(
 public data class RoleCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -238,7 +234,7 @@ public data class RoleCreateEntry(
 public data class RoleUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -248,7 +244,7 @@ public data class RoleUpdateEntry(
 public data class RoleDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -258,7 +254,7 @@ public data class RoleDeleteEntry(
 public data class InviteCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -268,7 +264,7 @@ public data class InviteCreateEntry(
 public data class InviteUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -278,7 +274,7 @@ public data class InviteUpdateEntry(
 public data class InviteDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -288,7 +284,7 @@ public data class InviteDeleteEntry(
 public data class WebhookCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -298,7 +294,7 @@ public data class WebhookCreateEntry(
 public data class WebhookUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -308,7 +304,7 @@ public data class WebhookUpdateEntry(
 public data class WebhookDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -318,7 +314,7 @@ public data class WebhookDeleteEntry(
 public data class EmojiCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -328,7 +324,7 @@ public data class EmojiCreateEntry(
 public data class EmojiUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -338,7 +334,7 @@ public data class EmojiUpdateEntry(
 public data class EmojiDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -348,7 +344,7 @@ public data class EmojiDeleteEntry(
 public data class MessageDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -365,7 +361,7 @@ public data class MessageDeleteEntry(
 public data class MessageBulkDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -381,7 +377,7 @@ public data class MessageBulkDeleteEntry(
 public data class MessagePinEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -398,7 +394,7 @@ public data class MessagePinEntry(
 public data class MessageUnpinEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null,
     @SerialName("options") public val options: Options
@@ -415,7 +411,7 @@ public data class MessageUnpinEntry(
 public data class IntegrationCreateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -425,7 +421,7 @@ public data class IntegrationCreateEntry(
 public data class IntegrationUpdateEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()
@@ -435,7 +431,7 @@ public data class IntegrationUpdateEntry(
 public data class IntegrationDeleteEntry(
     @SerialName("id") public override val id: String,
     @SerialName("target_id") public override val targetId: String?,
-    @SerialName("changes") public override val changesJson: JsonArray,
+    @SerialName("changes") public override val changes: List<AuditLogChange>,
     @SerialName("user_id") public override val userId: String,
     @SerialName("reason") public override val reason: String? = null
 ) : AuditLogEntry()

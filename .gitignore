@@ -4,3 +4,4 @@ out/
 *.iml
 *.hprof
 public/
+.idea/artifacts

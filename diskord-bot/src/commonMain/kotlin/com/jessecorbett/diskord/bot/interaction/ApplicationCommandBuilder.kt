@@ -15,7 +15,7 @@ import kotlin.reflect.KProperty
 
 public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
     private val delegates = mutableListOf<CommandDelegate<*>>()
-    internal val parameters = mutableListOf<CommandOption>()
+    internal val parameters = mutableListOf<CommandOption.Type>()
     internal var callbackFunction: suspend ResponseContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
 
     @InteractionModule
