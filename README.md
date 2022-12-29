@@ -49,9 +49,9 @@ The library is packaged into two artifacts.
 
 [Dokka documentation](https://jesselcorbett.gitlab.io/diskord/)
 
-For an example project you can easily clone to get started, look at the [diskord-starter repo.](https://gitlab.com/incendium/diskord-starter)
+For an example project you can easily clone to get started, look at the [diskord-starter repo.](https://gitlab.com/diskord/diskord-starter)
 
-There are also a collection of examples in the [diskord-examples repo.](https://gitlab.com/incendium/diskord-examples)
+There are also a collection of examples in the [diskord-examples repo.](https://gitlab.com/diskord/diskord-examples)
 
 ### Simple Example
 
