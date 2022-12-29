@@ -47,7 +47,7 @@ The library is packaged into two artifacts.
 
 ## How do I use this?
 
-[Dokka documentation](https://jesselcorbett.gitlab.io/diskord/)
+[Dokka documentation](https://diskord.gitlab.io/diskord/)
 
 For an example project you can easily clone to get started, look at the [diskord-starter repo.](https://gitlab.com/diskord/diskord-starter)
 
