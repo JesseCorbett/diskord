@@ -54,6 +54,18 @@ tasks {
                         "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/jvmMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
+                sourceLink {
+                    localDirectory.set(file("src/macMain/kotlin"))
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/macMain/kotlin/"))
+                    remoteLineSuffix.set("#L")
+                }
+                sourceLink {
+                    localDirectory.set(file("src/winMain/kotlin"))
+                    remoteUrl.set(URL(
+                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/winMain/kotlin/"))
+                    remoteLineSuffix.set("#L")
+                }
             }
         }
     }
@@ -74,6 +86,14 @@ kotlin {
         mavenPublication {
             artifact(javadocJar)
         }
+    }
+
+    macosX64("mac") {
+
+    }
+
+    mingwX64("win") {
+
     }
 
     metadata {
@@ -98,14 +118,13 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             }
         }
         commonTest {
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
-                implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
             }
         }
 
@@ -138,9 +157,16 @@ kotlin {
                 implementation("io.ktor:ktor-client-js:$ktorVersion")
             }
         }
-        val jsTest by getting {
+
+        val macMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion")
+                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+            }
+        }
+
+        val winMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
             }
         }
     }

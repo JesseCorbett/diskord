@@ -11,6 +11,7 @@ import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import mu.KLogger
 import mu.KotlinLogging
 
@@ -125,7 +126,7 @@ public suspend fun bot(token: String, builder: suspend BotBase.() -> Unit) {
         ?: GatewayIntents.NON_PRIVILEGED
 
     // Create the real dispatcher and register the modules with it
-    val dispatcher = EventDispatcher.build(CoroutineScope(Dispatchers.Default))
+    val dispatcher = EventDispatcher.build(CoroutineScope(SupervisorJob() + Dispatchers.Default))
     base.modules.forEach { it.register(dispatcher, virtualContext, true) }
 
     // Create the autogateway using what we've constructed

@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.api.common
 import com.jessecorbett.diskord.api.interaction.InteractionType
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer
+import com.jessecorbett.diskord.internal.MessageComponentSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -57,7 +58,7 @@ public enum class MessageType(public override val code: Int) : CodeEnum {
     GUILD_DISCOVERY_REQUALIFIED(15),
     GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING(16),
     GUILD_DISCOVERY_GRACE_PERIOD_FINAL_WARNING(17),
-   THREAD_CREATED(18),
+    THREAD_CREATED(18),
     REPLY(19),
     APPLICATION_COMMAND(20),
     THREAD_STARTER_MESSAGE(21),
@@ -115,15 +116,13 @@ public data class MessageInteraction(
     @SerialName("member") val guildMember: GuildMember? = null
 )
 
-@Serializable
-public sealed class MessageComponent(
-    @SerialName("type") public val type: Int
-)
+@Serializable(with = MessageComponentSerializer::class)
+public sealed class MessageComponent
 
 @Serializable
 public data class ActionRow(
     @SerialName("components") public val components: List<MessageComponent>
-) : MessageComponent(1)
+) : MessageComponent()
 
 @Serializable
 public data class Button(
@@ -133,7 +132,7 @@ public data class Button(
     @SerialName("label") public val label: String? = null,
     @SerialName("emoji") public val emoji: PartialEmoji? = null,
     @SerialName("url") public val url: String? = null,
-) : MessageComponent(2)
+) : MessageComponent()
 
 @Serializable
 public data class SelectMenu(
@@ -143,8 +142,7 @@ public data class SelectMenu(
     @SerialName("placeholder") public val placeholder: String? = null,
     @SerialName("min_values") public val minValues: Int = 1,
     @SerialName("max_values") public val maxValues: Int = 1,
-) : MessageComponent(3)
-
+) : MessageComponent()
 
 @Serializable(with = ButtonStyleSerializer::class)
 public enum class ButtonStyle(public override val code: Int) : CodeEnum {
