@@ -56,6 +56,14 @@ kotlin {
         }
     }
 
+    macosX64("mac") {
+
+    }
+
+    mingwX64("win") {
+
+    }
+
     metadata {
         mavenPublication {
             artifact(javadocJar)
@@ -73,13 +81,6 @@ kotlin {
                 api("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
             }
         }
-        commonTest {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
-                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
-                implementation("com.willowtreeapps.assertk:assertk:$assertkVersion")
-            }
-        }
 
         val jvmMain by getting {
             jvmToolchain {
@@ -89,10 +90,6 @@ kotlin {
                 implementation("org.slf4j:slf4j-api:$slf4jVersion")
                 implementation("org.slf4j:slf4j-simple:$slf4jVersion")
             }
-        }
-
-        val jsMain by getting {
-
         }
     }
 }

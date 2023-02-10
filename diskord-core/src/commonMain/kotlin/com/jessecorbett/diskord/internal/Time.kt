@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.internal
 
-internal expect fun epochSecondNow(): Long
-internal expect fun epochMillisNow(): Long
-internal expect fun parseRfc1123(timestamp: String): Long
+import kotlinx.datetime.Clock
+
+internal fun epochSecondNow(): Long = Clock.System.now().epochSeconds
+internal fun epochMillisNow(): Long = Clock.System.now().toEpochMilliseconds()
