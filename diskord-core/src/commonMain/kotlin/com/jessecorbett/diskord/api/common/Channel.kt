@@ -26,7 +26,7 @@ public interface TextChannel {
 }
 
 public interface GuildChannel : NamedChannel {
-    public val guildId: String
+    public val guildId: String?
     public val position: Int
     public val nsfw: Boolean?
     public val permissionOverwrites: List<Overwrite>
@@ -39,7 +39,7 @@ public interface GuildText : GuildChannel, TextChannel {
 }
 
 public interface Thread : NamedChannel, TextChannel {
-    public val guildId: String
+    public val guildId: String?
     public val rateLimitPerUser: Int?
     public val ownerId: String?
     public val parentId: String?
@@ -55,7 +55,7 @@ public sealed class GuildThread : Channel(), Thread {
     abstract override val name: String
     abstract override val lastMessageId: String?
     abstract override val lastPinTime: String?
-    abstract override val guildId: String
+    abstract override val guildId: String?
     abstract override val rateLimitPerUser: Int?
     abstract override val ownerId: String?
     abstract override val parentId: String?
@@ -74,15 +74,15 @@ public interface DM : TextChannel {
 @SerialName("0")
 public data class GuildTextChannel(
     @SerialName("id") override val id: String,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
     @SerialName("topic") override val topic: String? = null,
-    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), GuildText
 
@@ -100,14 +100,14 @@ public data class DMChannel(
 @SerialName("2")
 public data class GuildVoiceChannel(
     @SerialName("id") override val id: String,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
     @SerialName("bitrate") val bitrate: Int,
     @SerialName("user_limit") val userLimit: Int,
     @SerialName("parent_id") val parentId: String?,
-    @SerialName("nsfw") override val nsfw: Boolean,
+    @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("rtc_region") val rtcRegion: String? = null,
 ) : Channel(), GuildChannel
 
@@ -128,7 +128,7 @@ public data class GroupDMChannel(
 @SerialName("4")
 public data class GuildCategory(
     @SerialName("id") override val id: String,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
@@ -139,7 +139,7 @@ public data class GuildCategory(
 @SerialName("5")
 public data class GuildNewsChannel(
     @SerialName("id") override val id: String,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
@@ -155,7 +155,7 @@ public data class GuildNewsChannel(
 @SerialName("6")
 public data class GuildStoreChannel(
     @SerialName("id") override val id: String,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("position") override val position: Int,
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
@@ -179,7 +179,7 @@ public data class GuildNewsThread(
     @SerialName("name") override val name: String,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
     @SerialName("parent_id") override val parentId: String?,
@@ -196,7 +196,7 @@ public data class GuildPublicThread(
     @SerialName("name") override val name: String,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
     @SerialName("parent_id") override val parentId: String?,
@@ -213,7 +213,7 @@ public data class GuildPrivateThread(
     @SerialName("name") override val name: String,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null,
-    @SerialName("guild_id") override val guildId: String,
+    @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
     @SerialName("parent_id") override val parentId: String?,
@@ -222,6 +222,39 @@ public data class GuildPrivateThread(
     @SerialName("thread_metadata") override val metadata: ThreadMetadata? = null,
     @SerialName("member") override val member: ThreadMember? = null,
 ) : GuildThread()
+
+@Serializable
+@SerialName("13")
+public data class GuildStageVoice(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("guild_id") override val guildId: String? = null,
+    override val position: Int,
+    override val nsfw: Boolean? = null,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList()
+) : Channel(), GuildChannel
+
+@Serializable
+@SerialName("14")
+public data class GuildDirectory(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("guild_id") override val guildId: String? = null,
+    override val position: Int,
+    override val nsfw: Boolean? = null,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList()
+) : Channel(), GuildChannel
+
+@Serializable
+@SerialName("15")
+public data class GuildForum(
+    @SerialName("id") override val id: String,
+    @SerialName("name") override val name: String,
+    @SerialName("guild_id") override val guildId: String? = null,
+    override val position: Int,
+    override val nsfw: Boolean? = null,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList()
+) : Channel(), GuildChannel
 
 @Serializable(with = ChannelTypeSerializer::class)
 public enum class ChannelType(public override val code: Int) : CodeEnum {
@@ -237,6 +270,8 @@ public enum class ChannelType(public override val code: Int) : CodeEnum {
     GUILD_PUBLIC_THREAD(11),
     GUILD_PRIVATE_THREAD(12),
     GUILD_STAGE_VOICE(13),
+    GUILD_DIRECTORY(14),
+    GUILD_FORUM(15)
 }
 
 public class ChannelTypeSerializer : CodeEnumSerializer<ChannelType>(ChannelType.UNKNOWN, ChannelType.values())

@@ -8,7 +8,6 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-val kotlinVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
 val kotlinLoggingVersion: String by project
@@ -48,7 +47,7 @@ kotlin {
         }
     }
 
-    js(BOTH) {
+    js(IR) {
         nodejs()
 
         mavenPublication {

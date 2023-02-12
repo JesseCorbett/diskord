@@ -1,19 +1,25 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.common.Guild
+import com.jessecorbett.diskord.api.common.GuildChannel
+import com.jessecorbett.diskord.api.common.GuildMember
+import com.jessecorbett.diskord.api.common.OverwriteType
+import com.jessecorbett.diskord.api.common.Permission
+import com.jessecorbett.diskord.api.common.Permissions
+import com.jessecorbett.diskord.api.common.User
 import com.jessecorbett.diskord.api.guild.GuildClient
 import com.jessecorbett.diskord.internal.client.RestClient
 
 /**
- * Compute the permissions for the given user in the channel.  Takes into account the permission overwrites and whether or not
- * the user is an administrator.
+ * Compute the permissions for the given user in the channel.  Takes into account the permission overwrites and
+ * whether the user is an administrator.
  *
  * @param user the user whose permissions should be computed
  * @param channel the channel to compute the permissions for
  * @param restClient the client to use for lookup
  */
 public suspend fun computePermissions(user: User, channel: GuildChannel, restClient: RestClient): Permissions {
-    val client = GuildClient(channel.guildId, restClient)
+    val client = GuildClient(channel.guildId!!, restClient) // TODO: Resolve npe
 
     return computePermissions(client.getMember(user.id), channel, client.getGuild())
 }
