@@ -249,12 +249,17 @@ public data class GuildDirectory(
 @SerialName("15")
 public data class GuildForum(
     @SerialName("id") override val id: String,
-    @SerialName("name") override val name: String,
     @SerialName("guild_id") override val guildId: String? = null,
-    override val position: Int,
-    override val nsfw: Boolean? = null,
-    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList()
-) : Channel(), GuildChannel
+    @SerialName("position") override val position: Int,
+    @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
+    @SerialName("name") override val name: String,
+    @SerialName("topic") override val topic: String? = null,
+    @SerialName("nsfw") override val nsfw: Boolean? = null,
+    @SerialName("last_message_id") override val lastMessageId: String?,
+    @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
+    @SerialName("parent_id") override val parentId: String? = null,
+    @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
+) : Channel(), GuildText
 
 @Serializable(with = ChannelTypeSerializer::class)
 public enum class ChannelType(public override val code: Int) : CodeEnum {
