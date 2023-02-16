@@ -14,7 +14,7 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    channel("545369349452726303").sendMessage("Diskord JVM bot has started")
+                    channel("547517051556855808").sendMessage("Diskord JVM bot has started")
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
