@@ -6,14 +6,15 @@ import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.bot.interaction.interactions
+import com.jessecorbett.diskord.util.sendMessage
 
 suspend fun main() {
-    bot("NTQ3NTE1ODg4OTQxNzkzMjkx.XZAYVA.Or3LlfN_pSnd0X6d4r7UBMorYCY") {
+    bot(System.getenv("DISKORD_JVM_BOT")) {
         events {
             var started = false
             onReady {
                 if (!started) {
-//                    channel("545369349452726303").sendMessage("Diskord JVM bot has started")
+                    channel("545369349452726303").sendMessage("Diskord JVM bot has started")
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
