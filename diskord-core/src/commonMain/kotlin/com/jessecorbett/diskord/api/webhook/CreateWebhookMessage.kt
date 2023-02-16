@@ -3,6 +3,7 @@ package com.jessecorbett.diskord.api.webhook
 import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.common.Embed
 import com.jessecorbett.diskord.api.common.MessageComponent
+import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackDataFlags
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,4 +31,5 @@ public data class CreateWebhookMessage(
     @SerialName("payload_json") val fileUploadEmbed: String? = null,
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentions = AllowedMentions.ALL,
     @SerialName("components") val components: List<MessageComponent> = emptyList(),
+    @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE
 )

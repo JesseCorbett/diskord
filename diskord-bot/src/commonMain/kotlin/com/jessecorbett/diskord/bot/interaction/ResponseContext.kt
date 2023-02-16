@@ -8,15 +8,18 @@ import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSourc
 import com.jessecorbett.diskord.api.interaction.callback.DeferredChannelMessageWithSource
 import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackDataFlags
 import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
+import com.jessecorbett.diskord.api.webhook.CreateWebhookMessage
 import com.jessecorbett.diskord.bot.BotContext
 
 public class ResponseContext internal constructor(private val context: BotContext) : BotContext by context {
     private var hasResponded = false
+    private var hasAckedForFuture = false
 
     /**
      * Acknowledges the interaction and informs the user and Discord that a response will be coming shortly
      */
     public suspend fun ApplicationCommand.acknowledgeForFutureResponse() {
+        hasAckedForFuture = true
         respond(DeferredChannelMessageWithSource())
     }
 
@@ -32,6 +35,23 @@ public class ResponseContext internal constructor(private val context: BotContex
     }
 
     private suspend fun ApplicationCommand.respond(response: InteractionResponse) {
+        if (hasAckedForFuture && response is ChannelMessageWithSource) {
+            context.webhook(applicationId).execute(
+                token,
+                CreateWebhookMessage(
+                    useTTS = response.data.tts,
+                    content = response.data.content,
+                    embeds = response.data.embeds,
+                    allowedMentions = response.data.allowedMentions ?: AllowedMentions.NONE,
+                    flags = response.data.flags,
+                    components = emptyList(), // TODO: resolve conflict
+                ),
+                true
+            )
+            return
+        }
+
+
         if (hasResponded) {
             client.deleteOriginalInteractionResponse()
         }

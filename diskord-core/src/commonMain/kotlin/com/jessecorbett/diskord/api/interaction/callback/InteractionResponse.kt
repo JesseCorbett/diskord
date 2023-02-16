@@ -39,7 +39,7 @@ public data class ChannelMessageWithSource(
         @SerialName("embeds") val embeds: List<Embed> = emptyList(),
         @SerialName("allowed_mentions") val allowedMentions: AllowedMentions? = null,
         @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
-        @SerialName("components") val components: List<Message> = emptyList(),
+        @SerialName("components") val components: List<MessageComponent> = emptyList(),
         @SerialName("attachments") val attachments: List<Attachment> = emptyList()
     )
 }
