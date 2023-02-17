@@ -46,8 +46,12 @@ public data class ChannelMessageWithSource(
 
 @Serializable
 @SerialName("5")
-public class DeferredChannelMessageWithSource : InteractionResponse() {
+public class DeferredChannelMessageWithSource(public val data: Data) : InteractionResponse() {
     public val type: Int = 5
+    @Serializable
+    public data class Data(
+        @SerialName("flags") val flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE,
+    )
 }
 
 @Serializable

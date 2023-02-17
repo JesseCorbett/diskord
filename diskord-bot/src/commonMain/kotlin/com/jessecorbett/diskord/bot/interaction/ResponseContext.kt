@@ -18,9 +18,11 @@ public class ResponseContext internal constructor(private val context: BotContex
     /**
      * Acknowledges the interaction and informs the user and Discord that a response will be coming shortly
      */
-    public suspend fun ApplicationCommand.acknowledgeForFutureResponse() {
+    public suspend fun ApplicationCommand.acknowledgeForFutureResponse(ephemeral: Boolean = false) {
         hasAckedForFuture = true
-        respond(DeferredChannelMessageWithSource())
+        respond(DeferredChannelMessageWithSource(DeferredChannelMessageWithSource.Data(
+            if (ephemeral) InteractionCommandCallbackDataFlags.EPHEMERAL else InteractionCommandCallbackDataFlags.NONE
+        )))
     }
 
     /**
@@ -32,6 +34,13 @@ public class ResponseContext internal constructor(private val context: BotContex
         }.build()
 
         respond(response)
+    }
+
+    /**
+     * Deletes the original interaction response
+     */
+    public suspend fun ApplicationCommand.deleteOriginalResponse() {
+        client.deleteOriginalInteractionResponse()
     }
 
     private suspend fun ApplicationCommand.respond(response: InteractionResponse) {
