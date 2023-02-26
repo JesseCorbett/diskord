@@ -88,6 +88,7 @@ public data class CommandOption internal constructor(
                 minValue = JsonPrimitive(it.minValue),
                 maxValue = JsonPrimitive(it.maxValue)
             )
+            is AttachmentOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
             else -> throw IllegalArgumentException("Unknown option type " + it.type)
         }
     }

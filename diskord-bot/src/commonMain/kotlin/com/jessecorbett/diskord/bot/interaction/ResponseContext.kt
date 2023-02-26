@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.bot.interaction
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.common.Embed
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
 import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
 import com.jessecorbett.diskord.api.interaction.callback.DeferredChannelMessageWithSource

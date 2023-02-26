@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.bot.interaction
 
+import com.jessecorbett.diskord.api.common.Permissions
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
 import com.jessecorbett.diskord.api.interaction.CreateCommand
@@ -24,14 +25,14 @@ public class InteractionBuilder(
         name: String,
         description: String,
         guildId: String? = null,
-        availableByDefault: Boolean = true,
+        permissions: Permissions = Permissions.ALL,
         block: suspend ApplicationCommandBuilder<ApplicationCommand.ChatData>.() -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
             description = description,
             options = emptyList(),
-            defaultPermission = availableByDefault,
+            defaultPermission = permissions,
             type = CommandType.ChatInput
         )
 
@@ -42,14 +43,14 @@ public class InteractionBuilder(
     public fun userCommand(
         name: String,
         guildId: String? = null,
-        availableByDefault: Boolean = true,
+        permissions: Permissions = Permissions.ALL,
         callback: suspend ResponseContext.(ApplicationCommand, ApplicationCommand.UserData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
             description = "",
             options = emptyList(),
-            defaultPermission = availableByDefault,
+            defaultPermission = permissions,
             type = CommandType.User
         )
 
@@ -60,14 +61,14 @@ public class InteractionBuilder(
     public fun messageCommand(
         name: String,
         guildId: String? = null,
-        availableByDefault: Boolean = true,
+        permissions: Permissions = Permissions.ALL,
         callback: suspend ResponseContext.(ApplicationCommand, ApplicationCommand.MessageData) -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
             description = "",
             options = emptyList(),
-            defaultPermission = availableByDefault,
+            defaultPermission = permissions,
             type = CommandType.Message
         )
 
@@ -111,9 +112,9 @@ public class InteractionBuilder(
             if (interaction is ApplicationCommand && interaction.data.commandId == command?.id) {
                 val data = interaction.data
                 if (data is ApplicationCommand.ChatData) {
-                    builder.setResponses(data.options)
+                    builder.setResponses(data.options, data.resolvedResources)
                 } else {
-                    builder.setResponses(emptyList())
+                    builder.setResponses(emptyList(), null)
                 }
                 builder.callbackFunction.let { callback ->
                     /*

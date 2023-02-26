@@ -1,8 +1,11 @@
 package com.jessecorbett.diskord.bot.interaction
 
+import com.jessecorbett.diskord.api.common.Attachment
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
+import com.jessecorbett.diskord.api.interaction.AttachmentResponse
 import com.jessecorbett.diskord.api.interaction.BooleanResponse
 import com.jessecorbett.diskord.api.interaction.ChannelResponse
+import com.jessecorbett.diskord.api.interaction.CommandInteractionDataResolved
 import com.jessecorbett.diskord.api.interaction.CommandInteractionOptionResponse
 import com.jessecorbett.diskord.api.interaction.IntegerResponse
 import com.jessecorbett.diskord.api.interaction.MentionableResponse
@@ -23,8 +26,11 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
         callbackFunction = block
     }
 
-    internal fun setResponses(responses: List<CommandInteractionOptionResponse>) {
-        delegates.forEach { it.responses = responses }
+    internal fun setResponses(responses: List<CommandInteractionOptionResponse>, resources: CommandInteractionDataResolved?) {
+        delegates.forEach {
+            it.responses = responses
+            it.resources = resources
+        }
     }
 
     @InteractionModule
@@ -32,246 +38,147 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
         name: String,
         description: String,
         vararg choices: CommandOption.CommandOptionChoice,
-        autocomplete: Boolean = false
+        autocomplete: Boolean = false,
+        optional: Boolean = false
     ): CommandDelegate<String> {
         parameters += CommandOption.StringOption(
             name = name,
             description = description,
-            required = true,
+            required = !optional,
             choices = choices.toList(),
             autocomplete = autocomplete
         )
-        return CommandDelegate<String>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<StringResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalStringParameter(
-        name: String,
-        description: String,
-        vararg choices: CommandOption.CommandOptionChoice,
-        autocomplete: Boolean = false
-    ): CommandDelegate<String?> {
-        parameters += CommandOption.StringOption(
-            name = name,
-            description = description,
-            required = false,
-            choices = choices.toList(),
-            autocomplete = autocomplete
-        )
-        return CommandDelegate<String?>(name) { responses ->
-            responses.filterIsInstance<StringResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun booleanParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<Boolean> {
         parameters += CommandOption.BooleanOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<Boolean>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<BooleanResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalBooleanParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<Boolean?> {
-        parameters += CommandOption.BooleanOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<Boolean?>(name) { responses ->
-            responses.filterIsInstance<BooleanResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun intParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<Int> {
         parameters += CommandOption.BooleanOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<Int>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<IntegerResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalIntParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<Int?> {
-        parameters += CommandOption.IntegerOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<Int?>(name) { responses ->
-            responses.filterIsInstance<IntegerResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun floatParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<Float> {
         parameters += CommandOption.NumberOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<Float>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<NumberResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalFloatParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<Float?> {
-        parameters += CommandOption.NumberOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<Float?>(name) { responses ->
-            responses.filterIsInstance<NumberResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun userParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<String> {
         parameters += CommandOption.UserOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<String>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<UserResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalUserParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<String?> {
-        parameters += CommandOption.UserOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<String?>(name) { responses ->
-            responses.filterIsInstance<UserResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun channelParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<String> {
         parameters += CommandOption.ChannelOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<String>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<ChannelResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalChannelParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<String?> {
-        parameters += CommandOption.ChannelOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<String?>(name) { responses ->
-            responses.filterIsInstance<ChannelResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun roleParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<String> {
         parameters += CommandOption.RoleOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<String>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<RoleResponse>().find { it.name == name }!!.value!! // TODO error handling
-        }.also { delegates += it }
-    }
-
-    @InteractionModule
-    public fun optionalRoleParameter(
-        name: String,
-        description: String
-    ): CommandDelegate<String?> {
-        parameters += CommandOption.RoleOption(
-            name = name,
-            description = description,
-            required = false
-        )
-        return CommandDelegate<String?>(name) { responses ->
-            responses.filterIsInstance<RoleResponse>().find { it.name == name }?.value
         }.also { delegates += it }
     }
 
     @InteractionModule
     public fun mentionableParameter(
         name: String,
-        description: String
+        description: String,
+        optional: Boolean = false
     ): CommandDelegate<String> {
         parameters += CommandOption.MentionableOption(
             name = name,
             description = description,
-            required = true
+            required = !optional
         )
-        return CommandDelegate<String>(name) { responses ->
+        return CommandDelegate(name) { responses ->
             responses.filterIsInstance<MentionableResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
 
     @InteractionModule
-    public fun optionalMentionableParameter(
+    public fun attachmentParameter(
         name: String,
-        description: String
-    ): CommandDelegate<String?> {
-        parameters += CommandOption.MentionableOption(
+        description: String,
+        optional: Boolean = false
+    ): CommandDelegate<Attachment> {
+        parameters += CommandOption.AttachmentOption(
             name = name,
             description = description,
-            required = false
+            required = !optional
         )
-        return CommandDelegate<String?>(name) { responses ->
-            responses.filterIsInstance<MentionableResponse>().find { it.name == name }?.value
+        return CommandDelegate(name) { responses ->
+            val snowflake = responses.filterIsInstance<AttachmentResponse>().find { it.name == name }!!.value!! // TODO error handling
+            resources!!.attachments.getValue(snowflake)
         }.also { delegates += it }
     }
 
@@ -280,6 +187,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
         private val finder: CommandDelegate<T>.(List<CommandInteractionOptionResponse>) -> T
     ) {
         internal var responses: List<CommandInteractionOptionResponse> = emptyList()
+        internal var resources: CommandInteractionDataResolved? = null
 
         public operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
             return finder(responses)

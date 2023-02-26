@@ -1,8 +1,8 @@
 package com.jessecorbett.diskord.api.webhook
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.common.Embed
 import com.jessecorbett.diskord.api.common.MessageComponent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

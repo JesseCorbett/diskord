@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.common
 
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.interaction.InteractionType
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer

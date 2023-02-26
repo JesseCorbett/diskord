@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.interaction
 
+import com.jessecorbett.diskord.api.common.Attachment
 import com.jessecorbett.diskord.api.common.GuildMember
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.common.PartialChannel
@@ -71,7 +72,7 @@ public data class ApplicationCommand(
     public data class ChatData(
         @SerialName("id") override val commandId: String,
         @SerialName("name") override val commandName: String,
-        @SerialName("resolved") public val convertedUsersRolesChannels: CommandInteractionDataResolved? = null,
+        @SerialName("resolved") public val resolvedResources: CommandInteractionDataResolved? = null,
         @SerialName("options") public val options: List<CommandInteractionOptionResponse>
     ) : Data()
 
@@ -152,9 +153,9 @@ public data class CommandInteractionDataResolved(
     @SerialName("members") val members: Map<String, PartialMember> = emptyMap(),
     @SerialName("roles") val roles: Map<String, Role> = emptyMap(),
     @SerialName("channels") val channels: Map<String, PartialChannel> = emptyMap(),
-
     // Note: API denotes "partial" but does not mention what constitutes a partial message
     @SerialName("messages") val messages: Map<String, Message> = emptyMap(),
+    @SerialName("attachments") val attachments: Map<String, Attachment> = emptyMap()
 )
 
 @Serializable
@@ -230,4 +231,11 @@ public data class MentionableResponse(
 public data class NumberResponse(
     override val name: String,
     val value: Float?,
+) : CommandInteractionOptionResponse()
+
+@Serializable
+@SerialName("11")
+public data class AttachmentResponse(
+    override val name: String,
+    val value: String?,
 ) : CommandInteractionOptionResponse()

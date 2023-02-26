@@ -16,7 +16,7 @@ public data class Command(
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,
     // https://discord.com/developers/docs/reference#locales
-    @SerialName("description_localizations") val localizedDescriptions: Map<String, String> = emptyMap(),
+    @SerialName("description_localizations") val localizedDescriptions: Map<String, String>? = emptyMap(),
     @SerialName("options") val options: List<CommandOption> = emptyList(),
     @SerialName("default_member_permissions") val defaultMemberPermissions: Permissions? = null,
     @SerialName("dm_permission") val availableInDMs: Boolean = true,

@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.api.interaction.callback
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.common.Embed
+import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.interaction.MessageComponent
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
