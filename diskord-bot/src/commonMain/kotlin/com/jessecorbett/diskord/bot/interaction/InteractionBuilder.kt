@@ -7,13 +7,16 @@ import com.jessecorbett.diskord.api.interaction.command.Command
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.bot.BotContext
+import mu.KotlinLogging
 
 @InteractionModule
 public class InteractionBuilder(
     private val applicationId: String,
     private val dispatcher: EventDispatcher<Unit>,
-    private val botContext: BotContext
+    private val botContext: BotContext,
+    private val existingCommands: List<Command>
 ) {
+    private val logger = KotlinLogging.logger {  }
     internal val commandSet: MutableMap<String?, Set<String>> = mutableMapOf(null to emptySet())
 
     @InteractionModule
@@ -71,7 +74,7 @@ public class InteractionBuilder(
         interactionCommand(createCommand, guildId, block = { callback(callback) })
     }
 
-    private fun <D: ApplicationCommand.Data> interactionCommand(
+    private fun <D : ApplicationCommand.Data> interactionCommand(
         createCommand: CreateCommand,
         guildId: String? = null,
         block: suspend ApplicationCommandBuilder<D>.() -> Unit
@@ -83,7 +86,20 @@ public class InteractionBuilder(
 
         dispatcher.onReady {
             builder.block()
+            // Assemble the command + parameters
             val commandWithParams = createCommand.copy(options = builder.parameters.map { CommandOption.fromOption(it) })
+
+            // Find the existing command, if any
+            val existing = existingCommands.filter { it.guildId == guildId }.firstOrNull { it.name == commandWithParams.name }
+
+            // Check if the command already exists and needs updated
+            if (existing != null && commandWithParams.options == existing.options) {
+                logger.debug { "Command with name ${existing.name} and guildId $guildId already exists in current form" }
+                command = existing
+                return@onReady
+            }
+
+            // Create the command
             command = if (guildId != null) {
                 botContext.command(applicationId).createGuildCommand(guildId, commandWithParams)
             } else {

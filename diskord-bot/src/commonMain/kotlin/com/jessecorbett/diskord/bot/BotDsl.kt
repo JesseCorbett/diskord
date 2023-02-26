@@ -29,7 +29,7 @@ public class BotBase {
     init {
         // Simple module for logging bot state and handling interactions pings
         registerModule { dispatcher, _, _ ->
-            dispatcher.onReady { logger.info { "Bot has started and is ready for events" } }
+            dispatcher.onReady { logger.info { "Bot has started and is receiving events" } }
             dispatcher.onResume { logger.info { "Bot has resumed a previous websocket session" } }
         }
     }
