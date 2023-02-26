@@ -118,12 +118,18 @@ public data class MessageInteraction(
 )
 
 @Serializable(with = MessageComponentSerializer::class)
-public sealed class MessageComponent
+public sealed class MessageComponent {
+    public abstract val type: Int
+}
 
 @Serializable
 public data class ActionRow(
     @SerialName("components") public val components: List<MessageComponent>
-) : MessageComponent()
+) : MessageComponent() {
+    public constructor(component: MessageComponent) : this(listOf(component))
+
+    override val type: Int = 1
+}
 
 @Serializable
 public data class Button(
@@ -132,18 +138,91 @@ public data class Button(
     @SerialName("style") public val style: ButtonStyle,
     @SerialName("label") public val label: String? = null,
     @SerialName("emoji") public val emoji: PartialEmoji? = null,
-    @SerialName("url") public val url: String? = null,
-) : MessageComponent()
+    @SerialName("url") public val url: String? = null
+) : MessageComponent() {
+    override val type: Int = 2
+}
 
 @Serializable
-public data class SelectMenu(
+public data class TextSelectMenu(
     @SerialName("custom_id") public val customId: String,
     @SerialName("disabled") public val disabled: Boolean = false,
     @SerialName("options") public val options: List<SelectOption>,
     @SerialName("placeholder") public val placeholder: String? = null,
     @SerialName("min_values") public val minValues: Int = 1,
+    @SerialName("max_values") public val maxValues: Int = 1
+) : MessageComponent() {
+    override val type: Int = 3
+}
+
+@Serializable
+public data class TextInput(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("label") public val label: String,
+    @SerialName("style") public val style: TextInputStyle = TextInputStyle.Short,
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_length") public val mindLength: Int = 0,
+    @SerialName("max_length") public val maxLength: Int = 4000,
+    @SerialName("required") public val required: Boolean = true,
+    @SerialName("value") public val presetValue: String? = null
+) : MessageComponent() {
+    override val type: Int = 4
+}
+
+@Serializable(with = TextInputStyleSerializer::class)
+public enum class TextInputStyle(public override val code: Int) : CodeEnum {
+    UNKNOWN(-1),
+    Short(1),
+    Paragraph(2)
+}
+
+public class TextInputStyleSerializer : CodeEnumSerializer<TextInputStyle>(TextInputStyle.UNKNOWN, TextInputStyle.values())
+
+@Serializable
+public data class UserSelectMenu(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_values") public val minValues: Int = 1,
+    @SerialName("max_values") public val maxValues: Int = 1
+) : MessageComponent() {
+    override val type: Int = 5
+}
+
+@Serializable
+public data class RoleSelectMenu(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_values") public val minValues: Int = 1,
     @SerialName("max_values") public val maxValues: Int = 1,
-) : MessageComponent()
+) : MessageComponent() {
+    override val type: Int = 6
+}
+
+@Serializable
+public data class MentionableSelectMenu(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_values") public val minValues: Int = 1,
+    @SerialName("max_values") public val maxValues: Int = 1,
+) : MessageComponent() {
+    override val type: Int = 7
+}
+
+@Serializable
+public data class ChannelSelectMenu(
+    @SerialName("custom_id") public val customId: String,
+    @SerialName("disabled") public val disabled: Boolean = false,
+    @SerialName("channel_types") public val channelTypes: List<ChannelType> = ChannelType.values().toList(),
+    @SerialName("placeholder") public val placeholder: String? = null,
+    @SerialName("min_values") public val minValues: Int = 1,
+    @SerialName("max_values") public val maxValues: Int = 1,
+) : MessageComponent() {
+    override val type: Int = 8
+}
 
 @Serializable(with = ButtonStyleSerializer::class)
 public enum class ButtonStyle(public override val code: Int) : CodeEnum {

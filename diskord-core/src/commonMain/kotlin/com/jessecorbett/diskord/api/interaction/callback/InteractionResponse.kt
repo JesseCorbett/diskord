@@ -1,10 +1,10 @@
 package com.jessecorbett.diskord.api.interaction.callback
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
-import com.jessecorbett.diskord.api.common.Attachment
 import com.jessecorbett.diskord.api.channel.Embed
+import com.jessecorbett.diskord.api.common.Attachment
 import com.jessecorbett.diskord.api.common.Message
-import com.jessecorbett.diskord.api.interaction.MessageComponent
+import com.jessecorbett.diskord.api.common.MessageComponent
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -54,12 +54,18 @@ public class DeferredChannelMessageWithSource(public val data: Data) : Interacti
     )
 }
 
+/**
+ * Only for modals
+ */
 @Serializable
 @SerialName("6")
 public class DeferredUpdateMessage : InteractionResponse() {
     public val type: Int = 6
 }
 
+/**
+ * Only for modals
+ */
 @Serializable
 @SerialName("7")
 public data class UpdateMessage(
@@ -92,7 +98,7 @@ public data class ApplicationCommandAutocompleteResult(
 
 @Serializable
 @SerialName("9")
-public data class ModalResult(
+public data class CreateModalResult(
     public val data: Data
 ) : InteractionResponse() {
     public val type: Int = 9

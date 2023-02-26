@@ -2,23 +2,30 @@ package com.jessecorbett.diskord.bot.interaction
 
 import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.channel.Embed
+import com.jessecorbett.diskord.api.common.ActionRow
 import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.interaction.ApplicationCommand
+import com.jessecorbett.diskord.api.common.TextInput
+import com.jessecorbett.diskord.api.interaction.Interaction
+import com.jessecorbett.diskord.api.interaction.ModalSubmit
 import com.jessecorbett.diskord.api.interaction.callback.ChannelMessageWithSource
+import com.jessecorbett.diskord.api.interaction.callback.CreateModalResult
 import com.jessecorbett.diskord.api.interaction.callback.DeferredChannelMessageWithSource
 import com.jessecorbett.diskord.api.interaction.callback.InteractionCommandCallbackDataFlags
 import com.jessecorbett.diskord.api.interaction.callback.InteractionResponse
 import com.jessecorbett.diskord.api.webhook.CreateWebhookMessage
 import com.jessecorbett.diskord.bot.BotContext
 
-public class ResponseContext internal constructor(private val context: BotContext) : BotContext by context {
+public class ResponseContext internal constructor(
+    private val context: BotContext,
+    private val registerModal: (String, suspend ResponseContext.(ModalSubmit) -> Unit) -> Unit
+) : BotContext by context {
     private var hasResponded = false
     private var hasAckedForFuture = false
 
     /**
      * Acknowledges the interaction and informs the user and Discord that a response will be coming shortly
      */
-    public suspend fun ApplicationCommand.acknowledgeForFutureResponse(ephemeral: Boolean = false) {
+    public suspend fun Interaction.acknowledgeForFutureResponse(ephemeral: Boolean = false) {
         hasAckedForFuture = true
         respond(DeferredChannelMessageWithSource(DeferredChannelMessageWithSource.Data(
             if (ephemeral) InteractionCommandCallbackDataFlags.EPHEMERAL else InteractionCommandCallbackDataFlags.NONE
@@ -28,7 +35,7 @@ public class ResponseContext internal constructor(private val context: BotContex
     /**
      * Responds to the interaction with a channel message
      */
-    public suspend fun ApplicationCommand.respond(builder: suspend ResponseBuilder.() -> Unit) {
+    public suspend fun Interaction.respond(builder: suspend ResponseBuilder.() -> Unit) {
         val response = ResponseBuilder().apply {
             builder()
         }.build()
@@ -39,11 +46,29 @@ public class ResponseContext internal constructor(private val context: BotContex
     /**
      * Deletes the original interaction response
      */
-    public suspend fun ApplicationCommand.deleteOriginalResponse() {
+    public suspend fun Interaction.deleteOriginalResponse() {
         client.deleteOriginalInteractionResponse()
     }
 
-    private suspend fun ApplicationCommand.respond(response: InteractionResponse) {
+    @InteractionModule
+    public suspend fun Interaction.createModal(
+        modalId: String,
+        title: String,
+        vararg inputs: TextInput,
+        callback: suspend ResponseContext.(ModalSubmit) -> Unit
+    ) {
+        val computedId = "$id:$modalId"
+        val response = CreateModalResult(CreateModalResult.Data(
+            customId = computedId,
+            modalTitle = title,
+            components = inputs.map { ActionRow(it) }
+        ))
+        respond(response)
+
+        registerModal(computedId, callback)
+    }
+
+    private suspend fun Interaction.respond(response: InteractionResponse) {
         if (hasAckedForFuture && response is ChannelMessageWithSource) {
             context.webhook(applicationId).execute(
                 token,

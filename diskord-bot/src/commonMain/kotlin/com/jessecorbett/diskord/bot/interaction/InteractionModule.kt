@@ -17,7 +17,7 @@ public annotation class InteractionModule
 public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuilder.() -> Unit) {
     registerModule { dispatcher, context, configuring ->
 
-        // Handle pings automatically
+        // Handle pings automatically & modal responses
         dispatcher.onInteractionCreate { interaction ->
             if (interaction is InteractionPing) {
                 context.interaction(context.botUser.id, interaction.token).createInteractionResponse(

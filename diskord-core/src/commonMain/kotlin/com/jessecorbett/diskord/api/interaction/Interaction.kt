@@ -22,6 +22,7 @@ public sealed class Interaction {
     public abstract val applicationId: String
     public abstract val token: String
     public abstract val version: Int
+    public abstract val appPermissions: String?
 }
 
 @Serializable(with = InteractionTypeSerializer::class)
@@ -41,7 +42,8 @@ public data class InteractionPing(
     @SerialName("id") override val id: String,
     @SerialName("application_id") override val applicationId: String,
     @SerialName("token") override val token: String,
-    @SerialName("version") override val version: Int = 1
+    @SerialName("version") override val version: Int = 1,
+    @SerialName("app_permissions") override val appPermissions: String? = null
 ) : Interaction()
 
 @Serializable
@@ -51,6 +53,7 @@ public data class ApplicationCommand(
     @SerialName("application_id") override val applicationId: String,
     @SerialName("token") override val token: String,
     @SerialName("version") override val version: Int,
+    @SerialName("app_permissions") override val appPermissions: String? = null,
     @SerialName("data") val data: Data,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("channel_id") val channelId: String? = null,
@@ -96,19 +99,20 @@ public data class ApplicationCommand(
 @Serializable
 @SerialName("3")
 public data class MessageComponent(
-    @SerialName("id") val id: String,
-    @SerialName("application_id") val applicationId: String,
+    @SerialName("id") override val id: String,
+    @SerialName("application_id") override val applicationId: String,
     @SerialName("data") val data: Data,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("channel_id") val channelId: String? = null,
     @SerialName("member") val member: GuildMember? = null,
     @SerialName("user") val user: User? = null,
-    @SerialName("token") val token: String,
-    @SerialName("version") val version: Long,
+    @SerialName("token") override val token: String,
+    @SerialName("version") override val version: Int,
+    @SerialName("app_permissions") override val appPermissions: String? = null,
     @SerialName("message") val message: Message? = null,
     @SerialName("locale") val userLocale: String? = null,
     @SerialName("guild_locale") val guildLocale: String? = null
-) {
+) : Interaction() {
     @Serializable
     public data class Data(
         @SerialName("custom_id") public val customId: String,
@@ -120,19 +124,53 @@ public data class MessageComponent(
 @Serializable
 @SerialName("4")
 public data class AutocompletePrompt(
-    @SerialName("id") val id: String,
-    @SerialName("application_id") val applicationId: String,
+    @SerialName("id") override val id: String,
+    @SerialName("application_id") override val applicationId: String,
     @SerialName("data") val data: CommandInteractionData? = null,
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("channel_id") val channelId: String? = null,
     @SerialName("member") val member: GuildMember? = null,
     @SerialName("user") val user: User? = null,
-    @SerialName("token") val token: String,
-    @SerialName("version") val version: Long,
+    @SerialName("token") override val token: String,
+    @SerialName("version") override val version: Int,
+    @SerialName("app_permissions") override val appPermissions: String? = null,
     @SerialName("message") val message: Message? = null,
     @SerialName("locale") val userLocale: String? = null,
     @SerialName("guild_locale") val guildLocale: String? = null
-)
+) : Interaction()
+
+@Serializable
+@SerialName("5")
+public data class ModalSubmit(
+    @SerialName("id") override val id: String,
+    @SerialName("application_id") override val applicationId: String,
+    @SerialName("data") val data: Data,
+    @SerialName("guild_id") val guildId: String? = null,
+    @SerialName("channel_id") val channelId: String? = null,
+    @SerialName("member") val member: GuildMember? = null,
+    @SerialName("user") val user: User? = null,
+    @SerialName("token") override val token: String,
+    @SerialName("version") override val version: Int,
+    @SerialName("app_permissions") override val appPermissions: String? = null,
+    @SerialName("locale") val userLocale: String? = null,
+    @SerialName("guild_locale") val guildLocale: String? = null
+) : Interaction() {
+    @Serializable
+    public data class Data(
+        @SerialName("custom_id") public val modalCustomId: String,
+        @SerialName("components") public val componentResponses: List<ActionRowResponse>
+    )
+
+    @Serializable
+    public data class ActionRowResponse(public val components: List<ComponentResponse>)
+
+    @Serializable
+    public data class ComponentResponse(
+        public val type: Int,
+        @SerialName("custom_id") public val customId: String,
+        public val value: String
+    )
+}
 
 @Serializable
 public data class CommandInteractionData(

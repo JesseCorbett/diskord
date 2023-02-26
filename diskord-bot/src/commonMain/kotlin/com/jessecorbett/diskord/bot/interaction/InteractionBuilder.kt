@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.common.Permissions
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
 import com.jessecorbett.diskord.api.interaction.ApplicationCommand
 import com.jessecorbett.diskord.api.interaction.CreateCommand
+import com.jessecorbett.diskord.api.interaction.ModalSubmit
 import com.jessecorbett.diskord.api.interaction.command.Command
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.api.interaction.command.CommandType
@@ -108,6 +109,8 @@ public class InteractionBuilder(
             }
         }
 
+        val pendingModals = mutableMapOf<String, suspend ResponseContext.(ModalSubmit) -> Unit>()
+        val addModalCallback = { mid: String, f: suspend ResponseContext.(ModalSubmit) -> Unit -> pendingModals[mid] = f }
         dispatcher.onInteractionCreate { interaction ->
             if (interaction is ApplicationCommand && interaction.data.commandId == command?.id) {
                 val data = interaction.data
@@ -121,8 +124,12 @@ public class InteractionBuilder(
                     Cast should be safe as we should never have command ID match but somehow have the wrong Data subclass
                      */
                     @Suppress("UNCHECKED_CAST")
-                    ResponseContext(botContext).callback(interaction, data as D)
+                    ResponseContext(botContext, addModalCallback).callback(interaction, data as D)
                 }
+            } else if (interaction is ModalSubmit) {
+                val pending = pendingModals[interaction.data.modalCustomId] ?: return@onInteractionCreate
+                pendingModals.remove(interaction.data.modalCustomId)
+                ResponseContext(botContext, addModalCallback).pending(interaction)
             }
         }
     }
