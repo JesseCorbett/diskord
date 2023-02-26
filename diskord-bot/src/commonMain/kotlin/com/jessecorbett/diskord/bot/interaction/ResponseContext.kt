@@ -52,20 +52,18 @@ public class ResponseContext internal constructor(
 
     @InteractionModule
     public suspend fun Interaction.createModal(
-        modalId: String,
         title: String,
         vararg inputs: TextInput,
         callback: suspend ResponseContext.(ModalSubmit) -> Unit
     ) {
-        val computedId = "$id:$modalId"
         val response = CreateModalResult(CreateModalResult.Data(
-            customId = computedId,
+            customId = id,
             modalTitle = title,
             components = inputs.map { ActionRow(it) }
         ))
         respond(response)
 
-        registerModal(computedId, callback)
+        registerModal(id, callback)
     }
 
     private suspend fun Interaction.respond(response: InteractionResponse) {
