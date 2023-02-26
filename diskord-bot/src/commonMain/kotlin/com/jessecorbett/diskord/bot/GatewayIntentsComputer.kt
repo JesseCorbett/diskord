@@ -1,14 +1,53 @@
 package com.jessecorbett.diskord.bot
 
-import com.jessecorbett.diskord.api.common.*
+import com.jessecorbett.diskord.api.common.BulkMessageDelete
+import com.jessecorbett.diskord.api.common.Channel
+import com.jessecorbett.diskord.api.common.Guild
+import com.jessecorbett.diskord.api.common.GuildThread
+import com.jessecorbett.diskord.api.common.Message
+import com.jessecorbett.diskord.api.common.MessageDelete
+import com.jessecorbett.diskord.api.common.ThreadDelete
+import com.jessecorbett.diskord.api.common.ThreadListSync
+import com.jessecorbett.diskord.api.common.ThreadMember
+import com.jessecorbett.diskord.api.common.ThreadMembersUpdate
+import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.common.VoiceState
 import com.jessecorbett.diskord.api.gateway.EventDispatcher
-import com.jessecorbett.diskord.api.gateway.events.*
+import com.jessecorbett.diskord.api.gateway.events.ChannelPinUpdate
+import com.jessecorbett.diskord.api.gateway.events.CreatedGuild
+import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
+import com.jessecorbett.diskord.api.gateway.events.GuildBan
+import com.jessecorbett.diskord.api.gateway.events.GuildEmojiUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildIntegrationUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildInviteCreate
+import com.jessecorbett.diskord.api.gateway.events.GuildInviteDelete
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberAdd
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberRemove
+import com.jessecorbett.diskord.api.gateway.events.GuildMemberUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildMembersChunk
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleCreate
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleDelete
+import com.jessecorbett.diskord.api.gateway.events.GuildRoleUpdate
+import com.jessecorbett.diskord.api.gateway.events.GuildStickersUpdate
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionAdd
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemove
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemoveAll
+import com.jessecorbett.diskord.api.gateway.events.MessageReactionRemoveEmoji
+import com.jessecorbett.diskord.api.gateway.events.PresenceUpdate
+import com.jessecorbett.diskord.api.gateway.events.Ready
+import com.jessecorbett.diskord.api.gateway.events.Resumed
+import com.jessecorbett.diskord.api.gateway.events.TypingStart
+import com.jessecorbett.diskord.api.gateway.events.UnavailableGuild
+import com.jessecorbett.diskord.api.gateway.events.VoiceServerUpdate
+import com.jessecorbett.diskord.api.gateway.events.WebhookUpdate
 import com.jessecorbett.diskord.api.gateway.model.GatewayIntent
 import com.jessecorbett.diskord.api.interaction.Interaction
 import kotlinx.serialization.json.JsonElement
 
-internal class GatewayIntentsComputer : EventDispatcher<Unit> {
+internal class GatewayIntentsComputer : EventDispatcher {
     val intents: MutableList<GatewayIntent> = mutableListOf()
+
+    override fun onInit(handler: suspend (Ready) -> Unit) {}
 
     override fun onReady(handler: suspend (Ready) -> Unit) {}
 
@@ -190,9 +229,5 @@ internal class GatewayIntentsComputer : EventDispatcher<Unit> {
 
     override fun onInteractionCreate(handler: suspend (Interaction) -> Unit) {}
 
-    override fun <C> forType(): EventDispatcher<C> {
-        throw NotImplementedError("forType intentionally not implemented for this class")
-    }
-
-    override suspend fun handleEvent(event: DiscordEvent, json: JsonElement): List<Unit> = emptyList()
+    override suspend fun handleEvent(event: DiscordEvent, json: JsonElement) {}
 }

@@ -12,7 +12,7 @@ import mu.KotlinLogging
 @InteractionModule
 public class InteractionBuilder(
     private val applicationId: String,
-    private val dispatcher: EventDispatcher<Unit>,
+    private val dispatcher: EventDispatcher,
     private val botContext: BotContext,
     private val existingCommands: List<Command>
 ) {
@@ -84,7 +84,7 @@ public class InteractionBuilder(
         var command: Command? = null
         val builder = ApplicationCommandBuilder<D>()
 
-        dispatcher.onReady {
+        dispatcher.onInit {
             builder.block()
             // Assemble the command + parameters
             val commandWithParams = createCommand.copy(options = builder.parameters.map { CommandOption.fromOption(it) })
@@ -96,7 +96,7 @@ public class InteractionBuilder(
             if (existing != null && commandWithParams.options == existing.options) {
                 logger.debug { "Command with name ${existing.name} and guildId $guildId already exists in current form" }
                 command = existing
-                return@onReady
+                return@onInit
             }
 
             // Create the command

@@ -44,7 +44,7 @@ public class BotBase {
          * @param context Bot related context
          * @param configuring Whether this invocation is the config registration (false for actual runs)
          */
-        public suspend fun register(dispatcher: EventDispatcher<Unit>, context: BotContext, configuring: Boolean)
+        public suspend fun register(dispatcher: EventDispatcher, context: BotContext, configuring: Boolean)
     }
 
     /**

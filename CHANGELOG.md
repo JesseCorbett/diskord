@@ -1,6 +1,15 @@
 # Changelog
 
-## [3.0.0] - 2022-07-XX
+## [4.0.0] - 2023-03-XX
+
+### Added 
+- Completed the Interactions API
+- Synthetic `onInit` event which runs once at the start of the bot lifecycle
+
+### Changed
+- Various API improvements and bug fixes
+
+## [3.0.0] - 2022-07-01
 
 ### Added
 - Interactions API!

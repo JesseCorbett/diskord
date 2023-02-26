@@ -34,7 +34,7 @@ public class GatewaySession(
     private val intents: GatewayIntents,
     private val shardCount: Int = 0,
     private val shardNumber: Int = 0,
-    private val eventDispatcher: EventDispatcher<Unit>
+    private val eventDispatcher: EventDispatcher
 ) {
     private val logger = KotlinLogging.logger {}
 

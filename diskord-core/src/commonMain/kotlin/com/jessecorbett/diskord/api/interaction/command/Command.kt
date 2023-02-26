@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.interaction.command
 
+import com.jessecorbett.diskord.api.common.Permissions
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer
 import kotlinx.serialization.SerialName
@@ -14,8 +15,12 @@ public data class Command(
     @SerialName("guild_id") val guildId: String? = null,
     @SerialName("name") val name: String,
     @SerialName("description") val description: String,
+    // https://discord.com/developers/docs/reference#locales
+    @SerialName("description_localizations") val localizedDescriptions: Map<String, String> = emptyMap(),
     @SerialName("options") val options: List<CommandOption> = emptyList(),
-    @SerialName("default_permission") val defaultPermission: Boolean = true,
+    @SerialName("default_member_permissions") val defaultMemberPermissions: Permissions? = null,
+    @SerialName("dm_permission") val availableInDMs: Boolean = true,
+    @SerialName("nsfw") val nsfw: Boolean = false,
     @SerialName("version") val version: Long
 )
 
