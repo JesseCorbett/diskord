@@ -106,7 +106,7 @@ public data class GuildVoiceChannel(
     @SerialName("name") override val name: String,
     @SerialName("bitrate") val bitrate: Int,
     @SerialName("user_limit") val userLimit: Int,
-    @SerialName("parent_id") val parentId: String?,
+    @SerialName("parent_id") val parentId: String? = null,
     @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("rtc_region") val rtcRegion: String? = null,
 ) : Channel(), GuildChannel
@@ -147,7 +147,7 @@ public data class GuildNewsChannel(
     @SerialName("nsfw") override val nsfw: Boolean? = null,
     @SerialName("last_message_id") override val lastMessageId: String?,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("last_pin_timestamp") override val lastPinTime: String? = null
 ) : Channel(), GuildText
 
@@ -160,7 +160,7 @@ public data class GuildStoreChannel(
     @SerialName("permission_overwrites") override val permissionOverwrites: List<Overwrite> = emptyList(),
     @SerialName("name") override val name: String,
     @SerialName("nsfw") override val nsfw: Boolean? = null,
-    @SerialName("parent_id") val parentId: String?,
+    @SerialName("parent_id") val parentId: String? = null,
 ) : Channel(), GuildChannel
 
 @Serializable
@@ -182,7 +182,7 @@ public data class GuildNewsThread(
     @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("message_count") override val messageCount: Int,
     @SerialName("member_count") override val memberCount: Int,
     @SerialName("thread_metadata") override val metadata: ThreadMetadata? = null,
@@ -199,7 +199,7 @@ public data class GuildPublicThread(
     @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("message_count") override val messageCount: Int,
     @SerialName("member_count") override val memberCount: Int,
     @SerialName("thread_metadata") override val metadata: ThreadMetadata? = null,
@@ -216,7 +216,7 @@ public data class GuildPrivateThread(
     @SerialName("guild_id") override val guildId: String? = null,
     @SerialName("rate_limit_per_user") override val rateLimitPerUser: Int? = null,
     @SerialName("owner_id") override val ownerId: String?,
-    @SerialName("parent_id") override val parentId: String?,
+    @SerialName("parent_id") override val parentId: String? = null,
     @SerialName("message_count") override val messageCount: Int,
     @SerialName("member_count") override val memberCount: Int,
     @SerialName("thread_metadata") override val metadata: ThreadMetadata? = null,

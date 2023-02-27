@@ -76,7 +76,7 @@ public data class ApplicationCommand(
         @SerialName("id") override val commandId: String,
         @SerialName("name") override val commandName: String,
         @SerialName("resolved") public val resolvedResources: CommandInteractionDataResolved? = null,
-        @SerialName("options") public val options: List<CommandInteractionOptionResponse>
+        @SerialName("options") public val options: List<CommandInteractionOptionResponse> = emptyList()
     ) : Data()
 
     @Serializable
