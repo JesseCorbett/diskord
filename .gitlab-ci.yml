@@ -7,10 +7,21 @@ stages:
   - build
   - release
 
+publishDevelopmentVersion:
+  stage: release
+  script:
+    - gradle build publishAllPublicationsToOssrhSnapshotsRepository
+  tags:
+    - docker
+  only:
+    - develop
+
 test:
   stage: build
   script:
     - gradle check
+  only:
+    - master
 
 pages:
   stage: build
@@ -21,15 +32,6 @@ pages:
       - public/
   only:
     - master
-
-publishDevelopmentVersion:
-  stage: release
-  script:
-    - gradle publishAllPublicationsToOssrhSnapshotsRepository
-  tags:
-    - docker
-  only:
-    - develop
 
 publishMavenCentralVersion:
   stage: release
