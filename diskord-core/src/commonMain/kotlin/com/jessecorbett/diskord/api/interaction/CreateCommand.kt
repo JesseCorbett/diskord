@@ -12,7 +12,7 @@ public data class CreateCommand(
     @SerialName("name_localizations") val localizedNames: Map<String, String>? = null,
     @SerialName("description") val description: String,
     @SerialName("description_localizations") val localizedDescriptions: Map<String, String>? = null,
-    @SerialName("options") val options: List<CommandOption> = emptyList(),
+    @SerialName("options") val options: List<CommandOption>? = null,
     @SerialName("default_member_permissions") val defaultPermission: Permissions? = null,
     @SerialName("dm_permission") val allowedInDms: Boolean = true,
     @SerialName("nsfw") val nsfw: Boolean = false,

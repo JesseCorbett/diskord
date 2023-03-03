@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.interaction.InteractionPing
 import com.jessecorbett.diskord.api.interaction.callback.PingResponse
 import com.jessecorbett.diskord.bot.BotBase
 import com.jessecorbett.diskord.util.getAllGuilds
+import kotlinx.coroutines.delay
 
 @DslMarker
 public annotation class InteractionModule
@@ -30,6 +31,7 @@ public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuild
         val commandClient = context.command(context.botUser.id)
 
         val existingCommands = (context.global().getAllGuilds().map { it.id } + null).flatMap { guildId ->
+            delay(1000)
             if (guildId != null) {
                 commandClient.getGuildCommands(guildId)
             } else commandClient.getGlobalCommands()
