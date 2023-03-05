@@ -96,7 +96,7 @@ public class InteractionBuilder(
 
             // Check if the command already exists and needs updated
             if (existing != null && commandWithParams.options == existing.options) {
-                logger.info { "Command with name ${existing.name} and guildId $guildId already exists in current form" }
+                logger.debug { "Command with name ${existing.name} and guildId $guildId already exists in current form" }
                 command = existing
                 return@onInit
             }
