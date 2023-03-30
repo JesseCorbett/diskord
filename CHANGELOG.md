@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.0.0] - 2023-03-XX
+## [4.0.0] - 2023-03-30
 
 ### Added 
 - Completed the Interactions API
