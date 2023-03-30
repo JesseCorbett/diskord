@@ -19,7 +19,7 @@ public class AutoGateway @OptIn(DiskordInternals::class) constructor(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     restClient: RestClient,
-    private val eventDispatcher: EventDispatcher<Unit>,
+    private val eventDispatcher: EventDispatcher,
     sessionDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 

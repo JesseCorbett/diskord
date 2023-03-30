@@ -1,5 +1,7 @@
 package com.jessecorbett.diskord.testbot
 
+import com.jessecorbett.diskord.api.common.NamedChannel
+import com.jessecorbett.diskord.api.gateway.events.AvailableGuild
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
@@ -12,10 +14,24 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    channel("545369349452726303").sendMessage("Diskord JVM bot has started")
+                    channel("547517051556855808").sendMessage("Diskord JVM bot has started")
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
+            }
+
+            onGuildCreate {
+                if (it is AvailableGuild) {
+                    println("==================")
+                    println("Guild ID: " + it.id)
+                    it.extras.channels.forEach { ch ->
+                        if (ch is NamedChannel) {
+                            println(ch.name)
+                        } else {
+                            println(ch.id)
+                        }
+                    }
+                }
             }
         }
 

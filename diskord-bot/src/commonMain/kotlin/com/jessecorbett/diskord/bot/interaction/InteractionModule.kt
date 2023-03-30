@@ -1,9 +1,10 @@
 package com.jessecorbett.diskord.bot.interaction
 
-import com.jessecorbett.diskord.api.interaction.*
+import com.jessecorbett.diskord.api.interaction.InteractionPing
 import com.jessecorbett.diskord.api.interaction.callback.PingResponse
 import com.jessecorbett.diskord.bot.BotBase
 import com.jessecorbett.diskord.util.getAllGuilds
+import kotlinx.coroutines.delay
 
 @DslMarker
 public annotation class InteractionModule
@@ -17,7 +18,7 @@ public annotation class InteractionModule
 public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuilder.() -> Unit) {
     registerModule { dispatcher, context, configuring ->
 
-        // Handle pings automatically
+        // Handle pings automatically & modal responses
         dispatcher.onInteractionCreate { interaction ->
             if (interaction is InteractionPing) {
                 context.interaction(context.botUser.id, interaction.token).createInteractionResponse(
@@ -27,28 +28,27 @@ public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuild
             }
         }
 
-        val builder = InteractionBuilder(context.botUser.id, dispatcher, context).apply {
+        val commandClient = context.command(context.botUser.id)
+
+        val existingCommands = (context.global().getAllGuilds().map { it.id } + null).flatMap { guildId ->
+            delay(1000)
+            if (guildId != null) {
+                commandClient.getGuildCommands(guildId)
+            } else commandClient.getGlobalCommands()
+        }
+
+        val builder = InteractionBuilder(context.botUser.id, dispatcher, context, existingCommands).apply {
             commands()
         }
 
-        /*
-         * I want to go on record that this feels like a bad idea in my gut, but I'm not sure why
-         * Fingers crossed it is nothing
-         * - Jesse
-         */
+        // Check each existing command to see if the builder expects it to be around, and delete it if not
         if (trim && !configuring) {
-            val commandClient = context.command(context.botUser.id)
-            (context.global().getAllGuilds().map { it.id } + null).forEach {
-                val created = builder.commandSet.getOrElse(it) { emptySet() }
-
-                val existing = if (it != null) {
-                    commandClient.getGuildCommands(it)
-                } else commandClient.getGlobalCommands()
-
-                existing.filter { command -> command.name.lowercase() !in created }.forEach { command ->
-                    if (it != null) {
-                        commandClient.deleteGuildCommand(it, command.id)
-                    } else commandClient.deleteGlobalCommand(command.id)
+            existingCommands.forEach { existing ->
+                val guildId = existing.guildId
+                if (existing.name !in (builder.commandSet[guildId] ?: emptySet())) {
+                    if (guildId != null) {
+                        commandClient.deleteGuildCommand(guildId, existing.id)
+                    } else commandClient.deleteGlobalCommand(existing.id)
                 }
             }
         }

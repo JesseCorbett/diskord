@@ -20,7 +20,7 @@ public fun BotBase.classicCommands(commandPrefix: String = ".", commands: Comman
 @ClassicCommandModule
 public class CommandBuilder(
     private val prefix: String,
-    private val dispatcher: EventDispatcher<Unit>,
+    private val dispatcher: EventDispatcher,
     private val botContext: BotContext
 ) {
     /**

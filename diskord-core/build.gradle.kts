@@ -9,11 +9,9 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-val kotlinVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val kotlinSerializationVersion: String by project
 val ktorVersion: String by project
-val okhttpVersion: String by project
 val kotlinLoggingVersion: String by project
 val slf4jVersion: String by project
 val assertkVersion: String by project
@@ -80,7 +78,7 @@ kotlin {
         }
     }
 
-    js(BOTH) {
+    js(IR) {
         nodejs()
 
         mavenPublication {
@@ -123,8 +121,8 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion")
-                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion")
+                implementation("org.jetbrains.kotlin:kotlin-test-common")
+                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common")
             }
         }
 

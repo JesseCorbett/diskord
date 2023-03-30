@@ -20,6 +20,6 @@ public fun BotBase.events(eventsBuilder: EventDispatcherWithContext.() -> Unit) 
  */
 @DiskordDsl
 public class EventDispatcherWithContext(
-    private val dispatcher: EventDispatcher<Unit>,
+    private val dispatcher: EventDispatcher,
     private val context: BotContext
-) : EventDispatcher<Unit> by dispatcher, BotContext by context
+) : EventDispatcher by dispatcher, BotContext by context
