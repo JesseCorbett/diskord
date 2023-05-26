@@ -7,6 +7,7 @@ import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.bot.interaction.interactions
 import com.jessecorbett.diskord.util.sendMessage
+import java.time.Instant
 
 suspend fun main() {
     bot(System.getenv("DISKORD_JVM_BOT")) {
@@ -58,6 +59,14 @@ suspend fun main() {
                 callback { interaction, _ ->
                     interaction.respond {
                         content = message
+                    }
+                }
+            }
+
+            slashCommand("timestamp", "Prints the current timestamp") {
+                callback { interaction, _ ->
+                    interaction.respond {
+                        content = Instant.now().toString()
                     }
                 }
             }

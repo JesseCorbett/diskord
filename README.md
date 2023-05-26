@@ -12,7 +12,7 @@ Using Diskord? Drop by our [discord server](https://discord.gg/UPTWsZ5)
 
 ## How do I import this?
 
-It is strongly recommended to use Gradle version 6 or higher
+It is strongly recommended to use Gradle version 7 or higher
 
 ```kotlin
 // Kotlin build.gradle.kts
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:3.0.0")
+    implementation("com.jessecorbett:diskord-bot:4.0.1")
 }
 ```
 

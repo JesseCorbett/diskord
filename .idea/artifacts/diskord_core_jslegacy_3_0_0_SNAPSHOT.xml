@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="diskord-core-jslegacy-3.0.0-SNAPSHOT">
-    <output-path>$PROJECT_DIR$/diskord-core/build/libs</output-path>
-    <root id="archive" name="diskord-core-jslegacy-3.0.0-SNAPSHOT.jar">
-      <element id="module-output" name="diskord.diskord-core.jsMain" />
-    </root>
-  </artifact>
-</component>

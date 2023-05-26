@@ -246,26 +246,9 @@ public data class CommandOption internal constructor(
 
     // https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-choice-structure
     @Serializable
-    public sealed class CommandOptionChoice {
-        @Serializable
-        public data class String(
-            @SerialName("name") public val name: kotlin.String,
-            @SerialName("value") public val value: kotlin.String,
-            @SerialName("name_localizations") public val localizedNames: Map<kotlin.String, kotlin.String>
-        ) : CommandOptionChoice()
-
-        @Serializable
-        public data class Int(
-            @SerialName("name") public val name: kotlin.String,
-            @SerialName("value") public val value: kotlin.Int,
-            @SerialName("name_localizations") public val localizedNames: Map<kotlin.String, kotlin.String>
-        ) : CommandOptionChoice()
-
-        @Serializable
-        public data class Double(
-            @SerialName("name") public val name: kotlin.String,
-            @SerialName("value") public val value: kotlin.Double,
-            @SerialName("name_localizations") public val localizedNames: Map<kotlin.String, kotlin.String>
-        ) : CommandOptionChoice()
-    }
+    public data class CommandOptionChoice(
+        @SerialName("name") public val name: String,
+        @SerialName("value") public val value: JsonPrimitive,
+        @SerialName("name_localizations") public val localizedNames: Map<String, String> = emptyMap()
+    )
 }

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="diskord-bot-jvm-3.0.0-SNAPSHOT">
-    <output-path>$PROJECT_DIR$/diskord-bot/build/libs</output-path>
-    <root id="archive" name="diskord-bot-jvm-3.0.0-SNAPSHOT.jar">
-      <element id="module-output" name="diskord.diskord-bot.jvmMain" />
-    </root>
-  </artifact>
-</component>
