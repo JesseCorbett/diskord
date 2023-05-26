@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.0.1] - 2023-05-XX
+## [4.0.1] - 2023-05-25
 
 ### Fixed
 - Fixed a bug in deserializing command options

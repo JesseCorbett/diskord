@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="diskord-testbot-js">
-    <output-path>$PROJECT_DIR$/diskord-testbot-js/build/libs</output-path>
-    <root id="archive" name="diskord-testbot-js.jar">
-      <element id="module-output" name="diskord.diskord-testbot-js.main" />
-    </root>
-  </artifact>
-</component>
