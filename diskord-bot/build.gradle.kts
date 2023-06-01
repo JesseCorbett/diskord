@@ -30,7 +30,7 @@ tasks {
                 sourceLink {
                     localDirectory.set(file("src/commonMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/commonMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
             }
@@ -117,9 +117,9 @@ publishing {
             }
 
             scm {
-                url.set("https://gitlab.com/jesselcorbett/diskord")
-                connection.set("scm:git:https://gitlab.com/jesselcorbett/diskord.git")
-                developerConnection.set("scm:git:https://gitlab.com/jesselcorbett/diskord.git")
+                url.set("https://gitlab.com/diskord/diskord")
+                connection.set("scm:git:https://gitlab.com/diskord/diskord.git")
+                developerConnection.set("scm:git:https://gitlab.com/diskord/diskord.git")
             }
         }
     }

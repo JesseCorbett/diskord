@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.1.0] - 2023-06-01
+
+### Added
+- `timestamp(Instant, TimestampFormat)` and `Instant.toTimestamp(TimestampFormat)` functions which format Instants for relative display to each user
+- `kotlinx.datetime` is now an api dependency and accessible to developers as a transitive dependency
+
 ## [4.0.1] - 2023-05-25
 
 ### Fixed

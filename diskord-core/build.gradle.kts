@@ -36,32 +36,32 @@ tasks {
                     localDirectory.set(file("src/commonMain/kotlin"))
                     // URL showing where the source code can be accessed through the web browser
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-core/src/commonMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-core/src/commonMain/kotlin/"))
                     // Suffix which is used to append the line number to the URL. Use #L for GitHub
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/jsMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/jsMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/jsMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/jvmMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/jvmMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/jvmMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/macMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/macMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/macMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/winMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/blob/develop/diskord-bot/src/winMain/kotlin/"))
+                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/winMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
             }
@@ -116,7 +116,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
             }
         }
         commonTest {
@@ -179,7 +179,7 @@ tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
 
                 remoteUrl.set(
                     URL(
-                        "https://gitlab.com/jesselcorbett/diskord/-/tree/master/diskord-core/src"
+                        "https://gitlab.com/diskord/diskord/-/tree/master/diskord-core/src"
                     )
                 )
                 remoteLineSuffix.set("#L")
@@ -194,7 +194,7 @@ publishing {
         pom {
             name.set("diskord")
             description.set("A Kotlin wrapper around the Discord API")
-            url.set("https://gitlab.com/jesselcorbett/diskord")
+            url.set("https://gitlab.com/diskord/diskord")
 
             licenses {
                 license {
@@ -214,8 +214,8 @@ publishing {
 
             scm {
                 url.set("https://gitlab.com/jesselcorbett/diskord")
-                connection.set("scm:git:https://gitlab.com/jesselcorbett/diskord.git")
-                developerConnection.set("scm:git:https://gitlab.com/jesselcorbett/diskord.git")
+                connection.set("scm:git:https://gitlab.com/diskord/diskord.git")
+                developerConnection.set("scm:git:https://gitlab.com/diskord/diskord.git")
             }
         }
     }
