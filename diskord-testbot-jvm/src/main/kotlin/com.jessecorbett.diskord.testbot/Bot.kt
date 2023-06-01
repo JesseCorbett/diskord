@@ -7,7 +7,8 @@ import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
 import com.jessecorbett.diskord.bot.interaction.interactions
 import com.jessecorbett.diskord.util.sendMessage
-import java.time.Instant
+import com.jessecorbett.diskord.util.toTimestamp
+import kotlinx.datetime.Clock
 
 suspend fun main() {
     bot(System.getenv("DISKORD_JVM_BOT")) {
@@ -15,7 +16,8 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    channel("547517051556855808").sendMessage("Diskord JVM bot has started")
+                    val now = Clock.System.now()
+                    channel("547517051556855808").sendMessage("Diskord JVM bot has started, ${now.toTimestamp()}")
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
@@ -66,7 +68,7 @@ suspend fun main() {
             slashCommand("timestamp", "Prints the current timestamp") {
                 callback { interaction, _ ->
                     interaction.respond {
-                        content = Instant.now().toString()
+                        content = Clock.System.now().toString()
                     }
                 }
             }
