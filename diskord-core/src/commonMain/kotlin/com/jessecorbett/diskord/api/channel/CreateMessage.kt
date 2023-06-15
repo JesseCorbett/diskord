@@ -2,7 +2,7 @@ package com.jessecorbett.diskord.api.channel
 
 import com.jessecorbett.diskord.api.common.Color
 import com.jessecorbett.diskord.api.common.MessageReference
-import io.ktor.utils.io.core.ByteReadPacket
+import io.ktor.utils.io.core.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -53,7 +53,7 @@ public data class EmbedVideo(
 @Serializable
 public data class EmbedProvider(
     @SerialName("name") val name: String,
-    @SerialName("url") val url: String?
+    @SerialName("url") val url: String? = null
 )
 
 @Serializable
