@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.1.1] - 2023-06-15
+
+### Fixed
+- `EmbedProvider` not defaulting url to null when missing
+
 ## [4.1.0] - 2023-06-01
 
 ### Added
