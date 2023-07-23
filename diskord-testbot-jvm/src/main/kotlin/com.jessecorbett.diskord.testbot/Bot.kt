@@ -69,7 +69,7 @@ suspend fun main() {
                 }
             }
 
-            commandGroup("test", "Test group", guildId = "341767204255039490") {
+            commandGroup("test", "Test group", guildId = "424046347428167688") {
                 subgroup("foo", "Foo test group") {
                     slashCommand("bar", "Bar command") {
                         val msg by stringParameter("message", "The message to say")
