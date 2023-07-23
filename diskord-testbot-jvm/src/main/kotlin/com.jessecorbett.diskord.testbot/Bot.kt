@@ -45,30 +45,56 @@ suspend fun main() {
         }
 
         interactions {
-            userCommand("print") { it, data ->
-                it.respond {
-                    content = "Test data for interaction " + data.convertedUsersRolesChannels
+            userCommand("print") {
+                respond {
+                    content = "Test data for interaction $data"
                     ephemeral
                 }
             }
 
-            messageCommand("test") { interaction, data ->
-                println(interaction)
+            messageCommand("test") {
+                println(command)
+                respond {
+                    content = "OK"
+                    ephemeral
+                }
             }
 
             slashCommand("echo", "Makes the bot say something") {
                 val message by stringParameter("message", "The message")
-                callback { interaction, _ ->
-                    interaction.respond {
+                callback {
+                    respond {
                         content = message
                     }
                 }
             }
 
             slashCommand("timestamp", "Prints the current timestamp") {
-                callback { interaction, _ ->
-                    interaction.respond {
+                callback {
+                    respond {
                         content = Clock.System.now().toString()
+                    }
+                }
+            }
+
+            commandGroup("testing", "Test group", guildId = "341767204255039490") {
+                subgroup("foo", "Foo test group") {
+                    slashCommand("bar", "Bar command") {
+                        val msg by stringParameter("message", "The message to say")
+                        callback {
+                            respond {
+                                content = "$msg bar!"
+                            }
+                        }
+                    }
+                }
+
+                slashCommand("buzz", "Buzz command") {
+                    val msg by stringParameter("message", "The message to say")
+                    callback {
+                        respond {
+                            content = "$msg buzz!"
+                        }
                     }
                 }
             }
