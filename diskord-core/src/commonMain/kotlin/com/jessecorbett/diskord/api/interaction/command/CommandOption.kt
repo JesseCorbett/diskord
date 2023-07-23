@@ -53,42 +53,104 @@ public data class CommandOption internal constructor(
 
     public companion object {
         public fun fromOption(it: Type): CommandOption = when (it) {
-            is SubCommandOption -> CommandOption(it.type, it.name, description = it.description, options = it.options)
-            is SubCommandGroupOption -> CommandOption(it.type, it.name, description = it.description)
-            is StringOption -> CommandOption(
-                it.type,
-                it.name,
+            is SubCommandOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
                 description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                options = it.options
+            )
+            is SubCommandGroupOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                options = it.options
+            )
+            is StringOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
                 required = it.required,
                 choices = it.choices,
                 autocomplete = it.autocomplete
             )
             is IntegerOption -> CommandOption(
-                it.type,
-                it.name,
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
                 description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
                 required = it.required,
                 choices = it.choices,
                 autocomplete = it.autocomplete,
                 minValue = JsonPrimitive(it.minValue),
                 maxValue = JsonPrimitive(it.maxValue)
             )
-            is BooleanOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
-            is UserOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
-            is ChannelOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
-            is RoleOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
-            is MentionableOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
+            is BooleanOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
+            is UserOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
+            is ChannelOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
+            is RoleOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
+            is MentionableOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
             is NumberOption -> CommandOption(
-                it.type,
-                it.name,
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
                 description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
                 required = it.required,
                 choices = it.choices,
                 autocomplete = it.autocomplete,
                 minValue = JsonPrimitive(it.minValue),
                 maxValue = JsonPrimitive(it.maxValue)
             )
-            is AttachmentOption -> CommandOption(it.type, it.name, description = it.description, required = it.required)
+            is AttachmentOption -> CommandOption(
+                type = it.type,
+                name = it.name,
+                localizedNames = it.localizedNames,
+                description = it.description,
+                localizedDescriptions = it.localizedDescriptions,
+                required = it.required
+            )
             else -> throw IllegalArgumentException("Unknown option type " + it.type)
         }
     }

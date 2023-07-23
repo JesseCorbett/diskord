@@ -1,36 +1,24 @@
 package com.jessecorbett.diskord.bot.interaction
 
 import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.interaction.ApplicationCommand
-import com.jessecorbett.diskord.api.interaction.AttachmentResponse
-import com.jessecorbett.diskord.api.interaction.BooleanResponse
-import com.jessecorbett.diskord.api.interaction.ChannelResponse
-import com.jessecorbett.diskord.api.interaction.CommandInteractionDataResolved
-import com.jessecorbett.diskord.api.interaction.CommandInteractionOptionResponse
-import com.jessecorbett.diskord.api.interaction.IntegerResponse
-import com.jessecorbett.diskord.api.interaction.MentionableResponse
-import com.jessecorbett.diskord.api.interaction.NumberResponse
-import com.jessecorbett.diskord.api.interaction.RoleResponse
-import com.jessecorbett.diskord.api.interaction.StringResponse
-import com.jessecorbett.diskord.api.interaction.UserResponse
+import com.jessecorbett.diskord.api.interaction.*
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import kotlin.reflect.KProperty
 
-public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
+@InteractionModule
+public class CommandContext<I: Interaction> {
     private val delegates = mutableListOf<CommandDelegate<*>>()
     internal val parameters = mutableListOf<CommandOption.Type>()
-    internal var callbackFunction: suspend ResponseContext.(ApplicationCommand, D) -> Unit = { _, _ -> }
+    private var callbackFunction: suspend ResponseContext<I>.() -> Unit = {}
 
     @InteractionModule
-    public fun callback(block: suspend ResponseContext.(ApplicationCommand, D) -> Unit) {
+    public fun callback(block: suspend ResponseContext<I>.() -> Unit) {
         callbackFunction = block
     }
 
-    internal fun setResponses(responses: List<CommandInteractionOptionResponse>, resources: CommandInteractionDataResolved?) {
-        delegates.forEach {
-            it.responses = responses
-            it.resources = resources
-        }
+    internal suspend fun respond(response: ResponseContext<I>) {
+        delegates.forEach { it.responseContext = response }
+        response.callbackFunction()
     }
 
     @InteractionModule
@@ -48,7 +36,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             choices = choices.toList(),
             autocomplete = autocomplete
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<StringResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -64,7 +52,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<BooleanResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -80,7 +68,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<IntegerResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -96,7 +84,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<NumberResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -112,7 +100,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<UserResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -128,7 +116,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<ChannelResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -144,7 +132,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<RoleResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -160,7 +148,7 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, _ ->
             responses.filterIsInstance<MentionableResponse>().find { it.name == name }!!.value!! // TODO error handling
         }.also { delegates += it }
     }
@@ -176,21 +164,20 @@ public class ApplicationCommandBuilder<D : ApplicationCommand.Data> {
             description = description,
             required = !optional
         )
-        return CommandDelegate(name) { responses ->
+        return CommandDelegate(name) { responses, data ->
             val snowflake = responses.filterIsInstance<AttachmentResponse>().find { it.name == name }!!.value!! // TODO error handling
-            resources!!.attachments.getValue(snowflake)
+            data!!.attachments.getValue(snowflake)
         }.also { delegates += it }
     }
 
     public class CommandDelegate<T>(
         public val name: String,
-        private val finder: CommandDelegate<T>.(List<CommandInteractionOptionResponse>) -> T
+        public var responseContext: ResponseContext<*>? = null,
+        private val finder: (List<CommandInteractionOptionResponse>, CommandInteractionDataResolved?) -> T
     ) {
-        internal var responses: List<CommandInteractionOptionResponse> = emptyList()
-        internal var resources: CommandInteractionDataResolved? = null
-
         public operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-            return finder(responses)
+            val context = requireNotNull(responseContext) { "CommandDelegate requires being primed with a ResponseContext before it can get values" }
+            return finder(context.options, context.data)
         }
     }
 }

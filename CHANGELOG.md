@@ -1,5 +1,21 @@
 # Changelog
 
+## [5.0.0] - 2023-07-22
+
+### Added
+- Interaction module now supports `commandGroup` command type, with children `subgroup` and `slashCommand`
+
+### Changed
+- Interaction module upgraded with breaking API changes to support a cleaner developer experience
+  - See the [JVM Bot Demo](https://gitlab.com/diskord/diskord/-/blob/master/diskord-testbot-jvm/src/main/kotlin/com.jessecorbett.diskord.testbot/Bot.kt) for an example of the updated API
+  - See also the updated [ResponseContext](https://diskord.gitlab.io/diskord/diskord-bot/com.jessecorbett.diskord.bot.interaction/-response-context/index.html) for functions and properties available within an interaction response
+- Kotlin upgraded to 1.9.0
+- Ktor upgraded to 2.3.2
+- kotlinx.coroutines upgraded to 1.7.2
+
+### Fixed
+- Bug where the interactions module ran into rate limits far more often than it should
+
 ## [4.1.1] - 2023-06-15
 
 ### Fixed

@@ -6,25 +6,16 @@ import com.jessecorbett.diskord.util.DEBUG_MODE
 import com.jessecorbett.diskord.util.StripBlankSWSEHeader
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.toHexDump
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.logging.DEFAULT
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.websocket.WebSockets
-import io.ktor.client.plugins.websocket.wss
-import io.ktor.websocket.CloseReason
-import io.ktor.websocket.Frame
-import io.ktor.websocket.WebSocketSession
-import io.ktor.websocket.close
-import io.ktor.websocket.readText
-import io.ktor.websocket.send
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.client.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
-import mu.KotlinLogging
 
 internal class SocketManager(url: String, private val emitMessage: suspend (GatewayMessage) -> Unit) {
     private val logger = KotlinLogging.logger {}

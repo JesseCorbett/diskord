@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:4.1.1")
+    implementation("com.jessecorbett:diskord-bot:5.0.0")
 }
 ```
 
@@ -72,16 +72,40 @@ suspend fun main() {
         interactions {
             slashCommand("echo", "Makes the bot say something") {
                 val message by stringParameter("message", "The message")
-                callback { interaction, _ ->
-                    interaction.respond {
+                callback {
+                    respond {
                         content = message
+                    }
+                }
+            }
+
+            commandGroup("emoji", "Send an emoji to the server", guildId = "424046347428167688") {
+                subgroup("smile", "Smile emoji") {
+                    slashCommand("slight", "A slight smile emoji") {
+                        callback {
+                            respond {
+                                content = "🙂"
+                            }
+                        }
+                    }
+                }
+
+                slashCommand("shh", "The shh emoji") {
+                    val secret by stringParameter("secret", "Send the emoji secretly")
+                    callback {
+                        respond {
+                            content = "🤫"
+                            if (secret) {
+                                ephemeral
+                            }
+                        }
                     }
                 }
             }
         }
       
         // The old-fashioned way, it uses messages, such as .ping, for commands
-        classicCommands {
+        classicCommands("!") {
             command("ping") {
                 it.respond("pong")
             }

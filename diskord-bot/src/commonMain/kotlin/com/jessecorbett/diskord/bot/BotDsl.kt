@@ -9,11 +9,11 @@ import com.jessecorbett.diskord.api.gateway.model.GatewayIntents
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import mu.KLogger
-import mu.KotlinLogging
 
 public class BotBase {
     public val logger: KLogger = KotlinLogging.logger {}

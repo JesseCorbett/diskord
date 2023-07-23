@@ -4,7 +4,6 @@ import com.jessecorbett.diskord.api.interaction.InteractionPing
 import com.jessecorbett.diskord.api.interaction.callback.PingResponse
 import com.jessecorbett.diskord.bot.BotBase
 import com.jessecorbett.diskord.util.getAllGuilds
-import kotlinx.coroutines.delay
 
 @DslMarker
 public annotation class InteractionModule
@@ -30,25 +29,25 @@ public fun BotBase.interactions(trim: Boolean = true, commands: InteractionBuild
 
         val commandClient = context.command(context.botUser.id)
 
-        val existingCommands = (context.global().getAllGuilds().map { it.id } + null).flatMap { guildId ->
-            delay(1000)
-            if (guildId != null) {
-                commandClient.getGuildCommands(guildId)
-            } else commandClient.getGlobalCommands()
-        }
+        // Run during configuring phase since we want commands setup _before_ the bot is listening for interactions
+        if (configuring) {
+            val existingCommands = (context.global().getAllGuilds().map { it.id } + null).flatMap { guildId ->
+                if (guildId != null) {
+                    commandClient.getGuildCommands(guildId)
+                } else commandClient.getGlobalCommands()
+            }
 
-        val builder = InteractionBuilder(context.botUser.id, dispatcher, context, existingCommands).apply {
-            commands()
-        }
+            val builder = InteractionBuilder(context.botUser.id, dispatcher, context, existingCommands).apply(commands)
 
-        // Check each existing command to see if the builder expects it to be around, and delete it if not
-        if (trim && !configuring) {
-            existingCommands.forEach { existing ->
-                val guildId = existing.guildId
-                if (existing.name !in (builder.commandSet[guildId] ?: emptySet())) {
-                    if (guildId != null) {
-                        commandClient.deleteGuildCommand(guildId, existing.id)
-                    } else commandClient.deleteGlobalCommand(existing.id)
+            // Check each existing command to see if the builder expects it to be around, and delete it if not
+            if (trim) {
+                existingCommands.forEach { existing ->
+                    val guildId = existing.guildId
+                    if (existing.name !in (builder.commandSet[guildId] ?: emptySet())) {
+                        if (guildId != null) {
+                            commandClient.deleteGuildCommand(guildId, existing.id)
+                        } else commandClient.deleteGlobalCommand(existing.id)
+                    }
                 }
             }
         }
