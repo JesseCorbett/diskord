@@ -77,7 +77,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":diskord-core"))
-                api("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+                api("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
             }
         }
 

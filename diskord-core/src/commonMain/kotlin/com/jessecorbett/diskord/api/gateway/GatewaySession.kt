@@ -2,11 +2,7 @@ package com.jessecorbett.diskord.api.gateway
 
 import com.jessecorbett.diskord.api.common.UserStatus
 import com.jessecorbett.diskord.api.exceptions.DiscordCompatibilityException
-import com.jessecorbett.diskord.api.gateway.commands.Identify
-import com.jessecorbett.diskord.api.gateway.commands.IdentifyProperties
-import com.jessecorbett.diskord.api.gateway.commands.IdentifyShard
-import com.jessecorbett.diskord.api.gateway.commands.Resume
-import com.jessecorbett.diskord.api.gateway.commands.UpdateStatus
+import com.jessecorbett.diskord.api.gateway.commands.*
 import com.jessecorbett.diskord.api.gateway.events.DiscordEvent
 import com.jessecorbett.diskord.api.gateway.events.Hello
 import com.jessecorbett.diskord.api.gateway.events.Ready
@@ -16,17 +12,11 @@ import com.jessecorbett.diskord.api.gateway.model.OpCode
 import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.util.defaultJson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.encodeToJsonElement
-import mu.KotlinLogging
 
 public class GatewaySession(
     private val token: String,

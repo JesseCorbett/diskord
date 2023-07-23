@@ -111,7 +111,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+                implementation("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -138,9 +138,7 @@ kotlin {
             }
         }
         val jvmTest by getting {
-            jvmToolchain {
-                languageVersion.set(JavaLanguageVersion.of(8))
-            }
+            jvmToolchain(8)
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")

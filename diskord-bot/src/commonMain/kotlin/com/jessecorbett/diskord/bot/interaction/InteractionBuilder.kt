@@ -8,7 +8,7 @@ import com.jessecorbett.diskord.api.interaction.command.Command
 import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.bot.BotContext
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 @InteractionModule
 public class InteractionBuilder(
@@ -85,7 +85,7 @@ public class InteractionBuilder(
                             }
                         } ?: logger.error { "Could not find subgroup '${opt.name}' in command group name '$name' but received a response for it" }
                     }
-                    else -> logger.error { "Entered an error case where command group '$name' received an ${opt::class.qualifiedName}" }
+                    else -> logger.error { "Entered an error case where command group '$name' received an ${opt::class.simpleName}" }
                 }
             }
         }

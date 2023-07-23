@@ -8,14 +8,13 @@ import com.jessecorbett.diskord.api.gateway.model.UserStatusActivity
 import com.jessecorbett.diskord.api.global.GatewayBotUrl
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.internal.client.RestClient
-import com.jessecorbett.diskord.util.DiskordInternals
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
-import mu.KotlinLogging
 
 /**
  * A utility class for automatically creating and managing sharded gateway sessions
  */
-public class AutoGateway @OptIn(DiskordInternals::class) constructor(
+public class AutoGateway(
     private val token: String,
     private val intents: GatewayIntents = GatewayIntents.NON_PRIVILEGED,
     restClient: RestClient,
