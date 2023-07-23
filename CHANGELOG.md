@@ -13,6 +13,9 @@
 - Ktor upgraded to 2.3.2
 - kotlinx.coroutines upgraded to 1.7.2
 
+### Fixed
+- Bug where the interactions module ran into rate limits far more often than it should
+
 ## [4.1.1] - 2023-06-15
 
 ### Fixed

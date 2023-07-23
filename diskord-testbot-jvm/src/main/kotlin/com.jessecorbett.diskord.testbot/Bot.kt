@@ -52,14 +52,6 @@ suspend fun main() {
                 }
             }
 
-            messageCommand("test") {
-                println(command)
-                respond {
-                    content = "OK"
-                    ephemeral
-                }
-            }
-
             slashCommand("echo", "Makes the bot say something") {
                 val message by stringParameter("message", "The message")
                 callback {
@@ -77,7 +69,7 @@ suspend fun main() {
                 }
             }
 
-            commandGroup("testing", "Test group", guildId = "424046347428167688") {
+            commandGroup("test", "Test group", guildId = "341767204255039490") {
                 subgroup("foo", "Foo test group") {
                     slashCommand("bar", "Bar command") {
                         val msg by stringParameter("message", "The message to say")
@@ -89,7 +81,7 @@ suspend fun main() {
                     }
                 }
 
-                slashCommand("buzz", "Buzz command") {
+                slashCommand("fizz", "Buzz command") {
                     val msg by stringParameter("message", "The message to say")
                     callback {
                         respond {
