@@ -93,7 +93,7 @@ public data class AllowedMentions(
     @SerialName("replied_user") val mentionRepliedUsers: Boolean = false
 ) {
     public companion object {
-        public val ALL: AllowedMentions = AllowedMentions(MentionTypes.values().toList())
+        public val ALL: AllowedMentions = AllowedMentions(MentionTypes.entries)
         public val ONLY_USERS: AllowedMentions = AllowedMentions(listOf(MentionTypes.users))
         public val ONLY_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles))
         public val USERS_AND_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles, MentionTypes.users))
