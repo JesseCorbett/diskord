@@ -1,7 +1,6 @@
 package com.jessecorbett.diskord.testbot
 
-import com.jessecorbett.diskord.api.common.NamedChannel
-import com.jessecorbett.diskord.api.common.TextInput
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.gateway.events.AvailableGuild
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
@@ -19,8 +18,18 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    val now = Clock.System.now()
-                    channel("547517051556855808").sendMessage("Diskord JVM bot has started, ${now.toTimestamp()}")
+                    channel("547517051556855808").sendMessage(
+                        "Diskord JVM bot has started, ${Clock.System.now().toTimestamp()}.",
+                        components = listOf(
+                            ActionRow(
+                                Button(
+                                    url = "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-testbot-jvm/src/main/kotlin/com.jessecorbett.diskord.testbot/Bot.kt?ref_type=heads",
+                                    label = "Bot Source",
+                                    style = ButtonStyle.Link
+                                )
+                            )
+                        )
+                    )
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
@@ -72,7 +81,8 @@ suspend fun main() {
                         title = "Time Zone?",
                         TextInput("zone", label = "Timezone")
                     ) {
-                        val tz = it.data.componentResponses.flatMap { it.components }.find { it.customId == "zone" }?.value
+                        val tz =
+                            it.data.componentResponses.flatMap { it.components }.find { it.customId == "zone" }?.value
 
                         if (tz == null) {
                             respond {
