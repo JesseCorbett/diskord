@@ -1,6 +1,6 @@
 package com.jessecorbett.diskord.testbot
 
-import com.jessecorbett.diskord.api.common.NamedChannel
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.gateway.events.AvailableGuild
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
@@ -9,6 +9,8 @@ import com.jessecorbett.diskord.bot.interaction.interactions
 import com.jessecorbett.diskord.util.sendMessage
 import com.jessecorbett.diskord.util.toTimestamp
 import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 suspend fun main() {
     bot(System.getenv("DISKORD_JVM_BOT")) {
@@ -16,8 +18,18 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    val now = Clock.System.now()
-                    channel("547517051556855808").sendMessage("Diskord JVM bot has started, ${now.toTimestamp()}")
+                    channel("547517051556855808").sendMessage(
+                        "Diskord JVM bot has started, ${Clock.System.now().toTimestamp()}.",
+                        components = listOf(
+                            ActionRow(
+                                Button(
+                                    url = "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-testbot-jvm/src/main/kotlin/com.jessecorbett.diskord.testbot/Bot.kt?ref_type=heads",
+                                    label = "Bot Source",
+                                    style = ButtonStyle.Link
+                                )
+                            )
+                        )
+                    )
                 }
                 setStatus("Making sure JVM runtime works")
                 started = true
@@ -41,6 +53,7 @@ suspend fun main() {
         classicCommands {
             command("jvm") {
                 it.respondAndDelete("JVM bot is working!")
+                it.channel.sendMessage()
             }
         }
 
@@ -63,6 +76,35 @@ suspend fun main() {
 
             slashCommand("timestamp", "Prints the current timestamp") {
                 callback {
+
+                    command.createModal(
+                        title = "Time Zone?",
+                        TextInput("zone", label = "Timezone")
+                    ) {
+                        val tz =
+                            it.data.componentResponses.flatMap { it.components }.find { it.customId == "zone" }?.value
+
+                        if (tz == null) {
+                            respond {
+                                content = "Timezone must be provided"
+                                ephemeral
+                            }
+                        } else {
+                            try {
+                                val time = Clock.System.now().toLocalDateTime(TimeZone.of(tz))
+                                respond {
+                                    content = time.toString()
+                                    ephemeral
+                                }
+                            } catch (e: Exception) {
+                                respond {
+                                    content = "$tz was not a valid time zone"
+                                    ephemeral
+                                }
+                            }
+                        }
+                    }
+
                     respond {
                         content = Clock.System.now().toString()
                     }

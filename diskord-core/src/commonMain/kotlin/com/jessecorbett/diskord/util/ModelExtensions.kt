@@ -1,24 +1,7 @@
 package com.jessecorbett.diskord.util
 
-import com.jessecorbett.diskord.api.channel.ChannelClient
-import com.jessecorbett.diskord.api.channel.CreateMessage
-import com.jessecorbett.diskord.api.channel.CreateThread
-import com.jessecorbett.diskord.api.channel.Embed
-import com.jessecorbett.diskord.api.channel.EmbedImage
-import com.jessecorbett.diskord.api.channel.FileData
-import com.jessecorbett.diskord.api.common.ChannelType
-import com.jessecorbett.diskord.api.common.Emoji
-import com.jessecorbett.diskord.api.common.GuildMember
-import com.jessecorbett.diskord.api.common.GuildNewsChannel
-import com.jessecorbett.diskord.api.common.GuildText
-import com.jessecorbett.diskord.api.common.GuildTextChannel
-import com.jessecorbett.diskord.api.common.GuildThread
-import com.jessecorbett.diskord.api.common.Message
-import com.jessecorbett.diskord.api.common.MessageReference
-import com.jessecorbett.diskord.api.common.Permission
-import com.jessecorbett.diskord.api.common.Role
-import com.jessecorbett.diskord.api.common.ThreadMember
-import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.channel.*
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.global.GlobalClient
 import com.jessecorbett.diskord.api.global.PartialGuild
 import com.jessecorbett.diskord.api.guild.GuildClient
@@ -37,28 +20,28 @@ import kotlinx.serialization.encodeToString
 /**
  * Shortcut to add a spoiler to text.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withSpoiler(): String = "||$this||"
 
 /**
  * Shortcut to add a italics to text.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withItalics(): String = "*$this*"
 
 /**
  * Shortcut to bold text.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withBold(): String = "**$this**"
 
 /**
  * Shortcut to add an underline to text.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withUnderline(): String = "__${this}__"
 
@@ -66,21 +49,21 @@ public fun String.withUnderline(): String = "__${this}__"
 /**
  * Shortcut to add a strikethrough to text.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withStrikethrough(): String = "~~$this~~"
 
 /**
  * Shortcut to put the code in a single line code block.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withSingleLineCode(): String = "`$this`"
 
 /**
  * Shortcut to put the code in a multi line code block.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withMultiLineCode(): String = "```$this```"
 
@@ -89,7 +72,7 @@ public fun String.withMultiLineCode(): String = "```$this```"
  *
  * @param language The language to add style for.
  *
- * @return This string wrapped with markdown formatting.
+ * @return This string wrapped with Markdown formatting.
  */
 public fun String.withMultiLineCode(language: String): String = "```$language $this```"
 
@@ -220,12 +203,13 @@ public val Emoji.tag: String
  *
  * @param message The text message to send.
  * @param embeds The embeds to include with the message.
+ * @param components The message components to use. Null for none.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
-public suspend fun ChannelClient.sendMessage(message: String = "", vararg embeds: Embed): Message {
-    return createMessage(CreateMessage(content = message, embeds = embeds.toList()))
+public suspend fun ChannelClient.sendMessage(message: String = "", vararg embeds: Embed, components: List<ActionRow>? = null): Message {
+    return createMessage(CreateMessage(content = message, embeds = embeds.toList(), messageComponents = components))
 }
 
 /**
@@ -233,6 +217,7 @@ public suspend fun ChannelClient.sendMessage(message: String = "", vararg embeds
  * Also accepts a lambda that can be used to configure an [Embed] object.
  *
  * @param message The text message to send.
+ * @param components The message components to use. Null for none.
  * @param block The block to configure the [Embed] object with.
  *
  * @return the created [Message].
@@ -240,9 +225,10 @@ public suspend fun ChannelClient.sendMessage(message: String = "", vararg embeds
  */
 public suspend fun ChannelClient.sendEmbed(
     message: String = "",
+    components: List<ActionRow>? = null,
     block: Embed.() -> Unit
 ): Message {
-    return createMessage(CreateMessage(message, embeds = listOf(Embed().apply { block() })))
+    return createMessage(CreateMessage(message, messageComponents = components, embeds = listOf(Embed().apply { block() })))
 }
 
 /**
@@ -279,13 +265,19 @@ public suspend fun ChannelClient.sendEmbeddedImage(
  * @param message The message to reply to.
  * @param reply The text reply message to send.
  * @param embed The embed to include with the message.
+ * @param components The message components to use. Null for none.
  *
  * @return the created [Message].
  * @throws com.jessecorbett.diskord.api.exceptions.DiscordException upon client errors.
  */
-public suspend fun ChannelClient.sendReply(message: Message, reply: String = "", embed: Embed? = null): Message {
+public suspend fun ChannelClient.sendReply(message: Message, reply: String = "", embed: Embed? = null, components: List<ActionRow>? = null): Message {
     return createMessage(
-        CreateMessage(content = reply, embeds = listOfNotNull(embed), messageReference = MessageReference(messageId = message.id))
+        CreateMessage(
+            content = reply,
+            messageComponents = components,
+            embeds = listOfNotNull(embed),
+            messageReference = MessageReference(messageId = message.id)
+        )
     )
 }
 
@@ -295,6 +287,7 @@ public suspend fun ChannelClient.sendReply(message: Message, reply: String = "",
  *
  * @param message The message to reply to.
  * @param reply The text reply message to send.
+ * @param components The message components to use. Null for none.
  * @param block The block to configure the [Embed] object with.
  *
  * @return the created [Message].
@@ -303,11 +296,13 @@ public suspend fun ChannelClient.sendReply(message: Message, reply: String = "",
 public suspend fun ChannelClient.sendEmbeddedReply(
     message: Message,
     reply: String = "",
+    components: List<ActionRow>? = null,
     block: Embed.() -> Unit
 ): Message {
     return createMessage(
         CreateMessage(
             content = reply,
+            messageComponents = components,
             embeds = listOf(Embed().apply { block() }),
             messageReference = MessageReference(messageId = message.id)
         )

@@ -1,5 +1,6 @@
 package com.jessecorbett.diskord.api.channel
 
+import com.jessecorbett.diskord.api.common.ActionRow
 import com.jessecorbett.diskord.api.common.Color
 import com.jessecorbett.diskord.api.common.MessageReference
 import io.ktor.utils.io.core.*
@@ -16,6 +17,7 @@ public data class CreateMessage(
     @SerialName("payload_json") val fileUploadEmbed: String? = null,
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentions = AllowedMentions.ALL,
     @SerialName("message_reference") val messageReference: MessageReference? = null,
+    @SerialName("components") val messageComponents: List<ActionRow>? = null
 )
 
 @Serializable
@@ -93,7 +95,7 @@ public data class AllowedMentions(
     @SerialName("replied_user") val mentionRepliedUsers: Boolean = false
 ) {
     public companion object {
-        public val ALL: AllowedMentions = AllowedMentions(MentionTypes.values().toList())
+        public val ALL: AllowedMentions = AllowedMentions(MentionTypes.entries)
         public val ONLY_USERS: AllowedMentions = AllowedMentions(listOf(MentionTypes.users))
         public val ONLY_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles))
         public val USERS_AND_ROLES: AllowedMentions = AllowedMentions(listOf(MentionTypes.roles, MentionTypes.users))

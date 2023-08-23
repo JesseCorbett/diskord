@@ -1,5 +1,8 @@
 package com.jessecorbett.diskord.testbot
 
+import com.jessecorbett.diskord.api.common.ActionRow
+import com.jessecorbett.diskord.api.common.Button
+import com.jessecorbett.diskord.api.common.ButtonStyle
 import com.jessecorbett.diskord.bot.bot
 import com.jessecorbett.diskord.bot.classicCommands
 import com.jessecorbett.diskord.bot.events
@@ -9,6 +12,7 @@ import kotlinx.datetime.Clock
 
 // Hack to get node envvars
 external val process: Process
+
 external interface Process {
     val env: dynamic
 }
@@ -19,8 +23,18 @@ suspend fun main() {
             var started = false
             onReady {
                 if (!started) {
-                    val now = Clock.System.now()
-                    channel("547517051556855808").sendMessage("Diskord JS bot has started, ${now.toTimestamp()}")
+                    channel("547517051556855808").sendMessage(
+                        "Diskord JS bot has started, ${Clock.System.now().toTimestamp()}",
+                        components = listOf(
+                            ActionRow(
+                                Button(
+                                    url = "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-testbot-js/src/jsMain/kotlin/com.jessecorbett.diskord.testbot/Bot.kt?ref_type=heads",
+                                    label = "Bot Source",
+                                    style = ButtonStyle.Link
+                                )
+                            )
+                        )
+                    )
                 }
                 setStatus("Making sure JS runtime works")
                 started = true
