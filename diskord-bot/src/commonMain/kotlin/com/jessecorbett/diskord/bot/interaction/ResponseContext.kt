@@ -4,11 +4,9 @@ import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.ActionRow
 import com.jessecorbett.diskord.api.common.Attachment
+import com.jessecorbett.diskord.api.common.MessageComponent
 import com.jessecorbett.diskord.api.common.TextInput
-import com.jessecorbett.diskord.api.interaction.CommandInteractionDataResolved
-import com.jessecorbett.diskord.api.interaction.CommandInteractionOptionResponse
-import com.jessecorbett.diskord.api.interaction.Interaction
-import com.jessecorbett.diskord.api.interaction.ModalSubmit
+import com.jessecorbett.diskord.api.interaction.*
 import com.jessecorbett.diskord.api.interaction.callback.*
 import com.jessecorbett.diskord.api.webhook.CreateWebhookMessage
 import com.jessecorbett.diskord.bot.BotContext
@@ -88,7 +86,7 @@ public data class ResponseContext<I: Interaction> internal constructor(
                     embeds = response.data.embeds,
                     allowedMentions = response.data.allowedMentions ?: AllowedMentions.NONE,
                     flags = response.data.flags,
-                    components = emptyList(), // TODO: resolve conflict
+                    components = response.data.components
                 ),
                 true
             )
@@ -112,11 +110,12 @@ public data class ResponseContext<I: Interaction> internal constructor(
     public class ResponseBuilder {
         public var content: String? = null
         public var tts: Boolean = false
-        public var embeds: MutableList<Embed> = mutableListOf()
+        public var embeds: List<Embed> = mutableListOf()
         public var allowedMentions: AllowedMentions? = null
         public var flags: InteractionCommandCallbackDataFlags = InteractionCommandCallbackDataFlags.NONE
         // TODO: components
-        public var attachments: MutableList<Attachment> = mutableListOf()
+        public var attachments: List<Attachment> = mutableListOf()
+        public var components: List<ActionRow> = mutableListOf()
 
         /**
          * Marks the message as ephemeral, so only the invoking user can see it
@@ -143,7 +142,7 @@ public data class ResponseContext<I: Interaction> internal constructor(
                 embeds = embeds,
                 allowedMentions = allowedMentions,
                 flags = flags,
-                components = emptyList(),
+                components = components,
                 attachments = attachments
             )
         )
