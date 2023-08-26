@@ -28,7 +28,7 @@ public class CommandContext<I: Interaction> {
         vararg choices: CommandOption.CommandOptionChoice,
         autocomplete: Boolean = false,
         optional: Boolean = false
-    ): CommandDelegate<String> {
+    ): CommandDelegate<String?> {
         parameters += CommandOption.StringOption(
             name = name,
             description = description,
@@ -37,7 +37,9 @@ public class CommandContext<I: Interaction> {
             autocomplete = autocomplete
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<StringResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<StringResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -46,14 +48,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<Boolean> {
+    ): CommandDelegate<Boolean?> {
         parameters += CommandOption.BooleanOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<BooleanResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<BooleanResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -62,14 +66,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<Int> {
+    ): CommandDelegate<Int?> {
         parameters += CommandOption.BooleanOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<IntegerResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<IntegerResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -78,14 +84,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<Float> {
+    ): CommandDelegate<Float?> {
         parameters += CommandOption.NumberOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<NumberResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<NumberResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -94,14 +102,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<String> {
+    ): CommandDelegate<String?> {
         parameters += CommandOption.UserOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<UserResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<UserResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -110,14 +120,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<String> {
+    ): CommandDelegate<String?> {
         parameters += CommandOption.ChannelOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<ChannelResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<ChannelResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -126,14 +138,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<String> {
+    ): CommandDelegate<String?> {
         parameters += CommandOption.RoleOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<RoleResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<RoleResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -142,14 +156,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<String> {
+    ): CommandDelegate<String?> {
         parameters += CommandOption.MentionableOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, _ ->
-            responses.filterIsInstance<MentionableResponse>().find { it.name == name }!!.value!! // TODO error handling
+            responses.filterIsInstance<MentionableResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            }
         }.also { delegates += it }
     }
 
@@ -158,14 +174,16 @@ public class CommandContext<I: Interaction> {
         name: String,
         description: String,
         optional: Boolean = false
-    ): CommandDelegate<Attachment> {
+    ): CommandDelegate<Attachment?> {
         parameters += CommandOption.AttachmentOption(
             name = name,
             description = description,
             required = !optional
         )
         return CommandDelegate(name) { responses, data ->
-            val snowflake = responses.filterIsInstance<AttachmentResponse>().find { it.name == name }!!.value!! // TODO error handling
+            val snowflake = responses.filterIsInstance<AttachmentResponse>().find { it.name == name }.let {
+                if (it == null && optional) null else it!!.value // TODO error handling
+            } ?: return@CommandDelegate null
             data!!.attachments.getValue(snowflake)
         }.also { delegates += it }
     }
