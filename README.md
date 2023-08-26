@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:5.0.0")
+    implementation("com.jessecorbett:diskord-bot:5.1.1")
 }
 ```
 
@@ -71,10 +71,14 @@ suspend fun main() {
         // Modern interactions API for slash commands, user commands, etc
         interactions {
             slashCommand("echo", "Makes the bot say something") {
-                val message by stringParameter("message", "The message")
+                val message by stringParameter("message", "The message", optional = true)
                 callback {
                     respond {
-                        content = message
+                        content = if (message != null) {
+                            message
+                        } else {
+                            "The message was null, because it is optional"
+                        }
                     }
                 }
             }
