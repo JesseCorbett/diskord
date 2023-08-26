@@ -1,4 +1,4 @@
-rootProject.name = "diskord"
+rootProject.name = "Diskord"
 
 include(":diskord-core")
 include(":diskord-bot")
