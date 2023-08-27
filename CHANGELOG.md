@@ -1,5 +1,20 @@
 # Changelog
 
+## [5.2.0] - 2023-08-26
+
+### Added
+- Support for message components in slash command responses
+
+## [5.1.1] - 2023-08-25
+
+### Fixed
+- Slash command parameters not properly nullable
+
+## [5.1.0] - 2023-08-22
+
+### Added
+- Support for sending messages with message components
+
 ## [5.0.0] - 2023-07-22
 
 ### Added
