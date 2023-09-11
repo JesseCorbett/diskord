@@ -1,13 +1,6 @@
 package com.jessecorbett.diskord.api.interaction
 
-import com.jessecorbett.diskord.api.common.Attachment
-import com.jessecorbett.diskord.api.common.GuildMember
-import com.jessecorbett.diskord.api.common.Message
-import com.jessecorbett.diskord.api.common.PartialChannel
-import com.jessecorbett.diskord.api.common.PartialMember
-import com.jessecorbett.diskord.api.common.Role
-import com.jessecorbett.diskord.api.common.SelectOption
-import com.jessecorbett.diskord.api.common.User
+import com.jessecorbett.diskord.api.common.*
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.internal.CodeEnum
 import com.jessecorbett.diskord.internal.CodeEnumSerializer
@@ -117,7 +110,7 @@ public data class MessageComponent(
     public data class Data(
         @SerialName("custom_id") public val customId: String,
         @SerialName("component_type") public val type: String, // TODO: Can this be a sealed class as well?
-        @SerialName("values") public val values: List<SelectOption>
+        @SerialName("values") public val values: List<SelectOption> = emptyList()
     )
 }
 

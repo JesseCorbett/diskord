@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.2.1] - 2023-09-11
+
+### Fixed
+- Fix issue where MessageComponent.Data.values is not always present
+
 ## [5.2.0] - 2023-08-26
 
 ### Added
