@@ -9,6 +9,7 @@ import com.jessecorbett.diskord.util.DiskordInternals
 import com.jessecorbett.diskord.util.defaultJson
 import com.jessecorbett.diskord.util.omitNullsJson
 import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
@@ -109,13 +110,14 @@ public class DefaultRestClient(
     userType: DiscordUserType,
     token: String,
     botUrl: String = defaultUserAgentUrl,
-    botVersion: String = defaultUserAgentVersion
+    botVersion: String = defaultUserAgentVersion,
+    block: HttpClientConfig<*>.() -> Unit = {},
 ) : RestClient {
     private val authorizationHeader = userType.type + " " + token
     private val userAgentHeader = "DiscordBot: ($botUrl, $botVersion)"
 
-    private val defaultClient = buildClient(defaultJson)
-    private val omitNullsClient = buildClient(omitNullsJson)
+    private val defaultClient = buildClient(defaultJson, block)
+    private val omitNullsClient = buildClient(omitNullsJson, block)
 
     private val pathToBucketMap: MutableMap<String, String> = mutableMapOf()
     private var globalRateLimit = RateLimitInfo(1, 1, Float.MAX_VALUE)

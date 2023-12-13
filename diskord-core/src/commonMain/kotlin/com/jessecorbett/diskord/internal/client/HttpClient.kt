@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 
 private const val BOT_AUTH_PREFIX = "-> Authorization: Bot"
 
-internal fun buildClient(json: Json) = HttpClient(httpClient()) {
+internal fun buildClient(json: Json, block: HttpClientConfig<*>.() -> Unit) = HttpClient(httpClient()) {
     install(Logging) {
         logger = object : Logger {
             private val delegate = Logger.DEFAULT
@@ -35,4 +35,5 @@ internal fun buildClient(json: Json) = HttpClient(httpClient()) {
     }
 
     expectSuccess = false
+    block()
 }
