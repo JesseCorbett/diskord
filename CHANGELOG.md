@@ -1,6 +1,15 @@
 # Changelog
 
-## [5.2.1] - 2023-09-11
+## [5.3.0] - 2023-12-13
+
+### Added
+- Support for configuring the HttpClient used
+
+### Changed
+- Upgraded to Kotlin 1.9.21
+- Upgraded to kotlinx.datetime 0.5.0
+- Upgraded to Ktor 2.3.7
+- Upgraded to kotlinx.serialization 1.6.2
 
 ### Fixed
 - Fix issue where MessageComponent.Data.values is not always present
