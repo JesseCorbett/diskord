@@ -10,16 +10,20 @@ public data class User(
     @SerialName("id") val id: String,
     @SerialName("username") val username: String,
     @SerialName("discriminator") val discriminator: Long,
+    @SerialName("global_name") val displayName: String? = null,
     @SerialName("avatar") val avatarHash: String?,
     @SerialName("bot") val isBot: Boolean? = null,
     @SerialName("system") val isSystem: Boolean? = null,
     @SerialName("mfa_enabled") val twoFactorAuthEnabled: Boolean? = null,
+    @SerialName("banner") val bannerHash: String? = null,
+    @SerialName("accent_color") val accentColor: Color? = null,
     @SerialName("locale") val locale: String? = null,
     @SerialName("verified") val isVerified: Boolean? = null,
     @SerialName("email") val email: String? = null,
     @SerialName("flags") val flags: UserFlags = UserFlags.NONE,
     @SerialName("premium_type") val premiumType: PremiumType? = null,
-    @SerialName("public_flags") val publicFlags: UserFlags = UserFlags.NONE
+    @SerialName("public_flags") val publicFlags: UserFlags = UserFlags.NONE,
+    @SerialName("avatar_decorations") val avatarDecorations: String? = null,
 )
 
 @Serializable(with = PremiumTypeSerializer::class)

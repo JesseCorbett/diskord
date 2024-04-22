@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.4.0] - 2024-04-21
+
+### Added
+- User display name
+- User banner image hash
+- User accent colors
+- User avatar decoration
+
 ## [5.3.0] - 2023-12-13
 
 ### Added
