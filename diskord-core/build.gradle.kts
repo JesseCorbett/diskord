@@ -4,17 +4,11 @@ plugins {
     `maven-publish`
     signing
 
-    id("org.jetbrains.kotlin.multiplatform")
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.versions)
 }
-
-val kotlinxCoroutinesVersion: String by project
-val kotlinSerializationVersion: String by project
-val ktorVersion: String by project
-val kotlinLoggingVersion: String by project
-val slf4jVersion: String by project
-val assertkVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -108,21 +102,24 @@ kotlin {
 
         commonMain {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinSerializationVersion")
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
-                api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+                implementation(libs.kotlin.reflect)
+
+                api(libs.kotlinx.coroutines.core)
+                api(libs.kotlinx.serialization.json)
+                api(libs.kotlinx.datetime)
+
+                implementation(libs.logging.kotlinLogging)
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.client.logging.core)
             }
         }
         commonTest {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-common")
-                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common")
+                implementation(libs.kotlin.test.common)
+                implementation(libs.kotlin.test.annotations.common)
             }
         }
 
@@ -131,38 +128,38 @@ kotlin {
                 languageVersion.set(JavaLanguageVersion.of(8))
             }
             dependencies {
-                implementation("org.slf4j:slf4j-api:$slf4jVersion")
-                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
+                implementation(libs.logging.slf4j.api)
+                implementation(libs.logging.slf4j.simple)
+                implementation(libs.ktor.client.cio)
+                implementation(libs.ktor.client.logging.jvm)
             }
         }
         val jvmTest by getting {
             jvmToolchain(8)
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-junit5")
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
-                implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
-                implementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-                implementation("com.willowtreeapps.assertk:assertk-jvm:$assertkVersion")
+                implementation(libs.kotlin.test.junit5)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.ktor.client.mock.jvm)
+                implementation(libs.junit.jupiter.engine)
+                implementation(libs.assertk.jvm)
             }
         }
 
         val jsMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation(libs.ktor.client.js)
             }
         }
 
         val macMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:$ktorVersion")
+                implementation(libs.ktor.client.darwin)
             }
         }
 
         val winMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
+                implementation(libs.ktor.client.winhttp)
             }
         }
     }

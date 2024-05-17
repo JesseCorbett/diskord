@@ -1,5 +1,6 @@
 plugins {
-    id("org.jetbrains.kotlin.multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.versions)
 }
 
 kotlin {
@@ -14,8 +15,9 @@ kotlin {
     sourceSets {
         val macMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-macosx64:1.6.4")
                 implementation(project(":diskord-bot"))
+
+                implementation(libs.kotlinx.coroutines.coreMacosX64)
             }
         }
     }
