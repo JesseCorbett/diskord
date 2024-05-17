@@ -1,0 +1,49 @@
+[versions]
+dokka = "1.9.20"
+kotlin = "1.9.23"
+kotlinx-coroutines = "1.8.1"
+kotlinx-serialization = "1.6.2"
+ktor = "2.3.11"
+kotlinLogging = "6.0.9"
+slf4j = "2.0.13"
+assertk = "0.28.1"
+gradle-plugin-versions = "0.51.0"
+
+[libraries]
+# Note: Versions for kotlin-* dependencies are provided by the Kotlin Gradle plugin.
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-coreMacosX64 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-macosx64", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test =  { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.0"
+
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-winhttp = { module = "io.ktor:ktor-client-winhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-logging-core = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-logging-jvm = { module = "io.ktor:ktor-client-logging-jvm", version.ref = "ktor" }
+ktor-client-mock-jvm = { module = "io.ktor:ktor-client-mock-jvm", version.ref = "ktor" }
+
+logging-kotlinLogging = { module = "io.github.oshai:kotlin-logging", version.ref = "kotlinLogging" }
+logging-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logging-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+junit-jupiter-engine = "org.junit.jupiter:junit-jupiter-engine:5.10.2"
+assertk-core = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+assertk-jvm = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+assertk-js = { module = "com.willowtreeapps.assertk:assertk-js", version.ref = "assertk" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-plugin-versions" }

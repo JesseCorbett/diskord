@@ -4,13 +4,10 @@ plugins {
     `maven-publish`
     signing
 
-    kotlin("multiplatform")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.versions)
 }
-
-val slf4jVersion: String by project
-val assertkVersion: String by project
-val kotlinLoggingVersion: String by project
 
 group = rootProject.group
 version = rootProject.version
@@ -77,7 +74,8 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":diskord-core"))
-                api("io.github.oshai:kotlin-logging:$kotlinLoggingVersion")
+
+                api(libs.logging.kotlinLogging)
             }
         }
 
@@ -86,8 +84,8 @@ kotlin {
                 languageVersion.set(JavaLanguageVersion.of(8))
             }
             dependencies {
-                implementation("org.slf4j:slf4j-api:$slf4jVersion")
-                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+                implementation(libs.logging.slf4j.api)
+                implementation(libs.logging.slf4j.simple)
             }
         }
     }
