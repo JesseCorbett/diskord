@@ -11,8 +11,6 @@ publishDevelopmentVersion:
   stage: release
   script:
     - gradle build publishAllPublicationsToOssrhSnapshotsRepository
-  tags:
-    - docker
   only:
     - develop
 
