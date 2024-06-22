@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.channel.AllowedMentions
 import com.jessecorbett.diskord.api.channel.Embed
 import com.jessecorbett.diskord.api.common.ActionRow
 import com.jessecorbett.diskord.api.common.Attachment
+import com.jessecorbett.diskord.api.common.Message
 import com.jessecorbett.diskord.api.common.TextInput
 import com.jessecorbett.diskord.api.interaction.CommandInteractionDataResolved
 import com.jessecorbett.diskord.api.interaction.CommandInteractionOptionResponse
@@ -44,12 +45,12 @@ public data class ResponseContext<I: Interaction> internal constructor(
     /**
      * Responds to the interaction with a channel message
      */
-    public suspend fun respond(builder: suspend ResponseBuilder.() -> Unit) {
+    public suspend fun respond(builder: suspend ResponseBuilder.() -> Unit): Message? {
         val response = ResponseBuilder().apply {
             builder()
         }.build()
 
-        respond(response)
+        return respond(response)
     }
 
     /**
@@ -78,9 +79,9 @@ public data class ResponseContext<I: Interaction> internal constructor(
         registerModal(id, callback)
     }
 
-    private suspend fun respond(response: InteractionResponse) {
+    private suspend fun respond(response: InteractionResponse): Message? {
         if (hasAckedForFuture && response is ChannelMessageWithSource) {
-            context.webhook(command.applicationId).execute(
+            return context.webhook(command.applicationId).execute(
                 command.token,
                 CreateWebhookMessage(
                     useTTS = response.data.tts,
@@ -92,7 +93,6 @@ public data class ResponseContext<I: Interaction> internal constructor(
                 ),
                 true
             )
-            return
         }
 
 
@@ -102,6 +102,7 @@ public data class ResponseContext<I: Interaction> internal constructor(
 
         hasResponded = true
         command.client.createInteractionResponse(command.id, response)
+        return null
     }
 
     /**
