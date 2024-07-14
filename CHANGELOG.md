@@ -2,6 +2,9 @@
 
 ## [5.4.1] - XXXX-XX-XX
 
+### Fixed
+- Interaction commands defined by the commands DSL should now accept changes for more fields.
+
 ### Changed
 - Updated Gradle to 8.7 and changed dependency management to leverage Gradle version catalogs
 - Updated Kotlin to 1.9.23 / Dokka to 1.9.20

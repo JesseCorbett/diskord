@@ -9,6 +9,8 @@ import com.jessecorbett.diskord.api.interaction.command.CommandOption
 import com.jessecorbett.diskord.api.interaction.command.CommandType
 import com.jessecorbett.diskord.bot.BotContext
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 @InteractionModule
 public class InteractionBuilder(
@@ -150,7 +152,7 @@ public class InteractionBuilder(
             val existing = existingCommands.filter { it.guildId == guildId }.firstOrNull { it.name == createCommand.name }
 
             // Check if the command already exists and needs updated
-            if (existing != null && createCommand.options?.toSet() == existing.options.toSet()) {
+            if (isCommandNotUpdated(existing, createCommand)) {
                 logger.debug { "Command with name ${existing.name} and guildId $guildId already exists in current form" }
                 command = existing
                 return@onInit
@@ -195,5 +197,22 @@ public class InteractionBuilder(
                 ResponseContext(botContext, interaction, emptyList(), null, addModalCallback).pending(interaction)
             }
         }
+    }
+
+    @OptIn(ExperimentalContracts::class)
+    private fun isCommandNotUpdated(existingCommand: Command?, updatedCommand: CreateCommand): Boolean {
+        contract {
+            returns() implies (existingCommand != null)
+        }
+
+        logger.trace { "Comparing: existingCommand -> $existingCommand // updatedCommand -> $updatedCommand" }
+
+        return existingCommand != null
+            && updatedCommand.description == existingCommand.description
+            && updatedCommand.localizedDescriptions?.ifEmpty { null } == existingCommand.localizedDescriptions?.ifEmpty { null }
+            && updatedCommand.options?.toSet() == existingCommand.options.toSet()
+            && updatedCommand.defaultPermission == existingCommand.defaultMemberPermissions
+            && updatedCommand.allowedInDms == existingCommand.availableInDMs
+            && updatedCommand.nsfw == existingCommand.nsfw
     }
 }
