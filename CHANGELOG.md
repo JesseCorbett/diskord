@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.4.1] - 2024-07-14
+
+### Fixed
+- Interaction commands defined by the commands DSL should now accept changes for more fields.
+
+### Changed
+- Updated Gradle to 8.7 and changed dependency management to leverage Gradle version catalogs
+- Updated Kotlin to 1.9.23 / Dokka to 1.9.20
+- Updated Ktor to 2.3.11
+- Updated kotlinx.coroutines to 1.8.1
+- Updated kotlinx.datetime to 0.6.0
+- Updated SLF4J to 2.0.13
+
 ## [5.4.0] - 2024-04-21
 
 ### Added
