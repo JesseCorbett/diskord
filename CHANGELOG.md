@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.4.1] - XXXX-XX-XX
+## [5.4.1] - 2024-07-14
 
 ### Fixed
 - Interaction commands defined by the commands DSL should now accept changes for more fields.

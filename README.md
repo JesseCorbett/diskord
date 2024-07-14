@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.jessecorbett:diskord-bot:5.4.0")
+    implementation("com.jessecorbett:diskord-bot:5.4.1")
 }
 ```
 
