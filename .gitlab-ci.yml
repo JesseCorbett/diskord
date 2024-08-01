@@ -1,4 +1,4 @@
-image: gradle:7.6.2
+image: gradle:8.7
 
 variables:
   GRADLE_OPTS: -Dorg.gradle.internal.launcher.welcomeMessageEnabled=false
