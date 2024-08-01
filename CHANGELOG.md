@@ -1,11 +1,5 @@
 # Changelog
 
-## [5.5.0] - 2024-07-31
-
-### Changed
-- Upgraded Kotlin to 2.0.0
-- Upgraded to kotlinx.serialization 1.7.0
-
 ## [5.4.1] - 2024-07-14
 
 ### Fixed

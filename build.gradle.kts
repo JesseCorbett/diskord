@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -21,8 +20,8 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_1_8
+        kotlinOptions {
+            jvmTarget = "1.8"
         }
     }
 }
