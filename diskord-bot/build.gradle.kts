@@ -171,6 +171,6 @@ signing {
 
 tasks {
     withType<PublishToMavenRepository>().configureEach {
-        dependsOn("signJvmPublication")
+        dependsOn("signJvmPublication", "signJsPublication")
     }
 }
