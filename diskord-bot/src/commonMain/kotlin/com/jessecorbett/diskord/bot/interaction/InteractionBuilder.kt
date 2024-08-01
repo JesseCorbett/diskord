@@ -31,6 +31,7 @@ public class InteractionBuilder(
         description: String,
         guildId: String? = null,
         permissions: Permissions = Permissions.ALL,
+        integrationTypes: Set<CommandIntegrationType> = setOf(CommandIntegrationType.GUILD),
         build: CommandContext<ApplicationCommand>.() -> Unit
     ) {
         val context = CommandContext<ApplicationCommand>().apply(build)
@@ -40,7 +41,8 @@ public class InteractionBuilder(
             description = description,
             options = context.parameters.map(CommandOption::fromOption),
             defaultPermission = permissions,
-            type = CommandType.ChatInput
+            type = CommandType.ChatInput,
+            integrationTypes = integrationTypes
         )
 
         interactionCommand(createCommand, guildId) { responseContext ->
@@ -57,6 +59,7 @@ public class InteractionBuilder(
         description: String,
         guildId: String? = null,
         permissions: Permissions = Permissions.ALL,
+        integrationTypes: Set<CommandIntegrationType> = setOf(CommandIntegrationType.GUILD),
         builder: CommandGroupBuilder.() -> Unit
     ) {
         val groupTree = CommandGroupBuilder().apply(builder)
@@ -65,7 +68,8 @@ public class InteractionBuilder(
             description = description,
             options = groupTree.options.map(CommandOption::fromOption),
             defaultPermission = permissions,
-            type = CommandType.ChatInput
+            type = CommandType.ChatInput,
+            integrationTypes = integrationTypes
         )
 
         interactionCommand(createCommand, guildId) { responseContext ->
@@ -101,13 +105,15 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         permissions: Permissions = Permissions.ALL,
+        integrationTypes: Set<CommandIntegrationType> = setOf(CommandIntegrationType.GUILD),
         callback: suspend ResponseContext<ApplicationCommand>.() -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
             description = "",
             defaultPermission = permissions,
-            type = CommandType.User
+            type = CommandType.User,
+            integrationTypes = integrationTypes
         )
 
         interactionCommand(createCommand, guildId) { responseContext ->
@@ -123,13 +129,15 @@ public class InteractionBuilder(
         name: String,
         guildId: String? = null,
         permissions: Permissions = Permissions.ALL,
+        integrationTypes: Set<CommandIntegrationType> = setOf(CommandIntegrationType.GUILD),
         callback: suspend ResponseContext<ApplicationCommand>.() -> Unit
     ) {
         val createCommand = CreateCommand(
             name = name,
             description = "",
             defaultPermission = permissions,
-            type = CommandType.Message
+            type = CommandType.Message,
+            integrationTypes = integrationTypes
         )
 
         interactionCommand(createCommand, guildId) { responseContext ->
