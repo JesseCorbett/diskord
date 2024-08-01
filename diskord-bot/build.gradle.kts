@@ -17,7 +17,7 @@ val javadocJar by tasks.creating(Jar::class) {
     dependsOn(tasks.dokkaHtml)
     archiveBaseName.set("${project.name}-jvm")
     archiveClassifier.set("javadoc")
-    from("$buildDir/dokka/html")
+    from("${layout.buildDirectory}/dokka/html")
 }
 
 tasks {
