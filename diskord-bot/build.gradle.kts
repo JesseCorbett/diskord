@@ -17,7 +17,7 @@ val javadocJar by tasks.creating(Jar::class) {
     dependsOn(tasks.dokkaHtml)
     archiveBaseName.set("${project.name}-jvm")
     archiveClassifier.set("javadoc")
-    from("$buildDir/dokka/html")
+    from("${layout.buildDirectory}/dokka/html")
 }
 
 tasks {
@@ -27,7 +27,7 @@ tasks {
                 sourceLink {
                     localDirectory.set(file("src/commonMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/commonMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-bot/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
             }
@@ -96,7 +96,7 @@ publishing {
         pom {
             name.set("diskord-bot")
             description.set("A set of utilities for building bots using the diskord-core library")
-            url.set("https://gitlab.com/jesselcorbett/diskord")
+            url.set("https://github.com/JesseCorbett/diskord")
 
             licenses {
                 license {
@@ -115,9 +115,9 @@ publishing {
             }
 
             scm {
-                url.set("https://gitlab.com/diskord/diskord")
-                connection.set("scm:git:https://gitlab.com/diskord/diskord.git")
-                developerConnection.set("scm:git:https://gitlab.com/diskord/diskord.git")
+                url.set("https://github.com/JesseCorbett/diskord")
+                connection.set("scm:git:https://github.com/JesseCorbett/diskord.git")
+                developerConnection.set("scm:git:https://github.com/JesseCorbett/diskord")
             }
         }
     }

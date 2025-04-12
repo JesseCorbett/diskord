@@ -4,6 +4,7 @@ import com.jessecorbett.diskord.api.common.ActionRow
 import com.jessecorbett.diskord.api.common.Color
 import com.jessecorbett.diskord.api.common.MessageReference
 import io.ktor.utils.io.core.*
+import kotlinx.io.Source
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -82,7 +83,7 @@ public data class EmbedField(
 
 // TODO: This should be moved to the common package on the next breaking pass.
 public data class FileData(
-    val packet: ByteReadPacket,
+    val packet: Source,
     val filename: String,
     val contentType: String? = null
 )

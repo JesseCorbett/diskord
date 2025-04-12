@@ -30,32 +30,32 @@ tasks {
                     localDirectory.set(file("src/commonMain/kotlin"))
                     // URL showing where the source code can be accessed through the web browser
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-core/src/commonMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-core/src/commonMain/kotlin/"))
                     // Suffix which is used to append the line number to the URL. Use #L for GitHub
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/jsMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/jsMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-core/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/jvmMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/jvmMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-core/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/macMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/macMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-core/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
                 sourceLink {
                     localDirectory.set(file("src/winMain/kotlin"))
                     remoteUrl.set(URL(
-                        "https://gitlab.com/diskord/diskord/-/blob/develop/diskord-bot/src/winMain/kotlin/"))
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-core/src/commonMain/kotlin/"))
                     remoteLineSuffix.set("#L")
                 }
             }
@@ -174,7 +174,7 @@ tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
 
                 remoteUrl.set(
                     URL(
-                        "https://gitlab.com/diskord/diskord/-/tree/master/diskord-core/src"
+                        "https://github.com/JesseCorbett/diskord/blob/master/diskord-bot/src"
                     )
                 )
                 remoteLineSuffix.set("#L")
@@ -189,7 +189,7 @@ publishing {
         pom {
             name.set("diskord")
             description.set("A Kotlin wrapper around the Discord API")
-            url.set("https://gitlab.com/diskord/diskord")
+            url.set("https://github.com/JesseCorbett/diskord")
 
             licenses {
                 license {
@@ -208,9 +208,9 @@ publishing {
             }
 
             scm {
-                url.set("https://gitlab.com/jesselcorbett/diskord")
-                connection.set("scm:git:https://gitlab.com/diskord/diskord.git")
-                developerConnection.set("scm:git:https://gitlab.com/diskord/diskord.git")
+                url.set("https://github.com/JesseCorbett/diskord")
+                connection.set("scm:git:https://github.com/JesseCorbett/diskord.git")
+                developerConnection.set("scm:git:https://github.com/JesseCorbett/diskord.git")
             }
         }
     }

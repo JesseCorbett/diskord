@@ -92,7 +92,7 @@ internal class SocketManager(url: String, private val emitMessage: suspend (Gate
                     if (closeReason == null) {
                         logger.warn { "Closed with no close reason, probably a connection issue" }
                     } else {
-                        val closeCode = WebSocketCloseCode.values().find { it.code == closeReason.code }
+                        val closeCode = WebSocketCloseCode.entries.find { it.code == closeReason.code }
                         val message = if (closeReason.message.isEmpty()) {
                             "Closed with code '$closeCode' with no reason provided"
                         } else {

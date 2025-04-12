@@ -1,11 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.versions)
-    application
-}
-
-application {
-    mainClass.set("com.jessecorbett.diskord.testbot.BotKt")
 }
 
 kotlin {
