@@ -168,3 +168,9 @@ signing {
         publishing.publications.forEach { sign(it) }
     }
 }
+
+tasks {
+    withType<PublishToMavenRepository>().configureEach {
+        dependsOn("signJvmPublication", "signJsPublication")
+    }
+}
