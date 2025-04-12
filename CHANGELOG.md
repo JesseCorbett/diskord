@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.5.1] - 2025-04-12
+
+### Changed
+- Upgrade to Kotlin 2.1.20
+- Upgraded to kotlinx.coroutines 1.10.2
+- Upgraded to kotlinx.serialization 1.8.1
+- Upgraded to ktor 3.1.2
+
 ## [5.5.0] - 2024-07-31
 
 ### Added
