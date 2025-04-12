@@ -17,7 +17,7 @@ publishDevelopmentVersion:
 test:
   stage: build
   script:
-    - gradle check
+    - gradle build check
   only:
     - master
 

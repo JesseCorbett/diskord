@@ -1,11 +1,11 @@
 [versions]
-dokka = "1.9.20"
-kotlin = "2.0.0"
-kotlinx-coroutines = "1.8.1"
-kotlinx-serialization = "1.7.1"
-ktor = "2.3.12"
-kotlinLogging = "6.0.9"
-slf4j = "2.0.13"
+dokka = "2.0.0"
+kotlin = "2.1.20"
+kotlinx-coroutines = "1.10.2"
+kotlinx-serialization = "1.8.1"
+ktor = "3.1.2"
+kotlinLogging = "7.0.6"
+slf4j = "2.0.17"
 assertk = "0.28.1"
 gradle-plugin-versions = "0.51.0"
 
@@ -44,6 +44,7 @@ assertk-js = { module = "com.willowtreeapps.assertk:assertk-js", version.ref = "
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-plugin-versions" }
